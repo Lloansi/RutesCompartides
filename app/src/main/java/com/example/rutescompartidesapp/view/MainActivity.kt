@@ -15,6 +15,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import cafe.adriel.voyager.navigator.Navigator
 import com.example.rutescompartidesapp.ui.theme.RutesCompartidesAppTheme
 import com.example.rutescompartidesapp.view.login.LoginScreen
+import com.example.rutescompartidesapp.view.routes_order_list.RoutesOrderListScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -26,11 +27,7 @@ class MainActivity : ComponentActivity() {
                 // A surface container using the 'background' color from the theme
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
 
-                    Navigator(
-                        screen = LoginScreen
-                    ) {
-
-                    }
+                   RoutesOrderListScreen()
                 }
             }
         }
