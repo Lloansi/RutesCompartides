@@ -1,5 +1,9 @@
 package com.example.rutescompartidesapp.view.routes_order_list
 
+import android.content.res.Configuration.UI_MODE_NIGHT_NO
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import android.provider.CalendarContract
+import android.widget.ToggleButton
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,14 +17,19 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.List
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Text
+import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -28,6 +37,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.rutescompartidesapp.data.domain.Order
@@ -54,7 +64,18 @@ fun RoutesOrderListScreen(){
                 onQueryChange = routeOrderListViewModel::onSearchTextChange,
                 onSearch = routeOrderListViewModel::onSearchTextChange,
                 active = isSearching,
-                onActiveChange = { /*TODO*/  }) {
+                onActiveChange = { routeOrderListViewModel::onToogleSearch },
+                placeholder = {
+                    Text(
+                        text = "Cercar")
+                },
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Default.Search,
+                        tint = MaterialTheme.colorScheme.onSurface,
+                        contentDescription = "Icona de cerca"
+                    )
+                },) {
             }
             FloatingActionButton(
                 modifier= Modifier
@@ -75,12 +96,12 @@ fun RoutesOrderListScreen(){
             horizontalArrangement = Arrangement.Center) {
             Button(onClick = { /*TODO*/ }
             ) {
-                    Text(text = "Routes")
+                    Text(text = "Rutes")
             }
             Spacer(Modifier.padding(10.dp))
             Button(onClick = { /*TODO*/ }
             ) {
-                Text(text = "Orders")
+                Text(text = "Comandes")
             }
         }
         Spacer(Modifier.padding(16.dp))
@@ -123,9 +144,8 @@ fun OrderCar(order: Order) {
     }
 }
 
-@Preview(showBackground = true)
+@Preview( showBackground = true)
 @Composable
 fun RoutesOrderListScreenPreview() {
-
     RoutesOrderListScreen()
 }
