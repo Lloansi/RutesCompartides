@@ -50,6 +50,7 @@ android {
 
 dependencies {
 
+    implementation("androidx.preference:preference-ktx:1.2.1")
     val voyagerVersion = "1.0.0"
 
     implementation("androidx.core:core-ktx:1.12.0")
