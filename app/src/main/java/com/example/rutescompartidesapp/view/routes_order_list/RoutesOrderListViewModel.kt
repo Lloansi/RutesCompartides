@@ -1,10 +1,18 @@
 package com.example.rutescompartidesapp.view.routes_order_list
 
 import android.os.Build
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CardTravel
+import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.outlined.CardTravel
+import androidx.compose.material.icons.outlined.LocationOn
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.rutescompartidesapp.data.domain.Order
 import com.example.rutescompartidesapp.data.domain.Route
+import com.example.rutescompartidesapp.view.routes_order_list.components.TabItems
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -56,12 +64,10 @@ class RoutesOrderListViewModel: ViewModel() {
     }
     fun onToogleSearch() {
         _isSearching.value = !_isSearching.value
-
     }
 
-
-
 }
+
 private val routeList = listOf(
     Route(1, "Ruta 1"),
     Route(2, "eeeeee 2"),

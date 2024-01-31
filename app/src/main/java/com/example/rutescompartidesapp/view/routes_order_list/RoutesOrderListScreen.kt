@@ -42,15 +42,14 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.rutescompartidesapp.data.domain.Order
 import com.example.rutescompartidesapp.data.domain.Route
+import com.example.rutescompartidesapp.view.routes_order_list.components.TabRows
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RoutesOrderListScreen(){
-    val routeOrderListViewModel = RoutesOrderListViewModel()
+    val routeOrderListViewModel: RoutesOrderListViewModel = hiltViewModel()
     val searchText by routeOrderListViewModel.searchText.collectAsState()
-    val routes by routeOrderListViewModel.routes.collectAsState()
-    val orders by routeOrderListViewModel.orders.collectAsState()
     val isSearching by routeOrderListViewModel.isSearching.collectAsState()
 
     Column (Modifier.fillMaxSize()) {
@@ -92,55 +91,9 @@ fun RoutesOrderListScreen(){
                         .width(32.dp))
             }
         }
-        Row (Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center) {
-            Button(onClick = { /*TODO*/ }
-            ) {
-                    Text(text = "Rutes")
-            }
-            Spacer(Modifier.padding(10.dp))
-            Button(onClick = { /*TODO*/ }
-            ) {
-                Text(text = "Comandes")
-            }
+        Row (Modifier.fillMaxWidth()) {
+            TabRows()
         }
-        Spacer(Modifier.padding(16.dp))
-        if (isSearching) {
-            Box(modifier = Modifier.fillMaxSize()) {
-                CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
-            }
-        } else {
-            LazyColumn(modifier= Modifier.fillMaxWidth()){
-                items(routes.size) { index ->
-                    Spacer(modifier = Modifier.padding(8.dp))
-                    RouteCard(route = routes[index])
-                }
-            }
-        }
-
-
-    }
-
-}
-
-@Composable
-fun RouteCard(route: Route) {
-    Row {
-        Text(text = route.routeName, modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
-            .weight(3f))
-    }
-
-}
-
-@Composable
-fun OrderCar(order: Order) {
-    Row {
-        Text(text = order.orderName, modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
-            .weight(3f))
     }
 }
 
