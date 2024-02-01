@@ -1,6 +1,5 @@
 package com.example.rutescompartidesapp.view.map
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -28,7 +27,8 @@ class SearchViewModel: ViewModel() {
         _searchText.value = text
     }
 
-    val search = searchText.debounce(500L)
+    val search = searchText
+        .debounce(500L)
         .onEach{ _isSearching.update{ true } }
         .combine(_routes) { text, routes ->
             if (text.isBlank()) {

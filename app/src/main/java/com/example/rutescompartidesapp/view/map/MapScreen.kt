@@ -2,9 +2,7 @@ package com.example.rutescompartidesapp.view.map
 
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -13,17 +11,18 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.example.rutescompartidesapp.view.map.components.CardBottomMap
 import com.example.rutescompartidesapp.view.map.components.SearchViewContainer
+import dagger.hilt.android.lifecycle.HiltViewModel
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
@@ -39,28 +38,11 @@ object MapScreen: Screen {
 
 @Composable
 fun MapScreen() {
-    val mapViewModel = viewModel<MapViewModel>()
-    val searchViewModel = viewModel<SearchViewModel>()
+    val mapViewModel: MapViewModel = hiltViewModel()
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
-
-        /*
-        // Mapa y Card info comandas/rutes
-        Box(
-            modifier = Modifier
-                //.weight(1f) Use it with app bar
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background)
-                .padding(16.dp),
-            contentAlignment = Alignment.BottomCenter
-        ) {
-            MapViewContainer(viewModel = mapViewModel)
-            CardBottomMap()
-        }
-
-         */
 
         Box(
             modifier = Modifier
@@ -97,7 +79,7 @@ fun MapViewContainer(viewModel: MapViewModel ){
 
     val ctx = LocalContext.current
 
-    val initialZoom = 12.0
+    val initialZoom = 13.0
 
     val lifecycleOwner = LocalLifecycleOwner.current
 

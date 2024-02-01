@@ -1,10 +1,12 @@
 package com.example.rutescompartidesapp.domain.model
 
 data class Route(
-    //val routeName: String,
+    val routeId: Int,
     val startPoint: String,
     val inBetweenPoints: List<String>?,
-    val endPoint: String
+    val endPoint: String,
+    val maxDeviation: Int,
+    val routePrice: Float
 ){
     fun doesMatchSearchQuery(query: String): Boolean {
         val matchingCombinations = listOf(
@@ -18,21 +20,3 @@ data class Route(
         }
     }
 }
-
-private val allRoute = listOf(
-    Route(
-        "Mataró",
-        listOf("Premia de Mar"),
-        "Masnou"
-    ),
-    Route(
-        "Mataró",
-        listOf("Premia de Mar", "Masnou","Badalona"),
-        "Barcelona"
-    ),
-    Route(
-        "Terrasa",
-        null,
-        "Sabadell"
-    )
-)

@@ -27,5 +27,4 @@ class MapViewModel:ViewModel() {
     fun updateMarkerPosition(point: GeoPoint){
         markerPosition.value = point
     }
-
 }
