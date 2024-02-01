@@ -8,6 +8,8 @@ import androidx.compose.material.icons.filled.CardTravel
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.outlined.CardTravel
 import androidx.compose.material.icons.outlined.LocationOn
+import androidx.compose.runtime.MutableDoubleState
+import androidx.compose.runtime.MutableIntState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.rutescompartidesapp.data.domain.Order
@@ -24,6 +26,40 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 
 class RoutesOrderListViewModel: ViewModel() {
+
+    private val _popupIsShowing = MutableStateFlow(false)
+    val popupIsShowing = _popupIsShowing
+
+
+
+    private val _puntSortidaText = MutableStateFlow("")
+    val puntSortidaText = _puntSortidaText.asStateFlow()
+
+    private val _puntArribadaText = MutableStateFlow("")
+    val puntArribadaText = _puntArribadaText.asStateFlow()
+    fun onPopupShow(isShowing: Boolean){
+        _popupIsShowing.value = isShowing
+        if (!isShowing){
+            _puntSortidaText.value = ""
+            _puntArribadaText.value = ""
+        }
+    }
+
+    fun onFilterSearch(puntSortida: String?, puntArribada: String?){
+        _popupIsShowing.value = false
+        if (puntSortida != null) {
+            _searchText.value = puntSortida
+        }
+        _puntSortidaText.value = ""
+        _puntArribadaText.value = ""
+    }
+    fun onPuntSortidaChange(text: String){
+        _puntSortidaText.value = text
+    }
+    fun onPuntArribadaChange(text: String){
+        _puntArribadaText.value = text
+    }
+
 
     private val _searchText = MutableStateFlow("")
     val searchText = _searchText.asStateFlow()
