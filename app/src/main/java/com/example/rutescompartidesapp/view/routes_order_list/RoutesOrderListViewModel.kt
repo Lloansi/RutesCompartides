@@ -30,18 +30,26 @@ class RoutesOrderListViewModel: ViewModel() {
     private val _popupIsShowing = MutableStateFlow(false)
     val popupIsShowing = _popupIsShowing
 
-
-
     private val _puntSortidaText = MutableStateFlow("")
     val puntSortidaText = _puntSortidaText.asStateFlow()
 
     private val _puntArribadaText = MutableStateFlow("")
     val puntArribadaText = _puntArribadaText.asStateFlow()
+
+    private val _dataSortidaText = MutableStateFlow("")
+    val dataSortidaText = _dataSortidaText.asStateFlow()
+
+    private val _horaSortidaText = MutableStateFlow("")
+    val horaSortidaText = _horaSortidaText.asStateFlow()
+
     fun onPopupShow(isShowing: Boolean){
         _popupIsShowing.value = isShowing
         if (!isShowing){
             _puntSortidaText.value = ""
             _puntArribadaText.value = ""
+            _extraFiltersAreShowing.value = false
+            _horaSortidaText.value = ""
+            _dataSortidaText.value = ""
         }
     }
 
@@ -60,6 +68,21 @@ class RoutesOrderListViewModel: ViewModel() {
         _puntArribadaText.value = text
     }
 
+    fun onDataSortidaChange(text: String){
+        _dataSortidaText.value = text
+    }
+    fun onHoraArribadaChange(text: String){
+        _horaSortidaText.value = text
+    }
+
+    private val _extraFiltersAreShowing = MutableStateFlow(false)
+    val extraFiltersAreShowing = _extraFiltersAreShowing
+
+    fun onExtraFiltersToggle(){
+        _extraFiltersAreShowing.value = !_extraFiltersAreShowing.value
+    }
+
+
 
     private val _searchText = MutableStateFlow("")
     val searchText = _searchText.asStateFlow()
@@ -75,7 +98,7 @@ class RoutesOrderListViewModel: ViewModel() {
                 routes
             } else {
                 routes.filter { route ->
-                    route.routeName.contains(text)
+                    route.routeName.contains(text, ignoreCase = true)
                 }
             }
         } .onEach{ _isSearching.update{ false } }
@@ -89,7 +112,7 @@ class RoutesOrderListViewModel: ViewModel() {
                 orders
             } else {
                 orders.filter { order ->
-                    order.orderName.contains(text)
+                    order.orderName.contains(text, ignoreCase = true)
                 }
             }
         } .onEach{ _isSearching.update{ false } }
