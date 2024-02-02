@@ -6,8 +6,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -21,6 +24,7 @@ import androidx.compose.material.icons.filled.Map
 import androidx.compose.material.icons.filled.QuestionMark
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ChipColors
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ElevatedFilterChip
@@ -71,7 +75,7 @@ fun FilterPopup(){
 
     if (isPopupShowing){
         Popup(alignment = Alignment.Center,
-            offset = IntOffset(0, 700),
+            offset = IntOffset(0, 1200),
             onDismissRequest = { routeOrderListViewModel.onPopupShow(false) },
             properties = PopupProperties(
                 focusable = true,
@@ -165,26 +169,36 @@ fun FilterPopup(){
                                     }
                                     if (isCondicionsPopupShowing){
                                         Popup(onDismissRequest = { routeOrderListViewModel.onCondicionsPopupShow(false) },
+                                            offset = IntOffset(150, -700),
                                             properties = PopupProperties(
                                                 focusable = true,
                                                 dismissOnBackPress = true,
                                                 dismissOnClickOutside=  true)){
                                                 ElevatedCard(modifier = Modifier
-                                                    .fillMaxWidth(0.6f),
+                                                    .fillMaxWidth(0.65f),
                                                     colors = CardDefaults.cardColors(containerColor = Color.White)) {
                                                     Row (Modifier.fillMaxWidth()) {
                                                         Column(Modifier.fillMaxWidth(),
                                                             verticalArrangement = Arrangement.Center,
                                                             horizontalAlignment = Alignment.CenterHorizontally) {
-                                                            Row(modifier = Modifier.fillMaxWidth()
-                                                                .padding(20.dp)
-                                                                .background(Color.Gray),
+                                                            Row(modifier = Modifier
+                                                                .fillMaxWidth().height(40.dp)
+                                                                .background(Color.LightGray),
+                                                                verticalAlignment = Alignment.CenterVertically,
+                                                                horizontalArrangement = Arrangement.Center
                                                                 ){
                                                                 Text("Condicions de transport")
                                                             }
-                                                            Row(modifier = Modifier.padding(20.dp),
-                                                            ){
-                                                                Text("En seleccionar el tipus de transport, se't mostrarán nomès")
+                                                            Row (Modifier.height(10.dp).background(Color.LightGray)) {
+                                                                Divider(color = MateBlackRC, thickness = 4.dp)
+                                                            }
+                                                            Row (Modifier.padding(12.dp)) {
+                                                                Text("En seleccionar el tipus de transport, se't mostraran només els vehicles i les comandes (necessitats de transport) que compleixin aquestes característiques:")
+                                                                Spacer(Modifier.padding(8.dp))
+
+                                                            }
+                                                            Row(Modifier.padding(12.dp)) {
+                                                                ConditionScroll()
                                                             }
 
                                                         }
@@ -312,6 +326,23 @@ fun FilterPopup(){
     }
 }
 
+
+val condicionsTransportInfo = listOf(
+    "ISOTERM:Vehicle amb parets aïllants, manté la temperatura.",
+    "REFRIGERAT:Vehicle amb font de fred, temperatures de 4 a 12º (cal confirmar temperatura amb qui ofereixi el transport).",
+    "CONGELAT:Vehicle amb font de fred, temperatures inferiors a 0º (cal confirmar temperatura amb qui ofereixi el transport).",
+    "SENSE HUMITAT:No es transporten verdures o altres productes que produeixin humitat (vehicle compatible per al transport de pa, llavors, pasta, etc.)."
+)
+@Composable
+fun ConditionScroll(){
+    LazyColumn(modifier = Modifier.fillMaxHeight(0.3f)){
+        items(condicionsTransportInfo.size){ condicio ->
+            Text(condicionsTransportInfo[condicio].split(":")[0])
+            Text(condicionsTransportInfo[condicio].split(":")[1])
+            Spacer(Modifier.padding(4.dp))
+        }
+    }
+}
 
 @Composable
 fun OutlinedFilterTextField(value: String, onValueChange: (String) -> Unit, placeholder: String, leadingIcon: @Composable () -> Unit){
