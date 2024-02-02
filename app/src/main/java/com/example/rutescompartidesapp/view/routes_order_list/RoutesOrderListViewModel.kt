@@ -27,8 +27,8 @@ import kotlinx.coroutines.flow.update
 
 class RoutesOrderListViewModel: ViewModel() {
 
-    private val _popupIsShowing = MutableStateFlow(false)
-    val popupIsShowing = _popupIsShowing
+    private val _isCondicionsPopupShowing = MutableStateFlow(false)
+    val isCondicionsPopupShowing = _isCondicionsPopupShowing
 
     private val _puntSortidaText = MutableStateFlow("")
     val puntSortidaText = _puntSortidaText.asStateFlow()
@@ -42,17 +42,56 @@ class RoutesOrderListViewModel: ViewModel() {
     private val _horaSortidaText = MutableStateFlow("")
     val horaSortidaText = _horaSortidaText.asStateFlow()
 
+    private val _popupIsShowing = MutableStateFlow(false)
+    val popupIsShowing = _popupIsShowing
+
+    // Condicions de transport chips
+    private val _isIsoterm = MutableStateFlow(false)
+    val isIsoterm = _isIsoterm.asStateFlow()
+
+    private val _isRefrigerat = MutableStateFlow(false)
+    val isRefrigerat = _isRefrigerat.asStateFlow()
+
+    private val _isCongelat = MutableStateFlow(false)
+    val isCongelat = _isCongelat.asStateFlow()
+
+    private val _isSenseHumitat = MutableStateFlow(false)
+    val isSenseHumitat = _isSenseHumitat.asStateFlow()
+
+    fun onCheckChip(condition: String){
+        when(condition) {
+            "Isoterm" -> _isIsoterm.value = !_isIsoterm.value
+            "Refrigerat" -> _isRefrigerat.value = !_isRefrigerat.value
+            "Congelat" -> _isCongelat.value = !_isCongelat.value
+            "SenseHumitat" -> _isSenseHumitat.value = !_isSenseHumitat.value
+        }
+
+    }
+
     fun onPopupShow(isShowing: Boolean){
+        /*if (!_isCondicionsPopupShowing.value) {
+            _popupIsShowing.value = isShowing
+        }
+        */
         _popupIsShowing.value = isShowing
+
         if (!isShowing){
             _puntSortidaText.value = ""
             _puntArribadaText.value = ""
             _extraFiltersAreShowing.value = false
             _horaSortidaText.value = ""
             _dataSortidaText.value = ""
+            _isIsoterm.value = false
+            _isRefrigerat.value = false
+            _isCongelat.value = false
+            _isSenseHumitat.value = false
+            _isCondicionsPopupShowing.value = false
         }
     }
+    fun onCondicionsPopupShow(isShowing: Boolean){
+        _isCondicionsPopupShowing.value = isShowing
 
+    }
     fun onFilterSearch(puntSortida: String?, puntArribada: String?){
         _popupIsShowing.value = false
         if (puntSortida != null) {
@@ -60,6 +99,10 @@ class RoutesOrderListViewModel: ViewModel() {
         }
         _puntSortidaText.value = ""
         _puntArribadaText.value = ""
+        _isIsoterm.value = false
+        _isRefrigerat.value = false
+        _isCongelat.value = false
+        _isSenseHumitat.value = false
     }
     fun onPuntSortidaChange(text: String){
         _puntSortidaText.value = text
