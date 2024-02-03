@@ -1,9 +1,12 @@
 package com.example.rutescompartidesapp.view.routes_order_list.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -11,17 +14,23 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccessTime
 import androidx.compose.material.icons.filled.CalendarMonth
+import androidx.compose.material.icons.filled.Cancel
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Map
 import androidx.compose.material.icons.filled.QuestionMark
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ChipColors
 import androidx.compose.material3.Divider
@@ -33,6 +42,7 @@ import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.InputChip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.SelectableChipColors
@@ -51,32 +61,40 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.rutescompartidesapp.data.domain.ListQuery
+import com.example.rutescompartidesapp.ui.theme.BlueRC
 import com.example.rutescompartidesapp.ui.theme.GrayRC
 import com.example.rutescompartidesapp.ui.theme.MateBlackRC
+import com.example.rutescompartidesapp.view.routes_order_list.FilterPopupViewModel
 import com.example.rutescompartidesapp.view.routes_order_list.RoutesOrderListViewModel
 import kotlin.reflect.KFunction1
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Preview(showBackground = true)
 @Composable
 fun FilterPopup(){
+    val filterPopupViewModel: FilterPopupViewModel = hiltViewModel()
     val routeOrderListViewModel: RoutesOrderListViewModel = hiltViewModel()
-    val isPopupShowing by routeOrderListViewModel.popupIsShowing.collectAsState()
-    val puntSortidaText by routeOrderListViewModel.puntSortidaText.collectAsState()
-    val puntArribadaText by routeOrderListViewModel.puntArribadaText.collectAsState()
-    val dataSortidaText by routeOrderListViewModel.dataSortidaText.collectAsState()
-    val horaSortidaText by routeOrderListViewModel.horaSortidaText.collectAsState()
-    val areExtraFiltersShowing by routeOrderListViewModel.extraFiltersAreShowing.collectAsState()
-    val isIsoterm by routeOrderListViewModel.isIsoterm.collectAsState()
-    val isRefrigerat by routeOrderListViewModel.isRefrigerat.collectAsState()
-    val isCongelat by routeOrderListViewModel.isCongelat.collectAsState()
-    val isSenseHumitat by routeOrderListViewModel.isSenseHumitat.collectAsState()
-    val isCondicionsPopupShowing by routeOrderListViewModel.isCondicionsPopupShowing.collectAsState()
+
+    val isPopupShowing by filterPopupViewModel.popupIsShowing.collectAsState()
+    val puntSortidaText by filterPopupViewModel.puntSortidaText.collectAsState()
+    val puntArribadaText by filterPopupViewModel.puntArribadaText.collectAsState()
+    val dataSortidaText by filterPopupViewModel.dataSortidaText.collectAsState()
+    val horaSortidaText by filterPopupViewModel.horaSortidaText.collectAsState()
+    val areExtraFiltersShowing by filterPopupViewModel.extraFiltersAreShowing.collectAsState()
+    val isIsoterm by filterPopupViewModel.isIsoterm.collectAsState()
+    val isRefrigerat by filterPopupViewModel.isRefrigerat.collectAsState()
+    val isCongelat by filterPopupViewModel.isCongelat.collectAsState()
+    val isSenseHumitat by filterPopupViewModel.isSenseHumitat.collectAsState()
+    val isCondicionsPopupShowing by filterPopupViewModel.isCondicionsPopupShowing.collectAsState()
+    val etiquetesText by filterPopupViewModel.etiquetesText.collectAsState()
+    val etiquetesList by filterPopupViewModel.etiquetesList.collectAsState()
+    val etiquetesError by filterPopupViewModel.etiquetesError.collectAsState()
 
     if (isPopupShowing){
         Popup(alignment = Alignment.Center,
             offset = IntOffset(0, 1200),
-            onDismissRequest = { routeOrderListViewModel.onPopupShow(false) },
+            onDismissRequest = { filterPopupViewModel.onPopupShow(false) },
             properties = PopupProperties(
                 focusable = true,
                 dismissOnBackPress = true,
@@ -97,7 +115,7 @@ fun FilterPopup(){
                         Spacer(modifier = Modifier.padding(8.dp))
                         OutlinedFilterTextField(
                             value = puntSortidaText,
-                            onValueChange = routeOrderListViewModel::onPuntSortidaChange,
+                            onValueChange = filterPopupViewModel::onPuntSortidaChange,
                             placeholder = "Punt de sortida",
                             leadingIcon = {
                                 Icon(
@@ -108,7 +126,7 @@ fun FilterPopup(){
                             }
                         )
                         OutlinedFilterTextField(value = puntArribadaText,
-                            onValueChange = routeOrderListViewModel::onPuntArribadaChange,
+                            onValueChange = filterPopupViewModel::onPuntArribadaChange,
                             placeholder = "Punt de aribada",
                             leadingIcon = {
                                 Icon(
@@ -118,7 +136,7 @@ fun FilterPopup(){
                                 )
                             }
                         )
-                        IconButton(onClick = { routeOrderListViewModel.onExtraFiltersToggle() }) {
+                        IconButton(onClick = { filterPopupViewModel.onExtraFiltersToggle() }) {
                             if (areExtraFiltersShowing) {
                                 Icon(
                                     imageVector = Icons.Filled.KeyboardArrowUp,
@@ -134,7 +152,7 @@ fun FilterPopup(){
                         if (areExtraFiltersShowing){
                             OutlinedFilterTextField(
                                 value = dataSortidaText,
-                                onValueChange = routeOrderListViewModel::onDataSortidaChange,
+                                onValueChange = filterPopupViewModel::onDataSortidaChange,
                                 placeholder = "Data de sortida",
                                 leadingIcon = {
                                     Icon(
@@ -145,7 +163,7 @@ fun FilterPopup(){
                                 }
                             )
                             OutlinedFilterTextField(value = horaSortidaText,
-                                onValueChange = routeOrderListViewModel::onHoraArribadaChange,
+                                onValueChange = filterPopupViewModel::onHoraArribadaChange,
                                 placeholder = "Hora de aribada",
                                 leadingIcon = {
                                     Icon(
@@ -161,14 +179,14 @@ fun FilterPopup(){
                                 Column(modifier = Modifier.weight(1f),
                                     verticalArrangement = Arrangement.Center,
                                     horizontalAlignment = Alignment.CenterHorizontally) {
-                                    FloatingActionButton(onClick = { routeOrderListViewModel.onCondicionsPopupShow(true) },
+                                    FloatingActionButton(onClick = { filterPopupViewModel.onCondicionsPopupShow(true) },
                                         containerColor = MateBlackRC) {
                                         Icon(imageVector = Icons.Filled.QuestionMark,
                                             contentDescription = "Question Icon",
                                             tint = Color.White)
                                     }
                                     if (isCondicionsPopupShowing){
-                                        Popup(onDismissRequest = { routeOrderListViewModel.onCondicionsPopupShow(false) },
+                                        Popup(onDismissRequest = { filterPopupViewModel.onCondicionsPopupShow(false) },
                                             offset = IntOffset(150, -700),
                                             properties = PopupProperties(
                                                 focusable = true,
@@ -182,20 +200,19 @@ fun FilterPopup(){
                                                             verticalArrangement = Arrangement.Center,
                                                             horizontalAlignment = Alignment.CenterHorizontally) {
                                                             Row(modifier = Modifier
-                                                                .fillMaxWidth().height(40.dp)
+                                                                .fillMaxWidth()
+                                                                .height(40.dp)
                                                                 .background(Color.LightGray),
                                                                 verticalAlignment = Alignment.CenterVertically,
                                                                 horizontalArrangement = Arrangement.Center
                                                                 ){
                                                                 Text("Condicions de transport")
                                                             }
-                                                            Row (Modifier.height(10.dp).background(Color.LightGray)) {
+                                                            Row (
+                                                                Modifier
+                                                                    .height(10.dp)
+                                                                    .background(Color.LightGray)) {
                                                                 Divider(color = MateBlackRC, thickness = 4.dp)
-                                                            }
-                                                            Row (Modifier.padding(12.dp)) {
-                                                                Text("En seleccionar el tipus de transport, se't mostraran només els vehicles i les comandes (necessitats de transport) que compleixin aquestes característiques:")
-                                                                Spacer(Modifier.padding(8.dp))
-
                                                             }
                                                             Row(Modifier.padding(12.dp)) {
                                                                 ConditionScroll()
@@ -207,13 +224,14 @@ fun FilterPopup(){
                                             }
                                     }
                                 }
+                                // Chips & Info Button
                                 Column(modifier = Modifier.weight(3f),
                                     verticalArrangement = Arrangement.Center) {
                                     Row(modifier = Modifier.fillMaxWidth(),
                                         horizontalArrangement = Arrangement.SpaceAround) {
                                         ElevatedFilterChip(
                                             selected = isIsoterm ,
-                                            onClick = { routeOrderListViewModel.onCheckChip("Isoterm") },
+                                            onClick = { filterPopupViewModel.onCheckChip("Isoterm") },
                                             label = {  if (isIsoterm) {
                                                 Text("Isoterm",
                                                     color = Color.White)
@@ -234,7 +252,7 @@ fun FilterPopup(){
                                             ))
                                         ElevatedFilterChip(
                                             selected = isRefrigerat ,
-                                            onClick = { routeOrderListViewModel.onCheckChip("Refrigerat") },
+                                            onClick = { filterPopupViewModel.onCheckChip("Refrigerat") },
                                             label = {
                                                 if (isRefrigerat) {
                                                     Text("Refrigerat",
@@ -259,7 +277,7 @@ fun FilterPopup(){
                                         horizontalArrangement = Arrangement.SpaceEvenly) {
                                         ElevatedFilterChip(
                                             selected = isCongelat ,
-                                            onClick = { routeOrderListViewModel.onCheckChip("Congelat") },
+                                            onClick = { filterPopupViewModel.onCheckChip("Congelat") },
                                             label = {  if (isCongelat) {
                                                 Text("Congelat",
                                                     color = Color.White)
@@ -280,7 +298,7 @@ fun FilterPopup(){
                                             ))
                                         ElevatedFilterChip(
                                             selected = isSenseHumitat ,
-                                            onClick = { routeOrderListViewModel.onCheckChip("SenseHumitat") },
+                                            onClick = { filterPopupViewModel.onCheckChip("SenseHumitat") },
                                             label = { if (isSenseHumitat) {
                                                 Text("Sense Humitat",
                                                     color = Color.White)
@@ -302,23 +320,103 @@ fun FilterPopup(){
                                     }
                                 }
                             }
-                        }
-                        Spacer(modifier = Modifier.padding(8.dp))
-                        ElevatedButton(onClick = {
-                            routeOrderListViewModel.onFilterSearch(
-                                puntSortidaText,
-                                puntArribadaText
+                            Spacer(Modifier.padding(4.dp))
+                            OutlinedTextField(
+                                modifier = Modifier.fillMaxWidth(0.9f),
+                                value = etiquetesText,
+                                onValueChange = filterPopupViewModel::onEtiquetesChange,
+                                placeholder = {
+                                    Text(text = "Etiquetes", color = Color.Gray)
+                                              },
+                                isError = etiquetesError,
+                                trailingIcon = {
+                                    if (etiquetesError){
+                                        Icon(imageVector = Icons.Filled.Cancel,
+                                            contentDescription = "Error Icon",
+                                            tint = MaterialTheme.colorScheme.primary)
+                                    }
+                                },
+                                supportingText = {
+                                    if (etiquetesError){
+                                        Text(text = "Aquesta etiqueta ja existeix o no pot estar buida",
+                                            color = MaterialTheme.colorScheme.primary)
+                                    }
+                                },
+                                shape = RoundedCornerShape(16.dp),
+                                colors = TextFieldDefaults.colors(
+                                    focusedIndicatorColor = MaterialTheme.colorScheme.primary,
+                                    unfocusedIndicatorColor = Color.Gray,
+                                    disabledIndicatorColor = Color.Transparent,
+                                    focusedContainerColor = Color.White,
+                                    unfocusedContainerColor = Color.White,
+                                    errorTextColor = MaterialTheme.colorScheme.primary,
+                                    errorContainerColor = GrayRC
+                                ),
+                                keyboardOptions = KeyboardOptions(
+                                    imeAction = ImeAction.Send,
+                                ),
+                                keyboardActions = KeyboardActions(
+                                    onSend = {
+                                        if (etiquetesText.isEmpty() || etiquetesText in etiquetesList){
+                                            filterPopupViewModel.onEtiquetesErrorChange(true)
+                                            return@KeyboardActions
+                                        }
+                                        filterPopupViewModel.onEtiquetesErrorChange(false)
+                                        filterPopupViewModel.onEtiquetesAddToListChange(etiquetesText)
+                                }),
+                                singleLine = true,
                             )
-                        }) {
+                            FlowRow(modifier = Modifier.fillMaxWidth(0.9f),
+                                horizontalArrangement = Arrangement.Start,){
+                                etiquetesList.forEach{ etiqueta ->
+                                    InputChip(selected = true,
+                                        onClick = { filterPopupViewModel.onEtiquetaDelete(etiqueta) },
+                                        label = { Text(etiqueta,
+                                            color = Color.White) },
+                                        colors = FilterChipDefaults.elevatedFilterChipColors(
+                                            selectedContainerColor = BlueRC
+                                        ),
+                                        avatar = {
+                                            Icon(imageVector = Icons.Filled.Close,
+                                                contentDescription = "Close Icon",
+                                                tint = Color.LightGray,
+                                                modifier = Modifier.clickable {
+                                                    filterPopupViewModel.onEtiquetaDelete(etiqueta)
+                                                })
+
+                                        })
+                                    Spacer(Modifier.padding(4.dp))
+                                }
+                            }
+                        }
+
+                        Spacer(modifier = Modifier.padding(8.dp))
+
+                        // Search Button
+                        ElevatedButton(onClick = {
+                            filterPopupViewModel.onFilterSearch(
+                                ListQuery(
+                                    puntSortida = puntSortidaText,
+                                    puntArribada = puntArribadaText,
+                                    dataSortida = dataSortidaText,
+                                    horaSortida = horaSortidaText,
+                                    etiquetes = etiquetesList,
+                                    isIsoterm = isIsoterm,
+                                    isRefrigerat = isRefrigerat,
+                                    isCongelat = isCongelat,
+                                    isSenseHumitat = isSenseHumitat
+                                )
+                            )
+                        },
+                            colors = ButtonDefaults.elevatedButtonColors(
+                                contentColor = MaterialTheme.colorScheme.secondary,
+                                containerColor = MaterialTheme.colorScheme.primary
+                            )
+
+                            ) {
                             Text(text = "Cerca")
                         }
                         Spacer(modifier = Modifier.padding(8.dp))
-
-
-
-
-
-
                     }
                 }
             }
@@ -326,8 +424,8 @@ fun FilterPopup(){
     }
 }
 
-
 val condicionsTransportInfo = listOf(
+    "En seleccionar el tipus de transport, se't mostraran només els vehicles i les comandes (necessitats de transport) que compleixin aquestes característiques:",
     "ISOTERM:Vehicle amb parets aïllants, manté la temperatura.",
     "REFRIGERAT:Vehicle amb font de fred, temperatures de 4 a 12º (cal confirmar temperatura amb qui ofereixi el transport).",
     "CONGELAT:Vehicle amb font de fred, temperatures inferiors a 0º (cal confirmar temperatura amb qui ofereixi el transport).",
@@ -335,7 +433,7 @@ val condicionsTransportInfo = listOf(
 )
 @Composable
 fun ConditionScroll(){
-    LazyColumn(modifier = Modifier.fillMaxHeight(0.3f)){
+    LazyColumn(modifier = Modifier.fillMaxHeight(0.4f)){
         items(condicionsTransportInfo.size){ condicio ->
             Text(condicionsTransportInfo[condicio].split(":")[0])
             Text(condicionsTransportInfo[condicio].split(":")[1])
@@ -347,6 +445,7 @@ fun ConditionScroll(){
 @Composable
 fun OutlinedFilterTextField(value: String, onValueChange: (String) -> Unit, placeholder: String, leadingIcon: @Composable () -> Unit){
     OutlinedTextField(
+        modifier = Modifier.fillMaxWidth(0.9f),
         value = value,
         onValueChange = onValueChange,
         leadingIcon = {
@@ -367,10 +466,5 @@ fun OutlinedFilterTextField(value: String, onValueChange: (String) -> Unit, plac
             imeAction = ImeAction.Next),
         singleLine = true,
     )
-
     Spacer(modifier = Modifier.padding(8.dp))
-
 }
-
-
-
