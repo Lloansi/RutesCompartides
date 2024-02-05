@@ -20,7 +20,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
@@ -35,7 +34,6 @@ import androidx.compose.ui.unit.sp
 import com.example.rutescompartidesapp.R
 import com.example.rutescompartidesapp.domain.model.Route
 import com.example.rutescompartidesapp.domain.model.Vehicle
-
 
 val allRoute = listOf(
     Route(
@@ -65,7 +63,6 @@ val allRoute = listOf(
 )
 
 val newVehicle = Vehicle("Citroën Berlingo", 4, 234f,564f,234f)
-
 
 @Composable
 fun RouteCard(ruta : Route, vehicle: Vehicle) {

@@ -1,6 +1,5 @@
 package com.example.rutescompartidesapp.view.map.components
 
-
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -26,26 +25,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.rutescompartidesapp.R
 import com.example.rutescompartidesapp.domain.model.Package
-
 
 var package1 = Package(1, 3, false, 40.5f,256.5f,356.5f,2.5f,"11-04-2024","13-04-2024","Mataró", "Sabadell")
 var package2 = Package(2, 2, true, 46.3f,389.2f,189.3f,2.7f,"11-04-2024","13-04-2024","Mataró", "Sabadell")
 var package3 = Package(3, 2, true, 49.3f,324.2f,157.3f,2.7f,"11-04-2024","13-04-2024","Mataró", "Sabadell")
 
 var packagesList = mutableListOf(package1, package2,package3,package1,package3, package2)
-
-
 
 @Composable
 fun ComandaCard(comanda: Package) {
@@ -129,14 +122,11 @@ fun ComandaCard(comanda: Package) {
                     modifier = Modifier
                 )
                 Spacer(modifier = Modifier.height(4.dp))
-                //Important package information
                 Column (
                     modifier = Modifier
                         .fillMaxWidth()
-                        //.padding(1.dp)
-                        //.padding(start = 20.dp),
-                    //horizontalAlignment = Alignment.CenterHorizontally
                 ) {
+                    //Important package information
                     detailsCard(idImage = R.drawable.packages_svg, value = "${comanda.packageQuantity}", imageSize = 35.dp, paddingPercentage = 4)
                     detailsCard(idImage = R.drawable.weight_svg, value = "${comanda.packageWeight}kg", imageSize = 27.dp, paddingPercentage = 1)
                 }
@@ -148,34 +138,6 @@ fun ComandaCard(comanda: Package) {
                 }
             }
         }
-    }
-}
-
-@Composable
-fun SpecsComanda(idImage: Int,value: String, imageSize: Dp, fontSize : TextUnit = 16.sp){
-    Row (
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(1.dp)
-            .padding(start = 15.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Start
-    ){
-        Image(
-            painter = painterResource(id = idImage),
-            contentDescription = null,
-            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
-            modifier = Modifier
-                .size(imageSize)
-                .padding(end = 6.dp)
-        )
-        Text(
-            text = value,
-            style = MaterialTheme.typography.bodyMedium,
-            fontFamily = fredokaOneFamily,
-            fontWeight = FontWeight.SemiBold,
-            fontSize = fontSize,
-        )
     }
 }
 

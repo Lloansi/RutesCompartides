@@ -1,6 +1,5 @@
 package com.example.rutescompartidesapp.view.map
 
-
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -26,7 +26,6 @@ import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
-
 
 object MapScreen: Screen {
     @Composable
@@ -48,6 +47,9 @@ fun MapScreen() {
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.background)
         ) {
+            val percentagePaddingDesviament = 100
+            val padding = (LocalDensity.current.density * percentagePaddingDesviament).dp
+
             // Mapa
             MapViewContainer(viewModel = mapViewModel)
 
@@ -74,6 +76,7 @@ fun MapScreen() {
             Box(
                 modifier = Modifier
                 .padding(16.dp)
+                .padding(bottom = padding)
                 .fillMaxSize(),
                 contentAlignment = Alignment.BottomEnd
             ){
@@ -123,7 +126,6 @@ fun MapViewContainer(viewModel: MapViewModel ){
             locationOverlay.enableMyLocation()
             mapView.overlays.add(locationOverlay)
 
-
             mapView
         },
         update = { mapView ->
@@ -131,7 +133,6 @@ fun MapViewContainer(viewModel: MapViewModel ){
             // Since geoPoint is read here, the view will recompose whenever it is updated
             mapView.controller.setCenter(viewModel.markerPosition.value)
         }
-
     )
 
     /*

@@ -6,11 +6,11 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
@@ -23,25 +23,20 @@ fun ExpandableFloatingButton() {
 
     Column(
         modifier = Modifier
-            .wrapContentSize(),
+            .wrapContentSize()
     ) {
         if (isExpanded) {
             MiniFloatingButton(
-                icon = Icons.Default.ThumbUp,
-                onClick = { /* Handle ThumbUp click */ }
-            )
-            MiniFloatingButton(
-                icon = Icons.Default.Favorite,
+                icon = Icons.Default.Edit,
                 onClick = { /* Handle Favorite click */ }
             )
             MiniFloatingButton(
-                icon = Icons.Default.Edit,
+                icon = Icons.Default.Favorite,
                 onClick = { /* Handle Visibility click */ }
             )
-            // Add more MiniFloatingButton as needed
         }
-
         FloatingActionButton(
+            containerColor = MaterialTheme.colorScheme.primary,
             onClick = {
                 isExpanded = !isExpanded
                 if (isExpanded) {
@@ -63,6 +58,8 @@ fun MiniFloatingButton(
     onClick: () -> Unit
 ) {
     FloatingActionButton(
+        containerColor = Color.White,
+        contentColor = MaterialTheme.colorScheme.primary,
         onClick = {
             onClick()
         },
@@ -72,4 +69,3 @@ fun MiniFloatingButton(
         Icon(imageVector = icon, contentDescription = null)
     }
 }
-
