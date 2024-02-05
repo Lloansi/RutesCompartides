@@ -16,17 +16,17 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.example.rutescompartidesapp.view.map.components.CardBottomMap
+import com.example.rutescompartidesapp.view.map.components.ExpandableFloatingButton
 import com.example.rutescompartidesapp.view.map.components.SearchViewContainer
-import dagger.hilt.android.lifecycle.HiltViewModel
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
+
 
 object MapScreen: Screen {
     @Composable
@@ -43,7 +43,6 @@ fun MapScreen() {
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
-
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -52,7 +51,7 @@ fun MapScreen() {
             // Mapa
             MapViewContainer(viewModel = mapViewModel)
 
-            // Contenedor de búsqueda arriba del mapa
+            // Search
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -62,6 +61,7 @@ fun MapScreen() {
                 SearchViewContainer()
             }
 
+            // InfoCards Bottom Screen
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -69,6 +69,15 @@ fun MapScreen() {
                     .align(Alignment.BottomCenter)
             ) {
                 CardBottomMap()
+            }
+
+            Box(
+                modifier = Modifier
+                .padding(16.dp)
+                .fillMaxSize(),
+                contentAlignment = Alignment.BottomEnd
+            ){
+                ExpandableFloatingButton()
             }
         }
     }

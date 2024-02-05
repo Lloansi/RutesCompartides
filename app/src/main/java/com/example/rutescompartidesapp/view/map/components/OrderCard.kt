@@ -37,8 +37,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.rutescompartidesapp.R
 import com.example.rutescompartidesapp.domain.model.Package
-import com.example.rutescompartidesapp.domain.model.Route
-import com.example.rutescompartidesapp.domain.model.Vehicle
 
 
 var package1 = Package(1, 3, false, 40.5f,256.5f,356.5f,2.5f,"11-04-2024","13-04-2024","Mataró", "Sabadell")
@@ -46,6 +44,7 @@ var package2 = Package(2, 2, true, 46.3f,389.2f,189.3f,2.7f,"11-04-2024","13-04-
 var package3 = Package(3, 2, true, 49.3f,324.2f,157.3f,2.7f,"11-04-2024","13-04-2024","Mataró", "Sabadell")
 
 var packagesList = mutableListOf(package1, package2,package3,package1,package3, package2)
+
 
 
 @Composable
@@ -74,9 +73,9 @@ fun ComandaCard(comanda: Package) {
             ){
                 // Package number
                 Text(
-                    text = "Comanda nº${comanda.package_id}",
+                    text = "Comanda nº${comanda.packageId}",
                     style = MaterialTheme.typography.titleMedium,
-                    //fontFamily = fredokaOneFamily,
+                    fontFamily = fredokaOneFamily,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.primary
                 )
@@ -101,15 +100,15 @@ fun ComandaCard(comanda: Package) {
                     )
                     Column {
                         Text(
-                            text = comanda.package_starting_date,
+                            text = comanda.packageStartingDate,
                             style = MaterialTheme.typography.bodyMedium,
-                            //fontFamily = fredokaOneFamily,
+                            fontFamily = fredokaOneFamily,
                             fontWeight = FontWeight.SemiBold
                         )
                         Text(
-                            text = comanda.package_end_date,
+                            text = comanda.packageEndDate,
                             style = MaterialTheme.typography.bodyMedium,
-                            //fontFamily = fredokaOneFamily,
+                            fontFamily = fredokaOneFamily,
                             fontWeight = FontWeight.SemiBold
                         )
                     }
@@ -122,9 +121,9 @@ fun ComandaCard(comanda: Package) {
             ) {
                 // Profile details
                 Text(
-                    text = "${comanda.package_start_point} - ${comanda.package_end_point}",
+                    text = "${comanda.packageStartPoint} - ${comanda.packageEndPoint}",
                     style = MaterialTheme.typography.titleMedium,
-                    //fontFamily = fredokaOneFamily,
+                    fontFamily = fredokaOneFamily,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier
                 )
@@ -137,13 +136,13 @@ fun ComandaCard(comanda: Package) {
                         .padding(start = 20.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    detailsCard(idImage = R.drawable.packages_svg, value = "${comanda.package_quantity}", imageSize = 35.dp, paddingPercentage = 5)
-                    detailsCard(idImage = R.drawable.weight_svg, value = "${comanda.package_weight}kg", imageSize = 27.dp, paddingPercentage = 5)
+                    detailsCard(idImage = R.drawable.packages_svg, value = "${comanda.packageQuantity}", imageSize = 35.dp, paddingPercentage = 5)
+                    detailsCard(idImage = R.drawable.weight_svg, value = "${comanda.packageWeight}kg", imageSize = 27.dp, paddingPercentage = 5)
                 }
                 // Measures information
-                MeasuresText(icon = Icons.Default.KeyboardArrowRight, typeOfMeasure = "Amplada", value = "${comanda.package_width}",paddingPercentage = 5)
-                MeasuresText(icon = Icons.Default.KeyboardArrowRight, typeOfMeasure = "Longitud", value = "${comanda.package_longitude}",paddingPercentage = 5)
-                MeasuresText(icon = Icons.Default.KeyboardArrowRight, typeOfMeasure = "Altura", value = "${comanda.package_height}",paddingPercentage = 5)
+                MeasuresText(icon = Icons.Default.KeyboardArrowRight, typeOfMeasure = "Amplada", value = "${comanda.packageWidth}",paddingPercentage = 5)
+                MeasuresText(icon = Icons.Default.KeyboardArrowRight, typeOfMeasure = "Longitud", value = "${comanda.packageLongitude}",paddingPercentage = 5)
+                MeasuresText(icon = Icons.Default.KeyboardArrowRight, typeOfMeasure = "Altura", value = "${comanda.packageHeight}",paddingPercentage = 5)
             }
         }
     }
@@ -173,9 +172,9 @@ fun ComandaCard2(comanda: Package) {
             ){
                 // Package number
                 Text(
-                    text = "Comanda nº${comanda.package_id}",
+                    text = "Comanda nº${comanda.packageId}",
                     style = MaterialTheme.typography.titleMedium,
-                    //fontFamily = fredokaOneFamily,
+                    fontFamily = fredokaOneFamily,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.primary
                 )
@@ -200,15 +199,15 @@ fun ComandaCard2(comanda: Package) {
                     )
                     Column {
                         Text(
-                            text = comanda.package_starting_date,
+                            text = comanda.packageStartingDate,
                             style = MaterialTheme.typography.bodyMedium,
-                            //fontFamily = fredokaOneFamily,
+                            fontFamily = fredokaOneFamily,
                             fontWeight = FontWeight.SemiBold
                         )
                         Text(
-                            text = comanda.package_end_date,
+                            text = comanda.packageEndDate,
                             style = MaterialTheme.typography.bodyMedium,
-                            //fontFamily = fredokaOneFamily,
+                            fontFamily = fredokaOneFamily,
                             fontWeight = FontWeight.SemiBold
                         )
                     }
@@ -221,9 +220,9 @@ fun ComandaCard2(comanda: Package) {
             ) {
                 // Profile details
                 Text(
-                    text = "${comanda.package_start_point} - ${comanda.package_end_point}",
+                    text = "${comanda.packageStartPoint} - ${comanda.packageEndPoint}",
                     style = MaterialTheme.typography.titleMedium,
-                    //fontFamily = fredokaOneFamily,
+                    fontFamily = fredokaOneFamily,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.padding(top = 6.dp)
                 )
@@ -236,13 +235,13 @@ fun ComandaCard2(comanda: Package) {
                         .padding(start = 20.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    SpecsComanda(idImage = R.drawable.packages_svg, value = "${comanda.package_quantity}", imageSize = 35.dp)
-                    SpecsComanda(idImage = R.drawable.weight_svg, value = "${comanda.package_weight}kg", imageSize = 27.dp)
+                    SpecsComanda(idImage = R.drawable.packages_svg, value = "${comanda.packageQuantity}", imageSize = 35.dp)
+                    SpecsComanda(idImage = R.drawable.weight_svg, value = "${comanda.packageWeight}kg", imageSize = 27.dp)
                 }
                 // Measures information
-                MeasuresText(icon = Icons.Default.KeyboardArrowRight, typeOfMeasure = "Amplada", value = "${comanda.package_width}", paddingPercentage = 5)
-                MeasuresText(icon = Icons.Default.KeyboardArrowRight, typeOfMeasure = "Longitud", value = "${comanda.package_longitude}", paddingPercentage = 5)
-                MeasuresText(icon = Icons.Default.KeyboardArrowRight, typeOfMeasure = "Altura", value = "${comanda.package_height}", paddingPercentage = 5)
+                MeasuresText(icon = Icons.Default.KeyboardArrowRight, typeOfMeasure = "Amplada", value = "${comanda.packageWidth}", paddingPercentage = 5)
+                MeasuresText(icon = Icons.Default.KeyboardArrowRight, typeOfMeasure = "Longitud", value = "${comanda.packageLongitude}", paddingPercentage = 5)
+                MeasuresText(icon = Icons.Default.KeyboardArrowRight, typeOfMeasure = "Altura", value = "${comanda.packageHeight}", paddingPercentage = 5)
             }
         }
     }
@@ -269,7 +268,7 @@ fun SpecsComanda(idImage: Int,value: String, imageSize: Dp, fontSize : TextUnit 
         Text(
             text = value,
             style = MaterialTheme.typography.bodyMedium,
-            //fontFamily = fredokaOneFamily,
+            fontFamily = fredokaOneFamily,
             fontWeight = FontWeight.SemiBold,
             fontSize = fontSize,
         )
@@ -298,7 +297,7 @@ fun MeasuresText(icon: ImageVector, typeOfMeasure:String, value: String, padding
         Text(
             text = "${typeOfMeasure}:",
             style = MaterialTheme.typography.bodySmall,
-            //fontFamily = openSansFamily,
+            fontFamily = openSansFamily,
             fontWeight = FontWeight.Bold,
             fontSize = 14.sp,
             color = MaterialTheme.colorScheme.primary
@@ -307,7 +306,7 @@ fun MeasuresText(icon: ImageVector, typeOfMeasure:String, value: String, padding
         Text(
             text = value,
             style = MaterialTheme.typography.bodySmall,
-            //fontFamily = openSansFamily,
+            fontFamily = openSansFamily,
             fontWeight = FontWeight.SemiBold,
             fontSize = 14.sp
         )

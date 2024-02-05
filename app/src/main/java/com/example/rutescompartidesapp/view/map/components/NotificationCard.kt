@@ -23,7 +23,6 @@ fun NotificationButtonCard(){
         .wrapContentWidth()
         .wrapContentHeight()
         .wrapContentHeight()
-        //.padding(top = 3.dp)
         .clip(RoundedCornerShape(12.dp))
         .background(color = MaterialTheme.colorScheme.primary)
         .clickable { }
@@ -34,7 +33,6 @@ fun NotificationButtonCard(){
             tint = Color.White,
             modifier = Modifier
                 .padding(8.dp)
-            //.size(24.dp) // icono de dentro
         )
     }
 }

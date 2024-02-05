@@ -1,12 +1,8 @@
 package com.example.rutescompartidesapp.view.map.components
 
-
-
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -15,11 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -30,16 +22,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.rutescompartidesapp.R
-import com.example.rutescompartidesapp.domain.model.Package
 import com.example.rutescompartidesapp.domain.model.Route
 import com.example.rutescompartidesapp.domain.model.Vehicle
 
@@ -102,7 +95,7 @@ fun RouteCard(ruta : Route, vehicle: Vehicle) {
                 Text(
                     text = "Ruta nº${ruta.routeId}",
                     style = MaterialTheme.typography.titleMedium,
-                    //fontFamily = fredokaOneFamily,
+                    fontFamily = fredokaOneFamily,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.primary
                 )
@@ -129,7 +122,7 @@ fun RouteCard(ruta : Route, vehicle: Vehicle) {
                     Text(
                         text = newVehicle.name,
                         style = MaterialTheme.typography.bodyMedium,
-                        //fontFamily = fredokaOneFamily,
+                        fontFamily = fredokaOneFamily,
                         fontWeight = FontWeight.SemiBold,
                         modifier = Modifier
                         .padding(top = 4.dp)
@@ -146,7 +139,7 @@ fun RouteCard(ruta : Route, vehicle: Vehicle) {
                 Text(
                     text = "${ruta.startPoint} - ${ruta.endPoint}",
                     style = MaterialTheme.typography.titleMedium,
-                    //fontFamily = fredokaOneFamily,
+                    fontFamily = fredokaOneFamily,
                     fontWeight = FontWeight.Bold,
                 )
                 Spacer(modifier = Modifier.height(10.dp))
@@ -159,10 +152,24 @@ fun RouteCard(ruta : Route, vehicle: Vehicle) {
                 detailsCard(idImage = R.drawable.van_measures, value = "${vehicle.vehicleMesures}", imageSize = 35.dp, fontSize = 13.sp, paddingPercentage = 5)
                 val percentagePaddingDesviament = 5
                 val paddingDesviament = (LocalDensity.current.density * percentagePaddingDesviament).dp
+
+                val annotatedString = buildAnnotatedString {
+                    withStyle(style = SpanStyle(fontSize = 14.sp, fontWeight = FontWeight.SemiBold)) {
+                        append("Desviament de ")
+                    }
+                    withStyle(style = SpanStyle(fontSize = 17.sp, fontWeight = FontWeight.ExtraBold, color = MaterialTheme.colorScheme.primary)) {
+                        append("${ruta.maxDeviation}km")
+                    }
+                    withStyle(style = SpanStyle(fontSize = 14.sp, fontWeight = FontWeight.SemiBold)) {
+                        append(" màx")
+                    }
+                }
+
                 Text(
-                    text = "Desviament de ${ruta.maxDeviation}km màx",
+                    text = annotatedString,
                     fontSize = 14.sp,
                     fontWeight = FontWeight.SemiBold,
+                    fontFamily = openSansFamily,
                     modifier = Modifier.padding().padding(start = paddingDesviament)
                 )
 
@@ -193,7 +200,7 @@ fun detailsCard(idImage: Int,value: String, imageSize: Dp, fontSize: TextUnit = 
         Text(
             text = value,
             style = MaterialTheme.typography.bodyMedium,
-            //fontFamily = fredokaOneFamily,
+            fontFamily = openSansFamily,
             fontWeight = FontWeight.SemiBold,
             fontSize = fontSize,
         )
@@ -211,7 +218,7 @@ fun PricePerKM(idImage1: Int, idImage2: Int, value : String, fontSize : TextUnit
         Text(
             text = value,
             style = MaterialTheme.typography.bodyMedium,
-            //fontFamily = fredokaOneFamily,
+            fontFamily = openSansFamily,
             fontWeight = FontWeight.SemiBold,
             fontSize = fontSize,
             modifier = Modifier
@@ -229,7 +236,7 @@ fun PricePerKM(idImage1: Int, idImage2: Int, value : String, fontSize : TextUnit
         Text(
             text = "/",
             style = MaterialTheme.typography.bodyMedium,
-            //fontFamily = fredokaOneFamily,
+            fontFamily = openSansFamily,
             fontWeight = FontWeight.SemiBold,
             fontSize = 20.sp,
         )

@@ -1,8 +1,8 @@
 package com.example.rutescompartidesapp.view.map.components
 
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -29,7 +29,8 @@ fun SearchView(searchViewModel : SearchViewModel) {
     SearchBar(
         modifier= Modifier
             .fillMaxWidth(0.80f)
-            .height(45.dp)
+            .wrapContentHeight()
+            //.height(45.dp)
             .padding(end = 12.dp),
         query = searchText ,
         placeholder = {
