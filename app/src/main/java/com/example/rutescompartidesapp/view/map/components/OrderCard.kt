@@ -67,7 +67,7 @@ fun ComandaCard(comanda: Package) {
         ){
             Column(
                 modifier = Modifier
-                    .padding(start = 15.dp, end = 10.dp, bottom = 10.dp)
+                    .padding(start = 15.dp, end = 15.dp, bottom = 10.dp)
                     .wrapContentWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ){
@@ -118,6 +118,7 @@ fun ComandaCard(comanda: Package) {
                 modifier = Modifier
                     .padding(end = 10.dp)
                     .wrapContentWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 // Profile details
                 Text(
@@ -132,116 +133,19 @@ fun ComandaCard(comanda: Package) {
                 Column (
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(1.dp)
-                        .padding(start = 20.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                        //.padding(1.dp)
+                        //.padding(start = 20.dp),
+                    //horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    detailsCard(idImage = R.drawable.packages_svg, value = "${comanda.packageQuantity}", imageSize = 35.dp, paddingPercentage = 5)
-                    detailsCard(idImage = R.drawable.weight_svg, value = "${comanda.packageWeight}kg", imageSize = 27.dp, paddingPercentage = 5)
+                    detailsCard(idImage = R.drawable.packages_svg, value = "${comanda.packageQuantity}", imageSize = 35.dp, paddingPercentage = 4)
+                    detailsCard(idImage = R.drawable.weight_svg, value = "${comanda.packageWeight}kg", imageSize = 27.dp, paddingPercentage = 1)
                 }
-                // Measures information
-                MeasuresText(icon = Icons.Default.KeyboardArrowRight, typeOfMeasure = "Amplada", value = "${comanda.packageWidth}",paddingPercentage = 5)
-                MeasuresText(icon = Icons.Default.KeyboardArrowRight, typeOfMeasure = "Longitud", value = "${comanda.packageLongitude}",paddingPercentage = 5)
-                MeasuresText(icon = Icons.Default.KeyboardArrowRight, typeOfMeasure = "Altura", value = "${comanda.packageHeight}",paddingPercentage = 5)
-            }
-        }
-    }
-}
-
-@Composable
-fun ComandaCard2(comanda: Package) {
-    Card(
-        shape = MaterialTheme.shapes.medium,
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 6.dp
-        ),
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(10.dp)
-            //.background(color = Color.White)
-            .clickable { },
-    ) {
-        Row (
-            modifier =  Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ){
-            Column(
-                modifier = Modifier
-                    .padding(top = 10.dp, bottom = 10.dp, start = 20.dp, end = 10.dp)
-                    .wrapContentWidth()
-            ){
-                // Package number
-                Text(
-                    text = "Comanda nº${comanda.packageId}",
-                    style = MaterialTheme.typography.titleMedium,
-                    fontFamily = fredokaOneFamily,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.primary
-                )
-                // SVG Comanda
-                Image(
-                    painter = painterResource(id = R.drawable.comanda_svg),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(100.dp)
-                        .padding(start = 4.dp)
-                        .padding(top = 5.dp, bottom = 5.dp)
-                )
-                Row {
-                    // Icon date
-                    Icon(
-                        imageVector = Icons.Default.DateRange,
-                        contentDescription = "Date icon",
-                        tint = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier
-                            .padding(top = 7.dp, end = 2.dp)
-                            .offset(x = (-2).dp)
-                    )
-                    Column {
-                        Text(
-                            text = comanda.packageStartingDate,
-                            style = MaterialTheme.typography.bodyMedium,
-                            fontFamily = fredokaOneFamily,
-                            fontWeight = FontWeight.SemiBold
-                        )
-                        Text(
-                            text = comanda.packageEndDate,
-                            style = MaterialTheme.typography.bodyMedium,
-                            fontFamily = fredokaOneFamily,
-                            fontWeight = FontWeight.SemiBold
-                        )
-                    }
+                Column (horizontalAlignment = Alignment.Start){
+                    // Measures information
+                    MeasuresText(icon = Icons.Default.KeyboardArrowRight, typeOfMeasure = "Amplada", value = "${comanda.packageWidth}",paddingPercentage = 5)
+                    MeasuresText(icon = Icons.Default.KeyboardArrowRight, typeOfMeasure = "Longitud", value = "${comanda.packageLongitude}",paddingPercentage = 5)
+                    MeasuresText(icon = Icons.Default.KeyboardArrowRight, typeOfMeasure = "Altura", value = "${comanda.packageHeight}",paddingPercentage = 5)
                 }
-            }
-            Column(
-                modifier = Modifier
-                    .padding(top = 10.dp, bottom = 10.dp, start = 10.dp, end = 20.dp)
-                    .wrapContentWidth(),
-            ) {
-                // Profile details
-                Text(
-                    text = "${comanda.packageStartPoint} - ${comanda.packageEndPoint}",
-                    style = MaterialTheme.typography.titleMedium,
-                    fontFamily = fredokaOneFamily,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(top = 6.dp)
-                )
-                Spacer(modifier = Modifier.height(4.dp))
-                //Important package information
-                Column (
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(1.dp)
-                        .padding(start = 20.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    SpecsComanda(idImage = R.drawable.packages_svg, value = "${comanda.packageQuantity}", imageSize = 35.dp)
-                    SpecsComanda(idImage = R.drawable.weight_svg, value = "${comanda.packageWeight}kg", imageSize = 27.dp)
-                }
-                // Measures information
-                MeasuresText(icon = Icons.Default.KeyboardArrowRight, typeOfMeasure = "Amplada", value = "${comanda.packageWidth}", paddingPercentage = 5)
-                MeasuresText(icon = Icons.Default.KeyboardArrowRight, typeOfMeasure = "Longitud", value = "${comanda.packageLongitude}", paddingPercentage = 5)
-                MeasuresText(icon = Icons.Default.KeyboardArrowRight, typeOfMeasure = "Altura", value = "${comanda.packageHeight}", paddingPercentage = 5)
             }
         }
     }
@@ -281,8 +185,7 @@ fun MeasuresText(icon: ImageVector, typeOfMeasure:String, value: String, padding
     Row(
         modifier = Modifier
             .wrapContentWidth()
-            .padding(vertical = 2.dp)
-            .padding(start = padding),
+            .padding(vertical = 2.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Start
     ) {
@@ -304,7 +207,7 @@ fun MeasuresText(icon: ImageVector, typeOfMeasure:String, value: String, padding
         )
         Spacer(modifier = Modifier.width(3.dp))
         Text(
-            text = value,
+            text = "${value}cm",
             style = MaterialTheme.typography.bodySmall,
             fontFamily = openSansFamily,
             fontWeight = FontWeight.SemiBold,
