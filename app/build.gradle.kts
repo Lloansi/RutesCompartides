@@ -71,6 +71,9 @@ dependencies {
     // Extended icons
     implementation("androidx.compose.material:material-icons-extended-android:1.6.0")
 
+    // Collect Compose
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.7.0")
+
     // ViewModel Compose
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
 

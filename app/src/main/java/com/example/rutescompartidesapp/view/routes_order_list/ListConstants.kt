@@ -8,7 +8,7 @@ object ListConstants {
     val routeList = listOf(
         RouteForList(1, "Ruta 1", "Barcelona", "Tarragona",
             "2024-12-12", "12:00", listOf("diaria"),
-            true, false, false, true),
+            false, false, false, true),
         RouteForList(2, "Ruta 2", "Girona", "Lleida",
             "2024-05-08", "14:00", listOf("setmanal"),
             true, true, false, true),

@@ -5,7 +5,7 @@ data class ListQuery(
     val puntArribada: String,
     val dataSortida: String,
     val horaSortida: String,
-    val etiquetes: List<String>?,
+    val etiquetes: List<String>,
     val isIsoterm: Boolean,
     val isRefrigerat: Boolean,
     val isCongelat: Boolean,

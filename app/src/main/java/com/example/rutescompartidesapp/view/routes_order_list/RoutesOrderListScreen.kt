@@ -29,6 +29,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.rutescompartidesapp.view.routes_order_list.components.FilterPopup
 import com.example.rutescompartidesapp.view.routes_order_list.components.TabRows
 
@@ -38,8 +39,8 @@ import com.example.rutescompartidesapp.view.routes_order_list.components.TabRows
 fun RoutesOrderListScreen(){
     val routeOrderListViewModel: RoutesOrderListViewModel = hiltViewModel()
     val filterPopupViewModel: FilterPopupViewModel = hiltViewModel()
-    val searchText by routeOrderListViewModel.searchText.collectAsState()
-    val isSearching by routeOrderListViewModel.isSearching.collectAsState()
+    val searchText by routeOrderListViewModel.searchText.collectAsStateWithLifecycle()
+    val isSearching by routeOrderListViewModel.isSearching.collectAsStateWithLifecycle()
 
     Column (Modifier.fillMaxSize()) {
         Row (Modifier.padding(12.dp),

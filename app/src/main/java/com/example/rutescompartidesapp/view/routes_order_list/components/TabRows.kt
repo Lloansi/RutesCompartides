@@ -37,6 +37,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.rutescompartidesapp.view.routes_order_list.RoutesOrderListViewModel
 import com.example.rutescompartidesapp.view.routes_order_list.TabRowViewModel
 
@@ -53,11 +54,11 @@ fun TabRows(){
     val routesOrderListViewModel: RoutesOrderListViewModel = hiltViewModel()
     val tabRowViewModel: TabRowViewModel = hiltViewModel()
 
-    val selectedTabIndex by tabRowViewModel.selectedTabIndex.collectAsState()
+    val selectedTabIndex by tabRowViewModel.selectedTabIndex.collectAsStateWithLifecycle()
     val tabItems = tabRowViewModel.tabItems
-    val routes by routesOrderListViewModel.routes.collectAsState()
-    val orders by routesOrderListViewModel.orders.collectAsState()
-    val isSearching by routesOrderListViewModel.isSearching.collectAsState()
+    val routes by routesOrderListViewModel.routes.collectAsStateWithLifecycle()
+    val orders by routesOrderListViewModel.orders.collectAsStateWithLifecycle()
+    val isSearching by routesOrderListViewModel.isSearching.collectAsStateWithLifecycle()
 
     val pagerState = rememberPagerState {
         tabItems.size

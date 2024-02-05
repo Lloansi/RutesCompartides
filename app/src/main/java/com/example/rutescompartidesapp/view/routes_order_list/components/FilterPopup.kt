@@ -61,6 +61,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.rutescompartidesapp.data.domain.ListQuery
 import com.example.rutescompartidesapp.ui.theme.BlueRC
 import com.example.rutescompartidesapp.ui.theme.GrayRC
@@ -74,22 +75,20 @@ import kotlin.reflect.KFunction1
 @Composable
 fun FilterPopup(){
     val filterPopupViewModel: FilterPopupViewModel = hiltViewModel()
-    val routeOrderListViewModel: RoutesOrderListViewModel = hiltViewModel()
-
-    val isPopupShowing by filterPopupViewModel.popupIsShowing.collectAsState()
-    val puntSortidaText by filterPopupViewModel.puntSortidaText.collectAsState()
-    val puntArribadaText by filterPopupViewModel.puntArribadaText.collectAsState()
-    val dataSortidaText by filterPopupViewModel.dataSortidaText.collectAsState()
-    val horaSortidaText by filterPopupViewModel.horaSortidaText.collectAsState()
-    val areExtraFiltersShowing by filterPopupViewModel.extraFiltersAreShowing.collectAsState()
-    val isIsoterm by filterPopupViewModel.isIsoterm.collectAsState()
-    val isRefrigerat by filterPopupViewModel.isRefrigerat.collectAsState()
-    val isCongelat by filterPopupViewModel.isCongelat.collectAsState()
-    val isSenseHumitat by filterPopupViewModel.isSenseHumitat.collectAsState()
-    val isCondicionsPopupShowing by filterPopupViewModel.isCondicionsPopupShowing.collectAsState()
-    val etiquetesText by filterPopupViewModel.etiquetesText.collectAsState()
-    val etiquetesList by filterPopupViewModel.etiquetesList.collectAsState()
-    val etiquetesError by filterPopupViewModel.etiquetesError.collectAsState()
+    val isPopupShowing by filterPopupViewModel.popupIsShowing.collectAsStateWithLifecycle()
+    val puntSortidaText by filterPopupViewModel.puntSortidaText.collectAsStateWithLifecycle()
+    val puntArribadaText by filterPopupViewModel.puntArribadaText.collectAsStateWithLifecycle()
+    val dataSortidaText by filterPopupViewModel.dataSortidaText.collectAsStateWithLifecycle()
+    val horaSortidaText by filterPopupViewModel.horaSortidaText.collectAsStateWithLifecycle()
+    val areExtraFiltersShowing by filterPopupViewModel.extraFiltersAreShowing.collectAsStateWithLifecycle()
+    val isIsoterm by filterPopupViewModel.isIsoterm.collectAsStateWithLifecycle()
+    val isRefrigerat by filterPopupViewModel.isRefrigerat.collectAsStateWithLifecycle()
+    val isCongelat by filterPopupViewModel.isCongelat.collectAsStateWithLifecycle()
+    val isSenseHumitat by filterPopupViewModel.isSenseHumitat.collectAsStateWithLifecycle()
+    val isCondicionsPopupShowing by filterPopupViewModel.isCondicionsPopupShowing.collectAsStateWithLifecycle()
+    val etiquetesText by filterPopupViewModel.etiquetesText.collectAsStateWithLifecycle()
+    val etiquetesList by filterPopupViewModel.etiquetesList.collectAsStateWithLifecycle()
+    val etiquetesError by filterPopupViewModel.etiquetesError.collectAsStateWithLifecycle()
 
     if (isPopupShowing){
         Popup(alignment = Alignment.Center,
