@@ -73,6 +73,7 @@ fun MapScreen() {
                 CardBottomMap()
             }
 
+            // Floatting Button Expandable
             Box(
                 modifier = Modifier
                 .padding(16.dp)
