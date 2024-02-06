@@ -19,6 +19,7 @@ private val DarkColorScheme = darkColorScheme(
         primary = OrangeRC,
         secondary = MateBlackRC,
         tertiary = BlueRC,
+        background = MateBlackRC,
 
     )
 
@@ -26,6 +27,7 @@ private val LightColorScheme = lightColorScheme(
         primary = OrangeRC,
         secondary = GrayRC,
         tertiary = BlueRC,
+        background = GrayRC,
 
 
     /* Other default colors to override
