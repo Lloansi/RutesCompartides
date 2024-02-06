@@ -3,6 +3,7 @@ package com.example.rutescompartidesapp.view.profile
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -25,6 +26,7 @@ import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -34,6 +36,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
@@ -45,6 +48,7 @@ import com.example.rutescompartidesapp.R
 import com.example.rutescompartidesapp.ui.theme.GrayRC
 import com.example.rutescompartidesapp.ui.theme.MateBlackRC
 import com.example.rutescompartidesapp.view.profile.components.CreateCardsWithItems
+import com.example.rutescompartidesapp.view.profile.components.LogOutPopup
 import com.example.rutescompartidesapp.view.profile.components.ProfileEditButton
 import com.example.rutescompartidesapp.view.profile.components.ReviewButtons
 import com.example.rutescompartidesapp.view.profile.components.routeProfileItemsList
@@ -52,9 +56,12 @@ import com.example.rutescompartidesapp.view.profile.components.userProfileItemsL
 import java.util.concurrent.Flow
 
 @Composable
-fun ProfileScreen(viewModel: ProfileViewModel){
+fun ProfileScreen(viewModel: ProfileViewModel) {
+
+    val backgroundOpacity by viewModel.backgroundOpacity.collectAsState()
+
     Scaffold(
-        containerColor = GrayRC,
+        containerColor = GrayRC.copy(alpha = backgroundOpacity),
         topBar = {
             // Profile App bar
             Row(
@@ -64,17 +71,18 @@ fun ProfileScreen(viewModel: ProfileViewModel){
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center,
-                ){
+                ) {
                     BoxWithConstraints(
                         modifier = Modifier
                             .fillMaxWidth()
-                    ){
+                    ) {
                         val centerBottomPadding = 320.dp - 25.dp
 
-                        Box(modifier = Modifier
-                            .fillMaxWidth()
-                            .height(350.dp)
-                            .align(Alignment.TopCenter)
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(350.dp)
+                                .align(Alignment.TopCenter)
                         ) {
                             Image(
                                 painter = painterResource(id = R.drawable.esfera_rc),
@@ -82,7 +90,11 @@ fun ProfileScreen(viewModel: ProfileViewModel){
                                 contentScale = ContentScale.FillBounds,
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .height(320.dp)
+                                    .height(320.dp),
+                                colorFilter = ColorFilter.tint(
+                                    color = if (isSystemInDarkTheme()) MaterialTheme.colorScheme.secondary
+                                    else MaterialTheme.colorScheme.primary
+                                )
                             )
                         }
                         Box(
@@ -93,7 +105,11 @@ fun ProfileScreen(viewModel: ProfileViewModel){
                                 )
                         ) {
                             // Profile Edit Button
-                            ProfileEditButton(modifier = Modifier) {}
+                            ProfileEditButton(modifier = Modifier, onClick = {
+                                viewModel.onClickLogOut(true)
+                                viewModel.changeBgOpacity(0.5f)
+                            })
+                            LogOutPopup(viewModelProfile = viewModel)
                         }
                     }
                 }
@@ -143,7 +159,7 @@ fun ProfileScreen(viewModel: ProfileViewModel){
     ) {
         // Profile content
 
-        innerPadding ->
+            innerPadding ->
 
         Column(
             modifier = Modifier
@@ -153,7 +169,7 @@ fun ProfileScreen(viewModel: ProfileViewModel){
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(25.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-        ){
+        ) {
             // Creacion de la primera Card (Route Settings)
             CreateCardsWithItems(routeProfileItemsList, 0.dp)
 
