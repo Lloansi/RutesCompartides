@@ -3,6 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     kotlin("kapt")
     id("com.google.dagger.hilt.android")
+
 }
 
 android {
@@ -51,6 +52,7 @@ android {
 dependencies {
 
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation("com.android.volley:volley:1.2.1")
     val voyagerVersion = "1.0.0"
 
     implementation("androidx.core:core-ktx:1.12.0")
@@ -105,5 +107,10 @@ dependencies {
     implementation("com.github.PratikFagadiya:AnimatedSmoothBottomNavigation-JetpackCompose:1.1.1")
     implementation("com.canopas.compose-animated-navigationbar:bottombar:1.0.1")
 
+    // Gif animation
+    implementation("io.coil-kt:coil-compose:2.2.2")
+    implementation("io.coil-kt:coil-gif:2.5.0")
 
+    // Activity animations
+    implementation("com.github.AtifSayings:Animatoo:1.0.1")
 }

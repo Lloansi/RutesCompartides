@@ -47,6 +47,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import com.example.rutescompartidesapp.R
 import com.example.rutescompartidesapp.ui.theme.GrayRC
 import com.example.rutescompartidesapp.ui.theme.MateBlackRC
+import com.example.rutescompartidesapp.view.login.LoginScreen
 import com.example.rutescompartidesapp.view.profile.components.CreateCardsWithItems
 import com.example.rutescompartidesapp.view.profile.components.LogOutPopup
 import com.example.rutescompartidesapp.view.profile.components.ProfileEditButton
@@ -54,6 +55,14 @@ import com.example.rutescompartidesapp.view.profile.components.ReviewButtons
 import com.example.rutescompartidesapp.view.profile.components.routeProfileItemsList
 import com.example.rutescompartidesapp.view.profile.components.userProfileItemsList
 import java.util.concurrent.Flow
+
+
+object ProfileScreen: Screen {
+    @Composable
+    override fun Content() {
+        ProfileScreen(ProfileViewModel())
+    }
+}
 
 @Composable
 fun ProfileScreen(viewModel: ProfileViewModel) {
