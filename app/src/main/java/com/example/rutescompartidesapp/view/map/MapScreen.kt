@@ -1,6 +1,12 @@
 package com.example.rutescompartidesapp.view.map
 
+import android.content.Context
+import android.graphics.drawable.Drawable
+import androidx.annotation.DrawableRes
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -8,26 +14,37 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.res.imageResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.example.rutescompartidesapp.R
 import com.example.rutescompartidesapp.view.map.components.CardBottomMap
 import com.example.rutescompartidesapp.view.map.components.ExpandableFloatingButton
 import com.example.rutescompartidesapp.view.map.components.SearchViewContainer
+import com.example.rutescompartidesapp.view.map.components.allRoute
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
+import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 
 object MapScreen: Screen {
+    const val maxKmFog = 35
+
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
@@ -51,7 +68,8 @@ fun MapScreen() {
             val padding = (LocalDensity.current.density * percentagePaddingDesviament).dp
 
             // Mapa
-            MapViewContainer(viewModel = mapViewModel)
+            val ctx = LocalContext.current
+            MapViewContainer(viewModel = mapViewModel,ctx)
 
             // Search
             Box(
@@ -87,10 +105,9 @@ fun MapScreen() {
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun MapViewContainer(viewModel: MapViewModel ){
-
-    val ctx = LocalContext.current
+fun MapViewContainer(viewModel: MapViewModel, ctx : Context){
 
     val initialZoom = 13.0
 
@@ -103,8 +120,28 @@ fun MapViewContainer(viewModel: MapViewModel ){
     )
     Configuration.getInstance().userAgentValue = "rutescompartides"
 
+    // MutableState to store clicked pixel coordinates
+    val centerPixelCoordinates = remember { mutableStateOf(GeoPoint(0,0)) }
+
     AndroidView(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .pointerInput(Unit) {
+                detectTapGestures (
+                ) { offset ->
+
+                    // We get the x & y where ocurred the click
+                    val clickX = offset.x
+                    val clickY = offset.y
+
+                    // We update with clicked pixels data before on our remember
+                    viewModel.markerPosition.value = GeoPoint(clickX.toDouble(),clickY.toDouble())
+
+                    }
+                }
+            .combinedClickable (
+
+            ){},
         factory = { context ->
 
             //Creamos el MapView
@@ -117,7 +154,7 @@ fun MapViewContainer(viewModel: MapViewModel ){
             mapView.setBuiltInZoomControls(true)
             mapView.setMultiTouchControls(true)
 
-            //Instanciamos el controlador del mapa, para poder establecer configuraciones de en que lugar del mundo aparecer
+            // We instantiate the map controller, so that we can set configurations of where in the world to appear
             val controller = mapView.controller
             controller.setCenter(viewModel.markerPosition.value)
             controller.setZoom(initialZoom)
@@ -130,32 +167,31 @@ fun MapViewContainer(viewModel: MapViewModel ){
             mapView
         },
         update = { mapView ->
+
             // Code to update or recompose the view goes here
             // Since geoPoint is read here, the view will recompose whenever it is updated
             mapView.controller.setCenter(viewModel.markerPosition.value)
-        }
-    )
 
-    /*
-            AL TOCAR LA PANTALLA SE CREE UN MARKER
 
-            mapView.setOnTouchListener { _, event ->
-                when (event.action) {
-                    MotionEvent.ACTION_UP -> {
-                        // Convert screen coordinates to GeoPoint
-                        val x = event.x.toInt()
-                        val y = event.y.toInt()
-                        val projection = mapView.projection
-                        val geoPoint = projection.fromPixels(x, y)
-
-                        // Handle the click event
-                        viewModel.createMarker(geoPoint as GeoPoint, mapView)
-
-                        true  // Consume the touch event
-                    }
-                    else -> false
-                }
+            viewModel.handleClickMap(mapView)
+            /*
+            viewModel.markerPosition.value?.let {
+                viewModel.initialPosition(allRoute, it,mapView)
             }
 
+             */
+
+            /*
+            mapView.setOnTouchListener { _, event ->
+                gestureDetector.onTouchEvent(event)
+            }
             */
+
+        }
+    )
+}
+
+@Composable
+fun loadDrawableFromResource(ctx: Context, resourceId: Int): Drawable? {
+    return LocalContext.current.resources.getDrawable(resourceId, null)
 }

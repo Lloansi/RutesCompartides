@@ -42,7 +42,9 @@ val allRoute = listOf(
         listOf("Premia de Mar"),
         "Masnou",
         5,
-        4.56f
+        4.56f,
+        41.487125f,
+        2.181916f
     ),
     Route(
         2,
@@ -50,7 +52,9 @@ val allRoute = listOf(
         listOf("Premia de Mar", "Masnou","Badalona"),
         "Barcelona",
         4,
-        4.56f
+        4.56f,
+        41.513485f,
+        2.181916f
     ),
     Route(
         3,
@@ -58,7 +62,9 @@ val allRoute = listOf(
         null,
         "Sabadell",
         2,
-        4.56f
+        4.56f,
+        41.453426f,
+        2.187916f
     )
 )
 
@@ -84,7 +90,7 @@ fun RouteCard(ruta : Route, vehicle: Vehicle) {
         ){
             Column(
                 modifier = Modifier
-                    .padding(start = 15.dp, end = 10.dp, bottom = 10.dp)
+                    .padding(start = 15.dp, end = 7.dp, bottom = 10.dp)
                     .wrapContentWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ){
@@ -143,7 +149,7 @@ fun RouteCard(ruta : Route, vehicle: Vehicle) {
 
 
 
-                //Important route information
+                // Route information
                 detailsCard(idImage = R.drawable.seat_svg, value = "${vehicle.seatsAvailable}", imageSize = 28.dp, paddingPercentage = 2)
                 PricePerKM(idImage1 = R.drawable.eur_svg, idImage2 = R.drawable.km_svg, value = "${ruta.routePrice}€")
                 detailsCard(idImage = R.drawable.van_measures, value = "${vehicle.vehicleMesures}", imageSize = 35.dp, fontSize = 13.sp, paddingPercentage = 5)

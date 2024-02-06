@@ -54,36 +54,3 @@ fun SearchViewContainer() {
         NotificationButtonCard()
     }
 }
-
-
-/*
-@RequiresApi(Build.VERSION_CODES.O)
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun SearchView(state: MutableState<TextFieldValue>, placeHolder: String, modifier: Modifier) {
-    TextField(
-        value = state.value.text,
-        onValueChange = { value ->
-            state.value = value
-        },
-        modifier = Modifier
-            .fillMaxWidth(0.75f)
-            .padding(top = 20.dp)
-            .clip(RoundedCornerShape(10.dp))
-            .border(2.dp, Color.DarkGray, RoundedCornerShape(10.dp)),
-        placeHolder = placeHolder/*{
-            Text(text = placeholder)
-        }
-        */
-        ,
-        colors = TextFieldDefaults.textFieldColors(
-            containerColor = Color.White
-        ),
-        maxLines = 1,
-        singleLine = true,
-        textStile = androidx.compose.ui.text.TextStyle(
-            color = Color.Black, fontSize = 20.sp
-        )
-    )
-}
- */

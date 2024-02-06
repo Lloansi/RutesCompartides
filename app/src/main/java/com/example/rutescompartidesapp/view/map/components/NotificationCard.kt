@@ -22,7 +22,6 @@ fun NotificationButtonCard(){
     Box(modifier = Modifier
         .wrapContentWidth()
         .wrapContentHeight()
-        .wrapContentHeight()
         .clip(RoundedCornerShape(12.dp))
         .background(color = MaterialTheme.colorScheme.primary)
         .clickable { }
