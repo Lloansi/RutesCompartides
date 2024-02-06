@@ -130,7 +130,7 @@ fun SignUpScreen () {
                 //User Email Text
                 supportingText = {
                     if (userEmailError){
-                        Text(text = "Escriu un nom vàlid",
+                        Text(text = "Escriu un email vàlid",
                             color = MaterialTheme.colorScheme.primary)
                     }
                 },
@@ -241,7 +241,7 @@ fun SignUpScreen () {
                 //User Repeat Password Text
                 supportingText = {
                     if (userRepeatPasswordError){
-                        Text(text = "Escriu una contrassenya vàlida",
+                        Text(text = "Les contrassenyes no coincideixen",
                             color = MaterialTheme.colorScheme.primary)
                     }
                 },
@@ -258,13 +258,15 @@ fun SignUpScreen () {
 
         //Sing Up Button
         Row (){
-            ElevatedButton(onClick = { /*TODO*/ },
-                modifier=Modifier.fillMaxWidth(0.7f),
+            ElevatedButton(
+                onClick = signUpViewModel::onSignUpButtonClick,
+                modifier = Modifier.fillMaxWidth(0.7f),
                 colors = ButtonDefaults.elevatedButtonColors(
                     containerColor = MaterialTheme.colorScheme.primary,
                     contentColor = MaterialTheme.colorScheme.secondary
                 ),
-                shape = RoundedCornerShape(16.dp)) {
+                shape = RoundedCornerShape(16.dp)
+            ) {
                 Text(text = "Envia")
             }
         }

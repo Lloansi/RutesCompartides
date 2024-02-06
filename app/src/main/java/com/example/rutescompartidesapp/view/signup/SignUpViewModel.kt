@@ -1,9 +1,10 @@
 package com.example.rutescompartidesapp.view.signup
 
+import android.util.Patterns
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import org.w3c.dom.Text
+
 
 class SignUpViewModel: ViewModel(){
     //User name text
@@ -76,6 +77,13 @@ class SignUpViewModel: ViewModel(){
 
     fun onUserRepeatPasswordTextChange (text: String){
         _userRepeatPassword.value = text
+
+        // Check if passwords match and update error status
+        val userPassword = _userPassword.value
+        val repeatPassword = text
+        val isError = userPassword != repeatPassword
+
+        onUserRepeatPasswordError(isError)
     }
 
     //User repeat password error
@@ -85,5 +93,45 @@ class SignUpViewModel: ViewModel(){
     fun onUserRepeatPasswordError (isError:Boolean){
         _userRepeatPasswordError.value = isError
     }
+
+    //Sing Up Button
+    fun onSignUpButtonClick() {
+    //Aqui va la lògica per fer el registre
+
+        // Variables to obtain the values of the input
+        val userName = _userName.value
+        val userEmail = _userEmail.value
+        val userPhone = _userPhone.value
+        val userPassword = _userPassword.value
+        val userRepeatPassword = _userRepeatPassword.value
+
+        // Verify if any field is empty
+        //val isAnyFieldEmpty = userName.isEmpty() || userEmail.isEmpty() || userPhone.isEmpty() || userPassword.isEmpty() || userRepeatPassword.isEmpty()
+
+
+        //Check the Email format
+        if (!Patterns.EMAIL_ADDRESS.matcher(userEmail).matches()) {
+            onUserEmailError(isError = true)
+            return
+        }
+
+        //Verify if passwords match
+        if (userPassword != userRepeatPassword) {
+            onUserRepeatPasswordError(isError = true)
+            return
+        }
+
+        onUserNameError(userName.isEmpty())
+        onUserEmailError(userEmail.isEmpty())
+        onUserPhoneError(userPhone.isEmpty())
+        onUserPasswordError(userPassword.isEmpty())
+        onUserRepeatPasswordError(userRepeatPassword.isEmpty())
+        
+       /* if(isAnyFieldEmpty){
+            println("Siusplau, completa tots els camps")
+        }
+       */
+    }
+
 }
 
