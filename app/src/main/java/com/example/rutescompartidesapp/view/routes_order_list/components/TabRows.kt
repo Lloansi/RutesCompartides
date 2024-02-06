@@ -76,10 +76,11 @@ fun TabRows(){
     Column{
         TabRow(selectedTabIndex = selectedTabIndex) {
             tabItems.forEachIndexed { index, item ->
-                Tab(
+                Tab(modifier = Modifier.background(MaterialTheme.colorScheme.background),
                     selected = index == selectedTabIndex,
                     onClick = { tabRowViewModel.onSelectTab(index) },
-                    text = { Text(text = item.title) },
+                    text = { Text(text = item.title,
+                        style = MaterialTheme.typography.titleSmall) },
                     icon = {
                         Icon(
                             imageVector = if (index == selectedTabIndex) {

@@ -1,9 +1,16 @@
 package com.example.rutescompartidesapp.view.routes_order_list
 
+import androidx.compose.material3.DatePickerState
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.rememberDatePickerState
 import androidx.lifecycle.ViewModel
 import com.example.rutescompartidesapp.data.domain.ListQuery
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneId
+import java.util.Calendar
 
 class FilterPopupViewModel: ViewModel() {
     private val _isCondicionsPopupShowing = MutableStateFlow(false)
@@ -127,6 +134,43 @@ class FilterPopupViewModel: ViewModel() {
     fun onExtraFiltersToggle(){
         _extraFiltersAreShowing.value = !_extraFiltersAreShowing.value
     }
+
+    // Date Picker Dialog
+    private val _datePickerDialogIsShowing = MutableStateFlow(false)
+    val datePickerDialogIsShowing = _datePickerDialogIsShowing
+
+    fun onDatePickerDialogShow(isShowing: Boolean){
+        _datePickerDialogIsShowing.value = isShowing
+    }
+
+    fun onDatePickerDialogConfirm(datePicked: Long ){
+         datePicked.let {
+             val date = Instant.ofEpochMilli(it).atZone(ZoneId.systemDefault()).toLocalDate()
+             _dataSortidaText.value = "${date.dayOfMonth}/${date.monthValue}/${date.year}"
+        }
+        _datePickerDialogIsShowing.value = false
+
+    }
+
+
+    // Time Picker Dialog
+    private val _timePickerDialogIsShowing = MutableStateFlow(false)
+    val timePickerDialogIsShowing = _timePickerDialogIsShowing
+
+    fun onTimePickerDialogShow(isShowing: Boolean){
+        _timePickerDialogIsShowing.value = isShowing
+    }
+
+        fun onTimePickerDialogConfirm(timePicked: Calendar ){
+            timePicked.timeInMillis.let {
+            val time = Instant.ofEpochMilli(it).atZone(ZoneId.systemDefault()).toLocalTime()
+            _horaSortidaText.value = "${time.hour}:${time.minute}:${time.minute}"
+        }
+        _timePickerDialogIsShowing.value = false
+
+    }
+
+
 
 
 }
