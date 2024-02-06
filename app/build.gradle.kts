@@ -50,6 +50,7 @@ android {
 
 dependencies {
 
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     val voyagerVersion = "1.0.0"
 
     implementation("androidx.core:core-ktx:1.12.0")
@@ -99,5 +100,10 @@ dependencies {
     implementation("cafe.adriel.voyager:voyager-navigator:$voyagerVersion")
     // Transitions
     implementation("cafe.adriel.voyager:voyager-transitions:$voyagerVersion")
+
+    // BottomNavigation
+    implementation("com.github.PratikFagadiya:AnimatedSmoothBottomNavigation-JetpackCompose:1.1.1")
+    implementation("com.canopas.compose-animated-navigationbar:bottombar:1.0.1")
+
 
 }
