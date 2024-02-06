@@ -170,10 +170,10 @@ fun ProfileScreen(viewModel: ProfileViewModel) {
             verticalArrangement = Arrangement.spacedBy(25.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            // Creacion de la primera Card (Route Settings)
+            // First card creation (Route Settings)
             CreateCardsWithItems(routeProfileItemsList, 0.dp)
 
-            // Creacion de la primera Card (User Settings)
+            // Second card creation (User Settings)
             CreateCardsWithItems(userProfileItemsList, 20.dp)
         }
     }
