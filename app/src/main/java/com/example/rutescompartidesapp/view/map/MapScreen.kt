@@ -1,6 +1,8 @@
 package com.example.rutescompartidesapp.view.map
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -27,6 +29,7 @@ import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
@@ -144,7 +147,7 @@ fun MapViewContainer(viewModel: MapViewModel, ctx : Context){
             ){},
         factory = { context ->
 
-            //Creamos el MapView
+            // We instance the MapView
             val mapView = org.osmdroid.views.MapView(context)
 
             // Set tile source for the map
@@ -164,6 +167,13 @@ fun MapViewContainer(viewModel: MapViewModel, ctx : Context){
             locationOverlay.enableMyLocation()
             mapView.overlays.add(locationOverlay)
 
+            /*
+            PARA QUE CUANDO SE CREE EL MAPA SE MIRE SI HAY MARKERS CERCA DEL PUNTO INCIAL
+            viewModel.markerPosition.value?.let {
+                viewModel.initialPosition(allRoute, it,mapView)
+            }
+             */
+
             mapView
         },
         update = { mapView ->
@@ -172,16 +182,20 @@ fun MapViewContainer(viewModel: MapViewModel, ctx : Context){
             // Since geoPoint is read here, the view will recompose whenever it is updated
             mapView.controller.setCenter(viewModel.markerPosition.value)
 
+            val iconMarkerType = ContextCompat.getDrawable(ctx, R.drawable.little_map_marker_orders_svg)
+            val iconMarkerClickPointer = ContextCompat.getDrawable(ctx, R.drawable.marker_svgrepo_com)
 
-            viewModel.handleClickMap(mapView)
             /*
-            viewModel.markerPosition.value?.let {
-                viewModel.initialPosition(allRoute, it,mapView)
+            if (drawable != null) {
+                viewModel.handleClicksMap(mapView, drawable)
             }
-
              */
 
+            viewModel.handleClicksMap(mapView, iconMarkerType, iconMarkerClickPointer)
+
+
             /*
+            SI USAMOS GESTURE DETECTOR EN VEZ DE MOTION EVENTS
             mapView.setOnTouchListener { _, event ->
                 gestureDetector.onTouchEvent(event)
             }

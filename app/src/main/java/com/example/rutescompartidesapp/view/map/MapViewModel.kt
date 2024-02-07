@@ -20,6 +20,7 @@ import com.example.rutescompartidesapp.view.map.MapScreen.maxKmFog
 import com.example.rutescompartidesapp.view.map.components.allRoute
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.onEmpty
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
@@ -35,6 +36,9 @@ class MapViewModel(
 
     //private val applicationContext: Context = context.applicationContext
 
+    private val _userClickedPointer = MutableStateFlow<MutableList<Marker>>(mutableListOf())
+    private var userClickedPointer = _userClickedPointer.asStateFlow()
+
     private val _markerList = MutableStateFlow<MutableList<GeoPoint>>(mutableListOf())
     var markerList = _markerList.asStateFlow()
 
@@ -46,27 +50,36 @@ class MapViewModel(
 
     }
 
-    fun createMarker(point: GeoPoint, mapView: MapView, icon: Drawable? = null){
+    fun createMarker(point: GeoPoint, mapView: MapView, iconMarker: Drawable? = null){
         val marker = Marker(mapView)
         marker.position =  point
-        if (icon != null){
-            marker.icon = icon
+        if (iconMarker != null){
+            marker.icon = iconMarker
         }
 
         // Add the marker instantiated a few lines back in the map view
         mapView.overlays.add(marker)
     }
 
-    fun updateMarkerPosition(point: GeoPoint){
-        markerPosition.value = point
+    fun createClickPointerMarker(point: GeoPoint, mapView: MapView, iconMarker: Drawable? = null){
+        val marker = Marker(mapView)
+        marker.position =  point
+        if (iconMarker != null){
+            marker.icon = iconMarker
+        }
+        userClickedPointer.value.add(marker)
+
+        // Add the marker instantiated a few lines back in the map view
+        mapView.overlays.add(marker)
     }
 
-    fun addMarkersList(markerList: MutableStateFlow<MutableList<GeoPoint>>, mapView: MapView){
-        val markers = markerList.value.toMutableList()
+    fun deleteMarker(marker: Marker, mapView: MapView,){
+        userClickedPointer.value.removeAt(0)
+        mapView.overlays.remove(marker)
+    }
 
-        for (geoPoint in markers) {
-            //createMarker(geoPoint,mapView)
-        }
+    fun updateMarkerPosition(point: GeoPoint){
+        markerPosition.value = point
     }
 
     /*
@@ -75,7 +88,7 @@ class MapViewModel(
     }
      */
     @SuppressLint("ClickableViewAccessibility")
-    fun handleClickMap(mapView: MapView, icon: Drawable? = null){
+    fun handleClicksMap(mapView: MapView, iconMarkerType: Drawable? = null, iconMarkerClickPointer: Drawable? = null ){
         var isDragging = false
         mapView.setOnTouchListener { _, event ->
             when (event.action) {
@@ -91,17 +104,27 @@ class MapViewModel(
                 }
                 MotionEvent.ACTION_UP -> {
                     if (!isDragging) {
-                        // Convert screen coordinates to GeoPoint
+                        // Convert click screen coordinates to GeoPoint
                         val x = event.x.toInt()
                         val y = event.y.toInt()
                         val projection = mapView.projection
                         val geoPoint = projection.fromPixels(x, y)
 
-                        // We get the pixels from the center
+                        // We get the pixels from the center screen
                         val centerPoint = mapView.projection.fromPixels(mapView.width / 2, mapView.height / 2)
 
                         // Controller of the mapView for set center, animations ...
                         val controller = mapView.controller
+
+                        // With the position where user clicked, we create a point marker
+                        // If user never clicked, we just create a Click Pointer Marker if not, we delete the old Click Pointer Marker and create the new one
+                        if (userClickedPointer.value.isNotEmpty()){
+                            deleteMarker(userClickedPointer.value[0], mapView)
+                            createClickPointerMarker(geoPoint as GeoPoint, mapView, iconMarkerClickPointer)
+                        }else{
+                            createClickPointerMarker(geoPoint as GeoPoint, mapView, iconMarkerClickPointer)
+                        }
+
 
                         // Handle the click event
                         // The clicked point becomes the center point
@@ -117,7 +140,7 @@ class MapViewModel(
                             val routeGeoPoint = GeoPoint(route.lat.toDouble(),route.lon.toDouble())
 
                             if(isInArea(centerGeoPoint,routeGeoPoint, maxKmFog)){
-                                createMarker(routeGeoPoint,mapView)
+                                createMarker(routeGeoPoint,mapView,iconMarkerType)
                             }
                         }
                     }

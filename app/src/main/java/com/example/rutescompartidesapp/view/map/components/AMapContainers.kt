@@ -3,6 +3,7 @@ package com.example.rutescompartidesapp.view.map.components
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyRow
@@ -44,7 +45,7 @@ fun CardBottomMap(){
 fun SearchViewContainer() {
     val searchViewModel: SearchViewModel = hiltViewModel()
     Row (modifier = Modifier
-        .padding(top = 4.dp)
+        .offset(y = -(8).dp)
         .fillMaxWidth()
         .wrapContentHeight() ,
         horizontalArrangement = Arrangement.Center,
