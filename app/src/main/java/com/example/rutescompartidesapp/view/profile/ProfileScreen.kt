@@ -35,6 +35,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
@@ -47,6 +48,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import com.example.rutescompartidesapp.R
 import com.example.rutescompartidesapp.ui.theme.GrayRC
 import com.example.rutescompartidesapp.ui.theme.MateBlackRC
+import com.example.rutescompartidesapp.ui.theme.openSans
 import com.example.rutescompartidesapp.view.profile.components.CreateCardsWithItems
 import com.example.rutescompartidesapp.view.profile.components.LogOutPopup
 import com.example.rutescompartidesapp.view.profile.components.ProfileEditButton
@@ -105,10 +107,12 @@ fun ProfileScreen(viewModel: ProfileViewModel) {
                                 )
                         ) {
                             // Profile Edit Button
-                            ProfileEditButton(modifier = Modifier, onClick = {
-                                viewModel.onClickLogOut(true)
-                                viewModel.changeBgOpacity(0.5f)
-                            })
+                            ProfileEditButton(
+                                modifier = Modifier,
+                                onClick = {
+
+                                }
+                            )
                             LogOutPopup(viewModelProfile = viewModel)
                         }
                     }
@@ -129,21 +133,26 @@ fun ProfileScreen(viewModel: ProfileViewModel) {
                 ) {
                     Text(
                         text = "Alejandro Arcas",
-                        fontSize = 40.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.White
+                        fontSize = 36.sp,
+                        fontWeight = FontWeight.ExtraBold,
+                        color = Color.White,
+                        fontFamily = openSans
                     )
+                    Spacer(modifier = Modifier.height(10.dp))
                     Text(
                         text = "alejandroarcasleon@gmail.com",
-                        fontSize = 18.sp,
+                        fontSize = 16.sp,
                         fontWeight = FontWeight.Normal,
-                        color = Color.White
+                        color = Color.White,
+                        fontFamily = openSans
                     )
+                    Spacer(modifier = Modifier.height(5.dp))
                     Text(
                         text = "653 833 853",
-                        fontSize = 18.sp,
+                        fontSize = 16.sp,
                         fontWeight = FontWeight.Normal,
-                        color = Color.White
+                        color = Color.White,
+                        fontFamily = openSans
                     )
                 }
 
@@ -171,10 +180,16 @@ fun ProfileScreen(viewModel: ProfileViewModel) {
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             // First card creation (Route Settings)
-            CreateCardsWithItems(routeProfileItemsList, 0.dp)
+            CreateCardsWithItems(routeProfileItemsList, 0.dp, 0.dp, viewModel)
 
             // Second card creation (User Settings)
-            CreateCardsWithItems(userProfileItemsList, 20.dp)
+            CreateCardsWithItems(userProfileItemsList, 20.dp, 0.dp, viewModel)
         }
     }
 }
+
+
+/*
+   viewModel.onClickLogOut(true)
+   viewModel.changeBgOpacity(0.5f)
+*/
