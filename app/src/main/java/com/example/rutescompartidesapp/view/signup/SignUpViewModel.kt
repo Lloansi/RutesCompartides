@@ -29,6 +29,12 @@ class SignUpViewModel: ViewModel(){
 
     fun onUserEmailTextChange (text: String){
         _userEmail.value = text
+
+        //Check if the email is correct and update error status
+        val userEmail = _userEmail.value
+        val isError = userEmail !=text
+
+        onUserEmailError(isError)
     }
 
     //User email error
@@ -39,19 +45,19 @@ class SignUpViewModel: ViewModel(){
         _userEmailError.value = isError
     }
 
-    //User phone text
+    // User phone text
     private val _userPhone = MutableStateFlow("")
     val userPhone = _userPhone.asStateFlow()
 
-    fun onUserPhoneTextChange (text: String){
-        _userPhone.value = text
-    }
-
-    //User phone error
+    // User phone error
     private val _userPhoneError = MutableStateFlow(false)
     val userPhoneError = _userPhoneError.asStateFlow()
 
-    fun onUserPhoneError (isError:Boolean){
+    fun onUserPhoneTextChange(text: String) {
+        _userPhone.value = text
+    }
+
+    fun onUserPhoneError(isError: Boolean) {
         _userPhoneError.value = isError
     }
 
@@ -63,6 +69,22 @@ class SignUpViewModel: ViewModel(){
         _userPassword.value = text
     }
 
+    //Password visibility
+    private val _isPasswordVisible = MutableStateFlow(false)
+    val isPasswordVisible = _isPasswordVisible.asStateFlow()
+
+    fun togglePasswordVisibility() {
+        _isPasswordVisible.value = !_isPasswordVisible.value
+    }
+
+    //Repeat Password visibility
+    private val _isRepeatPasswordVisible = MutableStateFlow(false)
+    val isRepeatPasswordVisible = _isPasswordVisible.asStateFlow()
+
+    fun toggleRepeatPasswordVisibility() {
+        _isPasswordVisible.value = !_isPasswordVisible.value
+    }
+
     //User password error
     private val _userPasswordError = MutableStateFlow(false)
     val userPasswordError = _userPasswordError.asStateFlow()
@@ -71,17 +93,19 @@ class SignUpViewModel: ViewModel(){
         _userPasswordError.value = isError
     }
 
+    //User password hide and show
+
     //User repeat password text
     private val _userRepeatPassword = MutableStateFlow("")
     val userRepeatPassword = _userRepeatPassword.asStateFlow()
 
-    fun onUserRepeatPasswordTextChange (text: String){
+
+    fun onUserRepeatPasswordTextChange (text: String) {
         _userRepeatPassword.value = text
 
         // Check if passwords match and update error status
         val userPassword = _userPassword.value
-        val repeatPassword = text
-        val isError = userPassword != repeatPassword
+        val isError = userPassword != text
 
         onUserRepeatPasswordError(isError)
     }
@@ -112,13 +136,13 @@ class SignUpViewModel: ViewModel(){
         //Check the Email format
         if (!Patterns.EMAIL_ADDRESS.matcher(userEmail).matches()) {
             onUserEmailError(isError = true)
-            return
+
         }
 
-        //Verify if passwords match
-        if (userPassword != userRepeatPassword) {
-            onUserRepeatPasswordError(isError = true)
-            return
+        //Check the Phone format
+        if (!userPhone.matches(Regex("^\\s?\\(?\\d{3}\\)?\\d{3}\\d{3}$"))) {
+            onUserPhoneError(isError = true);
+            return;
         }
 
         onUserNameError(userName.isEmpty())
@@ -126,7 +150,7 @@ class SignUpViewModel: ViewModel(){
         onUserPhoneError(userPhone.isEmpty())
         onUserPasswordError(userPassword.isEmpty())
         onUserRepeatPasswordError(userRepeatPassword.isEmpty())
-        
+
        /* if(isAnyFieldEmpty){
             println("Siusplau, completa tots els camps")
         }
