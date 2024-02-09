@@ -1,17 +1,23 @@
-package com.example.rutescompartidesapp.view.routes_order_list
+package com.example.rutescompartidesapp.view.routes_order_list.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.rutescompartidesapp.data.domain.ListQuery
+import com.example.rutescompartidesapp.data.domain.RouteForList
+import com.example.rutescompartidesapp.view.routes_order_list.ListConstants
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.transformLatest
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 class RoutesOrderListViewModel: ViewModel() {
 
@@ -25,15 +31,18 @@ class RoutesOrderListViewModel: ViewModel() {
         ListQuery("", "", "", "",
             listOf(), false, false, false, false))
     private val _activeFilters = MutableStateFlow(
-        listOf(
-            false, false, false, false, false, false, false, true, false))
+        List(9) { false })
 
-    private val _routes = MutableStateFlow(ListConstants.routeList)
+    val activeFilters = _activeFilters.asStateFlow()
+    val queryList = _queryList.asStateFlow()
 
-    var routes = _queryList
+
+    private var _routes = MutableStateFlow(ListConstants.routeList)
+    var routes55 = _routes.asStateFlow()
+
+    var routes2 = _queryList
+        .onEach { _isSearching.update { true } }
         .combine(_routes) { queryList, routes ->
-            // Si no hay filtros activos muestra todas las rutas
-            println(_activeFilters.value.contains(true).not())
             if (_activeFilters.value.contains(true).not()) {
                 println("Todas")
                 routes
@@ -60,24 +69,29 @@ class RoutesOrderListViewModel: ViewModel() {
                             (_activeFilters.value[5] && route.isRefrigerat) ||
                             (_activeFilters.value[6] && route.isCongelat) ||
                             (_activeFilters.value[7] && route.isSenseHumitat) ||
-                            (_activeFilters.value[8] && (route.etiquetes?.any { it in queryList.etiquetes } == true))
+                            (_activeFilters.value[8] && (route.etiquetes?.any { it in _queryList.value.etiquetes } == true))
                 }
-            }
+            }.onEach { _isSearching.update { false } }
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), _routes.value)
 
+
     @OptIn(FlowPreview::class)
-    var routes3 = searchText.debounce(500L)
+    var routes = searchText.debounce(500L)
         .onEach { _isSearching.update { true } }
         .combine(_routes) { text, routes ->
             if (text.isBlank()) {
+                println("Todas")
                 routes
+
             } else {
+                println("Filtro searchbar")
                 routes.filter { route ->
                     route.puntSortida.contains(text, ignoreCase = true) ||
                             route.puntArribada.contains(text, ignoreCase = true)
                 }
             }
-        }.onEach { _isSearching.update { false } }
+        }
+            .onEach { _isSearching.update { false } }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), _routes.value)
 
 
@@ -123,41 +137,39 @@ class RoutesOrderListViewModel: ViewModel() {
 
         println(_activeFilters.value)
 
-        /*
+        // FUNCIONA
 
-        val routes1 = _queryList
-            .onEach { _isSearching.update { true } }
-            .combine(_routes){ queryList, routes ->
-                routes.filter { route ->
-                    (activeFilters[0] && route.puntSortida.contains(
-                        queryList.puntSortida,
+        val routes2 = _routes.value.filter { route ->
+            (activeFilters[0] && route.puntSortida.contains(
+                listQuery.puntSortida,
+                ignoreCase = true
+            )) ||
+                    (activeFilters[1] && route.puntArribada.contains(
+                        listQuery.puntArribada,
                         ignoreCase = true
                     )) ||
-                            (activeFilters[1] && route.puntArribada.contains(
-                                queryList.puntArribada,
-                                ignoreCase = true
-                            )) ||
-                            (activeFilters[2] && route.dataSortida.contains(
-                                queryList.dataSortida,
-                                ignoreCase = true
-                            )) ||
-                            (activeFilters[3] && route.horaSortida.contains(
-                                queryList.horaSortida,
-                                ignoreCase = true
-                            )) ||
-                            (activeFilters[4] && route.isIsoterm) ||
-                            (activeFilters[5] && route.isRefrigerat) ||
-                            (activeFilters[6] && route.isCongelat) ||
-                            (activeFilters[7] && route.isSenseHumitat) ||
-                            (activeFilters[8] && (route.etiquetes?.any { it in queryList.etiquetes } == true))
+                    (activeFilters[2] && route.dataSortida.contains(
+                        listQuery.dataSortida,
+                        ignoreCase = true
+                    )) ||
+                    (activeFilters[3] && route.horaSortida.contains(
+                        listQuery.horaSortida,
+                        ignoreCase = true
+                    )) ||
+                    (activeFilters[4] && route.isIsoterm) ||
+                    (activeFilters[5] && route.isRefrigerat) ||
+                    (activeFilters[6] && route.isCongelat) ||
+                    (activeFilters[7] && route.isSenseHumitat) ||
+                    (activeFilters[8] && (route.etiquetes?.any { it in listQuery.etiquetes } == true))
+        }
+        val routes5 = getFilteredRoutes(activeFilters, listQuery)
 
-                }
-                    .onEach { _isSearching.update { false } }
-            }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), _routes.value)
+        println(routes5)
 
+    }
 
-        // FUNCIONA
-        val routes2 = _routes.value.filter { route ->
+    fun getFilteredRoutes(activeFilters: List<Boolean>, listQuery: ListQuery): List<RouteForList> {
+       return _routes.value.filter { route ->
             (activeFilters[0] && route.puntSortida.contains(
                 listQuery.puntSortida,
                 ignoreCase = true
@@ -181,12 +193,6 @@ class RoutesOrderListViewModel: ViewModel() {
                     (activeFilters[8] && (route.etiquetes?.any { it in listQuery.etiquetes } == true))
 
         }
-        println(routes2)
-    }
-
-         */
-
-
     }
 
 }

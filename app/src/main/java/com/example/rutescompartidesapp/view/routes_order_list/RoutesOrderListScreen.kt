@@ -1,6 +1,5 @@
 package com.example.rutescompartidesapp.view.routes_order_list
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,13 +14,11 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,6 +29,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.rutescompartidesapp.view.routes_order_list.components.FilterPopup
 import com.example.rutescompartidesapp.view.routes_order_list.components.TabRows
+import com.example.rutescompartidesapp.view.routes_order_list.viewmodels.FilterPopupViewModel
+import com.example.rutescompartidesapp.view.routes_order_list.viewmodels.RoutesOrderListViewModel
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -69,9 +68,7 @@ fun RoutesOrderListScreen(){
                             contentDescription = "Icona de cerca"
                         )
                     },
-                ) {
-                   // Searchbar content
-                }
+                ) {}
             FloatingActionButton(
                 modifier= Modifier
                     .weight(0.5f)

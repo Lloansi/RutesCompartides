@@ -1,4 +1,4 @@
-package com.example.rutescompartidesapp.view.routes_order_list
+package com.example.rutescompartidesapp.view.routes_order_list.viewmodels
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CardTravel

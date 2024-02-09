@@ -1,14 +1,10 @@
-package com.example.rutescompartidesapp.view.routes_order_list
+package com.example.rutescompartidesapp.view.routes_order_list.viewmodels
 
-import androidx.compose.material3.DatePickerState
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.rememberDatePickerState
 import androidx.lifecycle.ViewModel
 import com.example.rutescompartidesapp.data.domain.ListQuery
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import java.time.Instant
-import java.time.LocalDate
 import java.time.ZoneId
 import java.util.Calendar
 
