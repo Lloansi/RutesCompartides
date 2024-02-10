@@ -9,6 +9,7 @@ import java.time.ZoneId
 import java.util.Calendar
 
 class FilterPopupViewModel: ViewModel() {
+
     private val _isCondicionsPopupShowing = MutableStateFlow(false)
     val isCondicionsPopupShowing = _isCondicionsPopupShowing
 
@@ -31,7 +32,6 @@ class FilterPopupViewModel: ViewModel() {
     private val _etiquetesError = MutableStateFlow(false)
     val etiquetesError = _etiquetesError.asStateFlow()
 
-
     private val _etiquetesList = MutableStateFlow(mutableListOf<String>())
     val etiquetesList = _etiquetesList.asStateFlow()
 
@@ -40,8 +40,8 @@ class FilterPopupViewModel: ViewModel() {
         _etiquetesText.value = ""
     }
 
+    // Reasigna el valor de la llista de etiquetas sense l'etiqueta que volem eliminar
     fun onEtiquetaDelete(etiqueta: String){
-        // Reasigna el valor de la llista de etiquetas sense l'etiqueta que volem eliminar
         _etiquetesList.value = _etiquetesList.value.filter { etiquetaFromList ->
             etiquetaFromList != etiqueta
         }.toMutableList()
@@ -76,13 +76,12 @@ class FilterPopupViewModel: ViewModel() {
         }
 
     }
-
+    // Resets the values of the popup
     fun onPopupShow(isShowing: Boolean){
         _popupIsShowing.value = isShowing
         if (!isShowing){
             _puntSortidaText.value = ""
             _puntArribadaText.value = ""
-            //_extraFiltersAreShowing.value = false
             _horaSortidaText.value = ""
             _dataSortidaText.value = ""
             _isIsoterm.value = false
@@ -97,13 +96,7 @@ class FilterPopupViewModel: ViewModel() {
     }
     fun onCondicionsPopupShow(isShowing: Boolean){
         _isCondicionsPopupShowing.value = isShowing
-
     }
-    fun onFilterSearch(listQuery: ListQuery){
-        RoutesOrderListViewModel().onFilterSearch(listQuery)
-        onPopupShow(false)
-    }
-
 
     fun onEtiquetesChange(text: String){
         _etiquetesText.value = text
@@ -123,7 +116,6 @@ class FilterPopupViewModel: ViewModel() {
     }
 
     // Expand extra filters
-
     private val _extraFiltersAreShowing = MutableStateFlow(false)
     val extraFiltersAreShowing = _extraFiltersAreShowing
 
@@ -139,15 +131,18 @@ class FilterPopupViewModel: ViewModel() {
         _datePickerDialogIsShowing.value = isShowing
     }
 
+    /**
+     * Converts the time picked from the DatePickerDialog to a string and updates the value of
+     * [_dataSortidaText] to the new value and dismisses the dialog
+     * @param datePicked Long: The time picked from the TimePickerDialog
+     */
     fun onDatePickerDialogConfirm(datePicked: Long ){
          datePicked.let {
              val date = Instant.ofEpochMilli(it).atZone(ZoneId.systemDefault()).toLocalDate()
              _dataSortidaText.value = "${date.dayOfMonth}/${date.monthValue}/${date.year}"
         }
         _datePickerDialogIsShowing.value = false
-
     }
-
 
     // Time Picker Dialog
     private val _timePickerDialogIsShowing = MutableStateFlow(false)
@@ -157,16 +152,16 @@ class FilterPopupViewModel: ViewModel() {
         _timePickerDialogIsShowing.value = isShowing
     }
 
-        fun onTimePickerDialogConfirm(timePicked: Calendar ){
-            timePicked.timeInMillis.let {
-            val time = Instant.ofEpochMilli(it).atZone(ZoneId.systemDefault()).toLocalTime()
-            _horaSortidaText.value = "${time.hour}:${time.minute}:${time.minute}"
-        }
-        _timePickerDialogIsShowing.value = false
-
+    /**
+     * Converts the time picked from the TimePickerDialog to a string and updates the value of
+     * [_horaSortidaText] to the new value and dismisses the dialog
+     * @param timePicked: The time picked from the TimePickerDialog
+     */
+    fun onTimePickerDialogConfirm(timePicked: Calendar ){
+        timePicked.timeInMillis.let {
+        val time = Instant.ofEpochMilli(it).atZone(ZoneId.systemDefault()).toLocalTime()
+        _horaSortidaText.value = "${time.hour}:${time.minute}"
     }
-
-
-
-
+    _timePickerDialogIsShowing.value = false
+    }
 }

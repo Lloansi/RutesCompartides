@@ -9,7 +9,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.FilterList
+import androidx.compose.material.icons.filled.FilterAlt
+import androidx.compose.material.icons.filled.FilterAltOff
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
@@ -40,10 +41,11 @@ fun RoutesOrderListScreen(){
     val filterPopupViewModel: FilterPopupViewModel = hiltViewModel()
     val searchText by routeOrderListViewModel.searchText.collectAsStateWithLifecycle()
     val isSearching by routeOrderListViewModel.isSearching.collectAsStateWithLifecycle()
-
+    val areFilterActive by routeOrderListViewModel.activeFilters.collectAsStateWithLifecycle()
     Column (Modifier.fillMaxSize()) {
         Row (Modifier.padding(12.dp),
             horizontalArrangement = Arrangement.SpaceAround) {
+            // Search Bar
                 SearchBar(
                     modifier= Modifier
                         .weight(3f)
@@ -52,8 +54,10 @@ fun RoutesOrderListScreen(){
                     onQueryChange = routeOrderListViewModel::onSearchTextChange,
                     onSearch = routeOrderListViewModel::onSearchTextChange,
                     active = isSearching,
-                    onActiveChange = { routeOrderListViewModel::onToogleSearch },
-                    tonalElevation = 4.dp,
+                    onActiveChange = { routeOrderListViewModel::onToogleSearch
+                    // This will expand the searchBar when active with
+                    // routeOrderListViewModel.onToogleSearch(true)
+                                     },
                     colors = SearchBarDefaults.colors(
                        containerColor = Color.White,
                     ),
@@ -69,24 +73,40 @@ fun RoutesOrderListScreen(){
                         )
                     },
                 ) {}
+            // Filter Button
             FloatingActionButton(
                 modifier= Modifier
                     .weight(0.5f)
                     .align(Alignment.CenterVertically)
                     .height(52.dp),
-                onClick = { filterPopupViewModel.onPopupShow(true) },
+                onClick = {
+                    if (areFilterActive.contains(true)) {
+                        routeOrderListViewModel.onResetFilters()
+                    } else {
+                        filterPopupViewModel.onPopupShow(true)
+                    }
+                     },
                 containerColor = MaterialTheme.colorScheme.primary,
                 contentColor = MaterialTheme.colorScheme.secondary
             ) {
-                Icon(Icons.Filled.FilterList, contentDescription = "Filter",
-                    Modifier
-                        .height(32.dp)
-                        .width(32.dp))
+                if (areFilterActive.contains(true)) {
+                    Icon(Icons.Filled.FilterAltOff, contentDescription = "Filter off icon",
+                        Modifier
+                            .height(32.dp)
+                            .width(32.dp))
+                } else {
+                    Icon(Icons.Filled.FilterAlt, contentDescription = "Filter icon",
+                        Modifier
+                            .height(32.dp)
+                            .width(32.dp))
+                }
             }
-            FilterPopup()
+            // Filter Popup
+            FilterPopup(routeOrderListViewModel)
         }
+        // Tabs and lists
         Row (Modifier.fillMaxWidth()) {
-            TabRows()
+            TabRows(routeOrderListViewModel)
         }
     }
 }

@@ -37,20 +37,14 @@ data class TabItems(
 )
 
 @OptIn(ExperimentalFoundationApi::class)
-@Preview(showBackground = true)
 @Composable
-fun TabRows(){
-    val routesOrderListViewModel: RoutesOrderListViewModel = hiltViewModel()
+fun TabRows(routesOrderListViewModel: RoutesOrderListViewModel){
     val tabRowViewModel: TabRowViewModel = hiltViewModel()
     val selectedTabIndex by tabRowViewModel.selectedTabIndex.collectAsStateWithLifecycle()
     val tabItems = tabRowViewModel.tabItems
     val routes by routesOrderListViewModel.routes.collectAsStateWithLifecycle()
     val orders by routesOrderListViewModel.orders.collectAsStateWithLifecycle()
     val isSearching by routesOrderListViewModel.isSearching.collectAsStateWithLifecycle()
-    val filterList by routesOrderListViewModel.activeFilters.collectAsStateWithLifecycle()
-    val queryList by routesOrderListViewModel.queryList.collectAsStateWithLifecycle()
-    val isFiltered by routesOrderListViewModel.isFiltered.collectAsStateWithLifecycle()
-    val filteredList by routesOrderListViewModel.filteredRoutes.collectAsStateWithLifecycle()
     val pagerState = rememberPagerState {
         tabItems.size
     }
@@ -65,6 +59,7 @@ fun TabRows(){
     }
 
     Column{
+        // Rutes and Comandes Tabs
         TabRow(selectedTabIndex = selectedTabIndex) {
             tabItems.forEachIndexed { index, item ->
                 Tab(modifier = Modifier.background(MaterialTheme.colorScheme.background),
@@ -85,13 +80,12 @@ fun TabRows(){
                 )
             }
         }
+        // Content
         HorizontalPager(
             state = pagerState,
             modifier = Modifier.fillMaxWidth()
         ) { index ->
             Box(modifier = Modifier.fillMaxSize()) {
-                println(filterList.contains(true).not())
-                println(filterList)
                 if (isSearching) {
                     Box(modifier = Modifier.fillMaxSize()) {
                         CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
@@ -99,14 +93,26 @@ fun TabRows(){
                 } else {
                     LazyColumn(modifier = Modifier.fillMaxWidth()) {
                         if (index == 0) {
-                            items(routes.size) { index ->
-                                Spacer(modifier = Modifier.padding(8.dp))
-                                RouteCard(route = routes[index])
+                            if (routes.isEmpty()){
+                                item {
+                                    EmptyResults(type = "ruta")
+                                }
+                            }else {
+                                items(routes.size) { index ->
+                                    Spacer(modifier = Modifier.padding(8.dp))
+                                    RouteCard(route = routes[index])
+                                }
                             }
                         } else {
-                            items(orders.size) { index ->
-                                Spacer(modifier = Modifier.padding(8.dp))
-                                OrderCard(order = orders[index])
+                            if (orders.isEmpty()){
+                                item {
+                                    EmptyResults(type = "comanda")
+                                }
+                            } else {
+                                    items(orders.size) { index ->
+                                        Spacer(modifier = Modifier.padding(8.dp))
+                                        OrderCard(order = orders[index])
+                                    }
                             }
                         }
                     }
