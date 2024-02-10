@@ -1,7 +1,6 @@
 package com.example.rutescompartidesapp.view.routes_order_list.viewmodels
 
 import androidx.lifecycle.ViewModel
-import com.example.rutescompartidesapp.data.domain.ListQuery
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import java.time.Instant
