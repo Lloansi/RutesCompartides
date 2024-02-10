@@ -50,12 +50,24 @@ fun CreateCardsWithItems(list: List<ProfileItems>, paddingBottom: Dp, paddingTop
                 shape = RoundedCornerShape(22.dp),
                 onClick = {
                     when (list[i].title) {
-                        "Les meves rutes" -> {}
-                        "Les meves comandes" -> {}
-                        "Punts habiutals" -> {}
-                        "Notificacions" -> {}
-                        "Com funciona?" -> {}
-                        "FAQs i Conceptes claus" -> {}
+                        "Les meves rutes" -> {
+                            viewModel.onClickItemPlaceholder(true)
+                        }
+                        "Les meves comandes" -> {
+                            viewModel.onClickItemPlaceholder(true)
+                        }
+                        "Punts habituals" -> {
+                            viewModel.onClickItemPlaceholder(true)
+                        }
+                        "Notificacions" -> {
+                            viewModel.onClickItemPlaceholder(true)
+                        }
+                        "Com funciona?" -> {
+                            viewModel.onClickItemPlaceholder(true)
+                        }
+                        "FAQs i Conceptes claus" -> {
+                            viewModel.onClickItemPlaceholder(true)
+                        }
                         "Tanca la sessió" -> {
                             viewModel.onClickLogOut(true)
                             viewModel.changeBgOpacity(0.5f)

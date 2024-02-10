@@ -33,6 +33,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
+import com.example.rutescompartidesapp.ui.theme.MateBlackRC
 import com.example.rutescompartidesapp.view.profile.ProfileViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -66,7 +67,7 @@ fun LogOutPopup(viewModelProfile: ProfileViewModel) {
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(text = "Estàs segur que desitges tancar sessió?")
+                    Text(text = "Estàs segur que desitges tancar sessió?", color = MateBlackRC)
                     Row(
                         modifier = Modifier
                             .fillMaxWidth(),

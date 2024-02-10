@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -23,8 +24,11 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.KeyboardArrowRight
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -44,12 +48,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.DialogProperties
 import cafe.adriel.voyager.core.screen.Screen
 import com.example.rutescompartidesapp.R
 import com.example.rutescompartidesapp.ui.theme.GrayRC
 import com.example.rutescompartidesapp.ui.theme.MateBlackRC
 import com.example.rutescompartidesapp.ui.theme.openSans
 import com.example.rutescompartidesapp.view.profile.components.CreateCardsWithItems
+import com.example.rutescompartidesapp.view.profile.components.LogOutButton
 import com.example.rutescompartidesapp.view.profile.components.LogOutPopup
 import com.example.rutescompartidesapp.view.profile.components.ProfileEditButton
 import com.example.rutescompartidesapp.view.profile.components.ReviewButtons
@@ -57,13 +63,14 @@ import com.example.rutescompartidesapp.view.profile.components.routeProfileItems
 import com.example.rutescompartidesapp.view.profile.components.userProfileItemsList
 import java.util.concurrent.Flow
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(viewModel: ProfileViewModel) {
 
-    val backgroundOpacity by viewModel.backgroundOpacity.collectAsState()
+    val onClickPlaceholder by viewModel.onClickPlaceholder.collectAsState()
 
     Scaffold(
-        containerColor = GrayRC.copy(alpha = backgroundOpacity),
+        containerColor = GrayRC,
         topBar = {
             // Profile App bar
             Row(
@@ -114,6 +121,39 @@ fun ProfileScreen(viewModel: ProfileViewModel) {
                                 }
                             )
                             LogOutPopup(viewModelProfile = viewModel)
+
+                            // This will be delete
+                            if (onClickPlaceholder) {
+                                AlertDialog(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .wrapContentHeight(),
+                                    onDismissRequest = { viewModel.onClickItemPlaceholder(false) },
+                                    properties = DialogProperties(
+                                        dismissOnBackPress = true,
+                                        dismissOnClickOutside = true
+                                    )
+                                ) {
+                                    ElevatedCard(
+                                        modifier = Modifier
+                                            .fillMaxWidth(0.9f)
+                                            .fillMaxHeight(0.2f),
+                                        shape = RoundedCornerShape(15.dp),
+                                        colors = CardDefaults.cardColors(containerColor = Color.White),
+                                        elevation = CardDefaults.cardElevation(defaultElevation = 5.dp)
+                                    ) {
+                                        Column(
+                                            verticalArrangement = Arrangement.Center,
+                                            horizontalAlignment = Alignment.CenterHorizontally
+                                        ) {
+                                            Text(
+                                                text = "Not implemented yet",
+                                                color = Color.Black
+                                            )
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -176,7 +216,7 @@ fun ProfileScreen(viewModel: ProfileViewModel) {
                 .padding(top = 25.dp, bottom = 25.dp)
                 .padding(innerPadding)
                 .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.spacedBy(25.dp),
+            verticalArrangement = Arrangement.spacedBy(20.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             // First card creation (Route Settings)
@@ -187,9 +227,3 @@ fun ProfileScreen(viewModel: ProfileViewModel) {
         }
     }
 }
-
-
-/*
-   viewModel.onClickLogOut(true)
-   viewModel.changeBgOpacity(0.5f)
-*/

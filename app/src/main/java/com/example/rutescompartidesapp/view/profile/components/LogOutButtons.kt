@@ -1,6 +1,7 @@
 package com.example.rutescompartidesapp.view.profile.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -14,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.example.rutescompartidesapp.ui.theme.MateBlackRC
 
 @Composable
 fun LogOutButton(buttonText: String, onClick: () -> Unit){
@@ -31,6 +33,6 @@ fun LogOutButton(buttonText: String, onClick: () -> Unit){
             .padding(start = 10.dp, end = 10.dp, top = 20.dp),
         onClick = onClick
     ) {
-        Text(text = buttonText, color = Color.White)
+        Text(text = buttonText, color = if (isSystemInDarkTheme()) Color.White else MateBlackRC)
     }
 }

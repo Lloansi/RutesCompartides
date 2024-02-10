@@ -24,6 +24,10 @@ class ProfileViewModel: ViewModel() {
         _isLogOutPopUpShowing.value = isPopUpShowing
     }
 
+    // Item onClick Placeholder
+    private val _onClickPlaceholder = MutableStateFlow(false)
+    val onClickPlaceholder = _onClickPlaceholder.asStateFlow()
+
     // Profile options
 
     fun onClickMyRoutes(){
@@ -48,6 +52,10 @@ class ProfileViewModel: ViewModel() {
 
     fun onClickFAQs(){
         TODO("Not implemented yet")
+    }
+
+    fun onClickItemPlaceholder(isShowingAlert: Boolean) {
+        _onClickPlaceholder.value = isShowingAlert
     }
 
 
