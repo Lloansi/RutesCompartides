@@ -1,6 +1,7 @@
 package com.example.rutescompartidesapp.data.domain
 
 data class OrderForList(
+    val user: String,
     val orderID: Int,
     val orderName: String,
     val puntSortida: String,
