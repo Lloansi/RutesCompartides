@@ -9,8 +9,10 @@ data class Route(
     val endPoint: String,
     val maxDeviation: Int,
     var routePrice: Float,
-    val lat: Float,
-    val lon: Float
+    val startLat: Float,
+    val startLon: Float,
+    val endLat: Float,
+    val endLon: Float,
 ){
     init {
         routePrice = routePrice.roundTo1Decimal()

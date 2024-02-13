@@ -44,7 +44,9 @@ val allRoute = listOf(
         5,
         4.56f,
         41.487125f,
-        2.181916f
+        2.181916f,
+        41.67125f,
+        2.193416f
     ),
     Route(
         2,
@@ -54,7 +56,9 @@ val allRoute = listOf(
         4,
         4.56f,
         41.513485f,
-        2.181916f
+        2.181916f,
+        41.33565f,
+        2.172416f
     ),
     Route(
         3,
@@ -64,6 +68,8 @@ val allRoute = listOf(
         2,
         4.56f,
         41.453426f,
+        2.187916f,
+        41.753227f,
         2.187916f
     )
 )
@@ -153,6 +159,7 @@ fun RouteCard(ruta : Route, vehicle: Vehicle) {
                 detailsCard(idImage = R.drawable.seat_svg, value = "${vehicle.seatsAvailable}", imageSize = 28.dp, paddingPercentage = 2)
                 PricePerKM(idImage1 = R.drawable.eur_svg, idImage2 = R.drawable.km_svg, value = "${ruta.routePrice}€")
                 detailsCard(idImage = R.drawable.van_measures, value = "${vehicle.vehicleMesures}", imageSize = 35.dp, fontSize = 13.sp, paddingPercentage = 5)
+
                 val percentagePaddingDesviament = 5
                 val paddingDesviament = (LocalDensity.current.density * percentagePaddingDesviament).dp
 

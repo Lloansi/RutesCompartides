@@ -2,7 +2,7 @@ package com.example.rutescompartidesapp.domain.model
 
 import com.example.rutescompartidesapp.utils.roundTo1Decimal
 
-data class Package (
+data class Order (
     val packageId: Int,
     val packageQuantity: Int,
     val isFragile: Boolean,
@@ -13,7 +13,9 @@ data class Package (
     val packageStartingDate: String,
     val packageEndDate: String,
     val packageStartPoint: String,
-    val packageEndPoint: String
+    val packageEndPoint: String,
+    val lat: Float,
+    val lon: Float
 ){
     init {
         packageHeight = packageHeight.roundTo1Decimal()

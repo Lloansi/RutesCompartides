@@ -32,16 +32,55 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.rutescompartidesapp.R
-import com.example.rutescompartidesapp.domain.model.Package
+import com.example.rutescompartidesapp.domain.model.Order
 
-var package1 = Package(1, 3, false, 40.5f,256.5f,356.5f,2.5f,"11-04-2024","13-04-2024","Mataró", "Sabadell")
-var package2 = Package(2, 2, true, 46.3f,389.2f,189.3f,2.7f,"11-04-2024","13-04-2024","Mataró", "Sabadell")
-var package3 = Package(3, 2, true, 49.3f,324.2f,157.3f,2.7f,"11-04-2024","13-04-2024","Mataró", "Sabadell")
-
-var packagesList = mutableListOf(package1, package2,package3,package1,package3, package2)
+val allOrders = listOf(
+    Order(1,
+        3,
+        false,
+        40.5f,
+        256.5f,
+        356.5f,
+        2.5f,
+        "11-04-2024",
+        "13-04-2024",
+        "Mataró",
+        "Sabadell",
+        41.487125f,
+        2.181916f
+    ),
+    Order(2,
+        2,
+        true,
+        46.3f,
+        389.2f,
+        189.3f,
+        2.7f,
+        "11-04-2024",
+        "13-04-2024",
+        "Mataró",
+        "Sabadell",
+        41.513485f,
+        2.181916f
+    ),
+    Order(3,
+        2,
+        true,
+        49.3f,
+        324.2f,
+        157.3f,
+        2.7f,
+        "11-04-2024",
+        "13-04-2024",
+        "Mataró",
+        "Sabadell",
+        41.453426f,
+        2.187916f
+    )
+)
 
 @Composable
-fun ComandaCard(comanda: Package) {
+fun ComandaCard(comanda: Order) {
     Card(
         shape = MaterialTheme.shapes.medium,
         elevation = CardDefaults.cardElevation(

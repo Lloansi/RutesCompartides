@@ -1,4 +1,4 @@
-package com.example.rutescompartidesapp.view.map
+package com.example.rutescompartidesapp.view.map.viewModels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -28,7 +28,7 @@ class SearchViewModel: ViewModel() {
     }
 
     val search = searchText
-        // Similar to delay (not the same, if somethign happens before, dont show it)
+        // Similar to delay (not the same, if something happens before, don't show it)
         .debounce(500L)
         // We update the state of a boolean to know , user is using the search bar
         .onEach{ _isSearching.update{ true } }
