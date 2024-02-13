@@ -2,6 +2,7 @@ package com.example.rutescompartidesapp.view.routes_order_list.components
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -23,7 +24,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -58,7 +58,7 @@ fun TabRows(routesOrderListViewModel: RoutesOrderListViewModel){
         }
     }
 
-    Column{
+    Column {
         // Rutes and Comandes Tabs
         TabRow(selectedTabIndex = selectedTabIndex) {
             tabItems.forEachIndexed { index, item ->
@@ -83,7 +83,8 @@ fun TabRows(routesOrderListViewModel: RoutesOrderListViewModel){
         // Content
         HorizontalPager(
             state = pagerState,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+
         ) { index ->
             Box(modifier = Modifier.fillMaxSize()) {
                 if (isSearching) {
@@ -91,7 +92,10 @@ fun TabRows(routesOrderListViewModel: RoutesOrderListViewModel){
                         CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
                     }
                 } else {
-                    LazyColumn(modifier = Modifier.fillMaxWidth()) {
+                    LazyColumn(modifier = Modifier.fillMaxWidth(),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
                         if (index == 0) {
                             if (routes.isEmpty()){
                                 item {
