@@ -1,7 +1,9 @@
 package com.example.rutescompartidesapp.view
 
 import android.os.Bundle
-import android.window.SplashScreen
+import android.util.Log
+import android.view.GestureDetector
+import android.view.MotionEvent
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
@@ -45,10 +47,16 @@ import com.example.rutescompartidesapp.view.profile.ProfileScreen
 import com.example.rutescompartidesapp.view.routes_order_list.RoutesOrderListScreen
 import dagger.hilt.android.AndroidEntryPoint
 
+private const val DEBUG_TAG = "Gestures"
+
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    //private lateinit var mDetector: GestureDetectorCompat
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        //mDetector = GestureDetectorCompat(this, MyGestureListener())
         setContent {
             RutesCompartidesAppTheme {
 
@@ -98,11 +106,11 @@ class MainActivity : ComponentActivity() {
                                 println("SELECTED_ITEM" + "onCreate: Selected Item ${it.name}")
                             })
                     }
-                }
-                ) { innerPadding ->
+                }) { innerPadding ->
                     Modifier.padding(innerPadding)
                     ScreenNavigationConfiguration(navController)
                 }
+
 
             }
         }
