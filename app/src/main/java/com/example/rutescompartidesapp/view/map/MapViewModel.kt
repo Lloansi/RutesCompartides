@@ -16,7 +16,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.rutescompartidesapp.R
 import com.example.rutescompartidesapp.domain.model.Route
-import com.example.rutescompartidesapp.view.map.MapScreen.maxKmFog
+import com.example.rutescompartidesapp.view.map.maxKmFog
 import com.example.rutescompartidesapp.view.map.components.allRoute
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

@@ -25,6 +25,7 @@ val fredokaOneFamily = FontFamily(
     Font(R.font.fredokaone, FontWeight.Normal),
 )
 
+
 @Composable
 fun CardBottomMap(){
     LazyRow(

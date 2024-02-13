@@ -44,6 +44,7 @@ import com.example.rutescompartidesapp.ui.theme.RutesCompartidesAppTheme
 import com.example.rutescompartidesapp.view.login.LoginScreen
 import com.example.rutescompartidesapp.view.map.MapScreen
 import com.example.rutescompartidesapp.view.profile.ProfileScreen
+import com.example.rutescompartidesapp.view.profile.ProfileViewModel
 import com.example.rutescompartidesapp.view.routes_order_list.RoutesOrderListScreen
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -131,7 +132,7 @@ fun ScreenNavigationConfiguration(navController: NavHostController) {
         }
 
         composable(Screens.ProfileScreen.route) {
-            ProfileScreen()
+            ProfileScreen(ProfileViewModel())
         }
     }
 

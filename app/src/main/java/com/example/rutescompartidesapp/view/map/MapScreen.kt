@@ -45,15 +45,7 @@ import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 
-object MapScreen: Screen {
-    const val maxKmFog = 35
-
-    @Composable
-    override fun Content() {
-        val navigator = LocalNavigator.currentOrThrow
-        MapScreen()
-    }
-}
+const val maxKmFog = 35
 
 @Composable
 fun MapScreen() {
@@ -91,7 +83,7 @@ fun MapScreen() {
                     .padding(16.dp)
                     .align(Alignment.BottomCenter)
             ) {
-                CardBottomMap()
+               // CardBottomMap()
             }
 
             // Floatting Button Expandable
