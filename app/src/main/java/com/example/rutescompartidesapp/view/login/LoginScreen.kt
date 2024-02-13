@@ -5,14 +5,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import cafe.adriel.voyager.core.screen.Screen
 
-object LoginScreen: Screen {
-    @Composable
-    override fun Content() {
-        LoginScreen()
-
-    }
-}
-
 @Composable
 fun LoginScreen(){
 

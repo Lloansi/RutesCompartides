@@ -100,4 +100,8 @@ dependencies {
     // Transitions
     implementation("cafe.adriel.voyager:voyager-transitions:$voyagerVersion")
 
+    // Bottom navigation PratikFagadiya
+    implementation("com.github.PratikFagadiya:AnimatedSmoothBottomNavigation-JetpackCompose:1.1.1")
+
+
 }
