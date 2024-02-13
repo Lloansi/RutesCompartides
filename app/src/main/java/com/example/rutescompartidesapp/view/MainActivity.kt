@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import cafe.adriel.voyager.navigator.Navigator
 import com.example.rutescompartidesapp.ui.theme.RutesCompartidesAppTheme
+import com.example.rutescompartidesapp.view.edit_profile.EditProfileScreen
 import com.example.rutescompartidesapp.view.profile.ProfileScreen
 import com.example.rutescompartidesapp.view.profile.ProfileViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -31,7 +32,8 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    ProfileScreen(ProfileViewModel())
+                    //ProfileScreen(ProfileViewModel())
+                    EditProfileScreen()
                 }
             }
         }

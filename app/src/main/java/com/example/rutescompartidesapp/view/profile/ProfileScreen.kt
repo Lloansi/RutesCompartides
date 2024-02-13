@@ -1,6 +1,7 @@
 package com.example.rutescompartidesapp.view.profile
 
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -54,6 +55,7 @@ import com.example.rutescompartidesapp.R
 import com.example.rutescompartidesapp.ui.theme.GrayRC
 import com.example.rutescompartidesapp.ui.theme.MateBlackRC
 import com.example.rutescompartidesapp.ui.theme.openSans
+import com.example.rutescompartidesapp.view.generic_components.HeaderCurveImage
 import com.example.rutescompartidesapp.view.profile.components.CreateCardsWithItems
 import com.example.rutescompartidesapp.view.profile.components.LogOutButton
 import com.example.rutescompartidesapp.view.profile.components.LogOutPopup
@@ -63,6 +65,7 @@ import com.example.rutescompartidesapp.view.profile.components.routeProfileItems
 import com.example.rutescompartidesapp.view.profile.components.userProfileItemsList
 import java.util.concurrent.Flow
 
+@SuppressLint("UnusedBoxWithConstraintsScope")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(viewModel: ProfileViewModel) {
@@ -87,25 +90,8 @@ fun ProfileScreen(viewModel: ProfileViewModel) {
                     ) {
                         val centerBottomPadding = 320.dp - 25.dp
 
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(350.dp)
-                                .align(Alignment.TopCenter)
-                        ) {
-                            Image(
-                                painter = painterResource(id = R.drawable.esfera_rc),
-                                contentDescription = null,
-                                contentScale = ContentScale.FillBounds,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(320.dp),
-                                colorFilter = ColorFilter.tint(
-                                    color = if (isSystemInDarkTheme()) MaterialTheme.colorScheme.secondary
-                                    else MaterialTheme.colorScheme.primary
-                                )
-                            )
-                        }
+                        HeaderCurveImage(height = 320.dp)
+
                         Box(
                             modifier = Modifier
                                 .padding(
