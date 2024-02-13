@@ -1,6 +1,5 @@
 package com.example.rutescompartidesapp.view.routes_order_list.components
 
-import android.widget.Space
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
