@@ -3,10 +3,14 @@ package com.example.rutescompartidesapp.view.map
 import android.content.Context
 import android.graphics.drawable.Drawable
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -17,6 +21,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
@@ -25,12 +32,18 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.example.rutescompartidesapp.R
+import com.example.rutescompartidesapp.domain.model.Order
+import com.example.rutescompartidesapp.view.map.components.CardBottom3
 import com.example.rutescompartidesapp.view.map.components.CardBottomMap
+import com.example.rutescompartidesapp.view.map.components.CardBottomMap2
 import com.example.rutescompartidesapp.view.map.components.ExpandableFloatingButton
-import com.example.rutescompartidesapp.view.map.components.SearchViewContainer
+import com.example.rutescompartidesapp.view.map.components.NotificationButtonCard
+import com.example.rutescompartidesapp.view.map.components.SearchView
 import com.example.rutescompartidesapp.view.map.viewModels.MapViewModel
+import com.example.rutescompartidesapp.view.map.viewModels.SearchViewModel
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
+import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 
@@ -47,7 +60,7 @@ object MapScreen: Screen {
 @Composable
 fun MapScreen() {
     val mapViewModel: MapViewModel = hiltViewModel()
-    val orders by mapViewModel.orders.collectAsState()
+    val visibleOrders by mapViewModel.visibleOrders.collectAsState()
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -70,7 +83,7 @@ fun MapScreen() {
             val iconMarkerType = ContextCompat.getDrawable(ctx, R.drawable.little_map_marker_orders_svg)
             val iconMarkerClickPointer = ContextCompat.getDrawable(ctx, R.drawable.marker_svgrepo_com)
 
-            MapViewContainer(viewModel = mapViewModel,ctx, iconMarkerType,iconMarkerClickPointer)
+            MapViewContainer(viewModel = mapViewModel,ctx, iconMarkerType,iconMarkerClickPointer, visibleOrders)
 
             // Search
             Box(
@@ -89,7 +102,8 @@ fun MapScreen() {
                     .padding(16.dp)
                     .align(Alignment.BottomCenter)
             ) {
-                CardBottomMap()
+                //CardBottomMap()
+                CardBottomMap2()
             }
 
             // Floatting Button Expandable
@@ -107,7 +121,7 @@ fun MapScreen() {
 }
 
 @Composable
-fun MapViewContainer(viewModel: MapViewModel, ctx : Context,iconMarkerType: Drawable? = null,iconMarkerClickPointer: Drawable? = null){
+fun MapViewContainer(viewModel: MapViewModel, ctx : Context,iconMarkerType: Drawable? = null,iconMarkerClickPointer: Drawable? = null, visibleOrders:MutableList<GeoPoint>){
 
     val initialZoom = 13.0
 
@@ -189,6 +203,24 @@ fun MapViewContainer(viewModel: MapViewModel, ctx : Context,iconMarkerType: Draw
                 gestureDetector.onTouchEvent(event)
             }
             */
+
+            // WE UPDATE THE VALUE OF CURRENT VISIBLE ORDERS
+            viewModel.filterPerVisibilityOrders(visibleOrders)
         }
     )
+}
+
+@Composable
+fun SearchViewContainer() {
+    val searchViewModel: SearchViewModel = hiltViewModel()
+    Row (modifier = Modifier
+        .offset(y = -(4).dp)
+        .fillMaxWidth()
+        .wrapContentHeight() ,
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        SearchView(searchViewModel)
+        NotificationButtonCard()
+    }
 }

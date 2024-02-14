@@ -30,9 +30,6 @@ class MapViewModel:ViewModel() {
     private val _ordersMarkers = MutableStateFlow<MutableSet<Marker>>(mutableSetOf())
     private var ordersMarkers = _ordersMarkers.asStateFlow()
 
-    private val _markerList = MutableStateFlow<MutableList<GeoPoint>>(mutableListOf())
-    var markerList = _markerList.asStateFlow()
-
     private val _visibleOrders = MutableStateFlow<MutableList<GeoPoint>>(mutableListOf())
     var visibleOrders = _visibleOrders.asStateFlow()
 
