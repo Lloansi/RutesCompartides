@@ -99,20 +99,21 @@ class MainActivity : ComponentActivity() {
                             })
                     }
                 }
-                ) { innerPadding ->
-                    Modifier.padding(innerPadding)
-                    ScreenNavigationConfiguration(navController)
+                ) { paddingValues ->
+                    ScreenNavigationConfiguration(
+                        navController,
+                        Modifier.padding(paddingValues),
+                    )
                 }
-
             }
         }
     }
 }
 
 @Composable
-fun ScreenNavigationConfiguration(navController: NavHostController) {
+fun ScreenNavigationConfiguration(navController: NavHostController, paddingModifier: Modifier) {
 
-    NavHost(navController = navController, startDestination = Screens.MapScreen.route) {
+    NavHost(navController = navController, startDestination = Screens.MapScreen.route, modifier = paddingModifier) {
 
         composable(Screens.MapScreen.route) {
             MapScreen()
