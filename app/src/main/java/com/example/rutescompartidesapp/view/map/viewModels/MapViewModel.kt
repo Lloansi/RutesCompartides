@@ -6,8 +6,10 @@ import android.view.MotionEvent
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.rutescompartidesapp.domain.model.Order
+import com.example.rutescompartidesapp.domain.model.Route
 import com.example.rutescompartidesapp.view.map.MapScreen.maxKmFog
 import com.example.rutescompartidesapp.view.map.components.allOrders
+import com.example.rutescompartidesapp.view.map.components.allRoute
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import org.osmdroid.util.GeoPoint
@@ -33,8 +35,14 @@ class MapViewModel:ViewModel() {
     private val _visibleOrders = MutableStateFlow<MutableList<GeoPoint>>(mutableListOf())
     var visibleOrders = _visibleOrders.asStateFlow()
 
+    private val _visibleRoutes = MutableStateFlow<MutableList<GeoPoint>>(mutableListOf())
+    var visibleRoutes = _visibleRoutes.asStateFlow()
+
     private val _filteredOrders = MutableStateFlow<List<Order>>(listOf())
     var filteredOrders = _filteredOrders.asStateFlow()
+
+    private val _filteredRoutes = MutableStateFlow<List<Route>>(listOf())
+    var filteredRoutes = _filteredRoutes.asStateFlow()
 
     var markerPosition = MutableLiveData<GeoPoint>()
 
@@ -161,6 +169,9 @@ class MapViewModel:ViewModel() {
         // We get the pixels from the center screen
         val centerPoint = mapView.projection.fromPixels(mapView.width / 2, mapView.height / 2)
 
+        // We clear the list with previous visible orders, to latter inside if (isInArea) reasign new values
+        _visibleOrders.value.clear()
+
         // We iterate the list to get the lat and lon
         // Then we compare the route distance with center distance (that we instanced lines before as "centerPoint") to know if the distance between them is minor to the max permitted, if is, we show it in the map
         for (orderPos in ordersList){
@@ -171,7 +182,7 @@ class MapViewModel:ViewModel() {
 
             if(isInArea(centerGeoPoint,orderGeoPoint, maxKmFog)){
                 createMarker(orderGeoPoint,mapView,iconMarkerType)
-                visibleOrders.value.add(orderGeoPoint)
+                _visibleOrders.value.add(orderGeoPoint)
             }
         }
 
@@ -213,7 +224,7 @@ class MapViewModel:ViewModel() {
         }
     }
 
-    private fun filterPerVisibilityOrders(visibleOrders:  MutableList<GeoPoint>){
+     private fun filterPerVisibilityOrders(visibleOrders:  MutableList<GeoPoint>){
         val ordersFiltered = allOrders.filter { order ->
             visibleOrders.any { geoPoint ->
                 geoPoint.latitude.toFloat() == order.lat && geoPoint.longitude.toFloat() == order.lon

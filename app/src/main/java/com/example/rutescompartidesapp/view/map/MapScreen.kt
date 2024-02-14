@@ -21,9 +21,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
@@ -191,7 +188,7 @@ fun MapViewContainer(viewModel: MapViewModel, ctx : Context,iconMarkerType: Draw
             // Since geoPoint is read here, the view will recompose whenever it is updated
             mapView.controller.setCenter(viewModel.markerPosition.value)
 
-
+            // ViewModel Function to hanlde click's user in map
             viewModel.handleClicksMap(mapView, iconMarkerType, iconMarkerClickPointer)
 
             /*
