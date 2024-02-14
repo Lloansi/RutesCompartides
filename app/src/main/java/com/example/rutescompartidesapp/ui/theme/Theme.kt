@@ -18,23 +18,29 @@ import androidx.core.view.WindowCompat
 private val DarkColorScheme = darkColorScheme(
         primary = OrangeRC,
         secondary = MateBlackRC,
-        tertiary = BlueRC
-)
+        tertiary = BlueRC,
+        background = MateBlackRC
+
+    )
 
 private val LightColorScheme = lightColorScheme(
         primary = OrangeRC,
+        onPrimary = MateBlackRC,
         secondary = GrayRC,
-        tertiary = BlueRC
+        onSecondary = MateBlackRC,
+        tertiary = BlueRC,
+        background = GrayRC
 
-        /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
+
+    /* Other default colors to override
+background = Color(0xFFFFFBFE),
+surface = Color(0xFFFFFBFE),
+onPrimary = Color.White,
+onSecondary = Color.White,
+onTertiary = Color.White,
+onBackground = Color(0xFF1C1B1F),
+onSurface = Color(0xFF1C1B1F),
+*/
 )
 
 @Composable
@@ -49,8 +55,8 @@ fun RutesCompartidesAppTheme(
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
             val context = LocalContext.current
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        }*/
-
+        }
+         */
         darkTheme -> DarkColorScheme
         else -> LightColorScheme
     }
