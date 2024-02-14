@@ -51,6 +51,7 @@ android {
 dependencies {
 
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation("com.android.volley:volley:1.2.1")
     implementation("androidx.preference:preference-ktx:1.2.1")
     val voyagerVersion = "1.0.0"
 
@@ -71,19 +72,11 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
-
-
-
-
-
-    
-
     // Extended icons
     implementation("androidx.compose.material:material-icons-extended-android:1.6.0")
 
     // Collect Compose
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.7.0")
-
 
     // ViewModel Compose
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
@@ -119,5 +112,10 @@ dependencies {
     implementation("com.github.PratikFagadiya:AnimatedSmoothBottomNavigation-JetpackCompose:1.1.1")
     implementation("com.canopas.compose-animated-navigationbar:bottombar:1.0.1")
 
+    // Gif animation
+    implementation("io.coil-kt:coil-compose:2.2.2")
+    implementation("io.coil-kt:coil-gif:2.5.0")
 
+    // Activity animations
+    implementation("com.github.AtifSayings:Animatoo:1.0.1")
 }
