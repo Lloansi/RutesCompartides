@@ -48,16 +48,10 @@ import com.example.rutescompartidesapp.view.profile.ProfileViewModel
 import com.example.rutescompartidesapp.view.routes_order_list.RoutesOrderListScreen
 import dagger.hilt.android.AndroidEntryPoint
 
-private const val DEBUG_TAG = "Gestures"
-
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-
-    //private lateinit var mDetector: GestureDetectorCompat
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //mDetector = GestureDetectorCompat(this, MyGestureListener())
         setContent {
             RutesCompartidesAppTheme {
 
@@ -107,21 +101,22 @@ class MainActivity : ComponentActivity() {
                                 println("SELECTED_ITEM" + "onCreate: Selected Item ${it.name}")
                             })
                     }
-                }) { innerPadding ->
-                    Modifier.padding(innerPadding)
-                    ScreenNavigationConfiguration(navController)
                 }
-
-
+                ) { paddingValues ->
+                    ScreenNavigationConfiguration(
+                        navController,
+                        Modifier.padding(paddingValues),
+                    )
+                }
             }
         }
     }
 }
 
 @Composable
-fun ScreenNavigationConfiguration(navController: NavHostController) {
+fun ScreenNavigationConfiguration(navController: NavHostController, paddingModifier: Modifier) {
 
-    NavHost(navController = navController, startDestination = Screens.MapScreen.route) {
+    NavHost(navController = navController, startDestination = Screens.MapScreen.route, modifier = paddingModifier) {
 
         composable(Screens.MapScreen.route) {
             MapScreen()
