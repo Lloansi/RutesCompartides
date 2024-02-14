@@ -27,14 +27,14 @@ val fredokaOneFamily = FontFamily(
 )
 
 @Composable
-fun CardBottomMap(){
+fun CardBottomMap(ordersFiltered: List<Order>){
     LazyRow(
         modifier = Modifier.fillMaxWidth()
     ){
 
-        items(allOrders.size){ item ->
-           val packageItem = allOrders[item]
-           ComandaCard(comanda = packageItem)
+        items(ordersFiltered.size){ item ->
+           val orderItem = ordersFiltered[item]
+           ComandaCard(comanda = orderItem)
         }
 
 

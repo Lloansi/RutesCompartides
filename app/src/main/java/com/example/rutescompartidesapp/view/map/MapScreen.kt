@@ -32,10 +32,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.example.rutescompartidesapp.R
-import com.example.rutescompartidesapp.domain.model.Order
-import com.example.rutescompartidesapp.view.map.components.CardBottom3
 import com.example.rutescompartidesapp.view.map.components.CardBottomMap
-import com.example.rutescompartidesapp.view.map.components.CardBottomMap2
 import com.example.rutescompartidesapp.view.map.components.ExpandableFloatingButton
 import com.example.rutescompartidesapp.view.map.components.NotificationButtonCard
 import com.example.rutescompartidesapp.view.map.components.SearchView
@@ -61,6 +58,7 @@ object MapScreen: Screen {
 fun MapScreen() {
     val mapViewModel: MapViewModel = hiltViewModel()
     val visibleOrders by mapViewModel.visibleOrders.collectAsState()
+    val ordersFiltered by mapViewModel.filteredOrders.collectAsState()
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -102,8 +100,7 @@ fun MapScreen() {
                     .padding(16.dp)
                     .align(Alignment.BottomCenter)
             ) {
-                //CardBottomMap()
-                CardBottomMap2()
+                CardBottomMap(ordersFiltered)
             }
 
             // Floatting Button Expandable
@@ -203,9 +200,6 @@ fun MapViewContainer(viewModel: MapViewModel, ctx : Context,iconMarkerType: Draw
                 gestureDetector.onTouchEvent(event)
             }
             */
-
-            // WE UPDATE THE VALUE OF CURRENT VISIBLE ORDERS
-            viewModel.filterPerVisibilityOrders(visibleOrders)
         }
     )
 }

@@ -33,6 +33,9 @@ class MapViewModel:ViewModel() {
     private val _visibleOrders = MutableStateFlow<MutableList<GeoPoint>>(mutableListOf())
     var visibleOrders = _visibleOrders.asStateFlow()
 
+    private val _filteredOrders = MutableStateFlow<List<Order>>(listOf())
+    var filteredOrders = _filteredOrders.asStateFlow()
+
     var markerPosition = MutableLiveData<GeoPoint>()
 
     init {
@@ -171,6 +174,9 @@ class MapViewModel:ViewModel() {
                 visibleOrders.value.add(orderGeoPoint)
             }
         }
+
+        // Call the filtering function to change mutableStateFlow and printed later to the lazy Row
+        filterPerVisibilityOrders(_visibleOrders.value)
     }
 
     private fun isInArea(point1: GeoPoint, point2: GeoPoint, maxKmDistance: Int):Boolean{
@@ -207,13 +213,13 @@ class MapViewModel:ViewModel() {
         }
     }
 
-    fun filterPerVisibilityOrders(visibleOrders:  MutableList<GeoPoint>): List<Order>{
-        val filteredOrders = allOrders.filter { order ->
+    private fun filterPerVisibilityOrders(visibleOrders:  MutableList<GeoPoint>){
+        val ordersFiltered = allOrders.filter { order ->
             visibleOrders.any { geoPoint ->
                 geoPoint.latitude.toFloat() == order.lat && geoPoint.longitude.toFloat() == order.lon
             }
         }
-        return filteredOrders
+        _filteredOrders.value = ordersFiltered
     }
 
     fun path(mapView: MapView){
