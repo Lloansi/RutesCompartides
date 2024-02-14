@@ -24,21 +24,9 @@ class ProfileViewModel: ViewModel() {
         _isLogOutPopUpShowing.value = isPopUpShowing
     }
 
-    // User info
-    /*
-    PD: Estos tres datos deberian ser temorales ya que yo haria un ViewModel para los
-    datos del usuario y des de la pantalla de Perfil poder acceder a esos datos del Viewmodel
-
-    private val _fullName = mutableStateOf("")
-    val fullName: State<String> = _fullName
-
-    private val _email = mutableStateOf("")
-    val email: State<String> = _email
-
-    private val _phoneNumber = mutableStateOf("")
-    val phoneNumber: State<String> = _phoneNumber
-
-    */
+    // Item onClick Placeholder
+    private val _onClickPlaceholder = MutableStateFlow(false)
+    val onClickPlaceholder = _onClickPlaceholder.asStateFlow()
 
     // Profile options
 
@@ -66,6 +54,9 @@ class ProfileViewModel: ViewModel() {
         TODO("Not implemented yet")
     }
 
+    fun onClickItemPlaceholder(isShowingAlert: Boolean) {
+        _onClickPlaceholder.value = isShowingAlert
+    }
 
 
 }

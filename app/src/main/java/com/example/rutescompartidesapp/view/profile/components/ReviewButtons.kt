@@ -11,6 +11,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.rutescompartidesapp.ui.theme.MateBlackRC
+import com.example.rutescompartidesapp.ui.theme.openSans
 
 @Composable
 fun ReviewButtons(modifier: Modifier, buttonText: String){
@@ -25,8 +26,9 @@ fun ReviewButtons(modifier: Modifier, buttonText: String){
         onClick = {}) {
         Text(
             text = buttonText,
-            fontSize = 16.sp,
-            color = MateBlackRC
+            fontSize = 15.sp,
+            color = MateBlackRC,
+            fontFamily = openSans
         )
     }
 }
