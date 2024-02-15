@@ -34,6 +34,8 @@ import androidx.compose.ui.unit.sp
 import com.example.rutescompartidesapp.R
 import com.example.rutescompartidesapp.domain.model.Route
 import com.example.rutescompartidesapp.domain.model.Vehicle
+import com.example.rutescompartidesapp.view.map.fredokaOneFamily
+import com.example.rutescompartidesapp.view.map.openSansFamily
 
 val allRoute = listOf(
     Route(
@@ -156,9 +158,9 @@ fun RouteCard(ruta : Route, vehicle: Vehicle) {
 
 
                 // Route information
-                detailsCard(idImage = R.drawable.seat_svg, value = "${vehicle.seatsAvailable}", imageSize = 28.dp, paddingPercentage = 2)
+                DetailsCard(idImage = R.drawable.seat_svg, value = "${vehicle.seatsAvailable}", imageSize = 28.dp, paddingPercentage = 2)
                 PricePerKM(idImage1 = R.drawable.eur_svg, idImage2 = R.drawable.km_svg, value = "${ruta.routePrice}€")
-                detailsCard(idImage = R.drawable.van_measures, value = "${vehicle.vehicleMesures}", imageSize = 35.dp, fontSize = 13.sp, paddingPercentage = 5)
+                DetailsCard(idImage = R.drawable.van_measures, value = "${vehicle.vehicleMesures}", imageSize = 35.dp, fontSize = 13.sp, paddingPercentage = 5)
 
                 val percentagePaddingDesviament = 5
                 val paddingDesviament = (LocalDensity.current.density * percentagePaddingDesviament).dp
@@ -189,7 +191,7 @@ fun RouteCard(ruta : Route, vehicle: Vehicle) {
 }
 
 @Composable
-fun detailsCard(idImage: Int,value: String, imageSize: Dp, fontSize: TextUnit = 16.sp, paddingPercentage: Int){
+fun DetailsCard(idImage: Int,value: String, imageSize: Dp, fontSize: TextUnit = 16.sp, paddingPercentage: Int){
     val padding = (LocalDensity.current.density * paddingPercentage).dp
     Row (
         modifier = Modifier

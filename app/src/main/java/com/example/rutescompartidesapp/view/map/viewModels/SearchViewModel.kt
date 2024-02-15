@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import com.example.rutescompartidesapp.domain.model.Route
+import kotlinx.coroutines.FlowPreview
 
 class SearchViewModel: ViewModel() {
 
@@ -27,6 +28,7 @@ class SearchViewModel: ViewModel() {
         _searchText.value = text
     }
 
+    @OptIn(FlowPreview::class)
     val search = searchText
         // Similar to delay (not the same, if something happens before, don't show it)
         .debounce(500L)

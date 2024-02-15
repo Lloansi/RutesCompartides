@@ -9,7 +9,6 @@ import com.example.rutescompartidesapp.domain.model.Order
 import com.example.rutescompartidesapp.domain.model.Route
 import com.example.rutescompartidesapp.view.map.MapScreen.maxKmFog
 import com.example.rutescompartidesapp.view.map.components.allOrders
-import com.example.rutescompartidesapp.view.map.components.allRoute
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import org.osmdroid.util.GeoPoint
@@ -111,12 +110,12 @@ class MapViewModel:ViewModel() {
                 MotionEvent.ACTION_DOWN -> {
                     // Touch event starts, not a drag yet
                     isDragging = false
-                    //true  // if MotionEvent dont have anything inside, use it to consume the touch event
+                    //true  // if MotionEvent don't have anything inside, use it to consume the touch event
                 }
                 MotionEvent.ACTION_MOVE -> {
                     // User is moving their finger, this is a drag
                     isDragging = true
-                    //true  // if MotionEvent dont have anything inside, use it to consume the touch event
+                    //true  // if MotionEvent don't have anything inside, use it to consume the touch event
                 }
                 MotionEvent.ACTION_UP -> {
                     // User tap screen
@@ -169,7 +168,7 @@ class MapViewModel:ViewModel() {
         // We get the pixels from the center screen
         val centerPoint = mapView.projection.fromPixels(mapView.width / 2, mapView.height / 2)
 
-        // We clear the list with previous visible orders, to latter inside if (isInArea) reasign new values
+        // We clear the list with previous visible orders, to latter inside if (isInArea) reassign new values
         _visibleOrders.value.clear()
 
         // We iterate the list to get the lat and lon
