@@ -24,6 +24,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import cafe.adriel.voyager.navigator.CurrentScreen
 import com.PratikFagadiya.smoothanimationbottombar.model.SmoothAnimationBottomBarScreens
 import com.PratikFagadiya.smoothanimationbottombar.properties.BottomBarProperties
 import com.PratikFagadiya.smoothanimationbottombar.ui.SmoothAnimationBottomBar
@@ -31,10 +32,12 @@ import com.example.rutescompartidesapp.R
 import com.example.rutescompartidesapp.navigation.Screens
 import com.example.rutescompartidesapp.ui.theme.MateBlackRC
 import com.example.rutescompartidesapp.ui.theme.RutesCompartidesAppTheme
+import com.example.rutescompartidesapp.view.login.LoginScreen
 import com.example.rutescompartidesapp.view.map.MapScreen
 import com.example.rutescompartidesapp.view.profile.ProfileScreen
 import com.example.rutescompartidesapp.view.profile.ProfileViewModel
 import com.example.rutescompartidesapp.view.routes_order_list.RoutesOrderListScreen
+import com.example.rutescompartidesapp.view.signup.SignUpScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 private const val DEBUG_TAG = "Gestures"
@@ -78,25 +81,25 @@ class MainActivity : ComponentActivity() {
                 }
 
                 Scaffold(bottomBar = {
-                    Box(
-
-                    ) {
-                        SmoothAnimationBottomBar(navController,
-                            bottomNavigationItems,
-                            initialIndex = currentIndex,
-                            bottomBarProperties = BottomBarProperties(
-                                backgroundColor = MateBlackRC,
-                                indicatorColor = Color.White.copy(alpha = 0.2F),
-                                iconTintColor = Color.White,
-                                iconTintActiveColor = Color.White,
-                                textActiveColor = Color.White,
-                                cornerRadius = 18.dp,
-                                fontWeight = FontWeight.Medium,
-                                fontSize = 18.sp
-                            ),
-                            onSelectItem = {
-                                println("SELECTED_ITEM" + "onCreate: Selected Item ${it.name}")
-                            })
+                    Box {
+                        //if (currentIndex.intValue != 3 || currentIndex.intValue != 4  ){
+                            SmoothAnimationBottomBar(navController,
+                                bottomNavigationItems,
+                                initialIndex = currentIndex,
+                                bottomBarProperties = BottomBarProperties(
+                                    backgroundColor = MateBlackRC,
+                                    indicatorColor = Color.White.copy(alpha = 0.2F),
+                                    iconTintColor = Color.White,
+                                    iconTintActiveColor = Color.White,
+                                    textActiveColor = Color.White,
+                                    cornerRadius = 18.dp,
+                                    fontWeight = FontWeight.Medium,
+                                    fontSize = 18.sp
+                                ),
+                                onSelectItem = {
+                                    println("SELECTED_ITEM" + "onCreate: Selected Item ${it.name}")
+                                })
+                       // }
                     }
                 }
                 ) { paddingValues ->
@@ -113,7 +116,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun ScreenNavigationConfiguration(navController: NavHostController, paddingModifier: Modifier) {
 
-    NavHost(navController = navController, startDestination = Screens.MapScreen.route, modifier = paddingModifier) {
+    NavHost(navController = navController, startDestination = Screens.LoginScreen.route, modifier = paddingModifier) {
 
         composable(Screens.MapScreen.route) {
             MapScreen()
@@ -125,6 +128,12 @@ fun ScreenNavigationConfiguration(navController: NavHostController, paddingModif
 
         composable(Screens.ProfileScreen.route) {
             ProfileScreen(ProfileViewModel())
+        }
+        composable(Screens.LoginScreen.route) {
+            LoginScreen(navController)
+        }
+        composable(Screens.SignUpScreen.route) {
+            SignUpScreen(navController)
         }
     }
 

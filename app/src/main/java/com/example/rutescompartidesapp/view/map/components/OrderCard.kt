@@ -168,8 +168,8 @@ fun ComandaCard(comanda: Order) {
                         .fillMaxWidth()
                 ) {
                     //Important package information
-                    detailsCard(idImage = R.drawable.packages_svg, value = "${comanda.packageQuantity}", imageSize = 35.dp, paddingPercentage = 4)
-                    detailsCard(idImage = R.drawable.weight_svg, value = "${comanda.packageWeight}kg", imageSize = 27.dp, paddingPercentage = 1)
+                    DetailsCard(idImage = R.drawable.packages_svg, value = "${comanda.packageQuantity}", imageSize = 35.dp, paddingPercentage = 4)
+                    DetailsCard(idImage = R.drawable.weight_svg, value = "${comanda.packageWeight}kg", imageSize = 27.dp, paddingPercentage = 1)
                 }
                 Column (horizontalAlignment = Alignment.Start){
                     // Measures information

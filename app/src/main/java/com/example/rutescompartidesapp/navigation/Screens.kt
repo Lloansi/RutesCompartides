@@ -6,4 +6,9 @@ sealed class Screens(
     object MapScreen: Screens("MapScreen")
     object RoutesOrderListScreen: Screens("RoutesOrderListScreen")
     object ProfileScreen: Screens("ProfileScreen")
+
+    object LoginScreen: Screens("LoginScreen")
+    object SignUpScreen: Screens("SignUpScreen")
+
+
 }
