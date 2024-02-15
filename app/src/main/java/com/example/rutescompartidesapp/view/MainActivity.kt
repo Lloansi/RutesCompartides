@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
@@ -20,9 +21,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import cafe.adriel.voyager.navigator.CurrentScreen
 import com.PratikFagadiya.smoothanimationbottombar.model.SmoothAnimationBottomBarScreens
@@ -81,8 +84,14 @@ class MainActivity : ComponentActivity() {
                 }
 
                 Scaffold(bottomBar = {
+                    val navBackStackEntry by navController.currentBackStackEntryAsState()
+                    val currentDestination = navBackStackEntry?.destination
                     Box {
-                        //if (currentIndex.intValue != 3 || currentIndex.intValue != 4  ){
+                        if (currentDestination?.hierarchy?.any { navDestination ->
+                            navDestination.route ==  Screens.MapScreen.route ||
+                            navDestination.route ==  Screens.RoutesOrderListScreen.route ||
+                            navDestination.route ==  Screens.ProfileScreen.route
+                        } == true ){
                             SmoothAnimationBottomBar(navController,
                                 bottomNavigationItems,
                                 initialIndex = currentIndex,
@@ -97,9 +106,9 @@ class MainActivity : ComponentActivity() {
                                     fontSize = 18.sp
                                 ),
                                 onSelectItem = {
-                                    println("SELECTED_ITEM" + "onCreate: Selected Item ${it.name}")
+                                    println("SELECTED_ITEM " + " onCreate: Selected Item ${it.name}")
                                 })
-                       // }
+                       }
                     }
                 }
                 ) { paddingValues ->

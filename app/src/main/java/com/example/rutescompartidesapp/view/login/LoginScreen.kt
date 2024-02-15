@@ -221,17 +221,19 @@ fun LoginScreen(navController: NavController){
                             //User Password Error
                             isError = userPasswordError,
                             trailingIcon = {
-                                val image =
-                                    if (isPasswordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
-                                IconButton(onClick = {loginViewModel.togglePasswordVisibility()}) {
-                                    Icon(imageVector = image, contentDescription = "toggle password icon" )
-                                }
-                                if (userPasswordError) {
-                                    Icon(
-                                        imageVector = Icons.Filled.Cancel,
-                                        contentDescription = "Error Icon",
-                                        tint = MaterialTheme.colorScheme.primary
-                                    )
+                                Row (horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(0.dp,0.dp,8.dp,0.dp)) {
+                                    val image =
+                                        if (isPasswordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
+                                    IconButton(onClick = {loginViewModel.togglePasswordVisibility()}) {
+                                        Icon(imageVector = image, contentDescription = "toggle password icon" )
+                                    }
+                                    if (userPasswordError) {
+                                        Icon(
+                                            imageVector = Icons.Filled.Cancel,
+                                            contentDescription = "Error Icon",
+                                            tint = MaterialTheme.colorScheme.primary
+                                        )
+                                    }
                                 }
                             },
 
@@ -264,7 +266,7 @@ fun LoginScreen(navController: NavController){
                     Spacer(modifier = Modifier.padding(4.dp))
 
                     //User Repeat Password
-                    Row () {
+                    Row {
                         OutlinedTextField(modifier = Modifier.fillMaxWidth(0.85f),
                             value = userRepeatPasswordText, onValueChange = loginViewModel::onUserRepeatPasswordTextChange,
                             leadingIcon = {

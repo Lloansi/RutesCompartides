@@ -51,7 +51,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -411,7 +410,7 @@ fun SignUpScreen(navController: NavController) {
                     //Sing Up Button
                     Row {
                         ElevatedButton(
-                            onClick = signUpViewModel::onSignUpButtonClick,
+                            onClick = { signUpViewModel.onSignUpButtonClick(navController) },
                             modifier = Modifier.fillMaxWidth(0.85f)
                                 .fillMaxHeight(0.15f),
                             colors = ButtonDefaults.elevatedButtonColors(
@@ -422,12 +421,7 @@ fun SignUpScreen(navController: NavController) {
                             shape = RoundedCornerShape(16.dp)
                         ) {
                             Text(text = "Registra't",
-                                style = MaterialTheme.typography.headlineMedium,
-                                modifier = Modifier.clickable {
-                                    navController.navigate("LoginScreen") {
-                                        popUpTo("LoginScreen") { inclusive = true }
-                                    }
-                                })
+                                style = MaterialTheme.typography.headlineMedium)
                         }
                     }
 

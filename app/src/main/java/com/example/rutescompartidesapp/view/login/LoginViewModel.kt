@@ -54,7 +54,7 @@ class LoginViewModel: ViewModel() {
     val isRepeatPasswordVisible = _isPasswordVisible.asStateFlow()
 
     fun toggleRepeatPasswordVisibility() {
-        _isPasswordVisible.value = !_isPasswordVisible.value
+        _isRepeatPasswordVisible.value = !_isRepeatPasswordVisible.value
     }
 
     //User password error
@@ -111,15 +111,13 @@ class LoginViewModel: ViewModel() {
         }
 
 
-        if (onUserEmailError(userEmail.isEmpty()) ||
-            onUserPasswordError(userPassword.isEmpty()) ||
-            onUserRepeatPasswordError(userRepeatPassword.isEmpty())){
-            println(
-                "2222222222222222222222222222222"
-            )
+        if (!onUserEmailError(userEmail.isEmpty()) ||
+            !onUserPasswordError(userPassword.isEmpty()) ||
+            !onUserRepeatPasswordError(userRepeatPassword.isEmpty())){
 
+            login(userEmail)
         }
-        login(userEmail)
+
 
     }
 

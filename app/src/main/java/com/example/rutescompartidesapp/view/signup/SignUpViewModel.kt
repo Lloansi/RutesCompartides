@@ -3,6 +3,7 @@ package com.example.rutescompartidesapp.view.signup
 import android.provider.ContactsContract.CommonDataKinds.Phone
 import android.util.Patterns
 import androidx.lifecycle.ViewModel
+import androidx.navigation.NavController
 import com.example.rutescompartidesapp.data.domain.User
 import com.example.rutescompartidesapp.utils.Constants
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -128,7 +129,7 @@ class SignUpViewModel: ViewModel(){
     }
 
     //Sing Up Button
-    fun onSignUpButtonClick() {
+    fun onSignUpButtonClick(navController: NavController) {
     //Aqui va la lògica per fer el registre
 
         // Variables to obtain the values of the input
@@ -144,22 +145,24 @@ class SignUpViewModel: ViewModel(){
         //Check the Email format
         if (!Patterns.EMAIL_ADDRESS.matcher(userEmail).matches()) {
             onUserEmailError(isError = true)
-
         }
 
         //Check the Phone format
         if (!userPhone.matches(Regex("^\\s?\\(?\\d{3}\\)?\\d{3}\\d{3}$"))) {
             onUserPhoneError(isError = true);
-            return;
         }
 
-        if (onUserNameError(userName.isEmpty()) ||
-            onUserEmailError(userEmail.isEmpty())||
-            onUserPhoneError(userPhone.isEmpty()) ||
-            onUserPasswordError(userPassword.isEmpty()) ||
-            onUserRepeatPasswordError(userRepeatPassword.isEmpty())
+        if (!onUserNameError(userName.isEmpty()) ||
+            !onUserEmailError(userEmail.isEmpty())||
+            !onUserPhoneError(userPhone.isEmpty()) ||
+            !onUserPasswordError(userPassword.isEmpty()) ||
+            !onUserRepeatPasswordError(userRepeatPassword.isEmpty())
             ) {
-            createUser(userName,userPhone.toInt(), userEmail, userPassword)
+           if (createUser(userName,userPhone.toInt(), userEmail, userPassword)) {
+               navController.navigate("LoginScreen") {
+                   popUpTo("LoginScreen") { inclusive = true }
+               }
+           }
         }
     }
 
@@ -169,7 +172,7 @@ class SignUpViewModel: ViewModel(){
     private fun createUser(name:String, phone: Int, userEmail: String, password: String): Boolean{
         val newUser = User(Constants.userList.size + 1, name, userEmail, phone, password)
 
-        return if (Constants.userList.filter { user -> user.email == userEmail }.isEmpty()) {
+        return if (Constants.userList.none { user -> user.email == userEmail }) {
             Constants.userList.add(newUser)
             true
         } else {
