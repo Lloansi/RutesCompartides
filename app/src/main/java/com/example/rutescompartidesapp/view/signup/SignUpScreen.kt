@@ -1,8 +1,10 @@
 package com.example.rutescompartidesapp.view.signup
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -37,7 +39,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -49,6 +53,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.rutescompartidesapp.R
@@ -75,6 +80,9 @@ fun SignUpScreen () {
     val userRepeatPasswordError by signUpViewModel.userRepeatPasswordError.collectAsStateWithLifecycle()
     val userRepeatPasswordText by signUpViewModel.userRepeatPassword.collectAsStateWithLifecycle()
     val isRepeatPasswordVisible by signUpViewModel.isRepeatPasswordVisible.collectAsStateWithLifecycle()
+    //User exists
+    val userExists by signUpViewModel.userExists.collectAsStateWithLifecycle()
+
 
     //Column
     Column(modifier= Modifier
@@ -92,10 +100,21 @@ fun SignUpScreen () {
                     .fillMaxWidth()
                     .height(270.dp),
                     painter = painterResource(id = R.drawable.authheader),
+                    colorFilter = ColorFilter.tint( color =
+                    if (isSystemInDarkTheme()) {
+                        Color.Gray
+                    } else {
+                        MaterialTheme.colorScheme.primary
+                    }
+                    ),
                     contentScale = ContentScale.FillBounds,
                     contentDescription = "Header image")
                 Image(modifier = Modifier.fillMaxWidth(0.58f).align(Alignment.TopCenter).padding(top = 25.dp),
-                    painter = painterResource(id = R.drawable.logoblack),
+                    painter = painterResource(id = if (isSystemInDarkTheme()) {
+                        R.drawable.logowhite
+                    } else {
+                        R.drawable.logoblack
+                    }),
                     contentScale = ContentScale.Fit,
                     contentDescription = "Logo image")
             }
@@ -115,7 +134,9 @@ fun SignUpScreen () {
                         horizontalArrangement= Arrangement.Absolute.Left) {
                         Text(text = "Crear un compte",
                             color = MaterialTheme.colorScheme.primary,
-                            style= MaterialTheme.typography.displayMedium )
+                            style = MaterialTheme.typography.headlineLarge,
+                            fontWeight = FontWeight.ExtraBold,
+                            fontSize = 26.sp)
                     }
                     Spacer(modifier = Modifier.padding(8.dp))
 
@@ -392,7 +413,7 @@ fun SignUpScreen () {
                         ElevatedButton(
                             onClick = signUpViewModel::onSignUpButtonClick,
                             modifier = Modifier.fillMaxWidth(0.85f)
-                                .fillMaxHeight(0.2f),
+                                .fillMaxHeight(0.15f),
                             colors = ButtonDefaults.elevatedButtonColors(
                                 containerColor = MaterialTheme.colorScheme.primary,
                                 contentColor = MaterialTheme.colorScheme.secondary
@@ -401,7 +422,7 @@ fun SignUpScreen () {
                             shape = RoundedCornerShape(16.dp)
                         ) {
                             Text(text = "Registra't",
-                                style = MaterialTheme.typography.headlineLarge)
+                                style = MaterialTheme.typography.headlineMedium)
                         }
                     }
 
@@ -427,6 +448,10 @@ fun SignUpScreen () {
                             }
                         )
                     }
+                    if(userExists){
+                        Toast.makeText(LocalContext.current, "Usuari ja registrat", Toast.LENGTH_SHORT).show()
+                    }
+
                 }
             }
         }

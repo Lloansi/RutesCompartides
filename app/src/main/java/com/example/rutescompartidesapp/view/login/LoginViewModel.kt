@@ -2,6 +2,7 @@ package com.example.rutescompartidesapp.view.login
 
 import android.util.Patterns
 import androidx.lifecycle.ViewModel
+import com.example.rutescompartidesapp.utils.Constants
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -26,8 +27,10 @@ class LoginViewModel: ViewModel() {
     private val _userEmailError = MutableStateFlow(false)
     val userEmailError = _userEmailError.asStateFlow()
 
-    fun onUserEmailError(isError: Boolean) {
+    fun onUserEmailError(isError: Boolean): Boolean {
         _userEmailError.value = isError
+
+        return isError
     }
 
     //User password text
@@ -58,8 +61,9 @@ class LoginViewModel: ViewModel() {
     private val _userPasswordError = MutableStateFlow(false)
     val userPasswordError = _userPasswordError.asStateFlow()
 
-    fun onUserPasswordError(isError: Boolean) {
+    fun onUserPasswordError(isError: Boolean): Boolean {
         _userPasswordError.value = isError
+        return isError
     }
 
     //User password hide and show
@@ -83,12 +87,13 @@ class LoginViewModel: ViewModel() {
     private val _userRepeatPasswordError = MutableStateFlow(false)
     val userRepeatPasswordError = _userRepeatPasswordError.asStateFlow()
 
-    fun onUserRepeatPasswordError(isError: Boolean) {
+    fun onUserRepeatPasswordError(isError: Boolean): Boolean {
         _userRepeatPasswordError.value = isError
+        return isError
     }
 
     //Sing Up Button
-    fun onSignUpButtonClick() {
+    fun onLoginButtonClick() {
 
         // Variables to obtain the values of the input
         val userEmail = _userEmail.value
@@ -105,10 +110,19 @@ class LoginViewModel: ViewModel() {
 
         }
 
-        onUserEmailError(userEmail.isEmpty())
-        onUserPasswordError(userPassword.isEmpty())
-        onUserRepeatPasswordError(userRepeatPassword.isEmpty())
-
+        if (onUserEmailError(userEmail.isEmpty()) ||
+            onUserPasswordError(userPassword.isEmpty()) ||
+            onUserRepeatPasswordError(userRepeatPassword.isEmpty())){
+            login(userEmail)
+        }
 
     }
+
+    //User exists
+    private val _userIsLogged = MutableStateFlow(false)
+    val userIsLogged = _userIsLogged.asStateFlow()
+     fun login(userEmail: String): Boolean {
+         return Constants.userList.filter { user -> user.email == userEmail }.isEmpty()
+     }
+
 }

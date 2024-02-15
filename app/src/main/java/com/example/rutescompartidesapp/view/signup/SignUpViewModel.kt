@@ -1,7 +1,10 @@
 package com.example.rutescompartidesapp.view.signup
 
+import android.provider.ContactsContract.CommonDataKinds.Phone
 import android.util.Patterns
 import androidx.lifecycle.ViewModel
+import com.example.rutescompartidesapp.data.domain.User
+import com.example.rutescompartidesapp.utils.Constants
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
@@ -19,8 +22,9 @@ class SignUpViewModel: ViewModel(){
     private val _userNameError = MutableStateFlow(false)
     val userNameError = _userNameError.asStateFlow()
 
-    fun onUserNameError (isError:Boolean){
+    fun onUserNameError (isError:Boolean): Boolean{
        _userNameError.value = isError
+        return isError
     }
 
     //User email text
@@ -41,8 +45,10 @@ class SignUpViewModel: ViewModel(){
     private val _userEmailError = MutableStateFlow(false)
     val userEmailError = _userEmailError.asStateFlow()
 
-    fun onUserEmailError (isError:Boolean){
+    fun onUserEmailError (isError:Boolean) : Boolean{
         _userEmailError.value = isError
+
+        return isError
     }
 
     // User phone text
@@ -57,8 +63,9 @@ class SignUpViewModel: ViewModel(){
         _userPhone.value = text
     }
 
-    fun onUserPhoneError(isError: Boolean) {
+    fun onUserPhoneError(isError: Boolean): Boolean {
         _userPhoneError.value = isError
+        return isError
     }
 
     //User password text
@@ -89,8 +96,9 @@ class SignUpViewModel: ViewModel(){
     private val _userPasswordError = MutableStateFlow(false)
     val userPasswordError = _userPasswordError.asStateFlow()
 
-    fun onUserPasswordError (isError:Boolean){
+    fun onUserPasswordError (isError:Boolean): Boolean{
         _userPasswordError.value = isError
+        return isError
     }
 
     //User password hide and show
@@ -114,8 +122,9 @@ class SignUpViewModel: ViewModel(){
     private val _userRepeatPasswordError = MutableStateFlow(false)
     val userRepeatPasswordError = _userRepeatPasswordError.asStateFlow()
 
-    fun onUserRepeatPasswordError (isError:Boolean){
+    fun onUserRepeatPasswordError (isError:Boolean): Boolean{
         _userRepeatPasswordError.value = isError
+        return isError
     }
 
     //Sing Up Button
@@ -132,7 +141,6 @@ class SignUpViewModel: ViewModel(){
         // Verify if any field is empty
         //val isAnyFieldEmpty = userName.isEmpty() || userEmail.isEmpty() || userPhone.isEmpty() || userPassword.isEmpty() || userRepeatPassword.isEmpty()
 
-
         //Check the Email format
         if (!Patterns.EMAIL_ADDRESS.matcher(userEmail).matches()) {
             onUserEmailError(isError = true)
@@ -145,16 +153,28 @@ class SignUpViewModel: ViewModel(){
             return;
         }
 
-        onUserNameError(userName.isEmpty())
-        onUserEmailError(userEmail.isEmpty())
-        onUserPhoneError(userPhone.isEmpty())
-        onUserPasswordError(userPassword.isEmpty())
-        onUserRepeatPasswordError(userRepeatPassword.isEmpty())
-
-       /* if(isAnyFieldEmpty){
-            println("Siusplau, completa tots els camps")
+        if (onUserNameError(userName.isEmpty()) ||
+            onUserEmailError(userEmail.isEmpty())||
+            onUserPhoneError(userPhone.isEmpty()) ||
+            onUserPasswordError(userPassword.isEmpty()) ||
+            onUserRepeatPasswordError(userRepeatPassword.isEmpty())
+            ) {
+            createUser(userName,userPhone.toInt(), userEmail, userPassword)
         }
-       */
+    }
+
+    //User exists
+    private val _userExists = MutableStateFlow(false)
+    val userExists = _userExists.asStateFlow()
+    private fun createUser(name:String, phone: Int, userEmail: String, password: String): Boolean{
+        val newUser = User(Constants.userList.size + 1, name, userEmail, phone, password)
+
+        return if (Constants.userList.filter { user -> user.email == userEmail }.isEmpty()) {
+            Constants.userList.add(newUser)
+            true
+        } else {
+            false
+        }
     }
 
 }
