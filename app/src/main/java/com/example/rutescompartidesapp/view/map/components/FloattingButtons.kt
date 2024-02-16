@@ -21,6 +21,7 @@ fun ExpandableFloatingButton() {
 
     Column(
         modifier = Modifier
+            .padding(end = 15.dp)
             .wrapContentSize()
     ) {
         if (isExpanded) {

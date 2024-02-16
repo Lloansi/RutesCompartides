@@ -5,9 +5,12 @@ import android.graphics.drawable.Drawable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -100,7 +103,19 @@ fun MapScreen() {
             ) {
                 SearchViewContainer()
             }
+            Box(modifier = Modifier
+                .align(Alignment.BottomCenter)){
+                Column(
+                    verticalArrangement = Arrangement.Bottom,
+                    horizontalAlignment = Alignment.End
+                ) {
+                    ExpandableFloatingButton()
+                    Spacer(modifier = Modifier.height(5.dp))
+                    CardBottomMap(ordersFiltered)
 
+                }
+            }
+            /*
             // InfoCards Bottom Screen
             Box(
                 modifier = Modifier
@@ -108,7 +123,7 @@ fun MapScreen() {
                     .padding(16.dp)
                     .align(Alignment.BottomCenter)
             ) {
-                CardBottomMap(ordersFiltered)
+
             }
 
             // Floatting Button Expandable
@@ -119,8 +134,8 @@ fun MapScreen() {
                     .fillMaxSize(),
                 contentAlignment = Alignment.BottomEnd
             ){
-                ExpandableFloatingButton()
-            }
+                //ExpandableFloatingButton()
+            }*/
         }
     }
 }

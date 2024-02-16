@@ -49,14 +49,6 @@ class LoginViewModel: ViewModel() {
         _isPasswordVisible.value = !_isPasswordVisible.value
     }
 
-    //Repeat Password visibility
-    private val _isRepeatPasswordVisible = MutableStateFlow(false)
-    val isRepeatPasswordVisible = _isPasswordVisible.asStateFlow()
-
-    fun toggleRepeatPasswordVisibility() {
-        _isRepeatPasswordVisible.value = !_isRepeatPasswordVisible.value
-    }
-
     //User password error
     private val _userPasswordError = MutableStateFlow(false)
     val userPasswordError = _userPasswordError.asStateFlow()
@@ -68,37 +60,12 @@ class LoginViewModel: ViewModel() {
 
     //User password hide and show
 
-    //User repeat password text
-    private val _userRepeatPassword = MutableStateFlow("")
-    val userRepeatPassword = _userRepeatPassword.asStateFlow()
-
-
-    fun onUserRepeatPasswordTextChange(text: String) {
-        _userRepeatPassword.value = text
-
-        // Check if passwords match and update error status
-        val userPassword = _userPassword.value
-        val isError = userPassword != text
-
-        onUserRepeatPasswordError(isError)
-    }
-
-    //User repeat password error
-    private val _userRepeatPasswordError = MutableStateFlow(false)
-    val userRepeatPasswordError = _userRepeatPasswordError.asStateFlow()
-
-    fun onUserRepeatPasswordError(isError: Boolean): Boolean {
-        _userRepeatPasswordError.value = isError
-        return isError
-    }
-
     //Sing Up Button
     fun onLoginButtonClick() {
 
         // Variables to obtain the values of the input
         val userEmail = _userEmail.value
         val userPassword = _userPassword.value
-        val userRepeatPassword = _userRepeatPassword.value
 
         // Verify if any field is empty
         //val isAnyFieldEmpty = userName.isEmpty() || userEmail.isEmpty() || userPhone.isEmpty() || userPassword.isEmpty() || userRepeatPassword.isEmpty()
@@ -112,9 +79,7 @@ class LoginViewModel: ViewModel() {
 
 
         if (!onUserEmailError(userEmail.isEmpty()) ||
-            !onUserPasswordError(userPassword.isEmpty()) ||
-            !onUserRepeatPasswordError(userRepeatPassword.isEmpty())){
-
+            !onUserPasswordError(userPassword.isEmpty())){
             login(userEmail)
         }
 

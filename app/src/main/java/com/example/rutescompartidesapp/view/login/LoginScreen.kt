@@ -38,6 +38,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -70,10 +71,6 @@ fun LoginScreen(navController: NavController){
     val userPasswordError by loginViewModel.userPasswordError.collectAsStateWithLifecycle()
     val userPasswordText by loginViewModel.userPassword.collectAsStateWithLifecycle()
     val isPasswordVisible by loginViewModel.isPasswordVisible.collectAsStateWithLifecycle()
-    //Repeat Password
-    val userRepeatPasswordError by loginViewModel.userRepeatPasswordError.collectAsStateWithLifecycle()
-    val userRepeatPasswordText by loginViewModel.userRepeatPassword.collectAsStateWithLifecycle()
-    val isRepeatPasswordVisible by loginViewModel.isRepeatPasswordVisible.collectAsStateWithLifecycle()
     //User is logged
     val userIsLogged by loginViewModel.userIsLogged.collectAsStateWithLifecycle()
 
@@ -265,75 +262,12 @@ fun LoginScreen(navController: NavController){
                     }
                     Spacer(modifier = Modifier.padding(4.dp))
 
-                    //User Repeat Password
-                    Row {
-                        OutlinedTextField(modifier = Modifier.fillMaxWidth(0.85f),
-                            value = userRepeatPasswordText, onValueChange = loginViewModel::onUserRepeatPasswordTextChange,
-                            leadingIcon = {
-                                Icon(imageVector = Icons.Outlined.LockOpen, contentDescription = "user password icon", tint= Color.LightGray)
-                            },
-                            placeholder = {
-                                Text(text = "Repeteix Contrassenya", color = Color.Gray)
-                            },
-                            shape = RoundedCornerShape(16.dp),
-
-                            //User Repeat Password Visibility
-                            visualTransformation =
-                            if (isRepeatPasswordVisible) {
-                                VisualTransformation.None
-                            } else {
-                                PasswordVisualTransformation()
-                            },
-
-                            //User Repeat Password Error
-                            isError = userRepeatPasswordError,
-                            trailingIcon = {
-                                Row (horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(0.dp,0.dp,8.dp,0.dp)) {
-                                    val image =
-                                        if (isRepeatPasswordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
-                                    IconButton(onClick = {loginViewModel.toggleRepeatPasswordVisibility()}) {
-                                        Icon(imageVector = image, contentDescription = "toggle password icon" )
-                                    }
-                                    if (userRepeatPasswordError){
-                                        Icon(imageVector = Icons.Filled.Cancel,
-                                            contentDescription = "Error Icon",
-                                            tint = MaterialTheme.colorScheme.primary)
-                                    }
-                                }
-
-                            },
-
-
-                            //User Repeat Password Text
-                            supportingText = {
-                                if (userRepeatPasswordError){
-                                    Text(text = "Les contrassenyes no coincideixen",
-                                        color = MaterialTheme.colorScheme.primary)
-                                }
-                            },
-                            //User Repeat Password Keyboard
-                            keyboardOptions = KeyboardOptions(
-                                keyboardType = KeyboardType.Password,
-                                imeAction = ImeAction.Next
-                            ),
-                            singleLine = true,
-
-                            colors = OutlinedTextFieldDefaults.colors(
-                                unfocusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
-                                focusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
-                                errorContainerColor = MaterialTheme.colorScheme.primaryContainer,
-                            )
-                        )
-
-                    }
-                    Spacer(modifier = Modifier.padding(4.dp))
-
                     //Sing Up Button
                     Row (){
                         ElevatedButton(
                             onClick = loginViewModel::onLoginButtonClick,
                             modifier = Modifier.fillMaxWidth(0.85f)
-                                .fillMaxHeight(0.15f),
+                                .height(LocalConfiguration.current.screenHeightDp.dp / 16),
                             colors = ButtonDefaults.elevatedButtonColors(
                                 containerColor = MaterialTheme.colorScheme.primary,
                                 contentColor = MaterialTheme.colorScheme.secondary
