@@ -4,7 +4,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.example.rutescompartidesapp.domain.model.Order
+import com.example.rutescompartidesapp.data.domain.Order
 
 
 @Composable

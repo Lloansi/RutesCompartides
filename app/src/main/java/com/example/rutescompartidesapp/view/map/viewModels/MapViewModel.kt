@@ -5,8 +5,8 @@ import android.graphics.drawable.Drawable
 import android.view.MotionEvent
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.rutescompartidesapp.domain.model.Order
-import com.example.rutescompartidesapp.domain.model.Route
+import com.example.rutescompartidesapp.data.domain.Order
+import com.example.rutescompartidesapp.data.domain.Route
 import com.example.rutescompartidesapp.view.map.MapScreen.maxKmFog
 import com.example.rutescompartidesapp.view.map.components.allOrders
 import kotlinx.coroutines.flow.MutableStateFlow

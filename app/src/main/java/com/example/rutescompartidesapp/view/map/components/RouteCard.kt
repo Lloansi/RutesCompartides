@@ -32,8 +32,8 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.rutescompartidesapp.R
-import com.example.rutescompartidesapp.domain.model.Route
-import com.example.rutescompartidesapp.domain.model.Vehicle
+import com.example.rutescompartidesapp.data.domain.Route
+import com.example.rutescompartidesapp.data.domain.Vehicle
 import com.example.rutescompartidesapp.view.map.fredokaOneFamily
 import com.example.rutescompartidesapp.view.map.openSansFamily
 

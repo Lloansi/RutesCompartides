@@ -1,4 +1,4 @@
-package com.example.rutescompartidesapp.domain.model
+package com.example.rutescompartidesapp.data.domain
 
 import com.example.rutescompartidesapp.utils.roundTo1Decimal
 

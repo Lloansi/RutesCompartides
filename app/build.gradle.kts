@@ -71,9 +71,9 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
-    // Extended icons
 
-    implementation("androidx.compose.material:material-icons-extended-android:1.6.0")
+    // Extended icons
+    implementation("androidx.compose.material:material-icons-extended-android:1.6.1")
 
     // Collect Compose
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.7.0")
@@ -89,7 +89,7 @@ dependencies {
 
     // Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("com.squareup.okhttp3:okhttp:4.11.0")
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation ("com.squareup.okhttp3:logging-interceptor:4.9.0")
 
@@ -101,6 +101,9 @@ dependencies {
     implementation("com.google.android.gms:play-services-maps:18.2.0")
     implementation ("org.osmdroid:osmdroid-android:6.1.16")
     implementation ("org.osmdroid:osmdroid-mapsforge:6.1.16")
+
+    // OSMdroid Bonus
+    implementation ("com.github.MKergall:osmbonuspack:6.9.0")
 
     // Voyager
     // Navigator
