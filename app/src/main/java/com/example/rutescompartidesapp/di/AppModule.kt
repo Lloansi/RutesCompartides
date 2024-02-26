@@ -1,6 +1,6 @@
 package com.example.rutescompartidesapp.di
 
-import com.example.rutescompartidesapp.data.network.OpenRouteServiceApi
+import com.example.rutescompartidesapp.data.network.openRouteService.OpenRouteServiceApi
 import com.example.rutescompartidesapp.utils.Constants
 import com.google.gson.GsonBuilder
 import dagger.Module
@@ -20,15 +20,13 @@ object AppModule {
     @Provides
     @Singleton
     fun provideOpenRouteApi(): OpenRouteServiceApi {
-        val gson = GsonBuilder()
-            .serializeNulls()
-            .create()
+        val gson = GsonBuilder().serializeNulls().create()
         val okHttpClient = OkHttpClient.Builder().build()
 
         return Retrofit.Builder()
-            .baseUrl(Constants.OPENROUTESERVICE_URL)
+            .baseUrl(Constants.ORS_URL)
             .client(okHttpClient)
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
             .create()
     }

@@ -1,4 +1,4 @@
-package com.example.rutescompartidesapp.data.network
+package com.example.rutescompartidesapp.data.network.openRouteService
 
 import com.example.rutescompartidesapp.data.domain.DirectionResponse
 import retrofit2.Response
