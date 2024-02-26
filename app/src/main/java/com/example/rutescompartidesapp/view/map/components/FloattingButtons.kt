@@ -13,9 +13,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 
 @Composable
-fun ExpandableFloatingButton() {
+fun ExpandableFloatingButton(navController: NavHostController) {
     var isExpanded by remember { mutableStateOf(false) }
     val keyboardController = LocalSoftwareKeyboardController.current
 
@@ -27,11 +28,11 @@ fun ExpandableFloatingButton() {
         if (isExpanded) {
             MiniFloatingButton(
                 icon = Icons.Filled.Directions,
-                onClick = { /* Handle Favorite click */ }
+                onClick = { navController.navigate("RoutesOrderListScreen") }
             )
             MiniFloatingButton(
                 icon = Icons.Default.CardTravel,
-                onClick = { /* Handle Visibility click */ }
+                onClick = { navController.navigate("RoutesOrderListScreen") }
             )
         }
         FloatingActionButton(

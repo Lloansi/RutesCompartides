@@ -35,6 +35,9 @@ import com.example.rutescompartidesapp.R
 import com.example.rutescompartidesapp.navigation.Screens
 import com.example.rutescompartidesapp.ui.theme.MateBlackRC
 import com.example.rutescompartidesapp.ui.theme.RutesCompartidesAppTheme
+import com.example.rutescompartidesapp.utils.Constants.ALL_PERMISSIONS
+import com.example.rutescompartidesapp.view.confirm.ConfirmScreen
+import com.example.rutescompartidesapp.view.confirm.components.DrawingScreen
 import com.example.rutescompartidesapp.view.login.LoginScreen
 import com.example.rutescompartidesapp.view.map.MapScreen
 import com.example.rutescompartidesapp.view.profile.ProfileScreen
@@ -53,12 +56,30 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //mDetector = GestureDetectorCompat(this, MyGestureListener())
+        fun hasRequiredPermissions(): Boolean {
+            return ALL_PERMISSIONS.all {
+                ContextCompat.checkSelfPermission(
+                    applicationContext,
+                    it
+                ) == PackageManager.PERMISSION_GRANTED
+            }
+        }
+        /*
+        OLD WAY TO HANLDE PERMISSIONS GRANTED
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.INTERNET), 0)
         }
+         */
+
+        if (!hasRequiredPermissions()) {
+            ActivityCompat.requestPermissions(
+                this, ALL_PERMISSIONS, 0
+            )
+        }
+
+
         setContent {
             RutesCompartidesAppTheme {
-
                 val navController = rememberNavController()
 
                 val bottomNavigationItems = listOf(
@@ -117,6 +138,7 @@ class MainActivity : ComponentActivity() {
                         Modifier.padding(paddingValues),
                     )
                 }
+
             }
         }
     }
@@ -128,7 +150,11 @@ fun ScreenNavigationConfiguration(navController: NavHostController, paddingModif
     NavHost(navController = navController, startDestination = Screens.LoginScreen.route, modifier = paddingModifier) {
 
         composable(Screens.MapScreen.route) {
-            MapScreen()
+            MapScreen(navController)
+        }
+
+        composable(Screens.ConfirmScreen.route){
+            ConfirmScreen()
         }
 
         composable(Screens.RoutesOrderListScreen.route) {
