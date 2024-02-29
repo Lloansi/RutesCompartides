@@ -11,15 +11,22 @@ import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.ImageProxy
 import androidx.camera.view.CameraController
 import androidx.camera.view.LifecycleCameraController
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Cameraswitch
+import androidx.compose.material.icons.filled.Circle
 import androidx.compose.material.icons.filled.Photo
 import androidx.compose.material.icons.filled.PhotoCamera
 import androidx.compose.material3.BottomSheetScaffold
@@ -36,6 +43,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -87,26 +95,14 @@ fun ConfirmScreen(){
                     controller = controller,
                     modifier = Modifier.fillMaxSize()
                 )
-                IconButton(onClick = {
-                        if (controller.cameraSelector == CameraSelector.DEFAULT_BACK_CAMERA){
-                            CameraSelector.DEFAULT_FRONT_CAMERA
-                        } else CameraSelector.DEFAULT_BACK_CAMERA
-                    },
-                    modifier = Modifier
-                        .offset(16.dp, 16.dp)
-                ){
-                    Icon(
-                        imageVector = Icons.Default.Cameraswitch,
-                        contentDescription = "Switch camera"
-                    )
-                }
 
                 Row (
                     modifier = Modifier
                         .fillMaxWidth()
                         .align(Alignment.BottomCenter)
                         .padding(16.dp),
-                    horizontalArrangement = Arrangement.SpaceAround
+                    horizontalArrangement = Arrangement.SpaceAround,
+                    verticalAlignment = Alignment.CenterVertically
                 ){
                     IconButton(
                         onClick = {
@@ -116,12 +112,15 @@ fun ConfirmScreen(){
                         }
                     ) {
                       Icon(
+                          modifier = Modifier.size(32.dp),
                           imageVector = Icons.Default.Photo,
+                          tint = Color.White,
                           contentDescription = "Open gallery"
                       )
                     }
 
                     IconButton(
+                        modifier = Modifier.size(80.dp),
                         onClick = {
                             takePhoto(
                                 controller = controller,
@@ -131,8 +130,29 @@ fun ConfirmScreen(){
                         }
                     ) {
                         Icon(
-                            imageVector = Icons.Default.PhotoCamera,
+                            modifier = Modifier.size(80.dp),
+                            imageVector = Icons.Filled.Circle,
+                            tint = Color.White,
                             contentDescription = "Take photo"
+                        )
+                    }
+
+                    IconButton(onClick = {
+                        if (controller.cameraSelector == CameraSelector.DEFAULT_BACK_CAMERA){
+                            CameraSelector.DEFAULT_FRONT_CAMERA
+                        } else CameraSelector.DEFAULT_BACK_CAMERA
+                    },
+                        /*
+                        modifier = Modifier
+                            .offset(16.dp, 16.dp)
+
+                         */
+                    ){
+                        Icon(
+                            modifier = Modifier.size(32.dp),
+                            imageVector = Icons.Default.Cameraswitch,
+                            tint = Color.White,
+                            contentDescription = "Switch camera"
                         )
                     }
                 }
@@ -168,7 +188,7 @@ private fun takePhoto(
                 )
 
                 onPhotoTaken(rotatedBitmap)
-                // Instead of rotatedBitmap, we could simplify to image.toBitmap() if we dont want to handle , when landscape mobile rotate
+                // Instead of rotatedBitmap, we could simplify to image.toBitmap() if we dont want to handle when landscape mobile rotate
             }
 
             override fun onError(exception: ImageCaptureException) {

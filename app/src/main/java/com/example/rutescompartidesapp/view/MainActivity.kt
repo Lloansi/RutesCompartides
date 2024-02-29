@@ -55,7 +55,9 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         //mDetector = GestureDetectorCompat(this, MyGestureListener())
+
         fun hasRequiredPermissions(): Boolean {
             return ALL_PERMISSIONS.all {
                 ContextCompat.checkSelfPermission(
@@ -147,7 +149,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun ScreenNavigationConfiguration(navController: NavHostController, paddingModifier: Modifier) {
 
-    NavHost(navController = navController, startDestination = Screens.LoginScreen.route, modifier = paddingModifier) {
+    NavHost(navController = navController, startDestination = Screens.ConfirmScreen.route, modifier = paddingModifier) {
 
         composable(Screens.MapScreen.route) {
             MapScreen(navController)

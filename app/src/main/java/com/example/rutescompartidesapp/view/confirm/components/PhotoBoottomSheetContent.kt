@@ -29,7 +29,7 @@ fun PhotoBottomSheetContent(
                 .padding(16.dp),
             contentAlignment = Alignment.Center
         ){
-            Text("There are no photos yet")
+            Text("No has fet cap foto encara")
         }
     } else {
         LazyVerticalStaggeredGrid(
