@@ -32,7 +32,7 @@ private val LightColorScheme = lightColorScheme(
         secondary = GrayRC,
         tertiary = BlueRC,
         background = GrayRC,
-         onBackground = Color.Black
+        onBackground = Color.Black
 
 
 

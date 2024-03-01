@@ -1,6 +1,5 @@
 package com.example.rutescompartidesapp.view
 
-import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
 
@@ -27,7 +26,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import cafe.adriel.voyager.navigator.CurrentScreen
 import com.PratikFagadiya.smoothanimationbottombar.model.SmoothAnimationBottomBarScreens
 import com.PratikFagadiya.smoothanimationbottombar.properties.BottomBarProperties
 import com.PratikFagadiya.smoothanimationbottombar.ui.SmoothAnimationBottomBar
@@ -36,10 +34,11 @@ import com.example.rutescompartidesapp.navigation.Screens
 import com.example.rutescompartidesapp.ui.theme.MateBlackRC
 import com.example.rutescompartidesapp.ui.theme.RutesCompartidesAppTheme
 import com.example.rutescompartidesapp.utils.Constants.ALL_PERMISSIONS
-import com.example.rutescompartidesapp.view.confirm.ConfirmScreen
-import com.example.rutescompartidesapp.view.confirm.components.DrawingScreen
+import com.example.rutescompartidesapp.view.complete.ConfirmScreen
 import com.example.rutescompartidesapp.view.login.LoginScreen
 import com.example.rutescompartidesapp.view.map.MapScreen
+import com.example.rutescompartidesapp.view.map.components.allOrders
+import com.example.rutescompartidesapp.view.map.components.allRoute
 import com.example.rutescompartidesapp.view.profile.ProfileScreen
 import com.example.rutescompartidesapp.view.profile.ProfileViewModel
 import com.example.rutescompartidesapp.view.routes_order_list.RoutesOrderListScreen
@@ -155,8 +154,10 @@ fun ScreenNavigationConfiguration(navController: NavHostController, paddingModif
             MapScreen(navController)
         }
 
+        val order = allOrders[0]
+        val route = allRoute[0]
         composable(Screens.ConfirmScreen.route){
-            ConfirmScreen()
+            ConfirmScreen(order)
         }
 
         composable(Screens.RoutesOrderListScreen.route) {

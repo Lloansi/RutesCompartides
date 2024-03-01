@@ -1,4 +1,4 @@
-package com.example.rutescompartidesapp.view.confirm.components
+package com.example.rutescompartidesapp.view.confirm.components.camera
 
 import androidx.camera.view.LifecycleCameraController
 import androidx.camera.view.PreviewView

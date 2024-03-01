@@ -1,4 +1,4 @@
-package com.example.rutescompartidesapp.view.confirm.components
+package com.example.rutescompartidesapp.view.confirm.components.camera
 
 import android.graphics.Bitmap
 import androidx.compose.foundation.Image

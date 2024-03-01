@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material3.Card
@@ -173,9 +174,9 @@ fun ComandaCard(comanda: Order) {
                 }
                 Column (horizontalAlignment = Alignment.Start){
                     // Measures information
-                    MeasuresText(icon = Icons.Default.KeyboardArrowRight, typeOfMeasure = "Amplada", value = "${comanda.packageWidth}",paddingPercentage = 5)
-                    MeasuresText(icon = Icons.Default.KeyboardArrowRight, typeOfMeasure = "Longitud", value = "${comanda.packageLongitude}",paddingPercentage = 5)
-                    MeasuresText(icon = Icons.Default.KeyboardArrowRight, typeOfMeasure = "Altura", value = "${comanda.packageHeight}",paddingPercentage = 5)
+                    MeasuresText(icon = Icons.AutoMirrored.Filled.KeyboardArrowRight, typeOfMeasure = "Amplada", value = "${comanda.packageWidth}")
+                    MeasuresText(icon = Icons.AutoMirrored.Filled.KeyboardArrowRight, typeOfMeasure = "Longitud", value = "${comanda.packageLongitude}")
+                    MeasuresText(icon = Icons.AutoMirrored.Filled.KeyboardArrowRight, typeOfMeasure = "Altura", value = "${comanda.packageHeight}")
                 }
             }
         }
@@ -183,8 +184,7 @@ fun ComandaCard(comanda: Order) {
 }
 
 @Composable
-fun MeasuresText(icon: ImageVector, typeOfMeasure:String, value: String, paddingPercentage: Int) {
-    val padding = (LocalDensity.current.density * paddingPercentage).dp
+fun MeasuresText(icon: ImageVector, typeOfMeasure:String, value: String) {
     Row(
         modifier = Modifier
             .wrapContentWidth()

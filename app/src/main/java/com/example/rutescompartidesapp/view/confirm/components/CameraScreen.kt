@@ -2,7 +2,6 @@ package com.example.rutescompartidesapp.view.confirm
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.Camera
 import android.graphics.Matrix
 import android.util.Log
 import androidx.camera.core.CameraSelector
@@ -11,24 +10,17 @@ import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.ImageProxy
 import androidx.camera.view.CameraController
 import androidx.camera.view.LifecycleCameraController
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Cameraswitch
 import androidx.compose.material.icons.filled.Circle
 import androidx.compose.material.icons.filled.Photo
-import androidx.compose.material.icons.filled.PhotoCamera
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -44,22 +36,20 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.rutescompartidesapp.view.confirm.components.CameraPreview
-import com.example.rutescompartidesapp.view.confirm.components.PhotoBottomSheetContent
-import com.example.rutescompartidesapp.view.map.viewModels.MapViewModel
+import com.example.rutescompartidesapp.view.confirm.components.camera.CameraPreview
+import com.example.rutescompartidesapp.view.confirm.components.camera.PhotoBottomSheetContent
 import kotlinx.coroutines.launch
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ConfirmScreen(){
-    val confirmViewModel: ConfirmViewModel = hiltViewModel()
-    val bitmaps by confirmViewModel.bitmaps.collectAsState()
+fun CameraScreen(){
+    val cameraViewModel: CameraViewModel = hiltViewModel()
+    val bitmaps by cameraViewModel.bitmaps.collectAsState()
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -125,7 +115,7 @@ fun ConfirmScreen(){
                             takePhoto(
                                 controller = controller,
                                 ctx,
-                                onPhotoTaken = confirmViewModel::onTakePhoto
+                                onPhotoTaken = cameraViewModel::onTakePhoto
                             )
                         }
                     ) {

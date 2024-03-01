@@ -1,17 +1,18 @@
 package com.example.rutescompartidesapp.view.confirm
 
 import android.graphics.Bitmap
+import android.graphics.Canvas
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
+class DrawViewModel: ViewModel() {
 
-class ConfirmViewModel: ViewModel() {
+    private val _drawBitmap = MutableStateFlow<Bitmap?>(null)
+    val drawBitmap = _drawBitmap.asStateFlow()
 
-    private val _bitmaps = MutableStateFlow<List<Bitmap>>(emptyList())
-    val bitmaps = _bitmaps.asStateFlow()
+    fun canvasToBitmap(canvas : Canvas){
 
-    fun onTakePhoto(bitmap : Bitmap){
-        _bitmaps.value += bitmap
     }
+
 }
