@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -20,6 +21,7 @@ import androidx.compose.material3.Text
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
@@ -28,19 +30,22 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.NavGraphNavigator
 import com.example.rutescompartidesapp.data.domain.ProfileItems
 import com.example.rutescompartidesapp.ui.theme.openSans
 import com.example.rutescompartidesapp.view.profile.ProfileViewModel
 
 @Composable
-fun CreateCardsWithItems(list: List<ProfileItems>, paddingBottom: Dp, paddingTop: Dp, viewModel: ProfileViewModel) {
+fun CreateCardsWithItems(list: List<ProfileItems>, paddingBottom: Dp, paddingTop: Dp, viewModel: ProfileViewModel, navController: NavController) {
     Card(
         modifier = Modifier
             .width(LocalConfiguration.current.screenWidthDp.dp - 50.dp)
             .wrapContentHeight()
             .padding(top = paddingTop, bottom = paddingBottom),
         shape = RoundedCornerShape(25.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
+        colors = if (isSystemInDarkTheme()) CardDefaults.cardColors(containerColor = Color(0xFF434343))
+            else CardDefaults.cardColors(containerColor = Color.White),
         elevation = CardDefaults.cardElevation(defaultElevation = 5.dp)
     ) {
         for (i in list.indices) {
@@ -66,7 +71,9 @@ fun CreateCardsWithItems(list: List<ProfileItems>, paddingBottom: Dp, paddingTop
                             viewModel.onClickItemPlaceholder(true)
                         }
                         "FAQs i Conceptes claus" -> {
-                            viewModel.onClickItemPlaceholder(true)
+                            navController.navigate("FaqScreen") {
+                                popUpTo("FaqScreen") { inclusive = true }
+                            }
                         }
                         "Tanca la sessió" -> {
                             viewModel.onClickLogOut(true)
@@ -94,7 +101,8 @@ fun CreateCardsWithItems(list: List<ProfileItems>, paddingBottom: Dp, paddingTop
                             modifier = Modifier
                                 .padding(start = 15.dp),
                         ) {
-                            var titleColor = Color(0xFF000000)
+                            var titleColor = if (isSystemInDarkTheme()) Color.White
+                            else Color(0xFF000000)
                             if (list[i].title == "Tanca la sessió") {
                                 titleColor = Color(0xFFEA4848)
                             }
@@ -107,7 +115,8 @@ fun CreateCardsWithItems(list: List<ProfileItems>, paddingBottom: Dp, paddingTop
                             )
                             Text(
                                 text = list[i].subtitle,
-                                color = Color(0xFF292929),
+                                color = if (isSystemInDarkTheme()) Color(0xFFE4E4E4)
+                                    else Color(0xFF292929),
                                 fontSize = 12.sp,
                                 fontFamily = openSans
                             )
@@ -116,6 +125,7 @@ fun CreateCardsWithItems(list: List<ProfileItems>, paddingBottom: Dp, paddingTop
                     Image(
                         imageVector = Icons.Default.KeyboardArrowRight,
                         contentDescription = null,
+                        colorFilter = ColorFilter.tint(color = if (isSystemInDarkTheme()) Color.White else Color.Black)
                     )
                 }
             }

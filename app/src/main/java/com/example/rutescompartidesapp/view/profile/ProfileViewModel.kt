@@ -1,6 +1,8 @@
 package com.example.rutescompartidesapp.view.profile
 
+import androidx.compose.runtime.LaunchedEffect
 import androidx.lifecycle.ViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
@@ -27,6 +29,22 @@ class ProfileViewModel: ViewModel() {
     // Item onClick Placeholder
     private val _onClickPlaceholder = MutableStateFlow(false)
     val onClickPlaceholder = _onClickPlaceholder.asStateFlow()
+
+    // Profile Button onClick Animation
+    private val _editProfileButtonSize = MutableStateFlow(1f)
+    var editProfileButtonSize = _editProfileButtonSize.asStateFlow()
+
+    fun onClickChangeSize(newSize: Float) {
+        _editProfileButtonSize.value = newSize
+    }
+
+    // Profile Button visibility
+    private val _editProfileButtonVisible = MutableStateFlow(true)
+    var editProfileButtonVisible = _editProfileButtonVisible.asStateFlow()
+
+    fun onClickChangeVisibility(newVisibility: Boolean) {
+        _editProfileButtonVisible.value = newVisibility
+    }
 
     // Profile options
 

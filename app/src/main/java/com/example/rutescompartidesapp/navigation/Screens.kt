@@ -11,4 +11,7 @@ sealed class Screens(
     object SignUpScreen: Screens("SignUpScreen")
 
 
+    object FaqScreen: Screens("FaqScreen")
+
+
 }
