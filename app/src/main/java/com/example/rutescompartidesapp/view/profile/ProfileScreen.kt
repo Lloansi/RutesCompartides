@@ -51,6 +51,7 @@ import com.example.rutescompartidesapp.R
 import com.example.rutescompartidesapp.ui.theme.GrayRC
 import com.example.rutescompartidesapp.ui.theme.openSans
 import com.example.rutescompartidesapp.utils.Constants
+import com.example.rutescompartidesapp.view.faq.FaqViewModel
 import com.example.rutescompartidesapp.view.generic_components.HeaderSphere
 import com.example.rutescompartidesapp.view.profile.components.CreateCardsWithItems
 import com.example.rutescompartidesapp.view.profile.components.LogOutPopup
@@ -72,7 +73,6 @@ fun ProfileScreen(viewModel: ProfileViewModel, navController: NavController) {
     val onClickPlaceholder by viewModel.onClickPlaceholder.collectAsState()
     val editProfileButtonSize by viewModel.editProfileButtonSize.collectAsState()
     val editProfileButtonVisible by viewModel.editProfileButtonVisible.collectAsState()
-
 
     val animateSize by animateFloatAsState(
         targetValue = editProfileButtonSize,

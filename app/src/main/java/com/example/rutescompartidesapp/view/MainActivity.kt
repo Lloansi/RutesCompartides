@@ -128,10 +128,10 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun ScreenNavigationConfiguration(navController: NavHostController, paddingModifier: Modifier) {
 
-    NavHost(navController = navController, startDestination = Screens.ProfileScreen.route, modifier = paddingModifier) {
+    NavHost(navController = navController, startDestination = Screens.LoginScreen.route, modifier = paddingModifier) {
 
         composable(Screens.MapScreen.route) {
-            MapScreen()
+            LoginScreen(navController)
         }
         composable(Screens.RoutesOrderListScreen.route) {
             RoutesOrderListScreen()

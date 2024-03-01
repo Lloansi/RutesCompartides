@@ -62,18 +62,12 @@ import com.example.rutescompartidesapp.view.faq.components.FaqItemModel
 import com.example.rutescompartidesapp.view.faq.components.ItemCategoryModel
 import com.example.rutescompartidesapp.view.faq.components.faqItems
 import com.example.rutescompartidesapp.view.generic_components.HeaderSphere
+import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
-fun FaqScreen(navController: NavHostController ,viewModel: FaqViewModel) {
+fun FaqScreen(navController: NavHostController, viewModel: FaqViewModel) {
 
-    val faqListItems = remember {
-        faqItems.map {
-            ItemCategoryModel(
-                name = it.key,
-                itemList = it.value
-            )
-        }
-    }
+    val faqListItems by viewModel.itemListMapped.collectAsState()
 
     Column(
         verticalArrangement = Arrangement.Center,
@@ -139,9 +133,7 @@ private fun ItemCard(item: FaqItemModel) {
 @Composable
 private fun ItemCardContent(item: FaqItemModel) {
 
-    var isExpanded by rememberSaveable {
-        mutableStateOf(false)
-    }
+    var isExpanded by rememberSaveable { mutableStateOf(false) }
 
     Column(
         modifier = Modifier

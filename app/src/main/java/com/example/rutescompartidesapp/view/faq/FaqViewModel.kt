@@ -1,15 +1,19 @@
 package com.example.rutescompartidesapp.view.faq
 
 import androidx.lifecycle.ViewModel
+import com.example.rutescompartidesapp.view.faq.components.ItemCategoryModel
+import com.example.rutescompartidesapp.view.faq.components.faqItems
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-class FaqViewModel: ViewModel() {
+class FaqViewModel : ViewModel() {
 
-    private val _isExpanded = MutableStateFlow(false)
-    val isExpanded = _isExpanded.asStateFlow()
+    private val _itemListMapped = MutableStateFlow(faqItems.map {
+        ItemCategoryModel(
+            name = it.key,
+            itemList = it.value
+        )
+    })
 
-    fun onCardIconClicked() {
-        _isExpanded.value = !_isExpanded.value
-    }
+    val itemListMapped = _itemListMapped.asStateFlow()
 }
