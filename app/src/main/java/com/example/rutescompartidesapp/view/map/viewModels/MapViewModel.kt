@@ -5,23 +5,49 @@ import android.graphics.drawable.Drawable
 import android.view.MotionEvent
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.rutescompartidesapp.data.network.repository.RutesCompartidesRepository
 import com.example.rutescompartidesapp.domain.model.Order
 import com.example.rutescompartidesapp.domain.model.Route
 import com.example.rutescompartidesapp.view.map.MapScreen.maxKmFog
 import com.example.rutescompartidesapp.view.map.components.allOrders
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.Polyline
 import org.osmdroid.views.overlay.infowindow.BasicInfoWindow
+import javax.inject.Inject
 import kotlin.math.acos
 import kotlin.math.cos
 import kotlin.math.sin
-
-class MapViewModel:ViewModel() {
+@HiltViewModel
+class MapViewModel @Inject constructor (
+    val rutesCompartidesRepository: RutesCompartidesRepository
+) :ViewModel() {
     //private val applicationContext: Context = context.applicationContext
+
+    init {
+        getAllRoutes()
+        getAllOrders()
+    }
+    private fun getAllRoutes(){
+        viewModelScope.launch {
+            val routes = rutesCompartidesRepository.getAllMapRoutes()
+            println(routes)
+        }
+    }
+
+    private fun getAllOrders(){
+        viewModelScope.launch {
+            val orders = rutesCompartidesRepository.getAllMapOrders()
+            println(orders)
+        }
+    }
+
     private val _orders = MutableStateFlow<MutableList<Order>>(mutableListOf())
     var orders = _orders.asStateFlow()
 
@@ -47,10 +73,10 @@ class MapViewModel:ViewModel() {
 
     init {
         //Barcelona GeoPoint
-        markerPosition.value = GeoPoint(41.4534265,2.1837151)
+        //markerPosition.value = GeoPoint(41.4534265,2.1837151)
 
         //NY
-        //markerPosition.value = GeoPoint(40.796788, -73.949232)
+        markerPosition.value = GeoPoint(40.796788, -73.949232)
     }
 
     private fun createMarker(point: GeoPoint, mapView: MapView, iconMarker: Drawable? = null){
