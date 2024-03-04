@@ -33,9 +33,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.rutescompartidesapp.R
 import com.example.rutescompartidesapp.data.domain.Route
+import com.example.rutescompartidesapp.data.domain.Route2
 import com.example.rutescompartidesapp.data.domain.Vehicle
 import com.example.rutescompartidesapp.view.map.fredokaOneFamily
 import com.example.rutescompartidesapp.view.map.openSansFamily
+import org.osmdroid.util.GeoPoint
+
+val allRoute2 = listOf(
+    Route2(
+        GeoPoint(41.563484f.toDouble(), 2.181916f.toDouble()),
+        GeoPoint(41.67175f.toDouble(), 2.193416f.toDouble())
+    )
+)
 
 val allRoute = listOf(
     Route(

@@ -1,16 +1,31 @@
 package com.example.rutescompartidesapp.view.map.viewModels
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.graphics.DashPathEffect
 import android.graphics.drawable.Drawable
 import android.view.MotionEvent
+import android.graphics.Color
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.rutescompartidesapp.R
 import com.example.rutescompartidesapp.data.domain.Order
 import com.example.rutescompartidesapp.data.domain.Route
+import com.example.rutescompartidesapp.data.domain.Route2
 import com.example.rutescompartidesapp.view.map.MapScreen.maxKmFog
 import com.example.rutescompartidesapp.view.map.components.allOrders
+import com.example.rutescompartidesapp.view.map.components.allRoute
+import com.example.rutescompartidesapp.view.map.components.allRoute2
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.osmdroid.bonuspack.routing.Road
+import org.osmdroid.bonuspack.routing.RoadManager
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
@@ -19,6 +34,7 @@ import org.osmdroid.views.overlay.infowindow.BasicInfoWindow
 import kotlin.math.acos
 import kotlin.math.cos
 import kotlin.math.sin
+
 
 class MapViewModel:ViewModel() {
     //private val applicationContext: Context = context.applicationContext
@@ -30,6 +46,12 @@ class MapViewModel:ViewModel() {
 
     private val _ordersMarkers = MutableStateFlow<MutableSet<Marker>>(mutableSetOf())
     private var ordersMarkers = _ordersMarkers.asStateFlow()
+
+    private val _routesMarkers = MutableStateFlow<MutableSet<Marker>>(mutableSetOf())
+    private var routesMarkers = _routesMarkers.asStateFlow()
+
+    private val _routesPaths = MutableStateFlow<MutableSet<Polyline>>(mutableSetOf())
+    private var routesPaths = _routesPaths.asStateFlow()
 
     private val _visibleOrders = MutableStateFlow<MutableList<GeoPoint>>(mutableListOf())
     var visibleOrders = _visibleOrders.asStateFlow()
@@ -53,7 +75,7 @@ class MapViewModel:ViewModel() {
         //markerPosition.value = GeoPoint(40.796788, -73.949232)
     }
 
-    private fun createMarker(point: GeoPoint, mapView: MapView, iconMarker: Drawable? = null){
+    private fun createMarker(type: String, point: GeoPoint, mapView: MapView, iconMarker: Drawable? = null){
         val marker = Marker(mapView)
         marker.position =  point
         marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER)
@@ -61,7 +83,12 @@ class MapViewModel:ViewModel() {
         if (iconMarker != null){
             marker.icon = iconMarker
         }
-        ordersMarkers.value.add(marker)
+
+        when(type.uppercase()){
+            "ORDER" -> _ordersMarkers.value.add(marker)
+            "ROUTE" -> _routesMarkers.value.add(marker)
+            else -> println("ERROR | Type mistake in createMarker()")
+        }
 
         // Add the marker instantiated a few lines back in the map view
         mapView.overlays.add(marker)
@@ -75,21 +102,38 @@ class MapViewModel:ViewModel() {
         if (iconMarker != null){
             marker.icon = iconMarker
         }
-        userClickedPointer.value.add(marker)
+        _userClickedPointer.value.add(marker)
 
         // Add the marker instantiated a few lines back in the map view
         mapView.overlays.add(marker)
     }
 
-    private fun deleteOrderMarkers(markers: MutableSet<Marker>, mapView: MapView){
+    private fun deleteOrdersMarkers(markers: MutableSet<Marker>, mapView: MapView){
         for (marker in markers){
             mapView.overlays.remove(marker)
         }
         markers.clear()
     }
 
+    private fun deleteRoutesMarkers(markers: MutableSet<Marker>, mapView: MapView){
+        for (marker in markers){
+            mapView.overlays.remove(marker)
+
+        }
+        markers.clear()
+    }
+
+    private fun deleteRoutesPaths(paths: MutableSet<Polyline>, mapView: MapView){
+        for (path in paths){
+            mapView.overlays.remove(path)
+
+        }
+        paths.clear()
+    }
+
+
     private fun deleteUserClickPointer(marker: Marker, mapView: MapView){
-        userClickedPointer.value.removeAt(0)
+        _userClickedPointer.value.removeAt(0)
         mapView.overlays.remove(marker)
     }
 
@@ -103,7 +147,11 @@ class MapViewModel:ViewModel() {
     }
      */
     @SuppressLint("ClickableViewAccessibility")
-    fun handleClicksMap(mapView: MapView, iconMarkerType: Drawable? = null, iconMarkerClickPointer: Drawable? = null ){
+    fun handleClicksMap(mapView: MapView, iconMarkerClickPointer: Drawable? = null, ctx : Context, roadManager: RoadManager){
+        // We instance the markers drawable type
+        val orderIconMarker = ContextCompat.getDrawable(ctx, R.drawable.little_map_marker_orders_svg)
+        val routeIconMarker = ContextCompat.getDrawable(ctx, R.drawable.little_map_marker_routes_svg)
+
         var isDragging = false
         mapView.setOnTouchListener { _, event ->
             when (event.action) {
@@ -133,7 +181,7 @@ class MapViewModel:ViewModel() {
 
                         // With the position where user clicked, we create a point marker
                         // If user never clicked, we just create a Click Pointer Marker if not, we delete the old Click Pointer Marker and create the new one
-                        if (userClickedPointer.value.isNotEmpty()){
+                        if (_userClickedPointer.value.isNotEmpty()){
                             deleteUserClickPointer(userClickedPointer.value[0], mapView)
                             createClickPointerMarker(geoPoint, mapView, iconMarkerClickPointer)
                         }else{
@@ -147,11 +195,15 @@ class MapViewModel:ViewModel() {
 
                         // With the position where user clicked, we check if near there is any marker, if there is, markers appear
                         // If user never clicked, we just show it as mentioned before, if not, we delete the old markers and create the new ones
-                        if (ordersMarkers.value.isNotEmpty()){
-                            deleteOrderMarkers(ordersMarkers.value, mapView)
-                            isNearClickUser(allOrders,mapView,iconMarkerType)
+                        if (_ordersMarkers.value.isNotEmpty() || _routesMarkers.value.isNotEmpty()){
+                            deleteOrdersMarkers(_ordersMarkers.value, mapView)
+                            deleteRoutesMarkers(_routesMarkers.value, mapView)
+                            deleteRoutesPaths(_routesPaths.value, mapView)
+                            isNearClickUser(ordersList = allOrders, routesList = null, mapView, orderIconMarker, roadManager)
+                            isNearClickUser(ordersList = null, routesList = allRoute2, mapView, routeIconMarker, roadManager)
                         }else{
-                            isNearClickUser(allOrders,mapView,iconMarkerType)
+                            isNearClickUser(ordersList = allOrders, routesList = null, mapView, orderIconMarker, roadManager)
+                            isNearClickUser(ordersList = null, routesList = allRoute2, mapView, routeIconMarker, roadManager)
                         }
                     }
                     // Reset the drag flag
@@ -164,24 +216,39 @@ class MapViewModel:ViewModel() {
         }
     }
 
-    private fun isNearClickUser(ordersList : List<Order>, mapView: MapView, iconMarkerType: Drawable? = null){
+    private fun isNearClickUser(ordersList : List<Order>? = null, routesList: List<Route2>? = null, mapView: MapView, iconMarkerType: Drawable? = null, roadManager: RoadManager){
         // We get the pixels from the center screen
-        val centerPoint = mapView.projection.fromPixels(mapView.width / 2, mapView.height / 2)
+        val centerPoint = mapView.projection.fromPixels(mapView.width / 2, mapView.height / 2) as GeoPoint
 
-        // We clear the list with previous visible orders, to latter inside if (isInArea) reassign new values
+        // We clear the list with previous visible orders/routes, to latter inside if (isInArea) reassign new values
         _visibleOrders.value.clear()
+        _visibleRoutes.value.clear()
 
         // We iterate the list to get the lat and lon
         // Then we compare the route distance with center distance (that we instanced lines before as "centerPoint") to know if the distance between them is minor to the max permitted, if is, we show it in the map
-        for (orderPos in ordersList){
-            val centerLat = centerPoint.latitude
-            val centerLon = centerPoint.longitude
-            val centerGeoPoint = GeoPoint(centerLat,centerLon)
-            val orderGeoPoint = GeoPoint(orderPos.lat.toDouble(),orderPos.lon.toDouble())
+        ordersList?.let {
+            for (orderPos in ordersList){
+                val orderGeoPoint = GeoPoint(orderPos.lat.toDouble(),orderPos.lon.toDouble())
+                if(isInArea(centerPoint,orderGeoPoint, maxKmFog)){
+                    createMarker("order",orderGeoPoint,mapView,iconMarkerType)
+                    _visibleOrders.value.add(orderGeoPoint)
+                }
+            }
+        }
 
-            if(isInArea(centerGeoPoint,orderGeoPoint, maxKmFog)){
-                createMarker(orderGeoPoint,mapView,iconMarkerType)
-                _visibleOrders.value.add(orderGeoPoint)
+        routesList?.let {
+            for (routePos in routesList){
+                if (isInArea(centerPoint,routePos.startPoint, maxKmFog)){
+                    _visibleRoutes.value.add(routePos.startPoint)
+                    createMarker("route",routePos.startPoint, mapView, iconMarkerType)
+                    createMarker("route",routePos.endPoint, mapView, iconMarkerType)
+                    showPathBetweenPoints(routePos.startPoint, routePos.endPoint, mapView, roadManager)
+                }else if (isInArea(centerPoint,routePos.endPoint, maxKmFog)){
+                    _visibleRoutes.value.add(routePos.endPoint)
+                    createMarker("route",routePos.startPoint, mapView, iconMarkerType)
+                    createMarker("route",routePos.endPoint, mapView, iconMarkerType)
+                    showPathBetweenPoints(routePos.startPoint, routePos.endPoint, mapView, roadManager)
+                }
             }
         }
 
@@ -218,7 +285,7 @@ class MapViewModel:ViewModel() {
             val orderGeoPoint = GeoPoint(order.lat.toDouble(),order.lon.toDouble())
 
             if(isInArea(centerPoint,orderGeoPoint, maxKmFog)){
-                createMarker(orderGeoPoint,mapView)
+                createMarker("order",orderGeoPoint,mapView)
             }
         }
     }
@@ -230,6 +297,41 @@ class MapViewModel:ViewModel() {
             }
         }
         _filteredOrders.value = ordersFiltered
+    }
+
+    private suspend fun getRoadAsync(roadManager: RoadManager, startPoint: GeoPoint, endPoint: GeoPoint): Road {
+        return withContext(Dispatchers.IO) {
+            val waypoints = ArrayList<GeoPoint>()
+            waypoints.add(startPoint)
+            waypoints.add(endPoint)
+            return@withContext roadManager.getRoad(waypoints)
+        }
+    }
+
+    @OptIn(DelicateCoroutinesApi::class)
+    fun showPathBetweenPoints(startPoint: GeoPoint, endPoint: GeoPoint, mapView: MapView, roadManager: RoadManager){
+        GlobalScope.launch(Dispatchers.Main) {
+            try {
+                val road = getRoadAsync(roadManager, startPoint, endPoint)
+                val roadOverlay = RoadManager.buildRoadOverlay(road)
+
+                // Cambiar el color del camino
+                roadOverlay.setColor(Color.GREEN)
+
+                // Cambiar el grosor del camino
+                roadOverlay.setWidth(20f)
+
+                val dashArray = floatArrayOf(10F, 20F)
+                val dashPhase = 0F
+                roadOverlay.paint.pathEffect = DashPathEffect(dashArray, dashPhase)
+
+                _routesPaths.value.add(roadOverlay)
+                mapView.overlays.add(roadOverlay)
+                mapView.invalidate()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
     }
 
     fun path(mapView: MapView){

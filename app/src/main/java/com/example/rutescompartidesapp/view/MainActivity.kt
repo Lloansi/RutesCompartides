@@ -58,7 +58,6 @@ class MainActivity : ComponentActivity() {
         }
         setContent {
             RutesCompartidesAppTheme {
-
                 val navController = rememberNavController()
 
                 val bottomNavigationItems = listOf(
@@ -107,11 +106,12 @@ class MainActivity : ComponentActivity() {
                                 ),
                                 onSelectItem = {
                                     println("SELECTED_ITEM " + " onCreate: Selected Item ${it.name}")
-                                })
+                                }
+                            )
                        }
                     }
-                }
-                ) { paddingValues ->
+                })
+                { paddingValues ->
                     ScreenNavigationConfiguration(
                         navController,
                         Modifier.padding(paddingValues),
@@ -124,8 +124,7 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun ScreenNavigationConfiguration(navController: NavHostController, paddingModifier: Modifier) {
-
-    NavHost(navController = navController, startDestination = Screens.LoginScreen.route, modifier = paddingModifier) {
+    NavHost(navController = navController, startDestination = Screens.MapScreen.route, modifier = paddingModifier) {
 
         composable(Screens.MapScreen.route) {
             MapScreen()
@@ -145,5 +144,4 @@ fun ScreenNavigationConfiguration(navController: NavHostController, paddingModif
             SignUpScreen(navController)
         }
     }
-
 }

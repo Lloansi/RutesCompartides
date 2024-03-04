@@ -104,6 +104,8 @@ dependencies {
 
     // OSMdroid Bonus
     implementation ("com.github.MKergall:osmbonuspack:6.9.0")
+    implementation ("org.apache.commons:commons-lang3:3.8.1")
+    implementation ("com.google.code.gson:gson:2.10")
 
     // Voyager
     // Navigator

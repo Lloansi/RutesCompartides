@@ -37,8 +37,10 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import com.example.rutescompartidesapp.R
 import com.example.rutescompartidesapp.view.map.components.CardBottomMap
 import com.example.rutescompartidesapp.view.map.components.ExpandableFloatingButton
+import com.example.rutescompartidesapp.view.map.components.MapViewContainer
 import com.example.rutescompartidesapp.view.map.components.NotificationButtonCard
 import com.example.rutescompartidesapp.view.map.components.SearchView
+import com.example.rutescompartidesapp.view.map.components.SearchViewContainer
 import com.example.rutescompartidesapp.view.map.viewModels.MapViewModel
 import com.example.rutescompartidesapp.view.map.viewModels.SearchViewModel
 import org.osmdroid.config.Configuration
@@ -88,11 +90,10 @@ fun MapScreen() {
             // We get the context
             val ctx = LocalContext.current
 
-            // We instance the markers drawable type
-            val iconMarkerType = ContextCompat.getDrawable(ctx, R.drawable.little_map_marker_orders_svg)
+
             val iconMarkerClickPointer = ContextCompat.getDrawable(ctx, R.drawable.marker_svgrepo_com)
 
-            MapViewContainer(viewModel = mapViewModel,ctx, iconMarkerType,iconMarkerClickPointer, visibleOrders)
+            MapViewContainer(viewModel = mapViewModel,ctx,iconMarkerClickPointer, visibleOrders)
 
             // Search
             Box(
@@ -137,107 +138,5 @@ fun MapScreen() {
                 //ExpandableFloatingButton()
             }*/
         }
-    }
-}
-
-@Composable
-fun MapViewContainer(viewModel: MapViewModel, ctx : Context,iconMarkerType: Drawable? = null,iconMarkerClickPointer: Drawable? = null, visibleOrders:MutableList<GeoPoint>){
-
-    val initialZoom = 13.0
-
-    val lifecycleOwner = LocalLifecycleOwner.current
-
-    // Load/initialize the osmdroid configuration
-    Configuration.getInstance().load(
-        ctx,
-        androidx.preference.PreferenceManager.getDefaultSharedPreferences(ctx)
-    )
-    Configuration.getInstance().userAgentValue = "rutescompartides"
-
-    AndroidView(
-        modifier = Modifier
-            .fillMaxSize(),
-            /*
-            .pointerInput(Unit) {
-                detectTapGestures (
-                ) { offset ->
-
-                    // We get the x & y where ocurred the click
-                    val clickX = offset.x
-                    val clickY = offset.y
-
-                    // We update with clicked pixels data before on our remember
-                    viewModel.markerPosition.value = GeoPoint(clickX.toDouble(),clickY.toDouble())
-
-                    }
-                }
-            .combinedClickable (
-
-            ){}
-             */
-        factory = { context ->
-
-            // We instance the MapView
-            val mapView = org.osmdroid.views.MapView(context)
-
-            // Set tile source for the map
-            mapView.setTileSource(TileSourceFactory.MAPNIK)
-
-            // Add default zoom buttons and enable multi-touch controls
-            mapView.setBuiltInZoomControls(true)
-            mapView.setMultiTouchControls(true)
-
-            // We instantiate the map controller, so that we can set configurations of where in the world to appear
-            val controller = mapView.controller
-            controller.setCenter(viewModel.markerPosition.value)
-            controller.setZoom(initialZoom)
-
-            // Create and add the location overlay
-            val locationOverlay = MyLocationNewOverlay(GpsMyLocationProvider(ctx), mapView)
-            locationOverlay.enableMyLocation()
-            mapView.overlays.add(locationOverlay)
-
-            /*
-            PARA QUE CUANDO SE CREE EL MAPA SE MIRE SI HAY MARKERS CERCA DEL PUNTO INCIAL
-            viewModel.markerPosition.value?.let {
-                viewModel.initialPosition(allRoute, it,mapView)
-            }
-             */
-
-            viewModel.path(mapView)
-
-            mapView
-        },
-        update = { mapView ->
-
-            // Code to update or recompose the view goes here
-            // Since geoPoint is read here, the view will recompose whenever it is updated
-            mapView.controller.setCenter(viewModel.markerPosition.value)
-
-            // ViewModel Function to hanlde click's user in map
-            viewModel.handleClicksMap(mapView, iconMarkerType, iconMarkerClickPointer)
-
-            /*
-            SI USAMOS GESTURE DETECTOR EN VEZ DE MOTION EVENTS
-            mapView.setOnTouchListener { _, event ->
-                gestureDetector.onTouchEvent(event)
-            }
-            */
-        }
-    )
-}
-
-@Composable
-fun SearchViewContainer() {
-    val searchViewModel: SearchViewModel = hiltViewModel()
-    Row (modifier = Modifier
-        .offset(y = -(4).dp)
-        .fillMaxWidth()
-        .wrapContentHeight() ,
-        horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        SearchView(searchViewModel)
-        NotificationButtonCard()
     }
 }

@@ -11,17 +11,12 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class OpenRouteServiceRepository @Inject constructor(
-    private val api: OpenRouteServiceApi
+    private val ORSApi: OpenRouteServiceApi
 ): RouteService {
-
-
-    val asd = allRoute.forEach { route: Route ->
-        route.startPoint
-    }
 
     suspend fun getRoutes(startPoint: String, endPoint : String) {
         return withContext(Dispatchers.IO) {
-            val route = api.getDirections(Constants.ORS_API_KEY, startPoint,endPoint)
+            val route = ORSApi.getDirections(Constants.ORS_API_KEY, startPoint,endPoint)
         }
     }
 }
