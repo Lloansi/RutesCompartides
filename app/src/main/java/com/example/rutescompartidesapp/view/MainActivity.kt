@@ -35,6 +35,8 @@ import com.example.rutescompartidesapp.R
 import com.example.rutescompartidesapp.navigation.Screens
 import com.example.rutescompartidesapp.ui.theme.MateBlackRC
 import com.example.rutescompartidesapp.ui.theme.RutesCompartidesAppTheme
+import com.example.rutescompartidesapp.view.edit_profile.EditProfileScreen
+import com.example.rutescompartidesapp.view.edit_profile.EditProfileViewModel
 import com.example.rutescompartidesapp.view.faq.FaqScreen
 import com.example.rutescompartidesapp.view.faq.FaqViewModel
 import com.example.rutescompartidesapp.view.login.LoginScreen
@@ -128,7 +130,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun ScreenNavigationConfiguration(navController: NavHostController, paddingModifier: Modifier) {
 
-    NavHost(navController = navController, startDestination = Screens.LoginScreen.route, modifier = paddingModifier) {
+    NavHost(navController = navController, startDestination = Screens.ProfileScreen.route, modifier = paddingModifier) {
 
         composable(Screens.MapScreen.route) {
             LoginScreen(navController)
@@ -148,6 +150,10 @@ fun ScreenNavigationConfiguration(navController: NavHostController, paddingModif
         composable(Screens.FaqScreen.route) {
             FaqScreen(navController, FaqViewModel())
         }
+        composable(Screens.EditProfileScreen.route) {
+            EditProfileScreen(EditProfileViewModel(), navController)
+        }
+
     }
 
 }

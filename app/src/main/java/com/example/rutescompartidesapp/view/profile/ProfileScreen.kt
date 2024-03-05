@@ -166,16 +166,7 @@ fun ProfileScreen(viewModel: ProfileViewModel, navController: NavController) {
                         ProfileEditButton(
                             modifier = Modifier,
                             animateSize = animateSize,
-                            onClick = {
-                                /*coroutineScope.launch {
-                                    viewModel.onClickChangeSize(50f)
-                                    viewModel.onClickChangeVisibility(false)
-                                    delay(2500)
-                                    navController.navigate("LoginScreen") {
-                                        popUpTo("LoginScreen") { inclusive = true }
-                                    }
-                                }*/
-                            },
+                            navController = navController,
                             iconVisible = editProfileButtonVisible
                         )
 
