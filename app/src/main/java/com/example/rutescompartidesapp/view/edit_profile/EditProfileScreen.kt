@@ -82,7 +82,7 @@ fun EditProfileScreen(viewModel: EditProfileViewModel, navController: NavControl
 
             Spacer(Modifier.size(height = 25.dp, width = 0.dp))
 
-            SaveButton()
+            SaveButton(viewModel, navController)
         }
     }
 }
@@ -93,10 +93,16 @@ fun BuildTextFields(
     textFieldList: List<EditProfileTextFieldModel>
 ) {
     val userNameText by viewModel.userNameText.collectAsState()
+    val userNameError by viewModel.userNameError.collectAsState()
+
     val firstNameText by viewModel.firstNameText.collectAsState()
     val lastNameText by viewModel.lastNameText.collectAsState()
+
     val emailText by viewModel.emailText.collectAsState()
+    val emailError by viewModel.userEmailError.collectAsState()
+
     val phoneText by viewModel.phoneText.collectAsState()
+    val phoneError by viewModel.userPhoneError.collectAsState()
 
     for (field in textFieldList.indices) {
         OutlinedTextField(
@@ -119,6 +125,28 @@ fun BuildTextFields(
                     3 -> viewModel.emailOnTextChange(value)
                     4 -> viewModel.phoneNameOnTextChange(value)
                     else -> "Error" + value
+                }
+            },
+            isError = when (field) {
+                0 -> userNameError
+                3 -> emailError
+                4 -> phoneError
+                else -> phoneError
+            },
+            supportingText = {
+                when(field) {
+                    0 -> if (userNameError){
+                        Text(text = "Aquest nom d'usuari ja existeix",
+                            color = MaterialTheme.colorScheme.primary)
+                    }
+                    3 -> if (emailError){
+                        Text(text = "Escriu un email vàlid",
+                            color = MaterialTheme.colorScheme.primary)
+                    }
+                    4 -> if (phoneError){
+                        Text(text = "Escriu un telèfon vàlid",
+                            color = MaterialTheme.colorScheme.primary)
+                    }
                 }
             },
             leadingIcon = {
@@ -146,9 +174,12 @@ fun BuildTextFields(
 }
 
 @Composable
-fun SaveButton() {
+fun SaveButton(viewModel: EditProfileViewModel, navController: NavController) {
+
     ElevatedButton(
-        onClick = {},
+        onClick = {
+                  viewModel.onSaveButtonClick(navController)
+        },
         modifier = Modifier
             .fillMaxWidth(0.85f)
             .height(LocalConfiguration.current.screenHeightDp.dp / 16),
@@ -185,7 +216,7 @@ fun textFieldList(): List<EditProfileTextFieldModel> {
         ),
         EditProfileTextFieldModel(
             Icons.Rounded.Email,
-            "Correo electrònic",
+            "Correu electrònic",
             KeyboardType.Email
         ),
         EditProfileTextFieldModel(
