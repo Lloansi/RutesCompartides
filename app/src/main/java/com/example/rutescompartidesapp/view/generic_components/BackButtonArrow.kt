@@ -23,7 +23,6 @@ fun BackButtonArrow(navController: NavController, alignment: Alignment) {
     ) {
         Box(
             modifier = Modifier
-
                 .fillMaxSize()
                 .align(alignment)
         ) {
