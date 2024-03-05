@@ -156,12 +156,10 @@ class MapViewModel:ViewModel() {
         mapView.setOnTouchListener { _, event ->
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
-                    // Touch event starts, not a drag yet
-                    isDragging = false
                     //true  // if MotionEvent don't have anything inside, use it to consume the touch event
                 }
                 MotionEvent.ACTION_MOVE -> {
-                    // User is moving their finger, this is a drag
+                    // User dragging
                     isDragging = true
                     //true  // if MotionEvent don't have anything inside, use it to consume the touch event
                 }
@@ -182,7 +180,7 @@ class MapViewModel:ViewModel() {
                         // With the position where user clicked, we create a point marker
                         // If user never clicked, we just create a Click Pointer Marker if not, we delete the old Click Pointer Marker and create the new one
                         if (_userClickedPointer.value.isNotEmpty()){
-                            deleteUserClickPointer(userClickedPointer.value[0], mapView)
+                            deleteUserClickPointer(_userClickedPointer.value[0], mapView)
                             createClickPointerMarker(geoPoint, mapView, iconMarkerClickPointer)
                         }else{
                             createClickPointerMarker(geoPoint, mapView, iconMarkerClickPointer)
@@ -195,14 +193,24 @@ class MapViewModel:ViewModel() {
 
                         // With the position where user clicked, we check if near there is any marker, if there is, markers appear
                         // If user never clicked, we just show it as mentioned before, if not, we delete the old markers and create the new ones
-                        if (_ordersMarkers.value.isNotEmpty() || _routesMarkers.value.isNotEmpty()){
+                        if (_ordersMarkers.value.isNotEmpty()){
+                            // We delete orders
                             deleteOrdersMarkers(_ordersMarkers.value, mapView)
+                            // We check if near user's click have any order
+                            isNearClickUser(ordersList = allOrders, routesList = null, mapView, orderIconMarker, roadManager)
+                        }else{
+                            // We check if near user's click have any order
+                            isNearClickUser(ordersList = allOrders, routesList = null, mapView, orderIconMarker, roadManager)
+                        }
+
+                        if (_routesMarkers.value.isNotEmpty()){
+                            // We delete routes and paths of the map
                             deleteRoutesMarkers(_routesMarkers.value, mapView)
                             deleteRoutesPaths(_routesPaths.value, mapView)
-                            isNearClickUser(ordersList = allOrders, routesList = null, mapView, orderIconMarker, roadManager)
+                            // We check if near user's click have any route
                             isNearClickUser(ordersList = null, routesList = allRoute2, mapView, routeIconMarker, roadManager)
-                        }else{
-                            isNearClickUser(ordersList = allOrders, routesList = null, mapView, orderIconMarker, roadManager)
+                        } else{
+                            // We check if near user's click have any route
                             isNearClickUser(ordersList = null, routesList = allRoute2, mapView, routeIconMarker, roadManager)
                         }
                     }
@@ -220,15 +228,15 @@ class MapViewModel:ViewModel() {
         // We get the pixels from the center screen
         val centerPoint = mapView.projection.fromPixels(mapView.width / 2, mapView.height / 2) as GeoPoint
 
-        // We clear the list with previous visible orders/routes, to latter inside if (isInArea) reassign new values
-        _visibleOrders.value.clear()
-        _visibleRoutes.value.clear()
-
-        // We iterate the list to get the lat and lon
+        // We iterate the list to get the lat and lon of a marker (order)
         // Then we compare the route distance with center distance (that we instanced lines before as "centerPoint") to know if the distance between them is minor to the max permitted, if is, we show it in the map
         ordersList?.let {
+            // We clear the list with previous visible orders, to latter inside if (isInArea) reassign new values
+            _visibleOrders.value.clear()
             for (orderPos in ordersList){
+                // GeoPoint from an order
                 val orderGeoPoint = GeoPoint(orderPos.lat.toDouble(),orderPos.lon.toDouble())
+                // Check if order is in area to show
                 if(isInArea(centerPoint,orderGeoPoint, maxKmFog)){
                     createMarker("order",orderGeoPoint,mapView,iconMarkerType)
                     _visibleOrders.value.add(orderGeoPoint)
@@ -236,24 +244,35 @@ class MapViewModel:ViewModel() {
             }
         }
 
+        // We iterate the list to get the lat and lon of a marker (route)
+        // Then we compare the route distance with center distance (that we instanced lines before as "centerPoint") to know if the distance between them is minor to the max permitted, if is, we show it in the map
         routesList?.let {
+            // We clear the list with previous visible routes, to latter inside if (isInArea) reassign new values
+            _visibleRoutes.value.clear()
             for (routePos in routesList){
+                // Check if route is in area to show
                 if (isInArea(centerPoint,routePos.startPoint, maxKmFog)){
                     _visibleRoutes.value.add(routePos.startPoint)
+                    // Marker route start point
                     createMarker("route",routePos.startPoint, mapView, iconMarkerType)
+                    // Marker route end point
                     createMarker("route",routePos.endPoint, mapView, iconMarkerType)
+                    // We draw path
                     showPathBetweenPoints(routePos.startPoint, routePos.endPoint, mapView, roadManager)
                 }else if (isInArea(centerPoint,routePos.endPoint, maxKmFog)){
                     _visibleRoutes.value.add(routePos.endPoint)
+                    // Marker route start point
                     createMarker("route",routePos.startPoint, mapView, iconMarkerType)
+                    // Marker route end point
                     createMarker("route",routePos.endPoint, mapView, iconMarkerType)
+                    // We draw path
                     showPathBetweenPoints(routePos.startPoint, routePos.endPoint, mapView, roadManager)
                 }
             }
         }
-
-        // Call the filtering function to change mutableStateFlow and printed later to the lazy Row
+        // Call the filtering function to change mutableStateFlow and print later the lazy Rows
         filterPerVisibilityOrders(_visibleOrders.value)
+        filterPerVisibilityRoute(_visibleRoutes.value)
     }
 
     private fun isInArea(point1: GeoPoint, point2: GeoPoint, maxKmDistance: Int):Boolean{
@@ -290,13 +309,22 @@ class MapViewModel:ViewModel() {
         }
     }
 
-     private fun filterPerVisibilityOrders(visibleOrders:  MutableList<GeoPoint>){
+     private fun filterPerVisibilityOrders(visibleOrders: MutableList<GeoPoint>){
         val ordersFiltered = allOrders.filter { order ->
             visibleOrders.any { geoPoint ->
                 geoPoint.latitude.toFloat() == order.lat && geoPoint.longitude.toFloat() == order.lon
             }
         }
         _filteredOrders.value = ordersFiltered
+    }
+
+    private fun filterPerVisibilityRoute(visibleRoutes: MutableList<GeoPoint>){
+        val routesFiltered = allRoute.filter { route ->
+            visibleRoutes.any{ geoPoint ->
+                geoPoint.latitude.toFloat() == route.startLat  && geoPoint.longitude.toFloat() == route.startLon || geoPoint.latitude.toFloat() == route.endLat && geoPoint.longitude.toFloat() == route.endLon
+            }
+        }
+        _filteredRoutes.value = routesFiltered
     }
 
     private suspend fun getRoadAsync(roadManager: RoadManager, startPoint: GeoPoint, endPoint: GeoPoint): Road {
@@ -315,15 +343,14 @@ class MapViewModel:ViewModel() {
                 val road = getRoadAsync(roadManager, startPoint, endPoint)
                 val roadOverlay = RoadManager.buildRoadOverlay(road)
 
-                // Cambiar el color del camino
-                roadOverlay.setColor(Color.GREEN)
+                roadOverlay.setColor(Color.GREEN) // Path color
+                roadOverlay.setWidth(20f) // Pat width
 
-                // Cambiar el grosor del camino
-                roadOverlay.setWidth(20f)
-
+                /*
                 val dashArray = floatArrayOf(10F, 20F)
                 val dashPhase = 0F
                 roadOverlay.paint.pathEffect = DashPathEffect(dashArray, dashPhase)
+                 */
 
                 _routesPaths.value.add(roadOverlay)
                 mapView.overlays.add(roadOverlay)

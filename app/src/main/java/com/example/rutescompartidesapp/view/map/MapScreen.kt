@@ -70,8 +70,8 @@ object MapScreen: Screen {
 @Composable
 fun MapScreen() {
     val mapViewModel: MapViewModel = hiltViewModel()
-    val visibleOrders by mapViewModel.visibleOrders.collectAsState()
     val ordersFiltered by mapViewModel.filteredOrders.collectAsState()
+    val routesFiltered by mapViewModel.filteredRoutes.collectAsState()
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -93,7 +93,7 @@ fun MapScreen() {
 
             val iconMarkerClickPointer = ContextCompat.getDrawable(ctx, R.drawable.marker_svgrepo_com)
 
-            MapViewContainer(viewModel = mapViewModel,ctx,iconMarkerClickPointer, visibleOrders)
+            MapViewContainer(viewModel = mapViewModel,ctx,iconMarkerClickPointer)
 
             // Search
             Box(
@@ -112,7 +112,7 @@ fun MapScreen() {
                 ) {
                     ExpandableFloatingButton()
                     Spacer(modifier = Modifier.height(5.dp))
-                    CardBottomMap(ordersFiltered)
+                    CardBottomMap(ordersFiltered, routesFiltered)
 
                 }
             }

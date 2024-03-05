@@ -19,7 +19,7 @@ import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 
 
 @Composable
-fun MapViewContainer(viewModel: MapViewModel, ctx : Context, iconMarkerClickPointer: Drawable? = null, visibleOrders:MutableList<GeoPoint>){
+fun MapViewContainer(viewModel: MapViewModel, ctx : Context, iconMarkerClickPointer: Drawable? = null){
 
     val agentNameMap = "rutescompartides"
 
