@@ -28,6 +28,8 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -49,8 +51,6 @@ fun EditProfileScreen(viewModel: EditProfileViewModel, navController: NavControl
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
-            .verticalScroll(rememberScrollState())
     ) {
         Box(
             modifier = Modifier
@@ -74,8 +74,10 @@ fun EditProfileScreen(viewModel: EditProfileViewModel, navController: NavControl
 
         Column(
             verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ){
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .verticalScroll(rememberScrollState())
+        ) {
             BuildTextFields(viewModel, textFieldList())
 
             Spacer(Modifier.size(height = 25.dp, width = 0.dp))
@@ -90,15 +92,35 @@ fun BuildTextFields(
     viewModel: EditProfileViewModel,
     textFieldList: List<EditProfileTextFieldModel>
 ) {
-
+    val userNameText by viewModel.userNameText.collectAsState()
+    val firstNameText by viewModel.firstNameText.collectAsState()
+    val lastNameText by viewModel.lastNameText.collectAsState()
+    val emailText by viewModel.emailText.collectAsState()
+    val phoneText by viewModel.phoneText.collectAsState()
 
     for (field in textFieldList.indices) {
         OutlinedTextField(
             modifier = Modifier
                 .fillMaxWidth(0.85f)
                 .padding(top = 10.dp, bottom = 10.dp),
-            value = "",
-            onValueChange = {},
+            value = when (field) {
+                0 -> userNameText
+                1 -> firstNameText
+                2 -> lastNameText
+                3 -> emailText
+                4 -> phoneText
+                else -> ""
+            },
+            onValueChange = { value ->
+                when (field) {
+                    0 -> viewModel.userNameOnTextChange(value)
+                    1 -> viewModel.firstNameOnTextChange(value)
+                    2 -> viewModel.lastNameOnTextChange(value)
+                    3 -> viewModel.emailOnTextChange(value)
+                    4 -> viewModel.phoneNameOnTextChange(value)
+                    else -> "Error" + value
+                }
+            },
             leadingIcon = {
                 Icon(
                     imageVector = textFieldList[field].icon,
