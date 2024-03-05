@@ -1,4 +1,5 @@
-package com.example.rutescompartidesapp.data.domain.rutes
+package com.example.rutescompartidesapp.data.domain.map
+
 
 data class MapRoute(
     val id: Int,

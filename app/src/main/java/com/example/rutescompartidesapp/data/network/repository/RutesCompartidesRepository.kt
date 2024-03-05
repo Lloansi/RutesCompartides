@@ -1,7 +1,9 @@
 package com.example.rutescompartidesapp.data.network.repository
 
-import com.example.rutescompartidesapp.data.domain.rutes.MapOrder
-import com.example.rutescompartidesapp.data.domain.rutes.MapRoute
+import com.example.rutescompartidesapp.data.domain.comandes.TripRequest
+import com.example.rutescompartidesapp.data.domain.rutes.TripOffer
+import com.example.rutescompartidesapp.data.domain.map.MapOrder
+import com.example.rutescompartidesapp.data.domain.map.MapRoute
 import com.example.rutescompartidesapp.data.network.rutes_compartides.ApiRutesCompartides
 import com.example.rutescompartidesapp.data.network.rutes_compartides.RutesCompartidesService
 import kotlinx.coroutines.Dispatchers
@@ -24,8 +26,13 @@ class RutesCompartidesRepository @Inject constructor(
         }
     }
 
-    // Orders
+    override suspend fun getRouteById(id: Int): TripOffer {
+        return withContext(Dispatchers.IO) {
+            apiRutesCompartides.getRouteById(id)
+        }
+    }
 
+    // Orders
     override suspend fun getAllMapOrders(): List<MapOrder> {
         return withContext(Dispatchers.IO) {
             apiRutesCompartides.getAllMapOrders()
@@ -35,6 +42,12 @@ class RutesCompartidesRepository @Inject constructor(
     override suspend fun getMapOrderById(id: Int): MapOrder {
         return withContext(Dispatchers.IO) {
             apiRutesCompartides.getMapOrderById(id)
+        }
+    }
+
+    override suspend fun getOrderById(id: Int): TripRequest {
+        return withContext(Dispatchers.IO) {
+            apiRutesCompartides.getOrderById(id)
         }
     }
 

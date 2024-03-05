@@ -34,6 +34,15 @@ class MapViewModel @Inject constructor (
         getAllRoutes()
         getAllOrders()
     }
+
+    // Routes
+    private fun getRouteById(id: Int){
+        viewModelScope.launch {
+            val route = rutesCompartidesRepository.getRouteById(id)
+            println(route)
+        }
+    }
+
     private fun getAllRoutes(){
         viewModelScope.launch {
             val routes = rutesCompartidesRepository.getAllMapRoutes()
@@ -41,10 +50,18 @@ class MapViewModel @Inject constructor (
         }
     }
 
+    // Orders
     private fun getAllOrders(){
         viewModelScope.launch {
             val orders = rutesCompartidesRepository.getAllMapOrders()
             println(orders)
+        }
+    }
+
+    private fun getOrderById(id: Int){
+        viewModelScope.launch {
+            val order = rutesCompartidesRepository.getOrderById(id)
+            println(order)
         }
     }
 

@@ -1,4 +1,4 @@
-package com.example.rutescompartidesapp.data.domain.rutes
+package com.example.rutescompartidesapp.data.domain.map
 
 data class Point (
     val type: String,

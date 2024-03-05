@@ -1,10 +1,8 @@
 package com.example.rutescompartidesapp.view.signup
 
-import android.provider.ContactsContract.CommonDataKinds.Phone
 import android.util.Patterns
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
-import com.example.rutescompartidesapp.data.domain.User
 import com.example.rutescompartidesapp.utils.Constants
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -170,10 +168,10 @@ class SignUpViewModel: ViewModel(){
     private val _userExists = MutableStateFlow(false)
     val userExists = _userExists.asStateFlow()
     private fun createUser(name:String, phone: Int, userEmail: String, password: String): Boolean{
-        val newUser = User(Constants.userList.size + 1, name, userEmail, phone, password)
+       // val newUser = User(Constants.userList.size + 1, name, userEmail, phone, password)
 
         return if (Constants.userList.none { user -> user.email == userEmail }) {
-            Constants.userList.add(newUser)
+     //       Constants.userList.add(newUser)
             true
         } else {
             false
