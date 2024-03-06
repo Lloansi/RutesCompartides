@@ -74,3 +74,5 @@ Este software está licenciado bajo la [Licencia MIT](https://opensource.org/lic
 ## 👨‍💻 Autores
 - [@Lloansi](https://github.com/Lloansi)
 - [@Ivan Martinez Cañero](https://github.com/IvanCaEz)
+- [@Nerea Arrabal](https://github.com/NereaAL)
+- [@Alejandro Arcas](https://github.com/AlejandroAndroidDev)
