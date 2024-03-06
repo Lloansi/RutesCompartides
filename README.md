@@ -67,9 +67,8 @@
 ## 📝 Feedback
 Para cualquier tipo de feedback, no dudes en contactarnos en [rutescompartides@riseup.net] ✉️
 
-## 📄 Licencia
-[![Licencia MIT](https://img.shields.io/badge/Licencia-MIT-green)](https://choosealicense.com/licenses/mit/)
-Este software está licenciado bajo la [Licencia MIT](https://opensource.org/licenses/MIT).
+## 📜 Licencia
+Este proyecto está bajo la [Licencia de Uso No Comercial y Restricción de Derechos de Autor](LICENSE.txt).
 
 ## 👨‍💻 Autores
 - [@Lloansi](https://github.com/Lloansi)
