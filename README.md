@@ -68,7 +68,7 @@
 Para cualquier tipo de feedback, no dudes en contactarnos en [rutescompartides@riseup.net] ✉️
 
 ## 📜 Licencia
-Este proyecto está bajo la [Licencia de Uso No Comercial y Restricción de Derechos de Autor](LICENSE.txt).
+Este proyecto está bajo la [Licencia de Uso](LICENSE.txt).
 
 ## 👨‍💻 Autores
 - [@Lloansi](https://github.com/Lloansi)
