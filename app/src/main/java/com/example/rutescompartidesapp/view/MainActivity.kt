@@ -26,10 +26,12 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.PratikFagadiya.smoothanimationbottombar.model.SmoothAnimationBottomBarScreens
 import com.PratikFagadiya.smoothanimationbottombar.properties.BottomBarProperties
 import com.PratikFagadiya.smoothanimationbottombar.ui.SmoothAnimationBottomBar
@@ -41,6 +43,7 @@ import com.example.rutescompartidesapp.view.login.LoginScreen
 import com.example.rutescompartidesapp.view.map.MapScreen
 import com.example.rutescompartidesapp.view.profile.ProfileScreen
 import com.example.rutescompartidesapp.view.profile.ProfileViewModel
+import com.example.rutescompartidesapp.view.route_detail.RoutesDetailScreen
 import com.example.rutescompartidesapp.view.routes_order_list.RoutesOrderListScreen
 import com.example.rutescompartidesapp.view.signup.SignUpScreen
 import dagger.hilt.android.AndroidEntryPoint
@@ -134,14 +137,14 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun ScreenNavigationConfiguration(navController: NavHostController, paddingModifier: Modifier) {
 
-    NavHost(navController = navController, startDestination = Screens.MapScreen.route, modifier = paddingModifier) {
+    NavHost(navController = navController, startDestination = Screens.RoutesOrderListScreen.route, modifier = paddingModifier) {
 
         composable(Screens.MapScreen.route) {
             MapScreen()
         }
 
         composable(Screens.RoutesOrderListScreen.route) {
-            RoutesOrderListScreen()
+            RoutesOrderListScreen(navController)
         }
 
         composable(Screens.ProfileScreen.route) {
@@ -152,6 +155,13 @@ fun ScreenNavigationConfiguration(navController: NavHostController, paddingModif
         }
         composable(Screens.SignUpScreen.route) {
             SignUpScreen(navController)
+        }
+        composable(Screens.RouteDetailScreen.route,
+            arguments = listOf(navArgument("routeId"){
+            type = NavType.IntType
+        })) {
+            val routeID = it.arguments?.getInt("routeId")
+            RoutesDetailScreen(routeID!!, navController)
         }
     }
 

@@ -22,21 +22,21 @@ val openSans = FontFamily(
 val Typography = Typography(
         displayLarge = TextStyle(
                 fontFamily = fredokaOne,
-                fontWeight = FontWeight.Normal,
+                fontWeight = FontWeight.Bold,
                 fontSize = 34.sp,
                 lineHeight = 40.sp,
                 letterSpacing = 0.sp
         ),
         displayMedium = TextStyle(
                 fontFamily = fredokaOne,
-                fontWeight = FontWeight.Normal,
+                fontWeight = FontWeight.Bold,
                 fontSize = 28.sp,
                 lineHeight = 34.sp,
                 letterSpacing = 0.sp
         ),
         displaySmall = TextStyle(
                 fontFamily = fredokaOne,
-                fontWeight = FontWeight.Normal,
+                fontWeight = FontWeight.Bold,
                 fontSize = 22.sp,
                 lineHeight = 28.sp,
                 letterSpacing = 0.sp

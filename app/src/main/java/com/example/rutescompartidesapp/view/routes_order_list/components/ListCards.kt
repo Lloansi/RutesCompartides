@@ -33,6 +33,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.example.rutescompartidesapp.data.domain.OrderForList
 import com.example.rutescompartidesapp.data.domain.RouteForList
 import com.example.rutescompartidesapp.ui.theme.BlueRC
@@ -89,27 +90,32 @@ fun RoutePoints(route: RouteForList){
 }
 
 @Composable
-fun RouteCard(route: RouteForList) {
+fun RouteCardHeader(route: RouteForList){
+    ElevatedCard (modifier = Modifier.fillMaxWidth(),colors = CardDefaults.elevatedCardColors(
+        containerColor = MateBlackRC)
+    ) {
+        Column(modifier = Modifier.padding(8.dp)) {
+            Row(horizontalArrangement = Arrangement.SpaceBetween) {
+                Row (modifier = Modifier.weight(2f),horizontalArrangement = Arrangement.Start) {
+                    Text(text = route.routeName, color = Color.White)
+                }
+                Row(modifier = Modifier.weight(2f), horizontalArrangement = Arrangement.End) {
+                    Text(text = route.user, color = OrangeRC, fontWeight = FontWeight.Bold)
+                }
+            }
+            RoutePoints(route = route)
+        }
+    }
+}
+
+@Composable
+fun RouteCard(route: RouteForList, navController: NavHostController) {
     Column{
         ElevatedCard (modifier = Modifier.fillMaxWidth(0.95f),
             colors = CardDefaults.elevatedCardColors(
                 containerColor = Color.White)) {
             Row {
-                ElevatedCard (modifier = Modifier.fillMaxWidth(),colors = CardDefaults.elevatedCardColors(
-                    containerColor = MateBlackRC)
-                ) {
-                    Column(modifier = Modifier.padding(8.dp)) {
-                        Row(horizontalArrangement = Arrangement.SpaceBetween) {
-                            Row (modifier = Modifier.weight(2f),horizontalArrangement = Arrangement.Start) {
-                                Text(text = route.routeName, color = Color.White)
-                            }
-                            Row(modifier = Modifier.weight(2f), horizontalArrangement = Arrangement.End) {
-                                Text(text = route.user, color = OrangeRC, fontWeight = FontWeight.Bold)
-                            }
-                        }
-                        RoutePoints(route = route)
-                    }
-                }
+                RouteCardHeader(route = route)
             }
             Spacer(modifier = Modifier.padding(4.dp))
             Row {
@@ -145,7 +151,11 @@ fun RouteCard(route: RouteForList) {
                 })
                 Spacer(modifier = Modifier.padding(4.dp))
                 ElevatedButton( shape = RoundedCornerShape(16.dp),
-                    onClick = { /*TODO*/ },
+                    onClick = { navController.navigate("RouteDetailScreen/{routeId}".replace(
+                        oldValue = "{routeId}",
+                        newValue = "${route.routeID}"
+                    ) )
+                        },
                     colors = ButtonDefaults.elevatedButtonColors(
                         containerColor = MaterialTheme.colorScheme.primary
                     )
@@ -163,7 +173,7 @@ fun RouteCard(route: RouteForList) {
 
 
 @Composable
-fun OrderCard(order: OrderForList) {
+fun OrderCard(order: OrderForList, navController: NavHostController) {
     Column{
         ElevatedCard (modifier = Modifier.fillMaxWidth(0.95f),
             colors = CardDefaults.elevatedCardColors(

@@ -9,6 +9,8 @@ sealed class Screens(
 
     object LoginScreen: Screens("LoginScreen")
     object SignUpScreen: Screens("SignUpScreen")
+    object RouteDetailScreen: Screens("RouteDetailScreen/{routeId}")
+
 
 
 }
