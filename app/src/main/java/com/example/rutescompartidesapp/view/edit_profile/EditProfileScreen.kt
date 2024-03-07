@@ -58,7 +58,7 @@ fun EditProfileScreen(viewModel: EditProfileViewModel, navController: NavControl
         ) {
             HeaderSphere(200.dp)
 
-            BackButtonArrow(navController = navController, alignment = Alignment.TopStart)
+            BackButtonArrow(navController = navController, alignment = Alignment.TopStart, "ProfileScreen")
 
             Text(
                 modifier = Modifier

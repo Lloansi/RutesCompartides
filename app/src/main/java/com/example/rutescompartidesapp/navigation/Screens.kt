@@ -15,5 +15,7 @@ sealed class Screens(
 
     object EditProfileScreen: Screens("EditProfileScreen")
 
+    object ComFuncionaScreen: Screens("ComFuncionaScreen")
+
 
 }

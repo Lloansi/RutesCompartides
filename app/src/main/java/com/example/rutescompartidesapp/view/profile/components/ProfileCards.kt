@@ -68,7 +68,9 @@ fun CreateCardsWithItems(list: List<ProfileItems>, paddingBottom: Dp, paddingTop
                             viewModel.onClickItemPlaceholder(true)
                         }
                         "Com funciona?" -> {
-                            viewModel.onClickItemPlaceholder(true)
+                            navController.navigate("ComFuncionaScreen") {
+                                popUpTo("ComFuncionaScreen") { inclusive = true }
+                            }
                         }
                         "FAQs i Conceptes claus" -> {
                             navController.navigate("FaqScreen") {

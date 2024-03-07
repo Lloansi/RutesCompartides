@@ -35,6 +35,7 @@ import com.example.rutescompartidesapp.R
 import com.example.rutescompartidesapp.navigation.Screens
 import com.example.rutescompartidesapp.ui.theme.MateBlackRC
 import com.example.rutescompartidesapp.ui.theme.RutesCompartidesAppTheme
+import com.example.rutescompartidesapp.view.com_funciona.ComFuncionaScreen
 import com.example.rutescompartidesapp.view.edit_profile.EditProfileScreen
 import com.example.rutescompartidesapp.view.edit_profile.EditProfileViewModel
 import com.example.rutescompartidesapp.view.faq.FaqScreen
@@ -152,6 +153,9 @@ fun ScreenNavigationConfiguration(navController: NavHostController, paddingModif
         }
         composable(Screens.EditProfileScreen.route) {
             EditProfileScreen(EditProfileViewModel(), navController)
+        }
+        composable(Screens.ComFuncionaScreen.route) {
+            ComFuncionaScreen(navController)
         }
 
     }
