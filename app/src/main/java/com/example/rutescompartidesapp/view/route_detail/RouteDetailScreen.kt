@@ -32,6 +32,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -42,6 +43,8 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.example.rutescompartidesapp.R
 import com.example.rutescompartidesapp.data.domain.RouteForList
@@ -53,6 +56,7 @@ import com.example.rutescompartidesapp.view.map.components.AppBar
 import com.example.rutescompartidesapp.view.route_detail.components.RouteInteractionCard
 import com.example.rutescompartidesapp.view.routes_order_list.ListConstants
 import com.example.rutescompartidesapp.view.routes_order_list.components.RouteCardHeader
+import javax.inject.Inject
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -62,6 +66,9 @@ fun RoutesDetailScreen(routeID: Int, navHost: NavHostController) {
     // TODO i una altra per obtenir les interaccions de la ruta
     val interactions = DetailUtils.interactionList.filter { it.routeID == routeID }
     val route: RouteForList = ListConstants.routeList.first { it.routeID == routeID }
+    val routeDetailViewModel = RouteDetailViewModel(interactions)
+    // TODO Fer un if per comprovar el boleà i mostrar el popup per completar ruta
+    val isCompletePopupShowing by routeDetailViewModel.isCompletePopupShowing.collectAsStateWithLifecycle()
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     Scaffold( modifier = Modifier.fillMaxSize()
         .nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -199,7 +206,7 @@ fun RoutesDetailScreen(routeID: Int, navHost: NavHostController) {
                             verticalAlignment = Alignment.CenterVertically) {
                             ElevatedButton( shape = RoundedCornerShape(16.dp),
                                 modifier = Modifier.align(Alignment.CenterVertically),
-                                onClick = { /*TODO*/ },
+                                onClick = { routeDetailViewModel.showRouteReport(route) },
                                 colors = ButtonDefaults.elevatedButtonColors(
                                     containerColor = Color.Gray
                                 )
@@ -214,7 +221,7 @@ fun RoutesDetailScreen(routeID: Int, navHost: NavHostController) {
                             .padding(start = 8.dp),
                             verticalAlignment = Alignment.CenterVertically) {
                             ElevatedButton( shape = RoundedCornerShape(16.dp),
-                                onClick = { /*TODO*/ },
+                                onClick = { routeDetailViewModel.editRoute(route) },
                                 colors = ButtonDefaults.elevatedButtonColors(
                                     containerColor = MateBlackRC
                                 )
@@ -225,7 +232,7 @@ fun RoutesDetailScreen(routeID: Int, navHost: NavHostController) {
                             }
                             Spacer(modifier = Modifier.padding(8.dp))
                             ElevatedButton( shape = RoundedCornerShape(16.dp),
-                                onClick = { /*TODO*/ },
+                                onClick = { routeDetailViewModel.duplicateRoute(route) },
                                 colors = ButtonDefaults.elevatedButtonColors(
                                     containerColor = MaterialTheme.colorScheme.primary
                                 )
@@ -243,7 +250,7 @@ fun RoutesDetailScreen(routeID: Int, navHost: NavHostController) {
 
                         ElevatedButton(
                             shape = RoundedCornerShape(16.dp),
-                            onClick = { /*TODO*/ },
+                            onClick = { routeDetailViewModel.deleteRoute(route) },
                             colors = ButtonDefaults.elevatedButtonColors(
                                 containerColor = RedRC
                             )
@@ -259,6 +266,7 @@ fun RoutesDetailScreen(routeID: Int, navHost: NavHostController) {
                     }
                 }
             }
+            // Interaccions
             Row(modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 8.dp),
@@ -275,7 +283,7 @@ fun RoutesDetailScreen(routeID: Int, navHost: NavHostController) {
             ) {
                 items(interactions.size) { interaction ->
                     Spacer(modifier = Modifier.padding(8.dp))
-                    RouteInteractionCard(interaction = interactions[interaction])
+                    RouteInteractionCard(interaction = interactions[interaction], routeDetailViewModel = routeDetailViewModel)
                 }
 
             }

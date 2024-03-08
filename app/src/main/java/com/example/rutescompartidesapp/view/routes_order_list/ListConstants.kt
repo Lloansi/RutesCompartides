@@ -5,7 +5,7 @@ import com.example.rutescompartidesapp.data.domain.RouteForList
 
 object ListConstants {
 
-    val routeList = listOf(
+    val routeList = mutableListOf(
         RouteForList("usuari",1, "Ruta 1", "Barcelona", "Tarragona",
             listOf("Viladecans", "Castelldefels", "Vilanova i la Geltrú", "Torredembarra"),"2024-12-12", "12:00",
             "2024-12-13", "14:00", listOf("diaria"),
@@ -25,7 +25,7 @@ object ListConstants {
             null, "2024-03-26", "20:00","2024-03-26", "23:15", listOf("setmanal"),
             true, true, false, true),
     )
-    val orderList = listOf(
+    val orderList = mutableListOf(
         OrderForList("ivan",1, "Colinabos", "Barcelona", "Tarragona",
             "2024-12-12", "12:00", listOf("hortalizes"),
             true, false, false, true),

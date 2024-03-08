@@ -28,17 +28,16 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rutescompartidesapp.ui.theme.BlueRC
 import com.example.rutescompartidesapp.ui.theme.MateBlackRC
 import com.example.rutescompartidesapp.ui.theme.RedRC
 import com.example.rutescompartidesapp.ui.theme.YellowRC
-import com.example.rutescompartidesapp.view.route_detail.DetailUtils
-import com.example.rutescompartidesapp.view.routes_order_list.ListConstants
+import com.example.rutescompartidesapp.view.route_detail.DetailUtils.RouteInteraction
+import com.example.rutescompartidesapp.view.route_detail.RouteDetailViewModel
 
 @Composable
-fun RouteInteractionCard(interaction: DetailUtils.RouteInteraction){
+fun RouteInteractionCard(interaction: RouteInteraction, routeDetailViewModel: RouteDetailViewModel){
     var firstText = ""
     var secondText = ""
     var chipText = ""
@@ -52,6 +51,9 @@ fun RouteInteractionCard(interaction: DetailUtils.RouteInteraction){
     var button2IconTint = Color.White
     var button1Icon = Icons.Default.Delete
     var button2Icon = Icons.Default.Delete
+    var button1OnClick: () -> Unit = { /*TODO*/ }
+    var button2OnClick: () -> Unit = { /*TODO*/ }
+
     when (interaction.status) {
         "Acceptada" -> {
             firstText = "Has acceptat"
@@ -62,10 +64,13 @@ fun RouteInteractionCard(interaction: DetailUtils.RouteInteraction){
             button1Color = MateBlackRC
             button1Icon = Icons.Filled.Check
             button1IconTint = Color.White
+            button1OnClick = { routeDetailViewModel.showCompletePopup(true) }
             button2IconTint = Color.Black
             button2Text = "Declinar"
             button2Color = RedRC
             button2Icon = Icons.Default.Cancel
+            button2OnClick = { routeDetailViewModel.declineOrder(interaction) }
+
         }
         "Entregada" -> {
             firstText = "Has entregat"
@@ -81,9 +86,11 @@ fun RouteInteractionCard(interaction: DetailUtils.RouteInteraction){
             button1Text = "Acceptar"
             button1Color = MaterialTheme.colorScheme.primary
             button1Icon = Icons.Filled.Check
+            button1OnClick = { routeDetailViewModel.acceptOrder(interaction) }
             button2Text = "Declinar"
             button2Color = RedRC
             button2Icon = Icons.Filled.Cancel
+            button2OnClick = { routeDetailViewModel.declineOrder(interaction) }
             button1IconTint = Color.White
             button2IconTint = Color.Black
             chipTextColor = Color.Black
@@ -123,8 +130,8 @@ fun RouteInteractionCard(interaction: DetailUtils.RouteInteraction){
                 .fillMaxWidth()
                 .padding(start = 8.dp, bottom = 8.dp, end = 8.dp),
             horizontalArrangement = Arrangement.SpaceAround) {
-                InteractionButton(onClick = { /*TODO*/ }, text = button1Text , color = button1Color, icon = button1Icon, iconTint = button1IconTint )
-                InteractionButton(onClick = { /*TODO*/ }, text = button2Text , color = button2Color, icon = button2Icon, iconTint = button2IconTint )
+                InteractionButton(onClick = button1OnClick, text = button1Text , color = button1Color, icon = button1Icon, iconTint = button1IconTint )
+                InteractionButton(onClick = button2OnClick, text = button2Text , color = button2Color, icon = button2Icon, iconTint = button2IconTint )
             }
         }
 
