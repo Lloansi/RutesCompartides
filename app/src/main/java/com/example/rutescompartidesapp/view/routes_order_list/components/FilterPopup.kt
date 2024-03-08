@@ -61,6 +61,7 @@ import com.example.rutescompartidesapp.data.domain.ListQuery
 import com.example.rutescompartidesapp.ui.theme.BlueRC
 import com.example.rutescompartidesapp.ui.theme.GrayRC
 import com.example.rutescompartidesapp.ui.theme.MateBlackRC
+import com.example.rutescompartidesapp.view.components.TimePickerDialog
 import com.example.rutescompartidesapp.view.routes_order_list.viewmodels.FilterPopupViewModel
 import com.example.rutescompartidesapp.view.routes_order_list.viewmodels.RoutesOrderListViewModel
 
@@ -538,10 +539,10 @@ fun OutlinedFilterTextField(value: String, onValueChange: (String) -> Unit, plac
         colors = TextFieldDefaults.colors(
             focusedIndicatorColor = MaterialTheme.colorScheme.primary,
             unfocusedIndicatorColor = Color.Gray,
-            disabledContainerColor = Color.White,
+            disabledContainerColor = MaterialTheme.colorScheme.background,
             disabledIndicatorColor = Color.Gray,
-            focusedContainerColor = Color.White,
-            unfocusedContainerColor = Color.White,
+            focusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
+            unfocusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
         ),
         keyboardOptions = KeyboardOptions(
             imeAction = ImeAction.Next),
