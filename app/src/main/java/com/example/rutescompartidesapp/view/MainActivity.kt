@@ -167,6 +167,7 @@ fun ScreenNavigationConfiguration(navController: NavHostController, paddingModif
         composable(Screens.PublishRouteScreen.route) {
             PublishRouteScreen(navController)
         }
+
     }
 
 }

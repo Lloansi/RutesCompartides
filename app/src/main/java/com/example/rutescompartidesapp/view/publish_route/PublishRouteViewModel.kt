@@ -3,6 +3,7 @@ package com.example.rutescompartidesapp.view.publish_route
 import android.graphics.Point
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 class PublishRouteViewModel: ViewModel(){
 
@@ -123,5 +124,114 @@ class PublishRouteViewModel: ViewModel(){
                 _routeFrequency.value.isNotEmpty()
     }
 
+    // Screen 2
+
+    // Max Detour KM
+    private val _maxDetourKm = MutableStateFlow(0.0f)
+    val maxDetourKm = _maxDetourKm
+
+    fun setMaxDetourKm(km: String){
+        _maxDetourKm.value = km.toFloat()
+    }
+
+    // Available Seats
+
+    private val _availableSeats = MutableStateFlow(0)
+    val availableSeats = _availableSeats
+
+    fun setSeats(seats: String){
+        _availableSeats.value = seats.toInt()
+    }
+
+    // Available Space
+    private val _availableSpace = MutableStateFlow("")
+    val availableSpace = _availableSpace
+
+    fun setAvailableSpace(text: String){
+        _availableSpace.value = text
+    }
+    // Cost KM
+    private val _costKM = MutableStateFlow(0.0f)
+    val costKM = _costKM
+
+    fun setCostKM(cost: String){
+        _costKM.value = cost.toFloat()
+    }
+
+    // Vehicle
+    private val _vehicle = MutableStateFlow("")
+    val vehicle = _vehicle
+
+    fun setVehicle(vehicle: String){
+        _vehicle.value = vehicle
+    }
+
+    // Screen 3
+    // Condicions de transport chips
+    private val _isIsoterm = MutableStateFlow(false)
+    val isIsoterm = _isIsoterm.asStateFlow()
+
+    private val _isRefrigerat = MutableStateFlow(false)
+    val isRefrigerat = _isRefrigerat.asStateFlow()
+
+    private val _isCongelat = MutableStateFlow(false)
+    val isCongelat = _isCongelat.asStateFlow()
+
+    private val _isSenseHumitat = MutableStateFlow(false)
+    val isSenseHumitat = _isSenseHumitat.asStateFlow()
+
+    fun onCheckChip(condition: String){
+        when(condition) {
+            "Isoterm" -> _isIsoterm.value = !_isIsoterm.value
+            "Refrigerat" -> _isRefrigerat.value = !_isRefrigerat.value
+            "Congelat" -> _isCongelat.value = !_isCongelat.value
+            "SenseHumitat" -> _isSenseHumitat.value = !_isSenseHumitat.value
+        }
+
+    }
+
+    // tags
+    private val _tagsText = MutableStateFlow("")
+    val tagsText = _tagsText.asStateFlow()
+
+    private val _tagsError = MutableStateFlow(false)
+    val tagsError = _tagsError.asStateFlow()
+
+    private val _tagsList = MutableStateFlow(mutableListOf<String>())
+    val tagsList = _tagsList.asStateFlow()
+
+    fun onTagsAddToListChange(etiqueta: String){
+        _tagsList.value.add(etiqueta)
+        _tagsText.value = ""
+    }
+
+    // Reasigna el valor de la llista de etiquetas sense l'etiqueta que volem eliminar
+    fun onTagDelete(etiqueta: String){
+        _tagsList.value = _tagsList.value.filter { etiquetaFromList ->
+            etiquetaFromList != etiqueta
+        }.toMutableList()
+    }
+
+    fun onTagsErrorChange(isError: Boolean){
+        _tagsError.value = isError
+    }
+    fun onTagsChange(text: String){
+        _tagsText.value = text
+    }
+
+    // Popup Transport Conditions
+    private val _isCondicionsPopupShowing = MutableStateFlow(false)
+    val isCondicionsPopupShowing = _isCondicionsPopupShowing
+    fun onCondicionsPopupShow(isShowing: Boolean){
+        _isCondicionsPopupShowing.value = isShowing
+    }
+
+    // Comment
+    private val _comment = MutableStateFlow("")
+    val comment = _comment
+
+    fun setComment(comment: String){
+        _comment.value = comment
+    }
 
 }
