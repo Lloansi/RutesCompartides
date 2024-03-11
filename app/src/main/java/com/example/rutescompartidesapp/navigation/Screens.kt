@@ -11,4 +11,6 @@ sealed class Screens(
     object SignUpScreen: Screens("SignUpScreen")
     object RouteDetailScreen: Screens("RouteDetailScreen/{routeId}")
     object PublishRouteScreen: Screens("PublishRouteScreen")
+    object PublishOrderScreen: Screens("PublishOrderScreen")
+
 }

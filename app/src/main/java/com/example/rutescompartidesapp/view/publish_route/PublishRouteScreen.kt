@@ -1,5 +1,6 @@
 package com.example.rutescompartidesapp.view.publish_route
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -70,9 +71,9 @@ import com.example.rutescompartidesapp.ui.theme.BlueRC
 import com.example.rutescompartidesapp.ui.theme.GrayRC
 import com.example.rutescompartidesapp.ui.theme.MateBlackRC
 import com.example.rutescompartidesapp.ui.theme.OrangeRC
-import com.example.rutescompartidesapp.view.publish_route.components.BasicTextField
-import com.example.rutescompartidesapp.view.publish_route.components.IconTextField
-import com.example.rutescompartidesapp.view.publish_route.components.StepTextField
+import com.example.rutescompartidesapp.view.components.BasicTextField
+import com.example.rutescompartidesapp.view.components.IconTextField
+import com.example.rutescompartidesapp.view.components.StepTextField
 import com.example.rutescompartidesapp.view.routes_order_list.components.ConditionScrollPopup
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -90,6 +91,7 @@ fun PublishRouteScreen(navHost: NavHostController){
     val stepName4 by publishRouteViewModel.stepName4.collectAsStateWithLifecycle()
     val stepName5 by publishRouteViewModel.stepName5.collectAsStateWithLifecycle()
     val stepName6 by publishRouteViewModel.stepName6.collectAsStateWithLifecycle()
+    val stepNameList by publishRouteViewModel.stepNameList.collectAsStateWithLifecycle()
     val destinationName by publishRouteViewModel.destinationName.collectAsStateWithLifecycle()
     val isDropdownExpanded by publishRouteViewModel.isDropdownExpanded.collectAsStateWithLifecycle()
     val routeFrequency by publishRouteViewModel.routeFrequency.collectAsStateWithLifecycle()
@@ -299,10 +301,12 @@ private fun PublishRouteContent3(
                         if (isIsoterm) {
                             Text(
                                 "Isoterm",
-                                color = Color.White
+                                color = Color.White,
+                                style = MaterialTheme.typography.bodyLarge,
                             )
                         } else {
-                            Text("Isoterm")
+                            Text("Isoterm",
+                                style = MaterialTheme.typography.bodyLarge,)
                         }
                     },
                     leadingIcon = {
@@ -327,10 +331,12 @@ private fun PublishRouteContent3(
                         if (isRefrigerat) {
                             Text(
                                 "Refrigerat",
-                                color = Color.White
+                                color = Color.White,
+                                style = MaterialTheme.typography.bodyLarge,
                             )
                         } else {
-                            Text("Refrigerat")
+                            Text("Refrigerat",
+                                style = MaterialTheme.typography.bodyLarge,)
                         }
                     },
                     leadingIcon = {
@@ -360,10 +366,12 @@ private fun PublishRouteContent3(
                         if (isCongelat) {
                             Text(
                                 "Congelat",
-                                color = Color.White
+                                color = Color.White,
+                                style = MaterialTheme.typography.bodyLarge,
                             )
                         } else {
-                            Text("Congelat")
+                            Text("Congelat",
+                                style = MaterialTheme.typography.bodyLarge,)
                         }
                     },
                     leadingIcon = {
@@ -388,10 +396,13 @@ private fun PublishRouteContent3(
                         if (isSenseHumitat) {
                             Text(
                                 "Sense Humitat",
-                                color = Color.White
+                                color = Color.White,
+                                style = MaterialTheme.typography.bodyLarge,
                             )
                         } else {
-                            Text("Sense Humitat")
+                            Text("Sense Humitat",
+                                style = MaterialTheme.typography.bodyLarge,
+                            )
                         }
                     },
                     leadingIcon = {
@@ -419,7 +430,7 @@ private fun PublishRouteContent3(
         value = tagsText,
         onValueChange = publishRouteViewModel::onTagsChange,
         placeholder = {
-            Text(text = "tags", color = Color.Gray)
+            Text(text = "Etiquetes (diaria, setmanal...)", color = Color.Gray)
         },
         isError = tagsError,
         trailingIcon = {
@@ -626,10 +637,12 @@ private fun PublishRouteContent2(
         IconButton(
             onClick = { /*TODO*/ },
             colors = IconButtonDefaults.iconButtonColors(
-                containerColor = MateBlackRC
+                containerColor = MaterialTheme.colorScheme.secondaryContainer
             )
         ) {
-            Icon(imageVector = Icons.Filled.QuestionMark, contentDescription = "Frequency Icon")
+            Icon(imageVector = Icons.Filled.QuestionMark,
+                contentDescription = "Frequency Icon",
+                tint = MaterialTheme.colorScheme.onSecondaryContainer)
         }
         Text(
             modifier = Modifier.weight(2f),
@@ -691,6 +704,7 @@ private fun PublishRouteContent2(
 
     }
 }
+@SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 private fun PublishRouteContent1(
@@ -698,7 +712,7 @@ private fun PublishRouteContent1(
     publishRouteViewModel: PublishRouteViewModel,
     originName: String,
     stepLocationsNumber: Int,
-    stepName1: String,
+    stepNameList: String,
     destinationName: String,
     isDropdownExpanded: Boolean,
     routeFrequency: String,
@@ -728,19 +742,20 @@ private fun PublishRouteContent1(
                 StepTextField(
                     modifier = Modifier
                         .weight(2f),
-                    value = stepName1,
-                    onValueChange = { publishRouteViewModel.setStepLocationName(index, stepName1) }
+                    value = stepNameList,
+                    onValueChange = {
+                        println("Name : $it")
+                        publishRouteViewModel.setStepLocationName(index, stepNameList) }
                 )
                 IconButton(
-                    onClick = { publishRouteViewModel.removeStepLocation() },
+                    onClick = { /*TODO*/ },
                     colors = IconButtonDefaults.iconButtonColors(
-                        containerColor = MateBlackRC
+                        containerColor = MaterialTheme.colorScheme.secondaryContainer
                     )
                 ) {
-                    Icon(
-                        imageVector = Icons.Filled.Delete,
-                        contentDescription = "Remove Step Location"
-                    )
+                    Icon(imageVector = Icons.Filled.QuestionMark,
+                        contentDescription = "Frequency Icon",
+                        tint = MaterialTheme.colorScheme.onSecondaryContainer)
                 }
             }
             Spacer(modifier = Modifier.size(8.dp))
@@ -776,15 +791,6 @@ private fun PublishRouteContent1(
                 modifier = Modifier.size(24.dp),
                 painter = painterResource(id = R.drawable.map_icon),
                 contentDescription = "Destination Location Icon"
-            )
-        })
-    IconTextField(value = destinationName,
-        onValueChange = publishRouteViewModel::setDestinationName,
-        placeholder = "Data i hora de sortida",
-        leadingIcon = {
-            Icon(
-                imageVector = Icons.Filled.CalendarMonth,
-                contentDescription = "Origin Location Icon"
             )
         })
     IconTextField(value = destinationName,

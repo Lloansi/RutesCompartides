@@ -61,6 +61,8 @@ class PublishRouteViewModel: ViewModel(){
     private val _stepName6 = MutableStateFlow("")
     val stepName6 = _stepName6
 
+    private val _stepNameList = MutableStateFlow(listOf(stepName1, stepName2, stepName3, stepName4, stepName5, stepName6))
+    val stepNameList = _stepNameList.asStateFlow()
 
     private val _stepLocationsNumber = MutableStateFlow(1)
     val stepLocationsNumber = _stepLocationsNumber
@@ -77,7 +79,10 @@ class PublishRouteViewModel: ViewModel(){
     }
     fun setStepLocationName(number: Int, name: String){
         when(number){
-            0 -> _stepName1.value = name
+            0 ->{
+                _stepName1.value = name
+                println("Step 1: ${_stepName1.value}/$name")
+            }
             1 -> _stepName2.value = name
             2 -> _stepName3.value = name
             3 -> _stepName4.value = name

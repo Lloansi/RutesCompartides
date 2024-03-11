@@ -232,7 +232,7 @@ fun FilterPopup(routesOrderListViewModel: RoutesOrderListViewModel){
                                 value = horaSortidaText,
                                 onValueChange = filterPopupViewModel::onHoraArribadaChange,
                                 placeholder =  {
-                                    Text(text = "Hora de aribada", color = Color.Gray)
+                                    Text(text = "Hora de arribada", color = Color.Gray)
                                 },
                                 enabled = false,
                                 leadingIcon = {
@@ -325,9 +325,11 @@ fun FilterPopup(routesOrderListViewModel: RoutesOrderListViewModel){
                                             onClick = { filterPopupViewModel.onCheckChip("Isoterm") },
                                             label = {  if (isIsoterm) {
                                                 Text("Isoterm",
-                                                    color = Color.White)
+                                                    color = Color.White,
+                                                    style = MaterialTheme.typography.bodyLarge,)
                                             } else {
-                                                Text("Isoterm")
+                                                Text("Isoterm",
+                                                    style = MaterialTheme.typography.bodyLarge,)
                                             }
                                             },
                                             leadingIcon = {
@@ -348,9 +350,11 @@ fun FilterPopup(routesOrderListViewModel: RoutesOrderListViewModel){
                                             label = {
                                                 if (isRefrigerat) {
                                                     Text("Refrigerat",
-                                                        color = Color.White)
+                                                        color = Color.White,
+                                                        style = MaterialTheme.typography.bodyLarge,)
                                                 } else {
-                                                    Text("Refrigerat")
+                                                    Text("Refrigerat",
+                                                        style = MaterialTheme.typography.bodyLarge,)
                                                 }
                                             },
                                             leadingIcon = {
@@ -373,9 +377,11 @@ fun FilterPopup(routesOrderListViewModel: RoutesOrderListViewModel){
                                             onClick = { filterPopupViewModel.onCheckChip("Congelat") },
                                             label = {  if (isCongelat) {
                                                 Text("Congelat",
-                                                    color = Color.White)
+                                                    color = Color.White,
+                                                    style = MaterialTheme.typography.bodyLarge,)
                                             } else {
-                                                Text("Congelat")
+                                                Text("Congelat",
+                                                    style = MaterialTheme.typography.bodyLarge,)
                                             }
                                             },
                                             leadingIcon = {
@@ -395,9 +401,11 @@ fun FilterPopup(routesOrderListViewModel: RoutesOrderListViewModel){
                                             onClick = { filterPopupViewModel.onCheckChip("SenseHumitat") },
                                             label = { if (isSenseHumitat) {
                                                 Text("Sense Humitat",
-                                                    color = Color.White)
+                                                    color = Color.White,
+                                                    style = MaterialTheme.typography.bodyLarge,)
                                             } else {
-                                                Text("Sense Humitat")
+                                                Text("Sense Humitat",
+                                                    style = MaterialTheme.typography.bodyLarge,)
                                             } },
                                             leadingIcon = {
                                                 if (isSenseHumitat) {

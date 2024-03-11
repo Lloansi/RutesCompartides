@@ -1,11 +1,14 @@
-package com.example.rutescompartidesapp.view.publish_route.components
+package com.example.rutescompartidesapp.view.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccessTime
+import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Route
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -96,6 +99,47 @@ fun StepTextField(modifier: Modifier, value: String, onValueChange: (String) -> 
         ),
         keyboardOptions = KeyboardOptions(
             imeAction = ImeAction.Next),
+        singleLine = true,
+
+        )
+    Spacer(modifier = Modifier.padding(8.dp))
+}
+
+@Composable
+fun DateTimePickerTextField(invocation: () -> Unit, time: String, onValueChange: (String) -> Unit, placeholder: String){
+    // Time Picker TextField
+    OutlinedTextField(
+        modifier = Modifier
+            .fillMaxWidth(0.95f)
+            .clickable {
+                invocation()
+            },
+        value = time,
+        onValueChange = onValueChange,
+        placeholder =  {
+            Text(text = placeholder, color = Color.Gray)
+        },
+        enabled = false,
+        leadingIcon = {
+            Icon(
+                imageVector = Icons.Filled.CalendarMonth,
+                contentDescription = "$placeholder Icon",
+                tint = Color.Gray
+            )
+        },
+        shape = RoundedCornerShape(16.dp),
+        colors = TextFieldDefaults.colors(
+            focusedIndicatorColor = MaterialTheme.colorScheme.primary,
+            unfocusedIndicatorColor = Color.Gray,
+            disabledContainerColor = MaterialTheme.colorScheme.onSecondaryContainer,
+            disabledIndicatorColor = Color.Gray,
+            focusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
+            unfocusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
+            disabledTextColor = Color.Black
+        ),
+        keyboardOptions = KeyboardOptions(
+            imeAction = ImeAction.Next
+        ),
         singleLine = true,
 
         )
