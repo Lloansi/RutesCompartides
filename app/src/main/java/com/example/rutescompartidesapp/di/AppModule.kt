@@ -1,5 +1,6 @@
 package com.example.rutescompartidesapp.di
 
+import com.example.rutescompartidesapp.data.network.gotify.GotifyApi
 import com.example.rutescompartidesapp.data.network.openRouteService.OpenRouteServiceApi
 import com.example.rutescompartidesapp.utils.Constants
 import com.google.gson.GsonBuilder
@@ -25,6 +26,21 @@ object AppModule {
 
         return Retrofit.Builder()
             .baseUrl(Constants.ORS_URL)
+            .client(okHttpClient)
+            .addConverterFactory(GsonConverterFactory.create(gson))
+            .build()
+            .create()
+    }
+
+
+    @Provides
+    @Singleton
+    fun provideGotifyServiceApi(): GotifyApi {
+        val gson = GsonBuilder().serializeNulls().create()
+        val okHttpClient = OkHttpClient.Builder().build()
+
+        return Retrofit.Builder()
+            .baseUrl(Constants.GOTIFY_URL)
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()

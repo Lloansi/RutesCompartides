@@ -1,4 +1,4 @@
-package com.example.rutescompartidesapp.data.repository
+package com.example.rutescompartidesapp.data.network.openRouteService.repository
 
 import com.example.rutescompartidesapp.data.domain.DirectionResponse
 import com.example.rutescompartidesapp.data.domain.Route

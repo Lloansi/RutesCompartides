@@ -54,6 +54,7 @@ dependencies {
     implementation("com.android.volley:volley:1.2.1")
     implementation("androidx.preference:preference-ktx:1.2.1")
     val voyagerVersion = "1.0.0"
+    val ktorVersion = "1.6.4"
 
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")

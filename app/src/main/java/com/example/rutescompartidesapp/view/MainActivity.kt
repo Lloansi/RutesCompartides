@@ -27,11 +27,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import cafe.adriel.voyager.navigator.CurrentScreen
 import com.PratikFagadiya.smoothanimationbottombar.model.SmoothAnimationBottomBarScreens
 import com.PratikFagadiya.smoothanimationbottombar.properties.BottomBarProperties
 import com.PratikFagadiya.smoothanimationbottombar.ui.SmoothAnimationBottomBar
 import com.example.rutescompartidesapp.R
+import com.example.rutescompartidesapp.data.network.gotify.GotifyWebSocketClient
 import com.example.rutescompartidesapp.navigation.Screens
 import com.example.rutescompartidesapp.ui.theme.MateBlackRC
 import com.example.rutescompartidesapp.ui.theme.RutesCompartidesAppTheme
@@ -49,6 +49,7 @@ private const val DEBUG_TAG = "Gestures"
 class MainActivity : ComponentActivity() {
 
     //private lateinit var mDetector: GestureDetectorCompat
+    private lateinit var webSocketClient: GotifyWebSocketClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,6 +57,13 @@ class MainActivity : ComponentActivity() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.INTERNET), 0)
         }
+
+
+        webSocketClient = GotifyWebSocketClient()
+        val serverUrl = "ws://45.131.64.161:6969/connect"
+        val appToken = "AipC35.CrE8cP2v"
+        webSocketClient.connect(serverUrl, appToken)
+
         setContent {
             RutesCompartidesAppTheme {
                 val navController = rememberNavController()
