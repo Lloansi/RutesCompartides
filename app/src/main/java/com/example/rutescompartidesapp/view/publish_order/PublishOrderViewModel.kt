@@ -52,7 +52,7 @@ class PublishOrderViewModel: ViewModel(){
         _destinationName.value = name
     }
 
-    // Step location 1 coordinates
+    // Destination location coordinates
     private val _destinationLocation = MutableStateFlow(listOf<Double>())
     val destinationLocation = _destinationLocation
 
@@ -76,7 +76,6 @@ class PublishOrderViewModel: ViewModel(){
             "Congelat" -> _isCongelat.value = !_isCongelat.value
             "SenseHumitat" -> _isSenseHumitat.value = !_isSenseHumitat.value
         }
-
     }
 
     // tags
@@ -184,6 +183,113 @@ class PublishOrderViewModel: ViewModel(){
                 _destinationName.value.isNotEmpty() &&
                 _minTimeArrivalText.value.isNotEmpty()
     }
+    // Screen 2
+
+    // Number of packages
+
+    private val _packagesNum = MutableStateFlow("")
+    val packagesNum = _packagesNum
+    fun setPackagesNum(num: String){
+        _packagesNum.value = num
+    }
+    // Packages are fragile
+    private val _arePackagesFragile = MutableStateFlow(false)
+    val arePackagesFragile = _arePackagesFragile
+    fun onPackagesFragileChange(){
+        _arePackagesFragile.value = !_arePackagesFragile.value
+    }
+
+    // Packages measurements
+
+    private val _packagesLength = MutableStateFlow(0f)
+    val packagesLength = _packagesLength
+    fun setPackagesLength(length: String){
+        _packagesLength.value = length.toFloat()
+    }
+
+    private val _packagesWidth = MutableStateFlow(0f)
+    val packagesWidth = _packagesWidth
+    fun setPackagesWidth(width: String){
+        _packagesWidth.value = width.toFloat()
+    }
+
+    private val _packagesHeight = MutableStateFlow(0f)
+    val packagesHeight = _packagesHeight
+    fun setPackagesHeight(height: String){
+        _packagesHeight.value = height.toFloat()
+    }
+
+    private val _packagesWeight = MutableStateFlow(0f)
+    val packagesWeight = _packagesWeight
+    fun setPackagesWeight(weight: String){
+        _packagesWeight.value = weight.toFloat()
+    }
+
+    // Notification
+    private val _wantsDeliveryNotification = MutableStateFlow(false)
+    val wantsDeliveryNotification = _wantsDeliveryNotification
+    fun onWantsDeliveryNotificationChange(){
+        _wantsDeliveryNotification.value = !_wantsDeliveryNotification.value
+    }
+
+    // Screen 3
+
+    // Delivery contact
+    // TODO Aquí hauria de ser un usuari, no un string
+    val deliveryContact = MutableStateFlow("Ivan Martínez")
+    val deliveryTelephoneNumber = MutableStateFlow("61234567")
+    // TODO Aquí hauria de ser les dades reals del contacte del punt habitual
+    val puntHabitualData = MutableStateFlow("\nCarrer de la Llibertat, 1, 08001 Barcelona\nTelèfon: 61234567")
+
+    // Delivery note
+    private val _deliveryNote = MutableStateFlow("")
+    val deliveryNote = _deliveryNote
+
+
+    private val _isDeliveryContactDataChecked = MutableStateFlow(false)
+    val isDeliveryContactDataChecked = _isDeliveryContactDataChecked
+
+    fun onDeliveryContactDataCheck() {
+
+        _isDeliveryContactDataChecked.value = !_isDeliveryContactDataChecked.value
+
+    }
+    fun appendInfoToDeliveryNote(type: String){
+        if (type == "puntHabitual"){
+            if (_isPuntHabitualDataChecked.value){
+                _deliveryNote.value += "\n${puntHabitualData.value}"
+            } else {
+                _deliveryNote.value = _deliveryNote.value.replace(puntHabitualData.value,"")
+            }
+        } else if (type == "userInfo") {
+            val userInfo =
+                "\nRecollida: ${deliveryContact.value}\nTelèfon: ${deliveryTelephoneNumber.value}"
+            if (_isDeliveryContactDataChecked.value) {
+                _deliveryNote.value += userInfo
+            } else {
+                _deliveryNote.value = _deliveryNote.value.replace(userInfo,"")
+            }
+        }
+
+    }
+    private val _isPuntHabitualDataChecked = MutableStateFlow(false)
+    val isPuntHabitualDataChecked = _isPuntHabitualDataChecked
+    fun onPuntHabitualDataCheck(){
+        _isPuntHabitualDataChecked.value = !_isPuntHabitualDataChecked.value
+    }
+
+    fun setDeliveryNote(text: String){
+        _deliveryNote.value = text
+    }
+
+    // Comment
+    private val _comment = MutableStateFlow("")
+    val comment = _comment
+
+    fun setComment(text: String){
+        _comment.value = text
+    }
+
 
 
 

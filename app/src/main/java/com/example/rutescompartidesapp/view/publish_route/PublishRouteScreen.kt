@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -26,7 +25,6 @@ import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Cancel
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.House
 import androidx.compose.material.icons.filled.QuestionMark
 import androidx.compose.material3.ButtonDefaults
@@ -73,6 +71,10 @@ import com.example.rutescompartidesapp.ui.theme.MateBlackRC
 import com.example.rutescompartidesapp.ui.theme.OrangeRC
 import com.example.rutescompartidesapp.view.components.BasicTextField
 import com.example.rutescompartidesapp.view.components.IconTextField
+import com.example.rutescompartidesapp.view.components.MultilineTextField
+import com.example.rutescompartidesapp.view.components.PublishBackButton
+import com.example.rutescompartidesapp.view.components.PublishButton
+import com.example.rutescompartidesapp.view.components.PublishNextButton
 import com.example.rutescompartidesapp.view.components.StepTextField
 import com.example.rutescompartidesapp.view.routes_order_list.components.ConditionScrollPopup
 
@@ -510,34 +512,8 @@ private fun PublishRouteContent3(
     ) {
         Text(text = "Comentaris", color = MaterialTheme.colorScheme.onBackground)
     }
-    OutlinedTextField(
-        modifier = Modifier
-            .fillMaxWidth(0.95f)
-            .height(LocalConfiguration.current.screenWidthDp.dp / 2)
-            .padding(top = 4.dp),
-        value = comment,
-        onValueChange = publishRouteViewModel::setComment,
-        placeholder = {
-            Text(
-                text = "Condicions especials quant a la recollida, entrega, transport (ex: faré una parada de 6 hores a la meva ruta abans d’arribar al destí final; necessito confirmació d’horari d’entrega als comentaris; acepto productes com forma de pagament...)",
-                color = Color.Gray
-            )
-        },
-        shape = RoundedCornerShape(16.dp),
-        colors = TextFieldDefaults.colors(
-            focusedIndicatorColor = MaterialTheme.colorScheme.primary,
-            unfocusedIndicatorColor = Color.Gray,
-            disabledContainerColor = MaterialTheme.colorScheme.background,
-            disabledIndicatorColor = Color.Gray,
-            focusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
-            unfocusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
-        ),
-        keyboardOptions = KeyboardOptions(
-            imeAction = ImeAction.Next
-        ),
-        singleLine = false,
-        maxLines = 7,
-    )
+    MultilineTextField(value = comment, onValueChange = publishRouteViewModel::setComment,
+        placeholder = "Condicions especials quant a la recollida, entrega, transport (ex: faré una parada de 6 hores a la meva ruta abans d’arribar al destí final; necessito confirmació d’horari d’entrega als comentaris; acepto productes com forma de pagament...)" )
     // Buttons
     Row(
         modifier = Modifier
@@ -547,38 +523,13 @@ private fun PublishRouteContent3(
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
         // Back button
-        ElevatedButton(
-            shape = RoundedCornerShape(16.dp),
-            onClick = {
-                publishRouteViewModel.previousStep()
-            },
-            colors = ButtonDefaults.elevatedButtonColors(
-                containerColor = MaterialTheme.colorScheme.onBackground
-            )
-        ) {
-            Text(
-                text = "Tornar",
-                color = MaterialTheme.colorScheme.background,
-                style = MaterialTheme.typography.headlineMedium,
-            )
-        }
-        // Next Button
-        ElevatedButton(
-            shape = RoundedCornerShape(16.dp),
-            onClick = {
-                // TODO POST ROUTE
-            },
-            colors = ButtonDefaults.elevatedButtonColors(
-                containerColor = OrangeRC
-            )
-        ) {
-            Text(
-                text = "Publicar ruta", color = Color.White,
-                style = MaterialTheme.typography.headlineMedium
-            )
-        }
+        PublishBackButton(publishRouteViewModel::previousStep)
+        // Publish route button
+        PublishButton( onClick = {/*TODO*/}, text = "Publicar ruta")
     }
 }
+
+
 
 @Composable
 private fun PublishRouteContent2(
@@ -590,48 +541,22 @@ private fun PublishRouteContent2(
     vehicle: String
 ) {
     // Max Detour KM
-    BasicTextField(
-        value = maxDetourKm.toString(),
+    BasicTextField(value = maxDetourKm.toString(),
         onValueChange = publishRouteViewModel::setMaxDetourKm,
         placeholder = "Max desviament (km)"
     )
     // Available Seats
-    BasicTextField(
-        value = availableSeats.toString(),
+    BasicTextField(value = availableSeats.toString(),
         onValueChange = publishRouteViewModel::setSeats,
         placeholder = "Seients disponibles"
     )
     // Available Space
-    OutlinedTextField(
-        modifier = Modifier
-            .fillMaxWidth(0.95f)
-            .fillMaxHeight(0.3f),
-        value = availableSpace,
-        onValueChange = publishRouteViewModel::setAvailableSpace,
-        placeholder = {
-            Text(text = "Espai disponible al vehicle", color = Color.Gray)
-        },
-        shape = RoundedCornerShape(16.dp),
-        colors = TextFieldDefaults.colors(
-            focusedIndicatorColor = MaterialTheme.colorScheme.primary,
-            unfocusedIndicatorColor = Color.Gray,
-            disabledContainerColor = MaterialTheme.colorScheme.background,
-            disabledIndicatorColor = Color.Gray,
-            focusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
-            unfocusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
-        ),
-        keyboardOptions = KeyboardOptions(
-            imeAction = ImeAction.Next
-        ),
-        singleLine = false,
-        maxLines = 7,
-        )
-    Spacer(modifier = Modifier.padding(8.dp))
+    MultilineTextField(value = availableSpace,
+        onValueChange = publishRouteViewModel::setAvailableSpace , placeholder = "Espai disponible al vehicle")
     // KM Cost
-    Row(
-        modifier = Modifier
-            .fillMaxWidth(0.95f)
-            .padding(bottom = 2.dp),
+    Row(modifier = Modifier
+        .fillMaxWidth(0.95f)
+        .padding(bottom = 2.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         IconButton(
@@ -671,39 +596,14 @@ private fun PublishRouteContent2(
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
         // Back button
-        ElevatedButton(
-            shape = RoundedCornerShape(16.dp),
-            onClick = {
-                publishRouteViewModel.previousStep()
-            },
-            colors = ButtonDefaults.elevatedButtonColors(
-                containerColor = MaterialTheme.colorScheme.onBackground
-            )
-        ) {
-            Text(
-                text = "Tornar",
-                color = MaterialTheme.colorScheme.background,
-                style = MaterialTheme.typography.headlineMedium,
-            )
-        }
+        PublishBackButton(publishRouteViewModel::previousStep)
         // Next Button
-        ElevatedButton(
-            shape = RoundedCornerShape(16.dp),
-            onClick = {
-                publishRouteViewModel.nextStep()
-            },
-            colors = ButtonDefaults.elevatedButtonColors(
-                containerColor = OrangeRC
-            )
-        ) {
-            Text(
-                text = "Següent", color = Color.White,
-                style = MaterialTheme.typography.headlineMedium
-            )
-        }
-
+        PublishNextButton(onClickCheck = null, isCompleted = true, onClickNext = publishRouteViewModel::nextStep)
     }
 }
+
+
+
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
@@ -890,26 +790,7 @@ private fun PublishRouteContent1(
 
         }
     }
-    ElevatedButton(
-        modifier = Modifier
-            .fillMaxWidth(0.5f)
-            .padding(top = 24.dp),
-        shape = RoundedCornerShape(16.dp),
-        onClick = {
-            publishRouteViewModel.checkAllValues()
-            if (isFirstFormCompleted) {
-                publishRouteViewModel.nextStep()
-            } else {
-                println("Falten camps per omplir")
-            }
-        },
-        colors = ButtonDefaults.elevatedButtonColors(
-            containerColor = OrangeRC
-        )
-    ) {
-        Text(
-            text = "Següent", color = Color.White,
-            style = MaterialTheme.typography.headlineMedium
-        )
-    }
+    PublishNextButton(publishRouteViewModel::checkAllValues, isFirstFormCompleted, publishRouteViewModel::nextStep)
 }
+
+
