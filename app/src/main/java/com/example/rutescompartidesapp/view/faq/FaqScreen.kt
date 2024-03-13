@@ -61,6 +61,7 @@ import com.example.rutescompartidesapp.ui.theme.fredokaOne
 import com.example.rutescompartidesapp.view.faq.components.FaqItemModel
 import com.example.rutescompartidesapp.view.faq.components.ItemCategoryModel
 import com.example.rutescompartidesapp.view.faq.components.faqItems
+import com.example.rutescompartidesapp.view.generic_components.BackButtonArrow
 import com.example.rutescompartidesapp.view.generic_components.HeaderSphere
 import kotlinx.coroutines.flow.MutableStateFlow
 
@@ -78,26 +79,9 @@ fun FaqScreen(navController: NavHostController, viewModel: FaqViewModel) {
                 .height(200.dp)
         ) {
             HeaderSphere(200.dp)
-            Box(
-                modifier = Modifier
-                    .padding(top = 8.dp)
-                    .align(Alignment.TopStart)
-            ) {
-                IconButton(
-                    onClick = {
-                    navController.navigate("ProfileScreen") {
-                        popUpTo("ProfileScreen") { inclusive = true }
-                    }
-                }) {
-                    Icon(
-                        modifier = Modifier
-                            .size(18.dp),
-                        imageVector = Icons.Rounded.ArrowBackIosNew,
-                        contentDescription = null,
-                        tint = Color(0xFFF2F2F2),
-                    )
-                }
-            }
+
+            BackButtonArrow(navController = navController, alignment = Alignment.TopStart)
+
             Text(
                 modifier = Modifier
                     .align(Alignment.Center),
