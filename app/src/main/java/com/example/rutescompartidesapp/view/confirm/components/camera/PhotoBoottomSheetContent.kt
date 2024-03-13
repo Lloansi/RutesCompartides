@@ -2,6 +2,7 @@ package com.example.rutescompartidesapp.view.confirm.components.camera
 
 import android.graphics.Bitmap
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -17,11 +18,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import com.example.rutescompartidesapp.view.confirm.viewmodel.CameraViewModel
 
 @Composable
 fun PhotoBottomSheetContent(
     bitmaps : List<Bitmap>,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: CameraViewModel,
+    navController: NavHostController
 ) {
     if (bitmaps.isEmpty()){
         Box (
@@ -45,6 +50,11 @@ fun PhotoBottomSheetContent(
                     contentDescription = null,
                     modifier = Modifier
                         .clip( RoundedCornerShape(10.dp) )
+                        .clickable {
+                            viewModel.updatePhotoBitmap(bitmap)
+                            println("FOTO ACTUALIZADA")
+                            navController.popBackStack()
+                        }
                 )
             }
         }

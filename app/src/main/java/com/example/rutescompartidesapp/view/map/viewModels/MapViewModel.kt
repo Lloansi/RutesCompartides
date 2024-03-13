@@ -35,47 +35,11 @@ import javax.inject.Inject
 import kotlin.math.acos
 import kotlin.math.cos
 import kotlin.math.sin
+
 @HiltViewModel
 class MapViewModel @Inject constructor (
     val rutesCompartidesRepository: RutesCompartidesRepository
 ) :ViewModel() {
-    //private val applicationContext: Context = context.applicationContext
-
-
-
-    // Routes
-    private fun getRouteById(id: Int){
-        viewModelScope.launch {
-            val route = rutesCompartidesRepository.getRouteById(id)
-            println(route)
-        }
-    }
-
-    private fun getAllRoutes(){
-        viewModelScope.launch {
-            val routes = rutesCompartidesRepository.getAllMapRoutes()
-            println(routes)
-        }
-    }
-
-    // Orders
-    private fun getAllOrders(){
-        viewModelScope.launch {
-            val orders = rutesCompartidesRepository.getAllMapOrders()
-            println(orders)
-        }
-    }
-
-    private fun getOrderById(id: Int){
-        viewModelScope.launch {
-            val order = rutesCompartidesRepository.getOrderById(id)
-            println(order)
-        }
-    }
-
-    private val _orders = MutableStateFlow<MutableList<Order>>(mutableListOf())
-    var orders = _orders.asStateFlow()
-
     private val _userClickedPointer = MutableStateFlow<MutableList<Marker>>(mutableListOf())
     private var userClickedPointer = _userClickedPointer.asStateFlow()
 
@@ -162,11 +126,9 @@ class MapViewModel @Inject constructor (
     private fun deleteRoutesPaths(paths: MutableSet<Polyline>, mapView: MapView){
         for (path in paths){
             mapView.overlays.remove(path)
-
         }
         paths.clear()
     }
-
 
     private fun deleteUserClickPointer(marker: Marker, mapView: MapView){
         _userClickedPointer.value.removeAt(0)
@@ -182,6 +144,7 @@ class MapViewModel @Inject constructor (
     gestureDetector.onTouchEvent(event)
     }
      */
+
     @SuppressLint("ClickableViewAccessibility")
     fun handleClicksMap(mapView: MapView, iconMarkerClickPointer: Drawable? = null, ctx : Context, roadManager: RoadManager){
         // We instance the markers drawable type
@@ -251,8 +214,7 @@ class MapViewModel @Inject constructor (
                             isNearClickUser(ordersList = null, routesList = allRoute2, mapView, routeIconMarker, roadManager)
                         }
                     }
-                    // Reset the drag flag
-                    //isDragging = false
+                    //isDragging = false // Reset the drag flag
                     //true
                 }
             }

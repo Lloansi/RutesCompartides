@@ -1,7 +1,5 @@
 package com.example.rutescompartidesapp.view.confirm.components.draw
 
-import android.graphics.Bitmap
-import android.os.Environment
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Arrangement
@@ -11,34 +9,34 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.rutescompartidesapp.view.confirm.DrawViewModel
-import java.io.ByteArrayOutputStream
-import java.io.File
-import java.io.FileOutputStream
-import java.io.OutputStream
+import androidx.navigation.NavHostController
+import com.example.rutescompartidesapp.data.domain.Line
+import com.example.rutescompartidesapp.view.confirm.viewmodel.DrawViewModel
 
 @Composable
-fun DrawingScreen() {
+fun DrawScreen(navController: NavHostController, drawViewModel: DrawViewModel) {
 
-    val drawViewModel: DrawViewModel = hiltViewModel()
-    val drawBitmap by drawViewModel.drawBitmap.collectAsState()
+    val context = LocalContext.current
 
     val lines = remember {
         mutableStateListOf<Line>()
     }
+
+    val strokeWidthInPx = with(LocalDensity.current) { 3.dp.toPx() }
+    val screenWidth = context.resources.displayMetrics.widthPixels
+    val screenHeight = context.resources.displayMetrics.heightPixels
+
+    val bitmapWidth = screenWidth
+    val bitmapHeight = screenHeight
 
     Canvas(
         modifier = Modifier
@@ -66,6 +64,7 @@ fun DrawingScreen() {
             )
         }
     }
+
     Row (
         modifier = Modifier,
         verticalAlignment = Alignment.Bottom,
@@ -74,39 +73,13 @@ fun DrawingScreen() {
 
         Button(
             onClick = {
-                drawBitmap?.let { saveBitmap(it) }
-                      },
+                drawViewModel.drawToBitmap(lines, strokeWidthInPx, bitmapWidth, bitmapHeight)
+                navController.popBackStack()
+            },
             modifier = Modifier
                 .padding(4.dp)
         ){
             Text("Save image")
         }
-
-    }
-}
-
-data class Line(
-    val start: Offset,
-    val end: Offset,
-    val color: Color = Color.Black,
-    val strokeWidth: Dp = 1.dp
-)
-
-fun saveBitmap(bitmap: Bitmap){
-
-    val filename = "sign_image.png"
-    val stream: OutputStream = ByteArrayOutputStream()
-
-    bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
-
-    val file = File(Environment.getExternalStorageDirectory().path + "/" + filename)
-
-    try {
-        file.createNewFile()
-        val fos = FileOutputStream(file)
-        fos.write((stream as ByteArrayOutputStream).toByteArray())
-        fos.close()
-    }catch (e: Exception){
-        e.printStackTrace()
     }
 }

@@ -1,6 +1,5 @@
 package com.example.rutescompartidesapp.view
 
-import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
 
@@ -21,9 +20,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.updatePadding
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -45,19 +42,26 @@ import com.example.rutescompartidesapp.view.edit_profile.EditProfileViewModel
 import com.example.rutescompartidesapp.view.faq.FaqScreen
 import com.example.rutescompartidesapp.view.faq.FaqViewModel
 import com.example.rutescompartidesapp.utils.Constants.ALL_PERMISSIONS
-import com.example.rutescompartidesapp.view.complete.ConfirmScreen
+import com.example.rutescompartidesapp.view.complete.CompleteScreen
+import com.example.rutescompartidesapp.view.confirm.CameraScreen
+import com.example.rutescompartidesapp.view.confirm.ConfirmScreen
+import com.example.rutescompartidesapp.view.confirm.components.draw.DrawScreen
+import com.example.rutescompartidesapp.view.confirm.viewmodel.CameraViewModel
+import com.example.rutescompartidesapp.view.confirm.viewmodel.DrawViewModel
 import com.example.rutescompartidesapp.view.login.LoginScreen
 import com.example.rutescompartidesapp.view.map.MapScreen
 import com.example.rutescompartidesapp.view.map.components.allOrders
-import com.example.rutescompartidesapp.view.map.components.allRoute
+import com.example.rutescompartidesapp.view.map.viewModels.MapViewModel
 import com.example.rutescompartidesapp.view.profile.ProfileScreen
 import com.example.rutescompartidesapp.view.profile.ProfileViewModel
 import com.example.rutescompartidesapp.view.publish_order.PublishOrderScreen
 import com.example.rutescompartidesapp.view.publish_route.PublishRouteScreen
 import com.example.rutescompartidesapp.view.route_detail.RoutesDetailScreen
+import com.example.rutescompartidesapp.view.routedetailgeneral.RouteDetailGeneralScreen
 import com.example.rutescompartidesapp.view.routes_order_list.RoutesOrderListScreen
 import com.example.rutescompartidesapp.view.signup.SignUpScreen
 import dagger.hilt.android.AndroidEntryPoint
+import org.osmdroid.util.GeoPoint
 
 private const val DEBUG_TAG = "Gestures"
 
@@ -79,6 +83,7 @@ class MainActivity : ComponentActivity() {
                 ) == PackageManager.PERMISSION_GRANTED
             }
         }
+
         /*
         OLD WAY TO HANLDE PERMISSIONS GRANTED
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED) {
@@ -102,6 +107,9 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             RutesCompartidesAppTheme {
+                val mapViewModel: MapViewModel = hiltViewModel()
+                val drawViewModel: DrawViewModel = hiltViewModel()
+                val cameraViewModel: CameraViewModel = hiltViewModel()
 
                 val navController = rememberNavController()
 
@@ -152,12 +160,16 @@ class MainActivity : ComponentActivity() {
                                 ),
                                 onSelectItem = {
                                     println("SELECTED_ITEM " + " onCreate: Selected Item ${it.name}")
-                                })
+                                }
+                            )
                        }
                     }
                 }
                 ) { paddingValues ->
                     ScreenNavigationConfiguration(
+                        mapViewModel,
+                        drawViewModel,
+                        cameraViewModel,
                         navController,
                         Modifier.padding(paddingValues),
                     )
@@ -168,24 +180,34 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun ScreenNavigationConfiguration(navController: NavHostController, paddingModifier: Modifier) {
+fun ScreenNavigationConfiguration( mapViewModel: MapViewModel,drawViewModel: DrawViewModel, cameraViewModel: CameraViewModel, navController: NavHostController, paddingModifier: Modifier) {
 
-    NavHost(navController = navController, startDestination = Screens.LoginScreen.route, modifier = paddingModifier) {
+    NavHost(navController = navController, startDestination = Screens.RouteDetailGeneralScreen.route, modifier = paddingModifier) {
 
         composable(Screens.MapScreen.route) {
-            MapScreen(navController)
+            MapScreen(navController, mapViewModel)
         }
-
         val order = allOrders[0]
-        val route = allRoute[0]
-        composable(Screens.ConfirmScreen.route){
-            ConfirmScreen(order)
+        composable(Screens.CompleteScreen.route) {
+            CompleteScreen(order)
         }
-
+        composable(Screens.ConfirmScreen.route){
+            ConfirmScreen(navController, cameraViewModel, drawViewModel)
+        }
+        composable(Screens.CameraScreen.route){
+            CameraScreen(navController, cameraViewModel)
+        }
+        composable(Screens.DrawScreen.route){
+            DrawScreen(navController, drawViewModel)
+        }
+        val startGeoPoint = GeoPoint(41.487125f.toDouble(),2.181916f.toDouble())
+        val endGeoPoint = GeoPoint(41.513485f.toDouble(),2.181916f.toDouble())
+        composable(Screens.RouteDetailGeneralScreen.route){
+            RouteDetailGeneralScreen(navController, mapViewModel,startGeoPoint,endGeoPoint)
+        }
         composable(Screens.RoutesOrderListScreen.route) {
             RoutesOrderListScreen(navController)
         }
-
         composable(Screens.ProfileScreen.route) {
             ProfileScreen(ProfileViewModel(), navController)
         }
@@ -211,7 +233,6 @@ fun ScreenNavigationConfiguration(navController: NavHostController, paddingModif
         composable(Screens.ComFuncionaScreen.route) {
             ComFuncionaScreen(navController)
         }
-
         composable(Screens.PublishRouteScreen.route) {
             PublishRouteScreen(navController)
         }

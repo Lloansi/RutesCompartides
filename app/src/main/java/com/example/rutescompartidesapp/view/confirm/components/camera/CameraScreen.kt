@@ -1,4 +1,4 @@
-package com.example.rutescompartidesapp.view.confirm.components.camera
+package com.example.rutescompartidesapp.view.confirm
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -40,14 +40,16 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.rutescompartidesapp.view.confirm.CameraViewModel
+import androidx.navigation.NavHostController
+import com.example.rutescompartidesapp.view.confirm.components.camera.CameraPreview
+import com.example.rutescompartidesapp.view.confirm.components.camera.PhotoBottomSheetContent
+import com.example.rutescompartidesapp.view.confirm.viewmodel.CameraViewModel
 import kotlinx.coroutines.launch
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CameraScreen(){
-    val cameraViewModel: CameraViewModel = hiltViewModel()
+fun CameraScreen(navController: NavHostController, cameraViewModel: CameraViewModel){
     val bitmaps by cameraViewModel.bitmaps.collectAsState()
 
     Surface(
@@ -71,6 +73,8 @@ fun CameraScreen(){
             sheetContent = {
                 PhotoBottomSheetContent(
                     bitmaps = bitmaps,
+                    navController = navController,
+                    viewModel = cameraViewModel,
                     modifier = Modifier
                         .fillMaxWidth()
                 )
@@ -121,7 +125,7 @@ fun CameraScreen(){
                         Icon(
                             modifier = Modifier.size(80.dp),
                             imageVector = Icons.Filled.Circle,
-                            tint = Color.White,
+                            tint = Color.Red,
                             contentDescription = "Take photo"
                         )
                     }
@@ -134,7 +138,6 @@ fun CameraScreen(){
                         /*
                         modifier = Modifier
                             .offset(16.dp, 16.dp)
-
                          */
                     ){
                         Icon(
@@ -187,3 +190,5 @@ private fun takePhoto(
         }
     )
 }
+
+

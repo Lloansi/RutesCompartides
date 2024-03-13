@@ -23,7 +23,6 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
@@ -54,8 +53,7 @@ object MapScreen: Screen {
 }
 
 @Composable
-fun MapScreen(navController: NavHostController) {
-    val mapViewModel: MapViewModel = hiltViewModel()
+fun MapScreen(navController: NavHostController, mapViewModel: MapViewModel) {
     val ordersFiltered by mapViewModel.filteredOrders.collectAsState()
     val routesFiltered by mapViewModel.filteredRoutes.collectAsState()
 
@@ -72,13 +70,12 @@ fun MapScreen(navController: NavHostController) {
             val percentagePaddingDesviament = 100
             val padding = (LocalDensity.current.density * percentagePaddingDesviament).dp
 
-            // Map
             // We get the context
             val ctx = LocalContext.current
 
-
             val iconMarkerClickPointer = ContextCompat.getDrawable(ctx, R.drawable.marker_svgrepo_com)
 
+            // Map
             MapViewContainer(viewModel = mapViewModel,ctx,iconMarkerClickPointer)
 
             // Search
@@ -90,6 +87,8 @@ fun MapScreen(navController: NavHostController) {
             ) {
                 SearchViewContainer()
             }
+
+            //Card orders/routes & Floatting buttons
             Box(modifier = Modifier
                 .align(Alignment.BottomCenter)){
                 Column(
@@ -99,30 +98,8 @@ fun MapScreen(navController: NavHostController) {
                     ExpandableFloatingButton(navController)
                     Spacer(modifier = Modifier.height(5.dp))
                     CardBottomMap(ordersFiltered, routesFiltered)
-
                 }
             }
-            /*
-            // InfoCards Bottom Screen
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp)
-                    .align(Alignment.BottomCenter)
-            ) {
-
-            }
-
-            // Floatting Button Expandable
-            Box(
-                modifier = Modifier
-                    .padding(16.dp)
-                    .padding(bottom = padding)
-                    .fillMaxSize(),
-                contentAlignment = Alignment.BottomEnd
-            ){
-                //ExpandableFloatingButton()
-            }*/
         }
     }
 }

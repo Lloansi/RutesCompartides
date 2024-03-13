@@ -14,12 +14,14 @@ sealed class Screens(
     object PublishOrderScreen: Screens("PublishOrderScreen")
 
     object FaqScreen: Screens("FaqScreen")
-
     object EditProfileScreen: Screens("EditProfileScreen")
-
     object ComFuncionaScreen: Screens("ComFuncionaScreen")
 
     object ConfirmScreen: Screens("ConfirmScreen")
+    object CompleteScreen: Screens("CompleteScreen")
+    object DrawScreen: Screens("DrawScreen")
+    object CameraScreen: Screens("CameraScreen")
+    object RouteDetailGeneralScreen: Screens("RouteDetailGeneralScreen")
 
 
 }

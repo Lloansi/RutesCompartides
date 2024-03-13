@@ -25,7 +25,7 @@ fun RouteMapViewContainer(viewModel: MapViewModel, ctx : Context, startPoint: Ge
 
     val agentNameMap = "rutescompartides"
 
-    val initialZoom = 20.0
+    val initialZoom = 16.0
 
     val lifecycleOwner = LocalLifecycleOwner.current
 

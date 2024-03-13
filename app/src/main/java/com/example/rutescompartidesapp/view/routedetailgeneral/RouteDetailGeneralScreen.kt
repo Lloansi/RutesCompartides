@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
@@ -43,6 +44,7 @@ import com.example.rutescompartidesapp.view.map.components.SearchView
 import com.example.rutescompartidesapp.view.map.components.SearchViewContainer
 import com.example.rutescompartidesapp.view.map.viewModels.MapViewModel
 import com.example.rutescompartidesapp.view.map.viewModels.SearchViewModel
+import com.example.rutescompartidesapp.view.routedetailgeneral.components.RouteMapViewContainer
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
@@ -63,17 +65,19 @@ object RouteDetailGeneralScreen: Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-        RouteDetailGeneralScreen()
     }
 }
 
 @Composable
-fun RouteDetailGeneralScreen() {
+fun RouteDetailGeneralScreen(navController: NavHostController, mapViewModel: MapViewModel, startPoint: GeoPoint, endPoint: GeoPoint) {
 
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
+        // We get the context
+        val ctx = LocalContext.current
 
+        RouteMapViewContainer(viewModel = mapViewModel,ctx, startPoint,endPoint)
     }
 }
