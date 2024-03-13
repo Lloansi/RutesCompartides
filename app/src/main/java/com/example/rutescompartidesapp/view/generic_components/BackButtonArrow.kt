@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 
 @Composable
-fun BackButtonArrow(navController: NavController, alignment: Alignment) {
+fun BackButtonArrow(navController: NavController, alignment: Alignment, screenRoute: String) {
     Box(
         modifier = Modifier
             .padding(top = 8.dp)
@@ -28,8 +28,8 @@ fun BackButtonArrow(navController: NavController, alignment: Alignment) {
         ) {
             IconButton(
                 onClick = {
-                    navController.navigate("ProfileScreen") {
-                        popUpTo("ProfileScreen") { inclusive = true }
+                    navController.navigate(screenRoute) {
+                        popUpTo(screenRoute) { inclusive = true }
                     }
                 }) {
                 Icon(

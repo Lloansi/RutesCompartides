@@ -118,4 +118,8 @@ dependencies {
 
     // Activity animations
     implementation("com.github.AtifSayings:Animatoo:1.0.1")
+
+    // Video player
+    implementation("com.google.android.exoplayer:exoplayer:2.19.1")
+    implementation("com.pierfrancescosoffritti.androidyoutubeplayer:core:11.1.0")
 }

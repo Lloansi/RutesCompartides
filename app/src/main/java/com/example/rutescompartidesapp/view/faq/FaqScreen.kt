@@ -80,7 +80,7 @@ fun FaqScreen(navController: NavHostController, viewModel: FaqViewModel) {
         ) {
             HeaderSphere(200.dp)
 
-            BackButtonArrow(navController = navController, alignment = Alignment.TopStart)
+            BackButtonArrow(navController = navController, alignment = Alignment.TopStart, "ProfileScreen")
 
             Text(
                 modifier = Modifier
