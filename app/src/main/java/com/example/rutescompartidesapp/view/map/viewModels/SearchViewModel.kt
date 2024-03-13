@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
-import com.example.rutescompartidesapp.domain.model.Route
+import com.example.rutescompartidesapp.data.domain.Route
 import kotlinx.coroutines.FlowPreview
 
 class SearchViewModel: ViewModel() {

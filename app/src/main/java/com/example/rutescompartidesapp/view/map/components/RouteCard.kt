@@ -32,10 +32,19 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.rutescompartidesapp.R
-import com.example.rutescompartidesapp.domain.model.Route
-import com.example.rutescompartidesapp.domain.model.Vehicle
+import com.example.rutescompartidesapp.data.domain.Route
+import com.example.rutescompartidesapp.data.domain.Route2
+import com.example.rutescompartidesapp.data.domain.Vehicle
 import com.example.rutescompartidesapp.view.map.fredokaOneFamily
 import com.example.rutescompartidesapp.view.map.openSansFamily
+import org.osmdroid.util.GeoPoint
+
+val allRoute2 = listOf(
+    Route2(
+        GeoPoint(41.563484f.toDouble(), 2.181916f.toDouble()),
+        GeoPoint(41.67175f.toDouble(), 2.193416f.toDouble())
+    )
+)
 
 val allRoute = listOf(
     Route(
@@ -45,9 +54,9 @@ val allRoute = listOf(
         "Masnou",
         5,
         4.56f,
-        41.487125f,
+        41.563484f,
         2.181916f,
-        41.67125f,
+        41.67175f,
         2.193416f
     ),
     Route(

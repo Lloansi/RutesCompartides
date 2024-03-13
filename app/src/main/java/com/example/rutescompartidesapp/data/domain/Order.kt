@@ -1,4 +1,4 @@
-package com.example.rutescompartidesapp.domain.model
+package com.example.rutescompartidesapp.data.domain
 
 import com.example.rutescompartidesapp.utils.roundTo1Decimal
 
@@ -17,11 +17,14 @@ data class Order (
     val lat: Float,
     val lon: Float
 ){
-    init {
-        packageHeight = packageHeight.roundTo1Decimal()
+
+    /*
+    init {   packageHeight = packageHeight.roundTo1Decimal()
         packageWidth = packageWidth.roundTo1Decimal()
         packageLongitude = packageLongitude.roundTo1Decimal()
         packageWeight = packageWeight.roundTo1Decimal()
     }
+     */
+
 
 }
