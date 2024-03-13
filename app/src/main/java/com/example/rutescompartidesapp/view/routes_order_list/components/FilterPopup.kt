@@ -61,6 +61,8 @@ import com.example.rutescompartidesapp.data.domain.ListQuery
 import com.example.rutescompartidesapp.ui.theme.BlueRC
 import com.example.rutescompartidesapp.ui.theme.GrayRC
 import com.example.rutescompartidesapp.ui.theme.MateBlackRC
+import com.example.rutescompartidesapp.view.components.TimePickerDialog
+import com.example.rutescompartidesapp.view.components.popups.ConditionScrollPopup
 import com.example.rutescompartidesapp.view.routes_order_list.viewmodels.FilterPopupViewModel
 import com.example.rutescompartidesapp.view.routes_order_list.viewmodels.RoutesOrderListViewModel
 
@@ -231,7 +233,7 @@ fun FilterPopup(routesOrderListViewModel: RoutesOrderListViewModel){
                                 value = horaSortidaText,
                                 onValueChange = filterPopupViewModel::onHoraArribadaChange,
                                 placeholder =  {
-                                    Text(text = "Hora de aribada", color = Color.Gray)
+                                    Text(text = "Hora de arribada", color = Color.Gray)
                                 },
                                 enabled = false,
                                 leadingIcon = {
@@ -324,9 +326,11 @@ fun FilterPopup(routesOrderListViewModel: RoutesOrderListViewModel){
                                             onClick = { filterPopupViewModel.onCheckChip("Isoterm") },
                                             label = {  if (isIsoterm) {
                                                 Text("Isoterm",
-                                                    color = Color.White)
+                                                    color = Color.White,
+                                                    style = MaterialTheme.typography.bodyLarge,)
                                             } else {
-                                                Text("Isoterm")
+                                                Text("Isoterm",
+                                                    style = MaterialTheme.typography.bodyLarge,)
                                             }
                                             },
                                             leadingIcon = {
@@ -347,9 +351,11 @@ fun FilterPopup(routesOrderListViewModel: RoutesOrderListViewModel){
                                             label = {
                                                 if (isRefrigerat) {
                                                     Text("Refrigerat",
-                                                        color = Color.White)
+                                                        color = Color.White,
+                                                        style = MaterialTheme.typography.bodyLarge,)
                                                 } else {
-                                                    Text("Refrigerat")
+                                                    Text("Refrigerat",
+                                                        style = MaterialTheme.typography.bodyLarge,)
                                                 }
                                             },
                                             leadingIcon = {
@@ -372,9 +378,11 @@ fun FilterPopup(routesOrderListViewModel: RoutesOrderListViewModel){
                                             onClick = { filterPopupViewModel.onCheckChip("Congelat") },
                                             label = {  if (isCongelat) {
                                                 Text("Congelat",
-                                                    color = Color.White)
+                                                    color = Color.White,
+                                                    style = MaterialTheme.typography.bodyLarge,)
                                             } else {
-                                                Text("Congelat")
+                                                Text("Congelat",
+                                                    style = MaterialTheme.typography.bodyLarge,)
                                             }
                                             },
                                             leadingIcon = {
@@ -394,9 +402,11 @@ fun FilterPopup(routesOrderListViewModel: RoutesOrderListViewModel){
                                             onClick = { filterPopupViewModel.onCheckChip("SenseHumitat") },
                                             label = { if (isSenseHumitat) {
                                                 Text("Sense Humitat",
-                                                    color = Color.White)
+                                                    color = Color.White,
+                                                    style = MaterialTheme.typography.bodyLarge,)
                                             } else {
-                                                Text("Sense Humitat")
+                                                Text("Sense Humitat",
+                                                    style = MaterialTheme.typography.bodyLarge,)
                                             } },
                                             leadingIcon = {
                                                 if (isSenseHumitat) {
@@ -538,10 +548,10 @@ fun OutlinedFilterTextField(value: String, onValueChange: (String) -> Unit, plac
         colors = TextFieldDefaults.colors(
             focusedIndicatorColor = MaterialTheme.colorScheme.primary,
             unfocusedIndicatorColor = Color.Gray,
-            disabledContainerColor = Color.White,
+            disabledContainerColor = MaterialTheme.colorScheme.background,
             disabledIndicatorColor = Color.Gray,
-            focusedContainerColor = Color.White,
-            unfocusedContainerColor = Color.White,
+            focusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
+            unfocusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
         ),
         keyboardOptions = KeyboardOptions(
             imeAction = ImeAction.Next),

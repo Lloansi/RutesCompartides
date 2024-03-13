@@ -49,6 +49,8 @@ import com.example.rutescompartidesapp.view.login.LoginScreen
 import com.example.rutescompartidesapp.view.map.MapScreen
 import com.example.rutescompartidesapp.view.profile.ProfileScreen
 import com.example.rutescompartidesapp.view.profile.ProfileViewModel
+import com.example.rutescompartidesapp.view.publish_order.PublishOrderScreen
+import com.example.rutescompartidesapp.view.publish_route.PublishRouteScreen
 import com.example.rutescompartidesapp.view.route_detail.RoutesDetailScreen
 import com.example.rutescompartidesapp.view.routes_order_list.RoutesOrderListScreen
 import com.example.rutescompartidesapp.view.signup.SignUpScreen
@@ -144,7 +146,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun ScreenNavigationConfiguration(navController: NavHostController, paddingModifier: Modifier) {
 
-    NavHost(navController = navController, startDestination = Screens.MapScreen.route, modifier = paddingModifier) {
+    NavHost(navController = navController, startDestination = Screens.RoutesOrderListScreen.route, modifier = paddingModifier) {
 
         composable(Screens.MapScreen.route) {
             MapScreen()
@@ -178,6 +180,13 @@ fun ScreenNavigationConfiguration(navController: NavHostController, paddingModif
         }
         composable(Screens.ComFuncionaScreen.route) {
             ComFuncionaScreen(navController)
+        }
+
+        composable(Screens.PublishRouteScreen.route) {
+            PublishRouteScreen(navController)
+        }
+        composable(Screens.PublishOrderScreen.route) {
+            PublishOrderScreen(navController)
         }
 
     }

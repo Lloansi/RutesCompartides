@@ -1,4 +1,4 @@
-package com.example.rutescompartidesapp.view.routes_order_list.components
+package com.example.rutescompartidesapp.view.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
