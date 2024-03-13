@@ -52,6 +52,7 @@ import com.example.rutescompartidesapp.R
 import com.example.rutescompartidesapp.ui.theme.MateBlackRC
 import com.example.rutescompartidesapp.ui.theme.fredokaOne
 import com.example.rutescompartidesapp.ui.theme.openSans
+import com.example.rutescompartidesapp.view.com_funciona.components.TextLink
 import com.example.rutescompartidesapp.view.generic_components.BackButtonArrow
 import com.example.rutescompartidesapp.view.generic_components.HeaderSphere
 import com.google.android.exoplayer2.MediaItem
@@ -138,10 +139,11 @@ fun YouTubePlayer(
 
 @Composable
 fun Description() {
+
     val description =
         "RutesCompartides és una eina per a compartir rutes de distribució entre productores. Així es minimitzen els costos econòmics, els impactes mediambientals i el temps que cada persona ha de dedicar al transport.\n" +
                 "\n" +
-                "A l'estil de com es fa per compartir cotxe, qui ja fa rutes de distribució les pot penjar aquí (i així omplir al màxim el seu vehicle) i qui vol fer arribar una comanda també la pot penjar aquí (i així trobar una ruta on sumar-se i evitar haver de fer la ruta expressament o requerir un servei de paqueteria).\n" +
+                "A l'estil de com es fa per compartir cotxe, qui ja fa rutes de distribució les pot afegir (i així omplir al màxim el seu vehicle) i qui vol fer arribar una comanda també la pot afegir (i així trobar una ruta on sumar-se i evitar haver de fer la ruta expressament o requerir un servei de paqueteria).\n" +
                 "\n" +
                 "I tot això amb opcions de rutes regulars, punts intermitjos, albarans, confirmació d'entrega, informe de ruta, xat intern i molt més. Més informació a FAQs.\n" +
                 "\n" +
@@ -160,9 +162,6 @@ fun Description() {
 
 @Composable
 fun RRSSButtons() {
-
-    val ctx = LocalContext.current
-    val mUriHandler = LocalUriHandler.current
 
     val annotatedEmailText = buildAnnotatedString {
         pushStringAnnotation(tag = "email", annotation = "mailto:rutescompartides@riseup.net")
@@ -198,23 +197,7 @@ fun RRSSButtons() {
                     .height(30.dp)
                     .padding(end = 8.dp)
             )
-            ClickableText(
-                text = annotatedEmailText,
-                style = TextStyle(
-                    color = if (isSystemInDarkTheme()) Color.White else MateBlackRC,
-                    fontWeight = FontWeight.SemiBold,
-                    fontFamily = openSans,
-                    fontSize = 13.sp
-                ),
-                onClick = { offset ->
-                    annotatedEmailText.getStringAnnotations(
-                        tag = "email",
-                        start = offset,
-                        end = offset
-                    ).firstOrNull()?.let {
-                        ctx.sendMail()
-                    }
-                })
+            TextLink(annotatedEmailText, "email")
         }
         Spacer(modifier = Modifier.size(height = 5.dp, width = 0.dp))
         Row(
@@ -228,36 +211,7 @@ fun RRSSButtons() {
                     .height(30.dp)
                     .padding(end = 8.dp)
             )
-            ClickableText(
-                text = annotatedTelegramString,
-                style = TextStyle(
-                    color = if (isSystemInDarkTheme()) Color.White else MateBlackRC,
-                    fontWeight = FontWeight.SemiBold,
-                    fontFamily = openSans,
-                    fontSize = 13.sp
-                ),
-                onClick = { offset ->
-                    annotatedTelegramString.getStringAnnotations(
-                        tag = "telegram",
-                        start = offset,
-                        end = offset
-                    ).firstOrNull()?.let {
-                        mUriHandler.openUri(it.item)
-                    }
-                })
+            TextLink(annotatedTelegramString, "telegram")
         }
-    }
-}
-
-fun Context.sendMail() {
-    try {
-        val intent = Intent(Intent.ACTION_SEND)
-        intent.type = "vnd.android.cursor.item/email"
-        intent.putExtra(Intent.EXTRA_EMAIL, arrayOf("rutescompartides@riseup.net"))
-        startActivity(intent)
-    } catch (e: ActivityNotFoundException) {
-        println("PRIMER ERROR$e")
-    } catch (t: Throwable) {
-        println("SEGUNDO ERROR$t")
     }
 }
