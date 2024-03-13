@@ -88,6 +88,7 @@ fun SignUpScreen(navController: NavController) {
     //User exists
     val userExists by signUpViewModel.userExists.collectAsStateWithLifecycle()
 
+
     //Column
     Column(modifier= Modifier
         .fillMaxSize()

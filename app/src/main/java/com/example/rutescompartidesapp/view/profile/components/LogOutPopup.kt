@@ -2,6 +2,7 @@ package com.example.rutescompartidesapp.view.profile.components
 
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -33,12 +34,13 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
+import androidx.navigation.NavController
 import com.example.rutescompartidesapp.ui.theme.MateBlackRC
 import com.example.rutescompartidesapp.view.profile.ProfileViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LogOutPopup(viewModelProfile: ProfileViewModel) {
+fun LogOutPopup(viewModelProfile: ProfileViewModel, navigator: NavController) {
 
     val isLogOutPopUpShowing by viewModelProfile.isLogOutPopUpShowing.collectAsState()
 
@@ -58,7 +60,7 @@ fun LogOutPopup(viewModelProfile: ProfileViewModel) {
                     .fillMaxWidth(0.9f)
                     .fillMaxHeight(0.2f),
                 shape = RoundedCornerShape(15.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White),
+                colors = CardDefaults.cardColors(containerColor = if (isSystemInDarkTheme()) Color(0xFF434343) else Color.White),
                 elevation = CardDefaults.cardElevation(defaultElevation = 5.dp)
             ) {
                 Column(
@@ -67,15 +69,20 @@ fun LogOutPopup(viewModelProfile: ProfileViewModel) {
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(text = "Estàs segur que desitges tancar sessió?", color = MateBlackRC)
+                    Text(text = "Estàs segur que desitges tancar sessió?", color = if (isSystemInDarkTheme()) Color.White else MateBlackRC )
                     Row(
                         modifier = Modifier
                             .fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.Center
                     ) {
-                        LogOutButton(buttonText = "No", { TODO("Not implemented yet") })
-                        LogOutButton(buttonText = "Si", { TODO("Not implemented yet") })
+                        LogOutButton(buttonText = "No") { viewModelProfile.onClickLogOut(false) }
+                        LogOutButton(buttonText = "Si") {
+                            viewModelProfile.onClickLogOut(false)
+                            navigator.navigate("LoginScreen") {
+                                popUpTo("LoginScreen") { inclusive = true }
+                            }
+                        }
                     }
                 }
             }

@@ -37,6 +37,8 @@ import com.example.rutescompartidesapp.R
 import com.example.rutescompartidesapp.navigation.Screens
 import com.example.rutescompartidesapp.ui.theme.MateBlackRC
 import com.example.rutescompartidesapp.ui.theme.RutesCompartidesAppTheme
+import com.example.rutescompartidesapp.view.faq.FaqScreen
+import com.example.rutescompartidesapp.view.faq.FaqViewModel
 import com.example.rutescompartidesapp.view.login.LoginScreen
 import com.example.rutescompartidesapp.view.map.MapScreen
 import com.example.rutescompartidesapp.view.profile.ProfileScreen
@@ -92,7 +94,8 @@ class MainActivity : ComponentActivity() {
                     mutableIntStateOf(0)
                 }
 
-                Scaffold(bottomBar = {
+                Scaffold(
+                    bottomBar = {
                     val navBackStackEntry by navController.currentBackStackEntryAsState()
                     val currentDestination = navBackStackEntry?.destination
                     Box {
@@ -137,21 +140,22 @@ fun ScreenNavigationConfiguration(navController: NavHostController, paddingModif
     NavHost(navController = navController, startDestination = Screens.MapScreen.route, modifier = paddingModifier) {
 
         composable(Screens.MapScreen.route) {
-            MapScreen()
+            LoginScreen(navController)
         }
-
         composable(Screens.RoutesOrderListScreen.route) {
             RoutesOrderListScreen()
         }
-
         composable(Screens.ProfileScreen.route) {
-            ProfileScreen(ProfileViewModel())
+            ProfileScreen(ProfileViewModel(), navController)
         }
         composable(Screens.LoginScreen.route) {
             LoginScreen(navController)
         }
         composable(Screens.SignUpScreen.route) {
             SignUpScreen(navController)
+        }
+        composable(Screens.FaqScreen.route) {
+            FaqScreen(navController, FaqViewModel())
         }
     }
 
