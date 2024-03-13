@@ -77,7 +77,9 @@ import com.example.rutescompartidesapp.view.components.MultilineTextField
 import com.example.rutescompartidesapp.view.components.PublishBackButton
 import com.example.rutescompartidesapp.view.components.PublishButton
 import com.example.rutescompartidesapp.view.components.PublishNextButton
-import com.example.rutescompartidesapp.view.routes_order_list.components.ConditionScrollPopup
+import com.example.rutescompartidesapp.view.components.popups.BasicPopup
+import com.example.rutescompartidesapp.view.components.popups.ConditionScrollPopup
+import com.example.rutescompartidesapp.view.components.popups.PopupScrolleable
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -104,6 +106,8 @@ fun PublishOrderScreen(navHost: NavHostController) {
     val isFirstFormCompleted by publishOrderViewModel.isFirstFormCompleted.collectAsStateWithLifecycle()
     val wantsCarpool by publishOrderViewModel.wantsCarpool.collectAsStateWithLifecycle()
     val isFlexDate by publishOrderViewModel.isFlexDate.collectAsStateWithLifecycle()
+    val isDataMinPopupShowing by publishOrderViewModel.isDataMinPopupShowing.collectAsStateWithLifecycle()
+    val isDataMaxPopupShowing by publishOrderViewModel.isDataMaxPopupShowing.collectAsStateWithLifecycle()
 
     // Screen 2 variables
     val packageNumber by publishOrderViewModel.packagesNum.collectAsStateWithLifecycle()
@@ -161,7 +165,9 @@ fun PublishOrderScreen(navHost: NavHostController) {
                         publishOrderViewModel,
                         originName,
                         destinationName,
+                        isDataMinPopupShowing,
                         minTimeArrival,
+                        isDataMaxPopupShowing,
                         maxTimeArrival,
                         isDatePickerShowing,
                         datePickerState,
@@ -443,7 +449,9 @@ private fun PublishOrderContent1(
     publishOrderViewModel: PublishOrderViewModel,
     originName: String,
     destinationName: String,
+    isDataMinPopupShowing: Boolean,
     minTimeArrival: String,
+    isDataMaxPopupShowing: Boolean,
     maxTimeArrival: String,
     isDatePickerShowing: Boolean,
     datePickerState: DatePickerState,
@@ -489,7 +497,7 @@ private fun PublishOrderContent1(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         IconButton(
-            onClick = { /*TODO*/ },
+            onClick = { publishOrderViewModel.onDataMinPopupShow(true) },
             colors = IconButtonDefaults.iconButtonColors(
                 containerColor = MaterialTheme.colorScheme.secondaryContainer
             )
@@ -513,6 +521,13 @@ private fun PublishOrderContent1(
             placeholder = "Data mínima d'arribada"
         )
     }
+    if (isDataMinPopupShowing){
+        BasicPopup(offset = IntOffset((LocalConfiguration.current.screenWidthDp / 2), (LocalConfiguration.current.screenHeightDp)),
+            onDismisRequest = { publishOrderViewModel.onDataMaxPopupShow(
+                false ) },
+            content = { Text(text = "Indicar a partir de quin moment podries tenir llesta la teva comanda per iniciar el transport.",
+                color = MaterialTheme.colorScheme.onBackground) })
+    }
     // MaxTimeArrival
     Row(
         modifier = Modifier
@@ -522,7 +537,7 @@ private fun PublishOrderContent1(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         IconButton(
-            onClick = { /*TODO*/ },
+            onClick = { publishOrderViewModel.onDataMaxPopupShow(true)  },
             colors = IconButtonDefaults.iconButtonColors(
                 containerColor = MaterialTheme.colorScheme.secondaryContainer
             )
@@ -532,6 +547,13 @@ private fun PublishOrderContent1(
                 contentDescription = "Frequency Icon",
                 tint = MaterialTheme.colorScheme.onSecondaryContainer
             )
+        }
+        if (isDataMaxPopupShowing){
+            BasicPopup(offset = IntOffset((LocalConfiguration.current.screenWidthDp / 2), (LocalConfiguration.current.screenHeightDp)),
+                onDismisRequest = { publishOrderViewModel.onDataMaxPopupShow(
+                    false ) },
+                content = { Text(text = "Indicar la data màxima en què ha d'arribar la teva comanda.",
+                    color = MaterialTheme.colorScheme.onBackground) })
         }
         // MaxTimeArrival Text field
         DateTimePickerTextField(

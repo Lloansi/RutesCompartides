@@ -25,14 +25,12 @@ import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Cancel
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.House
 import androidx.compose.material.icons.filled.QuestionMark
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ElevatedButton
-import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ElevatedFilterChip
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
@@ -60,8 +58,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Popup
-import androidx.compose.ui.window.PopupProperties
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.example.rutescompartidesapp.R
@@ -76,7 +72,8 @@ import com.example.rutescompartidesapp.view.components.PublishBackButton
 import com.example.rutescompartidesapp.view.components.PublishButton
 import com.example.rutescompartidesapp.view.components.PublishNextButton
 import com.example.rutescompartidesapp.view.components.StepTextField
-import com.example.rutescompartidesapp.view.routes_order_list.components.ConditionScrollPopup
+import com.example.rutescompartidesapp.view.components.popups.ConditionScrollPopup
+import com.example.rutescompartidesapp.view.components.popups.PopupScrolleable
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -98,7 +95,8 @@ fun PublishRouteScreen(navHost: NavHostController){
     val isDropdownExpanded by publishRouteViewModel.isDropdownExpanded.collectAsStateWithLifecycle()
     val routeFrequency by publishRouteViewModel.routeFrequency.collectAsStateWithLifecycle()
     val isFirstFormCompleted by publishRouteViewModel.isFirstFormCompleted.collectAsStateWithLifecycle()
-
+    val isFreqPopupShowing by publishRouteViewModel.isFreqPopupShowing.collectAsStateWithLifecycle()
+    val isCostPopupShowing by publishRouteViewModel.isCostPopupShowing.collectAsStateWithLifecycle()
     /*
     val timeDepart by publishRouteViewModel.timeDepart.collectAsStateWithLifecycle()
     val timeArrival by publishRouteViewModel.timeArrival.collectAsStateWithLifecycle()
@@ -163,6 +161,7 @@ fun PublishRouteScreen(navHost: NavHostController){
                     stepName1,
                     destinationName,
                     isDropdownExpanded,
+                    isFreqPopupShowing,
                     routeFrequency,
                     isFirstFormCompleted
                 )
@@ -172,6 +171,7 @@ fun PublishRouteScreen(navHost: NavHostController){
                         publishRouteViewModel,
                         availableSeats,
                         availableSpace,
+                        isCostPopupShowing,
                         costKm,
                         vehicle
                     )
@@ -232,58 +232,10 @@ private fun PublishRouteContent3(
             }
             // Conditions Popup
             if (isCondicionsPopupShowing) {
-                Popup(
-                    onDismissRequest = {
-                        publishRouteViewModel.onCondicionsPopupShow(
-                            false
-                        )
-                    },
-                    offset = IntOffset((LocalConfiguration.current.screenWidthDp / 2), -100),
-                    properties = PopupProperties(
-                        focusable = true,
-                        dismissOnBackPress = true,
-                        dismissOnClickOutside = true
-                    )
-                ) {
-                    ElevatedCard(
-                        modifier = Modifier
-                            .fillMaxWidth(0.65f),
-                        colors = CardDefaults.cardColors(containerColor = Color.White)
-                    ) {
-                        Row(Modifier.fillMaxWidth()) {
-                            Column(
-                                Modifier.fillMaxWidth(),
-                                verticalArrangement = Arrangement.Center,
-                                horizontalAlignment = Alignment.CenterHorizontally
-                            ) {
-                                Row(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .height(40.dp)
-                                        .background(Color.LightGray),
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    horizontalArrangement = Arrangement.Center
-                                ) {
-                                    Text(
-                                        "Condicions de transport",
-                                        style = MaterialTheme.typography.titleLarge,
-                                    )
-                                }
-                                Row(
-                                    Modifier
-                                        .height(10.dp)
-                                        .background(Color.LightGray)
-                                ) {
-                                    Divider(color = MateBlackRC, thickness = 4.dp)
-                                }
-                                Row(Modifier.padding(12.dp)) {
-                                    ConditionScrollPopup()
-                                }
-
-                            }
-                        }
-                    }
-                }
+                PopupScrolleable(offset = IntOffset((LocalConfiguration.current.screenWidthDp / 2), -100),
+                    title = "Condicions de transport" , onDismisRequest = { publishRouteViewModel.onCondicionsPopupShow(
+                        false ) },
+                    content = { ConditionScrollPopup() })
             }
         }
         // Chips & Info Button
@@ -537,6 +489,7 @@ private fun PublishRouteContent2(
     publishRouteViewModel: PublishRouteViewModel,
     availableSeats: Int,
     availableSpace: String,
+    isCostPopupShowing: Boolean,
     costKm: Float,
     vehicle: String
 ) {
@@ -560,14 +513,21 @@ private fun PublishRouteContent2(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         IconButton(
-            onClick = { /*TODO*/ },
+            onClick = { publishRouteViewModel.onCostPopupShow(true) },
             colors = IconButtonDefaults.iconButtonColors(
                 containerColor = MaterialTheme.colorScheme.secondaryContainer
             )
         ) {
             Icon(imageVector = Icons.Filled.QuestionMark,
-                contentDescription = "Frequency Icon",
+                contentDescription = "KMCost Icon",
                 tint = MaterialTheme.colorScheme.onSecondaryContainer)
+        }
+        if (isCostPopupShowing){
+            PopupScrolleable(offset = IntOffset((LocalConfiguration.current.screenWidthDp / 2), (LocalConfiguration.current.screenHeightDp)),
+                title = "Cost per KM" , onDismisRequest = { publishRouteViewModel.onCostPopupShow(
+                    false ) },
+                content = { Text(text = "Per ajudar amb  una estimació del preu del transport compartit. En cas que prefereixis  oferir una alternativa (productes a canvi del transport, altres monedes,  etc.) pots utilitzar el camp \"Comentaris\" (a sota) per especificar la  teva proposta i l'etiqueta \"intercanvi\" o \"monedasocial\" al camp  \"Etiquetes\"",
+                    color = MaterialTheme.colorScheme.onBackground) })
         }
         Text(
             modifier = Modifier.weight(2f),
@@ -615,6 +575,7 @@ private fun PublishRouteContent1(
     stepNameList: String,
     destinationName: String,
     isDropdownExpanded: Boolean,
+    isFreqPopupShowing: Boolean,
     routeFrequency: String,
     isFirstFormCompleted: Boolean
 ) {
@@ -648,13 +609,13 @@ private fun PublishRouteContent1(
                         publishRouteViewModel.setStepLocationName(index, stepNameList) }
                 )
                 IconButton(
-                    onClick = { /*TODO*/ },
+                    onClick = { publishRouteViewModel.removeStepLocation() },
                     colors = IconButtonDefaults.iconButtonColors(
                         containerColor = MaterialTheme.colorScheme.secondaryContainer
                     )
                 ) {
-                    Icon(imageVector = Icons.Filled.QuestionMark,
-                        contentDescription = "Frequency Icon",
+                    Icon(imageVector = Icons.Filled.Delete,
+                        contentDescription = "Delete Icon",
                         tint = MaterialTheme.colorScheme.onSecondaryContainer)
                 }
             }
@@ -709,7 +670,7 @@ private fun PublishRouteContent1(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         IconButton(
-            onClick = { /*TODO*/ },
+            onClick = { publishRouteViewModel.onFreqPopupShow(true) },
             colors = IconButtonDefaults.iconButtonColors(
                 containerColor = MateBlackRC
             )
@@ -720,6 +681,13 @@ private fun PublishRouteContent1(
             modifier = Modifier.weight(2f),
             text = "Freqüència de la ruta", color = MaterialTheme.colorScheme.onBackground
         )
+    }
+    if (isFreqPopupShowing){
+        PopupScrolleable(offset = IntOffset((LocalConfiguration.current.screenWidthDp / 2), (LocalConfiguration.current.screenHeightDp / 2)),
+            title = "Freqüència de la ruta" , onDismisRequest = { publishRouteViewModel.onFreqPopupShow(
+                false ) },
+            content = { Text(text = "Crearà totes  les rutes que pertoqui fins a la data final indicada, amb un màxim de 3  mesos. Recorda editar o eliminar les rutes si canvien a posteriori o  n'hi ha alguna que finalment no faràs. La freqüència mensual implica  aquell dia de la setmana i la mateixa setmana de cada mes (és a dir, el  1er dimecres de mes, o el 2on dijous de mes, etc).",
+                color = MaterialTheme.colorScheme.onBackground) })
     }
     Row(
         modifier = Modifier.fillMaxWidth(0.95f),

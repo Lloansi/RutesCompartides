@@ -114,6 +114,19 @@ class PublishOrderViewModel: ViewModel(){
         _isCondicionsPopupShowing.value = isShowing
     }
 
+    // Data Min Popup
+    private val _isDataMinPopupShowing = MutableStateFlow(false)
+    val isDataMinPopupShowing = _isDataMinPopupShowing
+    fun onDataMinPopupShow(isShowing: Boolean){
+        _isDataMinPopupShowing.value = isShowing
+    }
+    // Data Max Popup
+    private val _isDataMaxPopupShowing = MutableStateFlow(false)
+    val isDataMaxPopupShowing = _isDataMaxPopupShowing
+    fun onDataMaxPopupShow(isShowing: Boolean){
+        _isDataMaxPopupShowing.value = isShowing
+    }
+
     // MinTimeArrival
     private val _minTimeArrivalText = MutableStateFlow("")
     val minTimeArrivalText = _minTimeArrivalText.asStateFlow()

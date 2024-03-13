@@ -1,4 +1,4 @@
-package com.example.rutescompartidesapp.view.routes_order_list.components
+package com.example.rutescompartidesapp.view.components.popups
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight

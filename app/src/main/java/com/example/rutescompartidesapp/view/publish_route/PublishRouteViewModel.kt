@@ -231,6 +231,20 @@ class PublishRouteViewModel: ViewModel(){
         _isCondicionsPopupShowing.value = isShowing
     }
 
+    // Frequency Popup
+    private val _isFreqPopupShowing = MutableStateFlow(false)
+    val isFreqPopupShowing = _isFreqPopupShowing
+    fun onFreqPopupShow(isShowing: Boolean){
+        _isFreqPopupShowing.value = isShowing
+    }
+
+    // Cost KM Popup
+    private val _isCostPopupShowing = MutableStateFlow(false)
+    val isCostPopupShowing = _isCostPopupShowing
+    fun onCostPopupShow(isShowing: Boolean){
+        _isCostPopupShowing.value = isShowing
+    }
+
     // Comment
     private val _comment = MutableStateFlow("")
     val comment = _comment
