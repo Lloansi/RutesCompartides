@@ -35,6 +35,7 @@ import com.example.rutescompartidesapp.data.network.gotify.GotifyWebSocketClient
 import com.example.rutescompartidesapp.navigation.Screens
 import com.example.rutescompartidesapp.ui.theme.MateBlackRC
 import com.example.rutescompartidesapp.ui.theme.RutesCompartidesAppTheme
+import com.example.rutescompartidesapp.utils.Constants
 import com.example.rutescompartidesapp.view.login.LoginScreen
 import com.example.rutescompartidesapp.view.map.MapScreen
 import com.example.rutescompartidesapp.view.profile.ProfileScreen
@@ -58,11 +59,8 @@ class MainActivity : ComponentActivity() {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.INTERNET), 0)
         }
 
-
         webSocketClient = GotifyWebSocketClient()
-        val serverUrl = "ws://45.131.64.161:6969/connect"
-        val appToken = "AipC35.CrE8cP2v"
-        webSocketClient.connect(serverUrl, appToken)
+        webSocketClient.connect(Constants.GOTIFY_URL, Constants.GOTIFY_TOKEN)
 
         setContent {
             RutesCompartidesAppTheme {

@@ -16,6 +16,7 @@ class GotifyWebSocketClient {
         val listener = EchoWebSocketListener()
         val client = OkHttpClient()
         webSocket = client.newWebSocket(request, listener)
+        
         client.dispatcher.executorService.shutdown()
     }
 
