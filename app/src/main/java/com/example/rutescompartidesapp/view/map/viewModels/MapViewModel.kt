@@ -361,6 +361,12 @@ class MapViewModel:ViewModel() {
         }
     }
 
+    fun getCenterRoute(startLat: Double, startLong: Double, endLat: Double, endLong: Double): GeoPoint {
+        val centerLat = (startLat + endLat) / 2
+        val centerLong = (startLong + endLong) / 2
+        return GeoPoint(centerLat, centerLong)
+    }
+
     fun path(mapView: MapView){
 
         // THIS FUNCTION CREATES A SQUARE IN NY
