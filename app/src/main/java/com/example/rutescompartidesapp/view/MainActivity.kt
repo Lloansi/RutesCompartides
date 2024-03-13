@@ -44,8 +44,12 @@ import com.example.rutescompartidesapp.view.edit_profile.EditProfileScreen
 import com.example.rutescompartidesapp.view.edit_profile.EditProfileViewModel
 import com.example.rutescompartidesapp.view.faq.FaqScreen
 import com.example.rutescompartidesapp.view.faq.FaqViewModel
+import com.example.rutescompartidesapp.utils.Constants.ALL_PERMISSIONS
+import com.example.rutescompartidesapp.view.complete.ConfirmScreen
 import com.example.rutescompartidesapp.view.login.LoginScreen
 import com.example.rutescompartidesapp.view.map.MapScreen
+import com.example.rutescompartidesapp.view.map.components.allOrders
+import com.example.rutescompartidesapp.view.map.components.allRoute
 import com.example.rutescompartidesapp.view.profile.ProfileScreen
 import com.example.rutescompartidesapp.view.profile.ProfileViewModel
 import com.example.rutescompartidesapp.view.publish_order.PublishOrderScreen
@@ -64,7 +68,19 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         //mDetector = GestureDetectorCompat(this, MyGestureListener())
+
+        fun hasRequiredPermissions(): Boolean {
+            return ALL_PERMISSIONS.all {
+                ContextCompat.checkSelfPermission(
+                    applicationContext,
+                    it
+                ) == PackageManager.PERMISSION_GRANTED
+            }
+        }
+        /*
+        OLD WAY TO HANLDE PERMISSIONS GRANTED
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.INTERNET), 0)
         }
@@ -75,6 +91,15 @@ class MainActivity : ComponentActivity() {
             view.updatePadding(bottom = bottom)
             insets
         }
+         */
+
+        if (!hasRequiredPermissions()) {
+            ActivityCompat.requestPermissions(
+                this, ALL_PERMISSIONS, 0
+            )
+        }
+
+
         setContent {
             RutesCompartidesAppTheme {
 
@@ -145,10 +170,16 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun ScreenNavigationConfiguration(navController: NavHostController, paddingModifier: Modifier) {
 
-    NavHost(navController = navController, startDestination = Screens.MapScreen.route, modifier = paddingModifier) {
+    NavHost(navController = navController, startDestination = Screens.LoginScreen.route, modifier = paddingModifier) {
 
         composable(Screens.MapScreen.route) {
-            MapScreen()
+            MapScreen(navController)
+        }
+
+        val order = allOrders[0]
+        val route = allRoute[0]
+        composable(Screens.ConfirmScreen.route){
+            ConfirmScreen(order)
         }
 
         composable(Screens.RoutesOrderListScreen.route) {

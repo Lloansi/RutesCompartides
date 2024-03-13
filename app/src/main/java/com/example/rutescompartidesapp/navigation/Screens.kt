@@ -19,5 +19,7 @@ sealed class Screens(
 
     object ComFuncionaScreen: Screens("ComFuncionaScreen")
 
+    object ConfirmScreen: Screens("ConfirmScreen")
+
 
 }

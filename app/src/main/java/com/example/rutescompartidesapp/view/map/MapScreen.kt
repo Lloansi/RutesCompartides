@@ -24,6 +24,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
@@ -48,12 +49,12 @@ object MapScreen: Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-        MapScreen()
+        //MapScreen()
     }
 }
 
 @Composable
-fun MapScreen() {
+fun MapScreen(navController: NavHostController) {
     val mapViewModel: MapViewModel = hiltViewModel()
     val ordersFiltered by mapViewModel.filteredOrders.collectAsState()
     val routesFiltered by mapViewModel.filteredRoutes.collectAsState()
@@ -95,7 +96,7 @@ fun MapScreen() {
                     verticalArrangement = Arrangement.Bottom,
                     horizontalAlignment = Alignment.End
                 ) {
-                    ExpandableFloatingButton()
+                    ExpandableFloatingButton(navController)
                     Spacer(modifier = Modifier.height(5.dp))
                     CardBottomMap(ordersFiltered, routesFiltered)
 
