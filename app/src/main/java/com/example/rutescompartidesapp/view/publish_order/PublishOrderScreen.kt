@@ -69,17 +69,16 @@ import com.example.rutescompartidesapp.R
 import com.example.rutescompartidesapp.ui.theme.BlueRC
 import com.example.rutescompartidesapp.ui.theme.GrayRC
 import com.example.rutescompartidesapp.ui.theme.MateBlackRC
-import com.example.rutescompartidesapp.view.components.BasicTextField
-import com.example.rutescompartidesapp.view.components.DateTimePickerTextField
-import com.example.rutescompartidesapp.view.components.IconTextField
-import com.example.rutescompartidesapp.view.components.MeasurementsTextField
-import com.example.rutescompartidesapp.view.components.MultilineTextField
-import com.example.rutescompartidesapp.view.components.PublishBackButton
-import com.example.rutescompartidesapp.view.components.PublishButton
-import com.example.rutescompartidesapp.view.components.PublishNextButton
-import com.example.rutescompartidesapp.view.components.popups.BasicPopup
-import com.example.rutescompartidesapp.view.components.popups.ConditionScrollPopup
-import com.example.rutescompartidesapp.view.components.popups.PopupScrolleable
+import com.example.rutescompartidesapp.view.generic_components.BasicTextField
+import com.example.rutescompartidesapp.view.generic_components.DateTimePickerTextField
+import com.example.rutescompartidesapp.view.generic_components.IconTextField
+import com.example.rutescompartidesapp.view.generic_components.MeasurementsTextField
+import com.example.rutescompartidesapp.view.generic_components.MultilineTextField
+import com.example.rutescompartidesapp.view.generic_components.PublishBackButton
+import com.example.rutescompartidesapp.view.generic_components.PublishButton
+import com.example.rutescompartidesapp.view.generic_components.PublishNextButton
+import com.example.rutescompartidesapp.view.generic_components.popups.BasicPopup
+import com.example.rutescompartidesapp.view.generic_components.popups.ConditionScrollPopup
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

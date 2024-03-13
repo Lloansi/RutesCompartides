@@ -1,7 +1,6 @@
 package com.example.rutescompartidesapp.view.publish_route
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -11,7 +10,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -65,15 +63,15 @@ import com.example.rutescompartidesapp.ui.theme.BlueRC
 import com.example.rutescompartidesapp.ui.theme.GrayRC
 import com.example.rutescompartidesapp.ui.theme.MateBlackRC
 import com.example.rutescompartidesapp.ui.theme.OrangeRC
-import com.example.rutescompartidesapp.view.components.BasicTextField
-import com.example.rutescompartidesapp.view.components.IconTextField
-import com.example.rutescompartidesapp.view.components.MultilineTextField
-import com.example.rutescompartidesapp.view.components.PublishBackButton
-import com.example.rutescompartidesapp.view.components.PublishButton
-import com.example.rutescompartidesapp.view.components.PublishNextButton
-import com.example.rutescompartidesapp.view.components.StepTextField
-import com.example.rutescompartidesapp.view.components.popups.ConditionScrollPopup
-import com.example.rutescompartidesapp.view.components.popups.PopupScrolleable
+import com.example.rutescompartidesapp.view.generic_components.BasicTextField
+import com.example.rutescompartidesapp.view.generic_components.IconTextField
+import com.example.rutescompartidesapp.view.generic_components.MultilineTextField
+import com.example.rutescompartidesapp.view.generic_components.PublishBackButton
+import com.example.rutescompartidesapp.view.generic_components.PublishButton
+import com.example.rutescompartidesapp.view.generic_components.PublishNextButton
+import com.example.rutescompartidesapp.view.generic_components.StepTextField
+import com.example.rutescompartidesapp.view.generic_components.popups.ConditionScrollPopup
+import com.example.rutescompartidesapp.view.generic_components.popups.PopupScrolleable
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

@@ -1,4 +1,4 @@
-package com.example.rutescompartidesapp.view.components
+package com.example.rutescompartidesapp.view.generic_components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Spacer

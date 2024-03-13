@@ -3,9 +3,6 @@ package com.example.rutescompartidesapp.view.profile
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -26,32 +23,22 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
-import com.example.rutescompartidesapp.R
-import com.example.rutescompartidesapp.ui.theme.GrayRC
 import com.example.rutescompartidesapp.ui.theme.openSans
 import com.example.rutescompartidesapp.utils.Constants
-import com.example.rutescompartidesapp.view.faq.FaqViewModel
 import com.example.rutescompartidesapp.view.generic_components.HeaderSphere
 import com.example.rutescompartidesapp.view.profile.components.CreateCardsWithItems
 import com.example.rutescompartidesapp.view.profile.components.LogOutPopup
@@ -59,12 +46,6 @@ import com.example.rutescompartidesapp.view.profile.components.ProfileEditButton
 import com.example.rutescompartidesapp.view.profile.components.ReviewButtons
 import com.example.rutescompartidesapp.view.profile.components.routeProfileItemsList
 import com.example.rutescompartidesapp.view.profile.components.userProfileItemsList
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import okhttp3.Dispatcher
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

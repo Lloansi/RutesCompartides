@@ -61,8 +61,8 @@ import com.example.rutescompartidesapp.data.domain.ListQuery
 import com.example.rutescompartidesapp.ui.theme.BlueRC
 import com.example.rutescompartidesapp.ui.theme.GrayRC
 import com.example.rutescompartidesapp.ui.theme.MateBlackRC
-import com.example.rutescompartidesapp.view.components.TimePickerDialog
-import com.example.rutescompartidesapp.view.components.popups.ConditionScrollPopup
+import com.example.rutescompartidesapp.view.generic_components.TimePickerDialog
+import com.example.rutescompartidesapp.view.generic_components.popups.ConditionScrollPopup
 import com.example.rutescompartidesapp.view.routes_order_list.viewmodels.FilterPopupViewModel
 import com.example.rutescompartidesapp.view.routes_order_list.viewmodels.RoutesOrderListViewModel
 

@@ -31,7 +31,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import cafe.adriel.voyager.navigator.CurrentScreen
 import androidx.navigation.navArgument
 import com.PratikFagadiya.smoothanimationbottombar.model.SmoothAnimationBottomBarScreens
 import com.PratikFagadiya.smoothanimationbottombar.properties.BottomBarProperties
@@ -146,7 +145,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun ScreenNavigationConfiguration(navController: NavHostController, paddingModifier: Modifier) {
 
-    NavHost(navController = navController, startDestination = Screens.RoutesOrderListScreen.route, modifier = paddingModifier) {
+    NavHost(navController = navController, startDestination = Screens.ProfileScreen.route, modifier = paddingModifier) {
 
         composable(Screens.MapScreen.route) {
             MapScreen()
