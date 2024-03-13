@@ -5,24 +5,27 @@ import com.example.rutescompartidesapp.data.domain.RouteForList
 
 object ListConstants {
 
-    val routeList = listOf(
+    val routeList = mutableListOf(
         RouteForList("usuari",1, "Ruta 1", "Barcelona", "Tarragona",
-            listOf("Viladecans", "Castelldefels", "Vilanova i la Geltrú", "Torredembarra"),"2024-12-12", "12:00", listOf("diaria"),
+            listOf("Viladecans", "Castelldefels", "Vilanova i la Geltrú", "Torredembarra"),"2024-12-12", "12:00",
+            "2024-12-13", "14:00", listOf("diaria"),
             false, false, false, true),
         RouteForList("usuari", 2, "Ruta 2", "Girona", "Lleida",
-            null, "2024-05-08", "14:00", listOf("setmanal"),
+            null, "2024-05-08", "14:00",
+            "2024-05-09", "12:00", listOf("setmanal"),
             true, true, false, true),
         RouteForList("frodobaggins",3, "A Mordor", "Hobitton", "Mordor",
-            listOf("Bree", "Rivendell", "Moria", "Lothlorien", "Cirith Ungol"),"2024-10-10", "14:00", listOf(),
+            listOf("Bree", "Rivendell", "Moria", "Lothlorien", "Cirith Ungol"),"2024-10-10", "14:00",
+            "2024-12-12", "12:12", listOf(),
             false, false, false, false),
         RouteForList("usuari",4, "Ruta 4", "Manresa", "Terrasa",
-            null, "2024-04-17", "14:00", listOf("bisetmanal"),
+            null, "2024-04-17", "14:00", "2024-04-17", "21:00", listOf("bisetmanal"),
             true, true, false, true),
         RouteForList("usuari",5, "Ruta 5", "Manresa", "Barcelona",
-            null, "2024-03-26", "20:00", listOf("setmanal"),
+            null, "2024-03-26", "20:00","2024-03-26", "23:15", listOf("setmanal"),
             true, true, false, true),
     )
-    val orderList = listOf(
+    val orderList = mutableListOf(
         OrderForList("ivan",1, "Colinabos", "Barcelona", "Tarragona",
             "2024-12-12", "12:00", listOf("hortalizes"),
             true, false, false, true),

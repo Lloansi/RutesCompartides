@@ -27,6 +27,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavHostController
 import com.example.rutescompartidesapp.view.routes_order_list.viewmodels.RoutesOrderListViewModel
 import com.example.rutescompartidesapp.view.routes_order_list.viewmodels.TabRowViewModel
 
@@ -38,7 +39,7 @@ data class TabItems(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun TabRows(routesOrderListViewModel: RoutesOrderListViewModel){
+fun TabRows(routesOrderListViewModel: RoutesOrderListViewModel, navController: NavHostController){
     val tabRowViewModel: TabRowViewModel = hiltViewModel()
     val selectedTabIndex by tabRowViewModel.selectedTabIndex.collectAsStateWithLifecycle()
     val tabItems = tabRowViewModel.tabItems
@@ -104,7 +105,7 @@ fun TabRows(routesOrderListViewModel: RoutesOrderListViewModel){
                             }else {
                                 items(routes.size) { index ->
                                     Spacer(modifier = Modifier.padding(8.dp))
-                                    RouteCard(route = routes[index])
+                                    RouteCard(route = routes[index], navController)
                                 }
                             }
                         } else {
@@ -115,7 +116,7 @@ fun TabRows(routesOrderListViewModel: RoutesOrderListViewModel){
                             } else {
                                     items(orders.size) { index ->
                                         Spacer(modifier = Modifier.padding(8.dp))
-                                        OrderCard(order = orders[index])
+                                        OrderCard(order = orders[index], navController)
                                     }
                             }
                         }

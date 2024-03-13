@@ -122,9 +122,9 @@ class RoutesOrderListViewModel: ViewModel() {
         val filteredRoutes = getFilteredRoutes(activeFilters, listQuery)
         val filteredOrders = getFilteredOrders(activeFilters, listQuery)
 
-        // Reassing the value of the routes and orders to the filtered ones
-        _routes.value = filteredRoutes
-        _orders.value = filteredOrders
+        // Reassign the value of the routes and orders to the filtered ones
+        _routes.value = filteredRoutes.toMutableList()
+        _orders.value = filteredOrders.toMutableList()
 
         _isSearching.update { false }
 

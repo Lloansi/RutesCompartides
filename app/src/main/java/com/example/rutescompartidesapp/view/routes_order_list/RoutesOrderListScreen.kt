@@ -28,6 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavHostController
 import com.example.rutescompartidesapp.view.routes_order_list.components.FilterPopup
 import com.example.rutescompartidesapp.view.routes_order_list.components.TabRows
 import com.example.rutescompartidesapp.view.routes_order_list.viewmodels.FilterPopupViewModel
@@ -36,7 +37,7 @@ import com.example.rutescompartidesapp.view.routes_order_list.viewmodels.RoutesO
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RoutesOrderListScreen(){
+fun RoutesOrderListScreen(navController: NavHostController){
     val routeOrderListViewModel: RoutesOrderListViewModel = hiltViewModel()
     val filterPopupViewModel: FilterPopupViewModel = hiltViewModel()
     val searchText by routeOrderListViewModel.searchText.collectAsStateWithLifecycle()
@@ -106,13 +107,8 @@ fun RoutesOrderListScreen(){
         }
         // Tabs and lists
         Row (Modifier.fillMaxWidth()) {
-            TabRows(routeOrderListViewModel)
+            TabRows(routeOrderListViewModel, navController)
         }
     }
 }
 
-@Preview( showBackground = true)
-@Composable
-fun RoutesOrderListScreenPreview() {
-    RoutesOrderListScreen()
-}
