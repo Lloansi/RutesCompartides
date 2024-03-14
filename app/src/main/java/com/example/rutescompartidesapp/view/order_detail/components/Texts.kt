@@ -14,7 +14,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -47,12 +46,12 @@ fun TwoTexts(value1: String, value2: String) {
 }
 
 @Composable
-fun DetailsConfirm(icon : ImageVector, heading: String, value : String, padding : Dp = 0.dp, color : Color = MaterialTheme.colorScheme.primary) {
+fun DetailsConfirm(icon : Int, heading: String, value : String, padding : Dp = 0.dp, color : Color = MaterialTheme.colorScheme.primary) {
     Row (
         verticalAlignment = Alignment.CenterVertically
     ){
         Icon(
-            imageVector = icon,
+            painter = painterResource(id = icon),
             tint = color,
             contentDescription = null,
             modifier = Modifier
@@ -80,8 +79,8 @@ fun IconWithText(icon: Int, value: String) {
         verticalAlignment = Alignment.CenterVertically
     ){
         Icon(painter = painterResource(icon), contentDescription = null, modifier = Modifier
-            .height(LocalConfiguration.current.screenHeightDp.dp/25)
-            .width(LocalConfiguration.current.screenWidthDp.dp/10)
+            .height(LocalConfiguration.current.screenHeightDp.dp / 25)
+            .width(LocalConfiguration.current.screenWidthDp.dp / 10)
         )
         Spacer(modifier = Modifier.width(LocalConfiguration.current.screenWidthDp.dp/75))
         Text(text = value, fontSize = 14.sp)

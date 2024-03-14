@@ -18,30 +18,12 @@ class RouteDetailViewModel (interactionList: List<RouteInteraction>): ViewModel(
     private val _isCompletePopupShowing = MutableStateFlow(false)
     val isCompletePopupShowing = _isCompletePopupShowing.asStateFlow()
 
-    fun acceptOrder(routeInteraction: RouteInteraction){
-        viewModelScope.launch {
-            _interactions.value[interactions.value.indexOf(routeInteraction)].status = "Acceptada"
-            _interactions.value = interactions.value
-
-        }
+    fun modifyInteractionStatus(routeInteraction: RouteInteraction, status: String){
+        val newList = interactions.value
+        newList[interactions.value.indexOf(routeInteraction)].status = status
+        _interactions.value = newList
     }
-    fun declineOrder(routeInteraction: RouteInteraction){
-        viewModelScope.launch {
-            interactions.value[interactions.value.indexOf(routeInteraction)].status = "Declinada"
-            _interactions.value = interactions.value
-        }
 
-        /*
-        _interactions.update { list ->
-         list[list.indexOf(routeInteraction)].apply {
-                status = "Declinada"
-            }
-            _interactions.value = list
-            list
-        }
-         */
-
-    }
 
     fun showCompletePopup(isShowing: Boolean){
         _isCompletePopupShowing.value = isShowing

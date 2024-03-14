@@ -69,7 +69,7 @@ fun RouteInteractionCard(interaction: RouteInteraction, routeDetailViewModel: Ro
             button2Text = "Declinar"
             button2Color = RedRC
             button2Icon = Icons.Default.Cancel
-            button2OnClick = { routeDetailViewModel.declineOrder(interaction) }
+            button2OnClick = { routeDetailViewModel.modifyInteractionStatus(interaction, "Declinada") }
 
         }
         "Entregada" -> {
@@ -86,11 +86,11 @@ fun RouteInteractionCard(interaction: RouteInteraction, routeDetailViewModel: Ro
             button1Text = "Acceptar"
             button1Color = MaterialTheme.colorScheme.primary
             button1Icon = Icons.Filled.Check
-            button1OnClick = { routeDetailViewModel.acceptOrder(interaction) }
+            button1OnClick = { routeDetailViewModel.modifyInteractionStatus(interaction, "Acceptada") }
             button2Text = "Declinar"
             button2Color = RedRC
             button2Icon = Icons.Filled.Cancel
-            button2OnClick = { routeDetailViewModel.declineOrder(interaction) }
+            button2OnClick = { routeDetailViewModel.modifyInteractionStatus(interaction, "Declinada") }
             button1IconTint = Color.White
             button2IconTint = Color.Black
             chipTextColor = Color.Black

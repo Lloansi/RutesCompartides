@@ -16,7 +16,9 @@ import androidx.compose.material.icons.filled.Backpack
 import androidx.compose.material.icons.filled.EnergySavingsLeaf
 import androidx.compose.material.icons.filled.PanoramaWideAngle
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -34,11 +36,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.example.rutescompartidesapp.R
 import com.example.rutescompartidesapp.data.domain.Order
 import com.example.rutescompartidesapp.data.domain.RouteForList
 import com.example.rutescompartidesapp.view.order_detail.components.AcceptDenyContainer
@@ -56,10 +62,10 @@ fun OrderDetailScreen(packageId: Int, navHost: NavHostController) {
 
     val completeViewModel: CompleteViewModel = hiltViewModel()
     val isVisible by completeViewModel.isVisible.collectAsState()
-
     val responsiveHeight = LocalConfiguration.current.screenHeightDp.dp
     val responsiveWidth = LocalConfiguration.current.screenWidthDp.dp
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+
     Scaffold( modifier = Modifier
         .fillMaxSize()
         .nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -88,62 +94,69 @@ fun OrderDetailScreen(packageId: Int, navHost: NavHostController) {
             ),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally) {
+
+            CompleteCard(order, responsiveHeight, isVisible, completeViewModel)
+
         }
-        CompleteCard(order, responsiveHeight, isVisible, completeViewModel)
-
     }
-
 }
 
 @Composable
 fun CompleteCard(order: Order, responsiveHeight: Dp, isVisible: Boolean, completeViewModel: CompleteViewModel) {
     val mateBlack = Color(0xFF282826)
-    Card (
-        modifier = Modifier
-            .fillMaxWidth(),
-    ){
-        TopCardInfo(mateBlack = mateBlack, order = order)
-        Column (
+    ElevatedCard (modifier = Modifier.fillMaxWidth(),
+        colors = CardDefaults.elevatedCardColors(
+            contentColor = MaterialTheme.colorScheme.onBackground,
+            containerColor = MaterialTheme.colorScheme.background)) {
+        TopCardInfo(order = order)
+        Column(
             modifier = Modifier
-                .padding()
-                .padding(
-                    start = LocalConfiguration.current.screenWidthDp.dp / 15,
+                .padding(start = LocalConfiguration.current.screenWidthDp.dp / 15,
                     end = LocalConfiguration.current.screenWidthDp.dp / 15
                 )
         ){
             Column (
                 modifier = Modifier
-                    .padding()
-                    .padding(bottom = responsiveHeight / 90)
+                    .padding(bottom = responsiveHeight / 90, top = 8.dp)
             ){
                 Row (
                     verticalAlignment = Alignment.CenterVertically
                 ){
-                    Text(text = "Min.Sortida:",
-                        style = MaterialTheme.typography.bodyLarge.copy(
-                            fontWeight = FontWeight.Bold
-                        )
-                    )
-                    Text(text = order.packageStartingDate)
-                    Text(text = "14:55")
+                    Text(text = buildAnnotatedString {
+                        withStyle(
+                            style = SpanStyle(
+                                fontWeight = FontWeight.Bold,
+
+                                )
+                        ) {
+                            append("Min Sortida: ")
+                        }
+                        append(order.packageStartingDate+" 14:55")
+                    },
+                        color = MaterialTheme.colorScheme.onBackground)
                 }
 
                 Row (
                     verticalAlignment = Alignment.CenterVertically
                 ){
-                    Text(text = "Min.Arribada:",
-                        style = MaterialTheme.typography.bodyLarge.copy(
-                            fontWeight = FontWeight.Bold
-                        )
-                    )
-                    Text(text = order.packageEndDate)
-                    Text(text = "15:40")
+                    Text(text = buildAnnotatedString {
+                        withStyle(
+                            style = SpanStyle(
+                                fontWeight = FontWeight.Bold,
+
+                                )
+                        ) {
+                            append("Min Arribada: ")
+                        }
+                        append(order.packageEndDate+" 15:40")
+                    },
+                        color = MaterialTheme.colorScheme.onBackground)
                 }
             }
             Column {
-                DetailsConfirm(Icons.Filled.Backpack, heading = "Total Paquets", value = order.packageQuantity.toString(), padding = 8.dp)
-                Spacer(modifier = Modifier.height(responsiveHeight/90))
-                DetailsConfirm(Icons.Filled.PanoramaWideAngle, heading = "Dimensions total", value = "", padding = 8.dp)
+                DetailsConfirm( R.drawable.carrier_icon_svg, heading = "Total Paquets", value = order.packageQuantity.toString(), padding = 8.dp)
+                Spacer(modifier = Modifier.padding(8.dp))
+                DetailsConfirm( R.drawable.dimensions_svg_icon, heading = "Dimensions total", value = "", padding = 8.dp)
 
             }
                 Row (
@@ -180,8 +193,8 @@ fun CompleteCard(order: Order, responsiveHeight: Dp, isVisible: Boolean, complet
                 ),
             verticalArrangement = Arrangement.Center
         ){
-            DetailsConfirm(Icons.Filled.EnergySavingsLeaf, heading = "CO₂ estalviat", value = "4.0 kg", padding = 8.dp )
-            DetailsConfirm(Icons.Filled.AttachMoney, heading = "Valor orientatiu", value = "500 €", padding = 8.dp)
+            DetailsConfirm( R.drawable.co2_svg_icon, heading = "CO₂ estalviat", value = "4.0 kg", padding = 8.dp )
+            DetailsConfirm( R.drawable.money_svg_icon, heading = "Valor orientatiu", value = "500 €", padding = 8.dp)
         }
 
         Spacer(modifier = Modifier.height(responsiveHeight / 40))

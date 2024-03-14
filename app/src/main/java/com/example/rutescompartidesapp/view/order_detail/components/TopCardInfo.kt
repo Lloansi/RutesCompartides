@@ -11,6 +11,7 @@ import androidx.compose.material.icons.outlined.Flag
 import androidx.compose.material.icons.outlined.Route
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -24,18 +25,16 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.rutescompartidesapp.data.domain.Order
+import com.example.rutescompartidesapp.ui.theme.MateBlackRC
 
 
 @Composable
-fun TopCardInfo(mateBlack : Color, order : Order) {
-    Card (
-        modifier = Modifier
-            .fillMaxWidth(),
-        colors = CardDefaults.cardColors(
-            containerColor = mateBlack
-        )
-
-    ){
+fun TopCardInfo(order : Order) {
+    ElevatedCard (
+        modifier = Modifier.fillMaxWidth(),colors = CardDefaults.elevatedCardColors(
+        containerColor = MateBlackRC)
+    )
+    {
         Column (
             modifier = Modifier
                 .fillMaxWidth()
