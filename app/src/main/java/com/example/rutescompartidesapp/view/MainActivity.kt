@@ -43,27 +43,26 @@ import com.example.rutescompartidesapp.view.faq.FaqScreen
 import com.example.rutescompartidesapp.view.faq.FaqViewModel
 import com.example.rutescompartidesapp.utils.Constants.ALL_PERMISSIONS
 import com.example.rutescompartidesapp.view.order_detail.OrderDetailScreen
-import com.example.rutescompartidesapp.view.confirm_delivery.CameraScreen
+import com.example.rutescompartidesapp.view.confirm_delivery.components.camera.CameraScreen
 import com.example.rutescompartidesapp.view.confirm_delivery.ConfirmScreen
 import com.example.rutescompartidesapp.view.confirm_delivery.components.draw.DrawScreen
 import com.example.rutescompartidesapp.view.confirm_delivery.viewmodel.CameraViewModel
 import com.example.rutescompartidesapp.view.confirm_delivery.viewmodel.DrawViewModel
 import com.example.rutescompartidesapp.view.login.LoginScreen
 import com.example.rutescompartidesapp.view.map.MapScreen
-import com.example.rutescompartidesapp.view.map.components.allOrders
 import com.example.rutescompartidesapp.view.map.viewModels.MapViewModel
 import com.example.rutescompartidesapp.view.profile.ProfileScreen
 import com.example.rutescompartidesapp.view.profile.ProfileViewModel
 import com.example.rutescompartidesapp.view.publish_order.PublishOrderScreen
 import com.example.rutescompartidesapp.view.publish_route.PublishRouteScreen
-import com.example.rutescompartidesapp.view.route_detail.RoutesDetailScreen
-import com.example.rutescompartidesapp.view.routedetailgeneral.RouteDetailGeneralScreen
+import com.example.rutescompartidesapp.view.route_detail.route_detail_driver.RouteDetailDriverScreen
+import com.example.rutescompartidesapp.view.route_detail.RouteDetailGeneralScreen
 import com.example.rutescompartidesapp.view.routes_order_list.RoutesOrderListScreen
+import com.example.rutescompartidesapp.view.routes_order_list.viewmodels.FilterPopupViewModel
+import com.example.rutescompartidesapp.view.routes_order_list.viewmodels.RoutesOrderListViewModel
 import com.example.rutescompartidesapp.view.signup.SignUpScreen
 import dagger.hilt.android.AndroidEntryPoint
-import org.osmdroid.util.GeoPoint
 
-private const val DEBUG_TAG = "Gestures"
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -108,8 +107,10 @@ class MainActivity : ComponentActivity() {
         setContent {
             RutesCompartidesAppTheme {
                 val mapViewModel: MapViewModel = hiltViewModel()
-                val drawViewModel: DrawViewModel = hiltViewModel()
-                val cameraViewModel: CameraViewModel = hiltViewModel()
+                val drawViewModel = DrawViewModel()
+                val cameraViewModel = CameraViewModel()
+                val filterPopupViewModel = FilterPopupViewModel()
+                val routeOrderListViewModel = RoutesOrderListViewModel()
 
                 val navController = rememberNavController()
 
@@ -170,6 +171,8 @@ class MainActivity : ComponentActivity() {
                         mapViewModel,
                         drawViewModel,
                         cameraViewModel,
+                        routeOrderListViewModel,
+                        filterPopupViewModel,
                         navController,
                         Modifier.padding(paddingValues),
                     )
@@ -180,9 +183,11 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun ScreenNavigationConfiguration( mapViewModel: MapViewModel,drawViewModel: DrawViewModel, cameraViewModel: CameraViewModel, navController: NavHostController, paddingModifier: Modifier) {
+fun ScreenNavigationConfiguration( mapViewModel: MapViewModel,drawViewModel: DrawViewModel, cameraViewModel: CameraViewModel,
+                                   routeOrderListViewModel: RoutesOrderListViewModel, filterPopupViewModel: FilterPopupViewModel,
+                                   navController: NavHostController, paddingModifier: Modifier) {
 
-    NavHost(navController = navController, startDestination = Screens.OrderDetailScreen.route, modifier = paddingModifier) {
+    NavHost(navController = navController, startDestination = Screens.RouteDetailGeneralScreen.route, modifier = paddingModifier) {
 
         composable(Screens.MapScreen.route) {
             MapScreen(navController, mapViewModel)
@@ -204,13 +209,17 @@ fun ScreenNavigationConfiguration( mapViewModel: MapViewModel,drawViewModel: Dra
         composable(Screens.DrawScreen.route){
             DrawScreen(navController, drawViewModel)
         }
-        val startGeoPoint = GeoPoint(41.487125f.toDouble(),2.181916f.toDouble())
-        val endGeoPoint = GeoPoint(41.513485f.toDouble(),2.181916f.toDouble())
-        composable(Screens.RouteDetailGeneralScreen.route){
-            RouteDetailGeneralScreen(navController, mapViewModel,startGeoPoint,endGeoPoint)
+
+        composable(Screens.RouteDetailGeneralScreen.route,
+            arguments = listOf(navArgument("routeId"){
+            type = NavType.IntType
+        })) {
+            val routeID = it.arguments?.getInt("routeId")
+            RouteDetailGeneralScreen(navController, 1, mapViewModel, routeOrderListViewModel)
         }
+
         composable(Screens.RoutesOrderListScreen.route) {
-            RoutesOrderListScreen(navController)
+            RoutesOrderListScreen(navController, routeOrderListViewModel, filterPopupViewModel)
         }
         composable(Screens.ProfileScreen.route) {
             ProfileScreen(ProfileViewModel(), navController)
@@ -221,12 +230,12 @@ fun ScreenNavigationConfiguration( mapViewModel: MapViewModel,drawViewModel: Dra
         composable(Screens.SignUpScreen.route) {
             SignUpScreen(navController)
         }
-        composable(Screens.RouteDetailScreen.route,
+        composable(Screens.RouteDetailDriverScreen.route,
             arguments = listOf(navArgument("routeId"){
             type = NavType.IntType
         })) {
             val routeID = it.arguments?.getInt("routeId")
-            RoutesDetailScreen(routeID!!, navController)
+            RouteDetailDriverScreen(routeID!!, navController)
         }
         composable(Screens.FaqScreen.route) {
             FaqScreen(navController, FaqViewModel())

@@ -24,9 +24,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.example.rutescompartidesapp.view.routes_order_list.components.FilterPopup
@@ -37,9 +35,7 @@ import com.example.rutescompartidesapp.view.routes_order_list.viewmodels.RoutesO
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RoutesOrderListScreen(navController: NavHostController){
-    val routeOrderListViewModel: RoutesOrderListViewModel = hiltViewModel()
-    val filterPopupViewModel: FilterPopupViewModel = hiltViewModel()
+fun RoutesOrderListScreen(navController: NavHostController, routeOrderListViewModel: RoutesOrderListViewModel, filterPopupViewModel: FilterPopupViewModel) {
     val searchText by routeOrderListViewModel.searchText.collectAsStateWithLifecycle()
     val isSearching by routeOrderListViewModel.isSearching.collectAsStateWithLifecycle()
     val areFilterActive by routeOrderListViewModel.activeFilters.collectAsStateWithLifecycle()
@@ -103,7 +99,7 @@ fun RoutesOrderListScreen(navController: NavHostController){
                 }
             }
             // Filter Popup
-            FilterPopup(routeOrderListViewModel)
+            FilterPopup(routeOrderListViewModel, filterPopupViewModel)
         }
         // Tabs and lists
         Row (Modifier.fillMaxWidth()) {

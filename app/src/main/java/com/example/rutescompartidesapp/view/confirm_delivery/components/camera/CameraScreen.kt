@@ -1,4 +1,4 @@
-package com.example.rutescompartidesapp.view.confirm_delivery
+package com.example.rutescompartidesapp.view.confirm_delivery.components.camera
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -40,8 +40,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavHostController
-import com.example.rutescompartidesapp.view.confirm_delivery.components.camera.CameraPreview
-import com.example.rutescompartidesapp.view.confirm_delivery.components.camera.PhotoBottomSheetContent
 import com.example.rutescompartidesapp.view.confirm_delivery.viewmodel.CameraViewModel
 import kotlinx.coroutines.launch
 

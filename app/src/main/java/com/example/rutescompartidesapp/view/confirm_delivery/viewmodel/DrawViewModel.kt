@@ -22,10 +22,6 @@ class DrawViewModel: ViewModel() {
     private val _drawBitmap = MutableStateFlow<Bitmap?>(null)
     val drawBitmap = _drawBitmap.asStateFlow()
 
-    fun canvasToBitmap(canvas : Canvas){
-
-    }
-
     fun saveBitmapToGallery(bitmap: Bitmap) {
         viewModelScope.launch(Dispatchers.IO) {
             val fileName = "drawing_${System.currentTimeMillis()}.png"
@@ -43,7 +39,6 @@ class DrawViewModel: ViewModel() {
             }
         }
     }
-
 
     fun drawToBitmap(lines: List<Line>, strokeWidthInPx: Float, width: Int, height: Int) {
         val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)

@@ -1,0 +1,325 @@
+package com.example.rutescompartidesapp.view.route_detail
+
+import android.annotation.SuppressLint
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBackIosNew
+import androidx.compose.material.icons.filled.FilterList
+import androidx.compose.material3.AssistChipDefaults
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Divider
+import androidx.compose.material3.ElevatedAssistChip
+import androidx.compose.material3.ElevatedButton
+import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import com.example.rutescompartidesapp.R
+import com.example.rutescompartidesapp.data.domain.ListQuery
+import com.example.rutescompartidesapp.data.domain.Route
+import com.example.rutescompartidesapp.data.domain.RouteForList
+import com.example.rutescompartidesapp.ui.theme.BlueRC
+import com.example.rutescompartidesapp.ui.theme.OrangeRC
+import com.example.rutescompartidesapp.view.map.components.allRoute
+import com.example.rutescompartidesapp.view.map.viewModels.MapViewModel
+import com.example.rutescompartidesapp.view.route_detail.route_detail_driver.RouteData
+import com.example.rutescompartidesapp.view.route_detail.route_detail_driver.TransportOptions
+import com.example.rutescompartidesapp.view.route_detail.components.RouteMapViewContainer
+import com.example.rutescompartidesapp.view.routes_order_list.ListConstants
+import com.example.rutescompartidesapp.view.routes_order_list.components.RouteCardHeader
+import com.example.rutescompartidesapp.view.routes_order_list.viewmodels.RoutesOrderListViewModel
+import org.osmdroid.util.GeoPoint
+
+@OptIn(ExperimentalMaterial3Api::class)
+@SuppressLint("UnusedBoxWithConstraintsScope")
+@Composable
+fun RouteDetailGeneralScreen(navHost: NavHostController, routeID: Int, mapViewModel: MapViewModel, routesOrderListViewModel: RoutesOrderListViewModel) {
+
+    val routeGeo: Route = allRoute.first { it.routeId == routeID }
+    val routeInfo: RouteForList = ListConstants.routeList.first { it.routeID == routeID }
+    val startGeoPoint = GeoPoint(routeGeo.startLat.toDouble(), routeGeo.startLon.toDouble())
+    val endGeoPoint = GeoPoint(routeGeo.endLat.toDouble(), routeGeo.endLon.toDouble())
+    val routeDetailViewModel = RouteDetailViewModel()
+
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+    Scaffold(modifier = Modifier
+        .fillMaxSize()
+        .nestedScroll(scrollBehavior.nestedScrollConnection),
+        topBar = {
+            TopAppBar(
+                title = { Text(text = "Ruta #$routeID") },
+                navigationIcon = {
+                    IconButton(onClick = { navHost.popBackStack() }) {
+                        Icon(
+                            imageVector = Icons.Filled.ArrowBackIosNew,
+                            contentDescription = "Go Back"
+                        )
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.background,
+                    titleContentColor = MaterialTheme.colorScheme.onBackground
+                ),
+                scrollBehavior = scrollBehavior,
+            )
+        }) { paddingValues ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(
+                    top = paddingValues.calculateTopPadding() + 8.dp,
+                    bottom = paddingValues.calculateBottomPadding() + 8.dp,
+                    start = 8.dp,
+                    end = 8.dp
+                ),
+            verticalArrangement = Arrangement.SpaceEvenly,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            val ctx = LocalContext.current
+            BoxWithConstraints(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight(0.25f)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight()
+                        .clip(RoundedCornerShape(16.dp))
+                ) {
+                    RouteMapViewContainer(
+                        viewModel = mapViewModel,
+                        ctx,
+                        startGeoPoint,
+                        endGeoPoint,
+                        13.5
+                    )
+                }
+            }
+            Row( modifier = Modifier
+                .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceEvenly) {
+                ElevatedButton(
+                    shape = RoundedCornerShape(16.dp),
+                    onClick = { routesOrderListViewModel.onFilterSearch(
+                        ListQuery(
+                            puntSortida = routeInfo.puntSortida,
+                            puntArribada = routeInfo.puntArribada,
+                            dataSortida = routeInfo.dataSortida,
+                            horaSortida = routeInfo.horaSortida,
+                            etiquetes = routeInfo.etiquetes?: listOf(),
+                            isIsoterm = routeInfo.isIsoterm,
+                            isRefrigerat = routeInfo.isRefrigerat,
+                            isCongelat = routeInfo.isCongelat,
+                            isSenseHumitat = routeInfo.isSenseHumitat
+                        )
+                    )
+                        navHost.navigate("RoutesOrderListScreen")
+                    },
+                    colors = ButtonDefaults.elevatedButtonColors(
+                        containerColor = BlueRC
+                    )
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.FilterList, contentDescription = "Edit route icon",
+                        tint = Color.White)
+                    Text(
+                        text = "Rutes semblants", color = Color.White,
+                        style = MaterialTheme.typography.headlineMedium
+                    )
+                }
+                ElevatedButton(
+                    shape = RoundedCornerShape(16.dp),
+                    onClick = { routeDetailViewModel.requestRoute(routeID, 0) },
+                    colors = ButtonDefaults.elevatedButtonColors(
+                        containerColor = OrangeRC
+                    )
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.transport_icon_svg), contentDescription = "Edit route icon",
+                        tint = Color.White)
+                    Text(
+                        text = "Demana aquesta ruta", color = Color.White,
+                        style = MaterialTheme.typography.headlineMedium
+                    )
+                }
+            }
+            ElevatedCard(
+                modifier = Modifier.fillMaxWidth(),
+                colors = CardDefaults.elevatedCardColors(
+                    containerColor = MaterialTheme.colorScheme.background
+                )
+            ) {
+                Row {
+                    RouteCardHeader(route = routeInfo)
+                }
+                Row {
+                    LazyRow(modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 12.dp),
+                        content = {
+                            routeInfo.etiquetes?.forEach { etiqueta ->
+                                item {
+                                    ElevatedAssistChip(
+                                        onClick = { /*TODO*/ },
+                                        label = {
+                                            Text(etiqueta, color = Color.White)
+                                        },
+                                        shape = RoundedCornerShape(16.dp),
+                                        colors = AssistChipDefaults.assistChipColors(
+                                            containerColor = BlueRC
+                                        )
+                                    )
+                                }
+                            }
+                        })
+                }
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 12.dp)
+                ) {
+                    Text(
+                        text = buildAnnotatedString {
+                            withStyle(
+                                style = SpanStyle(
+                                    fontWeight = FontWeight.Bold,
+
+                                    )
+                            ) {
+                                append("Data sortida: ")
+                            }
+                            append(routeInfo.dataSortida)
+                        },
+                        color = MaterialTheme.colorScheme.onBackground
+                    )
+                }
+                Spacer(modifier = Modifier.padding(2.dp))
+                // Data Arribada
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 12.dp)
+                ) {
+                    Text(
+                        text = buildAnnotatedString {
+                            withStyle(
+                                style = SpanStyle(
+                                    fontWeight = FontWeight.Bold
+                                )
+                            ) {
+                                append("Data arribada: ")
+                            }
+                            append(routeInfo.dataArribada)
+                        },
+                        color = MaterialTheme.colorScheme.onBackground
+                    )
+                }
+                Divider(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 8.dp, end = 8.dp, top = 4.dp, bottom = 4.dp),
+                    color = OrangeRC,
+                    thickness = 2.dp
+                )
+                // Transport Options
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    TransportOptions(route = routeInfo)
+                }
+                // Available seats
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    RouteData(
+                        icon = R.drawable.seat_icon_svg,
+                        dataHeader = "Seients lliures",
+                        data = "2"
+                    )
+                }
+                // Max Deviation
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    RouteData(
+                        icon = R.drawable.max_deviation_svg,
+                        dataHeader = "Màxim desviament",
+                        data = "5km"
+                    )
+
+                }
+                // Available Space
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    RouteData(
+                        icon = R.drawable.carrier_icon_svg,
+                        dataHeader = "Espai disponible",
+                        data = "Volum similair a 1 palet i mig"
+                    )
+                }
+                Divider(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 8.dp, end = 8.dp, top = 4.dp, bottom = 4.dp),
+                    color = OrangeRC,
+                    thickness = 2.dp
+                )
+
+                // Vehicle Type
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    RouteData(
+                        icon = R.drawable.transport_icon_svg,
+                        dataHeader = "Vehicle",
+                        data = "Wolkswagen"
+                    )
+                }
+            }
+        }
+    }
+}

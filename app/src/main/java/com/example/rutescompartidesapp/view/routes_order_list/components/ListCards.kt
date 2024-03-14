@@ -151,7 +151,7 @@ fun RouteCard(route: RouteForList, navController: NavHostController) {
                 })
                 Spacer(modifier = Modifier.padding(4.dp))
                 ElevatedButton( shape = RoundedCornerShape(16.dp),
-                    onClick = { navController.navigate("RouteDetailScreen/{routeId}".replace(
+                    onClick = { navController.navigate("RouteDetailDriverScreen/{routeId}".replace(
                         oldValue = "{routeId}",
                         newValue = "${route.routeID}"
                     ) )
@@ -262,7 +262,10 @@ fun OrderCard(order: OrderForList, navController: NavHostController) {
                         }
                     })
                 ElevatedButton( shape = RoundedCornerShape(16.dp),
-                    onClick = { /*TODO*/ },
+                    onClick = { navController.navigate("OrderDetailScreen/{packageId}".replace(
+                        oldValue = "{packageId}",
+                        newValue = "${order.orderID}"
+                    ) ) },
                     colors = ButtonDefaults.elevatedButtonColors(
                         containerColor = MaterialTheme.colorScheme.primary
                     )

@@ -55,7 +55,6 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.rutescompartidesapp.data.domain.ListQuery
 import com.example.rutescompartidesapp.ui.theme.BlueRC
@@ -68,8 +67,7 @@ import com.example.rutescompartidesapp.view.routes_order_list.viewmodels.RoutesO
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
-fun FilterPopup(routesOrderListViewModel: RoutesOrderListViewModel){
-    val filterPopupViewModel: FilterPopupViewModel = hiltViewModel()
+fun FilterPopup(routesOrderListViewModel: RoutesOrderListViewModel, filterPopupViewModel: FilterPopupViewModel){
     val isPopupShowing by filterPopupViewModel.popupIsShowing.collectAsStateWithLifecycle()
     val puntSortidaText by filterPopupViewModel.puntSortidaText.collectAsStateWithLifecycle()
     val puntArribadaText by filterPopupViewModel.puntArribadaText.collectAsStateWithLifecycle()

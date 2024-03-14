@@ -1,5 +1,4 @@
-package com.example.rutescompartidesapp.view.route_detail
-import java.time.LocalDateTime
+package com.example.rutescompartidesapp.view.route_detail.route_detail_driver
 
 object DetailUtils {
 

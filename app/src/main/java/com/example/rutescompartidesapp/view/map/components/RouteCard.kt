@@ -169,7 +169,7 @@ fun RouteCard(ruta : Route, vehicle: Vehicle) {
                 // Route information
                 DetailsCard(idImage = R.drawable.seat_svg, value = "${vehicle.seatsAvailable}", imageSize = 28.dp, paddingPercentage = 2)
                 PricePerKM(idImage1 = R.drawable.eur_svg, idImage2 = R.drawable.km_svg, value = "${ruta.routePrice}€")
-                DetailsCard(idImage = R.drawable.van_measures, value = "${vehicle.vehicleMesures}", imageSize = 35.dp, fontSize = 13.sp, paddingPercentage = 5)
+                DetailsCard(idImage = R.drawable.van_measures, value = vehicle.vehicleMesures, imageSize = 35.dp, fontSize = 13.sp, paddingPercentage = 5)
 
                 val percentagePaddingDesviament = 5
                 val paddingDesviament = (LocalDensity.current.density * percentagePaddingDesviament).dp

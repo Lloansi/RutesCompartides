@@ -147,7 +147,7 @@ class SignUpViewModel: ViewModel(){
 
         //Check the Phone format
         if (!userPhone.matches(Regex("^\\s?\\(?\\d{3}\\)?\\d{3}\\d{3}$"))) {
-            onUserPhoneError(isError = true);
+            onUserPhoneError(isError = true)
         }
 
         if (!onUserNameError(userName.isEmpty()) ||

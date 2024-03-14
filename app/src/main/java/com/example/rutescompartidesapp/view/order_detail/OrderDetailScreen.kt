@@ -11,11 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.ArrowBackIosNew
-import androidx.compose.material.icons.filled.AttachMoney
-import androidx.compose.material.icons.filled.Backpack
-import androidx.compose.material.icons.filled.EnergySavingsLeaf
-import androidx.compose.material.icons.filled.PanoramaWideAngle
-import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ElevatedCard
@@ -24,7 +19,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -46,14 +40,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.rutescompartidesapp.R
 import com.example.rutescompartidesapp.data.domain.Order
-import com.example.rutescompartidesapp.data.domain.RouteForList
 import com.example.rutescompartidesapp.view.order_detail.components.AcceptDenyContainer
 import com.example.rutescompartidesapp.view.order_detail.components.CompletedContainer
 import com.example.rutescompartidesapp.view.order_detail.components.DetailsConfirm
 import com.example.rutescompartidesapp.view.order_detail.components.TopCardInfo
 import com.example.rutescompartidesapp.view.map.components.MeasuresText
 import com.example.rutescompartidesapp.view.map.components.allOrders
-import com.example.rutescompartidesapp.view.routes_order_list.ListConstants
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

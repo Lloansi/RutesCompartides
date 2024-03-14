@@ -1,6 +1,5 @@
 package com.example.rutescompartidesapp.view.publish_route
 
-import android.graphics.Point
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

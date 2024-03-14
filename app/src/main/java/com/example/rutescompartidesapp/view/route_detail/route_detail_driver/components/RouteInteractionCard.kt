@@ -1,4 +1,4 @@
-package com.example.rutescompartidesapp.view.route_detail.components
+package com.example.rutescompartidesapp.view.route_detail.route_detail_driver.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -33,11 +33,11 @@ import com.example.rutescompartidesapp.ui.theme.BlueRC
 import com.example.rutescompartidesapp.ui.theme.MateBlackRC
 import com.example.rutescompartidesapp.ui.theme.RedRC
 import com.example.rutescompartidesapp.ui.theme.YellowRC
-import com.example.rutescompartidesapp.view.route_detail.DetailUtils.RouteInteraction
-import com.example.rutescompartidesapp.view.route_detail.RouteDetailViewModel
+import com.example.rutescompartidesapp.view.route_detail.route_detail_driver.DetailUtils.RouteInteraction
+import com.example.rutescompartidesapp.view.route_detail.route_detail_driver.RouteDetailDriverViewModel
 
 @Composable
-fun RouteInteractionCard(interaction: RouteInteraction, routeDetailViewModel: RouteDetailViewModel){
+fun RouteInteractionCard(interaction: RouteInteraction, routeDetailDriverViewModel: RouteDetailDriverViewModel){
     var firstText = ""
     var secondText = ""
     var chipText = ""
@@ -64,12 +64,12 @@ fun RouteInteractionCard(interaction: RouteInteraction, routeDetailViewModel: Ro
             button1Color = MateBlackRC
             button1Icon = Icons.Filled.Check
             button1IconTint = Color.White
-            button1OnClick = { routeDetailViewModel.showCompletePopup(true) }
+            button1OnClick = { routeDetailDriverViewModel.showCompletePopup(true) }
             button2IconTint = Color.Black
             button2Text = "Declinar"
             button2Color = RedRC
             button2Icon = Icons.Default.Cancel
-            button2OnClick = { routeDetailViewModel.modifyInteractionStatus(interaction, "Declinada") }
+            button2OnClick = { routeDetailDriverViewModel.modifyInteractionStatus(interaction, "Declinada") }
 
         }
         "Entregada" -> {
@@ -86,11 +86,11 @@ fun RouteInteractionCard(interaction: RouteInteraction, routeDetailViewModel: Ro
             button1Text = "Acceptar"
             button1Color = MaterialTheme.colorScheme.primary
             button1Icon = Icons.Filled.Check
-            button1OnClick = { routeDetailViewModel.modifyInteractionStatus(interaction, "Acceptada") }
+            button1OnClick = { routeDetailDriverViewModel.modifyInteractionStatus(interaction, "Acceptada") }
             button2Text = "Declinar"
             button2Color = RedRC
             button2Icon = Icons.Filled.Cancel
-            button2OnClick = { routeDetailViewModel.modifyInteractionStatus(interaction, "Declinada") }
+            button2OnClick = { routeDetailDriverViewModel.modifyInteractionStatus(interaction, "Declinada") }
             button1IconTint = Color.White
             button2IconTint = Color.Black
             chipTextColor = Color.Black
@@ -172,7 +172,7 @@ fun InteractionChip(text: String, containerColor: Color, chipColorText: Color){
 }
 
 @Composable
-fun InteractionText(firstText: String, secondText: String, comandaID: Int,){
+fun InteractionText(firstText: String, secondText: String, comandaID: Int){
    Text(text = buildAnnotatedString {
         append("$firstText ")
         withStyle(

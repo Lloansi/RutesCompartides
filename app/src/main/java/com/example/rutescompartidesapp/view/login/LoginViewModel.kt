@@ -3,10 +3,8 @@ package com.example.rutescompartidesapp.view.login
 import android.util.Patterns
 import androidx.lifecycle.ViewModel
 import com.example.rutescompartidesapp.utils.Constants
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import javax.inject.Inject
 
 class LoginViewModel: ViewModel() {
     //User email text

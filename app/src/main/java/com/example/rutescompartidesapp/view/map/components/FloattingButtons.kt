@@ -28,11 +28,11 @@ fun ExpandableFloatingButton(navController: NavHostController) {
         if (isExpanded) {
             MiniFloatingButton(
                 icon = Icons.Filled.Directions,
-                onClick = { navController.navigate("RoutesOrderListScreen") }
+                onClick = { navController.navigate("PublishRouteScreen") }
             )
             MiniFloatingButton(
                 icon = Icons.Default.CardTravel,
-                onClick = { navController.navigate("RoutesOrderListScreen") }
+                onClick = { navController.navigate("PublishOrderScreen") }
             )
         }
         FloatingActionButton(

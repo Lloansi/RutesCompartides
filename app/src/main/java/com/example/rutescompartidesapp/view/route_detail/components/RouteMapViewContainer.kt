@@ -1,4 +1,4 @@
-package com.example.rutescompartidesapp.view.routedetailgeneral.components
+package com.example.rutescompartidesapp.view.route_detail.components
 
 import android.content.Context
 import androidx.compose.runtime.Composable
