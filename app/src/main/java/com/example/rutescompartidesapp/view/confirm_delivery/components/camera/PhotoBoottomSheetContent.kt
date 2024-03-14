@@ -1,4 +1,4 @@
-package com.example.rutescompartidesapp.view.confirm.components.camera
+package com.example.rutescompartidesapp.view.confirm_delivery.components.camera
 
 import android.graphics.Bitmap
 import androidx.compose.foundation.Image
@@ -19,7 +19,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.example.rutescompartidesapp.view.confirm.viewmodel.CameraViewModel
+import com.example.rutescompartidesapp.view.confirm_delivery.viewmodel.CameraViewModel
 
 @Composable
 fun PhotoBottomSheetContent(

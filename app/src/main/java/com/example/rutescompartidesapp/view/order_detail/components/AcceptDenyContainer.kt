@@ -1,12 +1,9 @@
-package com.example.rutescompartidesapp.view.complete.components
+package com.example.rutescompartidesapp.view.order_detail.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
-import com.example.rutescompartidesapp.R
-import com.example.rutescompartidesapp.view.complete.CompleteViewModel
+import com.example.rutescompartidesapp.view.order_detail.CompleteViewModel
 
 @Composable
 fun AcceptDenyContainer(colorDenyButton: Color,isVisible: Boolean, completeViewModel: CompleteViewModel) {

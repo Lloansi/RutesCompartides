@@ -1,4 +1,4 @@
-package com.example.rutescompartidesapp.view.confirm.components.draw
+package com.example.rutescompartidesapp.view.confirm_delivery.components.draw
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectDragGestures
@@ -20,7 +20,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.rutescompartidesapp.data.domain.Line
-import com.example.rutescompartidesapp.view.confirm.viewmodel.DrawViewModel
+import com.example.rutescompartidesapp.view.confirm_delivery.viewmodel.DrawViewModel
 
 @Composable
 fun DrawScreen(navController: NavHostController, drawViewModel: DrawViewModel) {

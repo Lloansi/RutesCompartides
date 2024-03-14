@@ -1,4 +1,4 @@
-package com.example.rutescompartidesapp.view.complete
+package com.example.rutescompartidesapp.view.order_detail
 
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

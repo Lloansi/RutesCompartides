@@ -1,4 +1,4 @@
-package com.example.rutescompartidesapp.view.complete.components
+package com.example.rutescompartidesapp.view.order_detail.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

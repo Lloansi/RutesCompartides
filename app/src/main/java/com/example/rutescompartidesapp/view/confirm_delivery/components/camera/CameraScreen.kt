@@ -1,4 +1,4 @@
-package com.example.rutescompartidesapp.view.confirm
+package com.example.rutescompartidesapp.view.confirm_delivery
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -39,11 +39,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.example.rutescompartidesapp.view.confirm.components.camera.CameraPreview
-import com.example.rutescompartidesapp.view.confirm.components.camera.PhotoBottomSheetContent
-import com.example.rutescompartidesapp.view.confirm.viewmodel.CameraViewModel
+import com.example.rutescompartidesapp.view.confirm_delivery.components.camera.CameraPreview
+import com.example.rutescompartidesapp.view.confirm_delivery.components.camera.PhotoBottomSheetContent
+import com.example.rutescompartidesapp.view.confirm_delivery.viewmodel.CameraViewModel
 import kotlinx.coroutines.launch
 
 

@@ -1,4 +1,4 @@
-package com.example.rutescompartidesapp.view.complete.components
+package com.example.rutescompartidesapp.view.order_detail.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -18,7 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
-import com.example.rutescompartidesapp.view.complete.CompleteViewModel
+import com.example.rutescompartidesapp.view.order_detail.CompleteViewModel
 
 
 @Composable

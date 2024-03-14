@@ -1,8 +1,7 @@
-package com.example.rutescompartidesapp.view.confirm.viewmodel
+package com.example.rutescompartidesapp.view.confirm_delivery.viewmodel
 
 import android.graphics.Bitmap
 import androidx.lifecycle.ViewModel
-import androidx.navigation.NavHostController
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 

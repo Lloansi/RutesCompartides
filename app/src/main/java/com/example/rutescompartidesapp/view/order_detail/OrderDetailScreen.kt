@@ -1,54 +1,98 @@
-package com.example.rutescompartidesapp.view.complete
+package com.example.rutescompartidesapp.view.order_detail
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.filled.AttachMoney
 import androidx.compose.material.icons.filled.Backpack
 import androidx.compose.material.icons.filled.EnergySavingsLeaf
 import androidx.compose.material.icons.filled.PanoramaWideAngle
 import androidx.compose.material3.Card
 import androidx.compose.material3.Divider
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import com.example.rutescompartidesapp.data.domain.Order
-import com.example.rutescompartidesapp.view.complete.components.AcceptDenyContainer
-import com.example.rutescompartidesapp.view.complete.components.CompletedContainer
-import com.example.rutescompartidesapp.view.complete.components.DetailsConfirm
-import com.example.rutescompartidesapp.view.complete.components.TopCardInfo
+import com.example.rutescompartidesapp.data.domain.RouteForList
+import com.example.rutescompartidesapp.view.order_detail.components.AcceptDenyContainer
+import com.example.rutescompartidesapp.view.order_detail.components.CompletedContainer
+import com.example.rutescompartidesapp.view.order_detail.components.DetailsConfirm
+import com.example.rutescompartidesapp.view.order_detail.components.TopCardInfo
 import com.example.rutescompartidesapp.view.map.components.MeasuresText
+import com.example.rutescompartidesapp.view.map.components.allOrders
+import com.example.rutescompartidesapp.view.routes_order_list.ListConstants
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CompleteScreen(order: Order) {
+fun OrderDetailScreen(packageId: Int, navHost: NavHostController) {
+    val order: Order = allOrders.first { it.packageId == packageId }
+
     val completeViewModel: CompleteViewModel = hiltViewModel()
     val isVisible by completeViewModel.isVisible.collectAsState()
 
     val responsiveHeight = LocalConfiguration.current.screenHeightDp.dp
     val responsiveWidth = LocalConfiguration.current.screenWidthDp.dp
-    Surface(
-        modifier = Modifier.padding(top = responsiveHeight/40, bottom = responsiveHeight/40, start =  responsiveWidth/20, end = responsiveWidth/20),
-        //color = Color.White
-    ) {
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+    Scaffold( modifier = Modifier
+        .fillMaxSize()
+        .nestedScroll(scrollBehavior.nestedScrollConnection),
+        topBar = {
+            TopAppBar(
+                title = { Text(text = "Comanda #${order.packageId}") },
+                navigationIcon = {
+                    IconButton(onClick = { navHost.navigate("RoutesOrderListScreen") }) {
+                        Icon(imageVector = Icons.Filled.ArrowBackIosNew, contentDescription = "Go Back")
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.background,
+                    titleContentColor = MaterialTheme.colorScheme.onBackground
+                ),
+                scrollBehavior = scrollBehavior,
+            )
+        }) { paddingValues ->
+        Column(modifier = Modifier
+            .fillMaxSize()
+            .padding(
+                top = paddingValues.calculateTopPadding() + 8.dp,
+                bottom = paddingValues.calculateBottomPadding() + 8.dp,
+                start = 8.dp,
+                end = 8.dp
+            ),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally) {
+        }
         CompleteCard(order, responsiveHeight, isVisible, completeViewModel)
+
     }
+
 }
 
 @Composable
@@ -59,7 +103,6 @@ fun CompleteCard(order: Order, responsiveHeight: Dp, isVisible: Boolean, complet
             .fillMaxWidth(),
     ){
         TopCardInfo(mateBlack = mateBlack, order = order)
-        Spacer(modifier = Modifier.height(responsiveHeight/50))
         Column (
             modifier = Modifier
                 .padding()

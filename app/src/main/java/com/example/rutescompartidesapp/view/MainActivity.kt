@@ -42,12 +42,12 @@ import com.example.rutescompartidesapp.view.edit_profile.EditProfileViewModel
 import com.example.rutescompartidesapp.view.faq.FaqScreen
 import com.example.rutescompartidesapp.view.faq.FaqViewModel
 import com.example.rutescompartidesapp.utils.Constants.ALL_PERMISSIONS
-import com.example.rutescompartidesapp.view.complete.CompleteScreen
-import com.example.rutescompartidesapp.view.confirm.CameraScreen
-import com.example.rutescompartidesapp.view.confirm.ConfirmScreen
-import com.example.rutescompartidesapp.view.confirm.components.draw.DrawScreen
-import com.example.rutescompartidesapp.view.confirm.viewmodel.CameraViewModel
-import com.example.rutescompartidesapp.view.confirm.viewmodel.DrawViewModel
+import com.example.rutescompartidesapp.view.order_detail.OrderDetailScreen
+import com.example.rutescompartidesapp.view.confirm_delivery.CameraScreen
+import com.example.rutescompartidesapp.view.confirm_delivery.ConfirmScreen
+import com.example.rutescompartidesapp.view.confirm_delivery.components.draw.DrawScreen
+import com.example.rutescompartidesapp.view.confirm_delivery.viewmodel.CameraViewModel
+import com.example.rutescompartidesapp.view.confirm_delivery.viewmodel.DrawViewModel
 import com.example.rutescompartidesapp.view.login.LoginScreen
 import com.example.rutescompartidesapp.view.map.MapScreen
 import com.example.rutescompartidesapp.view.map.components.allOrders
@@ -182,16 +182,20 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun ScreenNavigationConfiguration( mapViewModel: MapViewModel,drawViewModel: DrawViewModel, cameraViewModel: CameraViewModel, navController: NavHostController, paddingModifier: Modifier) {
 
-    NavHost(navController = navController, startDestination = Screens.RouteDetailGeneralScreen.route, modifier = paddingModifier) {
+    NavHost(navController = navController, startDestination = Screens.OrderDetailScreen.route, modifier = paddingModifier) {
 
         composable(Screens.MapScreen.route) {
             MapScreen(navController, mapViewModel)
         }
-        val order = allOrders[0]
-        composable(Screens.CompleteScreen.route) {
-            CompleteScreen(order)
+        composable(Screens.OrderDetailScreen.route,
+            arguments = listOf(navArgument("packageId"){
+                type = NavType.IntType
+            }
+            )) {
+            val packageId = it.arguments?.getInt("packageId")
+            OrderDetailScreen(1, navController)
         }
-        composable(Screens.ConfirmScreen.route){
+        composable(Screens.ConfirmDeliveryScreen.route){
             ConfirmScreen(navController, cameraViewModel, drawViewModel)
         }
         composable(Screens.CameraScreen.route){
@@ -239,6 +243,8 @@ fun ScreenNavigationConfiguration( mapViewModel: MapViewModel,drawViewModel: Dra
         composable(Screens.PublishOrderScreen.route) {
             PublishOrderScreen(navController)
         }
+
+
 
     }
 

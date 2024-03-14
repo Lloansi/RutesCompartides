@@ -1,4 +1,4 @@
-package com.example.rutescompartidesapp.view.confirm.viewmodel
+package com.example.rutescompartidesapp.view.confirm_delivery.viewmodel
 
 import android.graphics.Bitmap
 import android.graphics.Canvas
