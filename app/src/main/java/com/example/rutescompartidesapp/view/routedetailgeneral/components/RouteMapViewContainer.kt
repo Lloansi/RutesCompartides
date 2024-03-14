@@ -1,13 +1,8 @@
 package com.example.rutescompartidesapp.view.routedetailgeneral.components
 
 import android.content.Context
-import android.graphics.drawable.Drawable
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.viewinterop.AndroidView
 import com.example.rutescompartidesapp.view.map.viewModels.MapViewModel
 import org.osmdroid.bonuspack.routing.OSRMRoadManager
@@ -21,13 +16,9 @@ import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 
 
 @Composable
-fun RouteMapViewContainer(viewModel: MapViewModel, ctx : Context, startPoint: GeoPoint, endPoint: GeoPoint){
+fun RouteMapViewContainer(viewModel: MapViewModel, ctx : Context, startPoint: GeoPoint, endPoint: GeoPoint, zoomMap : Double){
 
     val agentNameMap = "rutescompartides"
-
-    val initialZoom = 16.0
-
-    val lifecycleOwner = LocalLifecycleOwner.current
 
     // Load/initialize the osmdroid configuration
     Configuration.getInstance().load(
@@ -38,8 +29,9 @@ fun RouteMapViewContainer(viewModel: MapViewModel, ctx : Context, startPoint: Ge
 
     AndroidView(
         modifier = Modifier
-            .fillMaxHeight(0.25f)
-            .fillMaxWidth(0.7f),
+            //.height(150.dp)
+            //.width(150.dp)
+                ,
         factory = { context ->
 
             // We instance the MapView
@@ -54,7 +46,7 @@ fun RouteMapViewContainer(viewModel: MapViewModel, ctx : Context, startPoint: Ge
             // We instantiate the map controller, so that we can set configurations of where in the world to appear
             val controller = mapView.controller
             controller.setCenter(centerRoute)
-            controller.setZoom(initialZoom)
+            controller.setZoom(zoomMap)
 
             // Create and add the location overlay
             val locationOverlay = MyLocationNewOverlay(GpsMyLocationProvider(ctx), mapView)
