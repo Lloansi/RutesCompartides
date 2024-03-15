@@ -4,17 +4,15 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.ButtonDefaults
@@ -25,23 +23,19 @@ import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -51,6 +45,7 @@ import com.example.rutescompartidesapp.data.domain.Route
 import com.example.rutescompartidesapp.data.domain.RouteForList
 import com.example.rutescompartidesapp.ui.theme.BlueRC
 import com.example.rutescompartidesapp.ui.theme.OrangeRC
+import com.example.rutescompartidesapp.view.generic_components.TopAppBarWithBackNav
 import com.example.rutescompartidesapp.view.map.components.allRoute
 import com.example.rutescompartidesapp.view.map.viewModels.MapViewModel
 import com.example.rutescompartidesapp.view.route_detail.route_detail_driver.RouteData
@@ -61,7 +56,6 @@ import com.example.rutescompartidesapp.view.routes_order_list.components.RouteCa
 import com.example.rutescompartidesapp.view.routes_order_list.viewmodels.RoutesOrderListViewModel
 import org.osmdroid.util.GeoPoint
 
-@OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedBoxWithConstraintsScope")
 @Composable
 fun RouteDetailGeneralScreen(navHost: NavHostController, routeID: Int, mapViewModel: MapViewModel, routesOrderListViewModel: RoutesOrderListViewModel) {
@@ -72,40 +66,10 @@ fun RouteDetailGeneralScreen(navHost: NavHostController, routeID: Int, mapViewMo
     val endGeoPoint = GeoPoint(routeGeo.endLat.toDouble(), routeGeo.endLon.toDouble())
     val routeDetailViewModel = RouteDetailViewModel()
 
-    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
-    Scaffold(modifier = Modifier
-        .fillMaxSize()
-        .nestedScroll(scrollBehavior.nestedScrollConnection),
-        topBar = {
-            TopAppBar(
-                title = { Text(text = "Ruta #$routeID") },
-                navigationIcon = {
-                    IconButton(onClick = { navHost.popBackStack() }) {
-                        Icon(
-                            imageVector = Icons.Filled.ArrowBackIosNew,
-                            contentDescription = "Go Back"
-                        )
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.background,
-                    titleContentColor = MaterialTheme.colorScheme.onBackground
-                ),
-                scrollBehavior = scrollBehavior,
-            )
-        }) { paddingValues ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(
-                    top = paddingValues.calculateTopPadding() + 8.dp,
-                    bottom = paddingValues.calculateBottomPadding() + 8.dp,
-                    start = 8.dp,
-                    end = 8.dp
-                ),
-            verticalArrangement = Arrangement.SpaceEvenly,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
+    TopAppBarWithBackNav(
+        title = "Ruta #$routeID",
+        onBack = { navHost.popBackStack() },
+        content = {
             val ctx = LocalContext.current
             BoxWithConstraints(
                 modifier = Modifier
@@ -127,25 +91,29 @@ fun RouteDetailGeneralScreen(navHost: NavHostController, routeID: Int, mapViewMo
                     )
                 }
             }
-            Row( modifier = Modifier
-                .fillMaxWidth(),
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceEvenly) {
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
                 ElevatedButton(
+                    modifier = Modifier.weight(1f).padding(start= 4.dp, end = 4.dp),
                     shape = RoundedCornerShape(16.dp),
-                    onClick = { routesOrderListViewModel.onFilterSearch(
-                        ListQuery(
-                            puntSortida = routeInfo.puntSortida,
-                            puntArribada = routeInfo.puntArribada,
-                            dataSortida = routeInfo.dataSortida,
-                            horaSortida = routeInfo.horaSortida,
-                            etiquetes = routeInfo.etiquetes?: listOf(),
-                            isIsoterm = routeInfo.isIsoterm,
-                            isRefrigerat = routeInfo.isRefrigerat,
-                            isCongelat = routeInfo.isCongelat,
-                            isSenseHumitat = routeInfo.isSenseHumitat
+                    onClick = {
+                        routesOrderListViewModel.onFilterSearch(
+                            ListQuery(
+                                puntSortida = routeInfo.puntSortida,
+                                puntArribada = routeInfo.puntArribada,
+                                dataSortida = routeInfo.dataSortida,
+                                horaSortida = routeInfo.horaSortida,
+                                etiquetes = routeInfo.etiquetes ?: listOf(),
+                                isIsoterm = routeInfo.isIsoterm,
+                                isRefrigerat = routeInfo.isRefrigerat,
+                                isCongelat = routeInfo.isCongelat,
+                                isSenseHumitat = routeInfo.isSenseHumitat
+                            )
                         )
-                    )
                         navHost.navigate("RoutesOrderListScreen")
                     },
                     colors = ButtonDefaults.elevatedButtonColors(
@@ -153,14 +121,19 @@ fun RouteDetailGeneralScreen(navHost: NavHostController, routeID: Int, mapViewMo
                     )
                 ) {
                     Icon(
-                        imageVector = Icons.Filled.FilterList, contentDescription = "Edit route icon",
-                        tint = Color.White)
+                        modifier = Modifier.size(32.dp),
+                        imageVector = Icons.Filled.FilterList,
+                        contentDescription = "Rutes semblants icon",
+                        tint = Color.White
+                    )
                     Text(
                         text = "Rutes semblants", color = Color.White,
+                        textAlign = TextAlign.Center,
                         style = MaterialTheme.typography.headlineMedium
                     )
                 }
                 ElevatedButton(
+                    modifier = Modifier.weight(1f).padding(start= 4.dp, end = 4.dp),
                     shape = RoundedCornerShape(16.dp),
                     onClick = { routeDetailViewModel.requestRoute(routeID, 0) },
                     colors = ButtonDefaults.elevatedButtonColors(
@@ -168,10 +141,14 @@ fun RouteDetailGeneralScreen(navHost: NavHostController, routeID: Int, mapViewMo
                     )
                 ) {
                     Icon(
-                        painter = painterResource(id = R.drawable.transport_icon_svg), contentDescription = "Edit route icon",
-                        tint = Color.White)
+                        modifier = Modifier.padding(end = 4.dp).size(24.dp),
+                        painter = painterResource(id = R.drawable.transport_icon_svg),
+                        contentDescription = "Demanar ruta icon",
+                        tint = Color.White
+                    )
                     Text(
                         text = "Demana aquesta ruta", color = Color.White,
+                        textAlign = TextAlign.Center,
                         style = MaterialTheme.typography.headlineMedium
                     )
                 }
@@ -285,7 +262,6 @@ fun RouteDetailGeneralScreen(navHost: NavHostController, routeID: Int, mapViewMo
                         dataHeader = "Màxim desviament",
                         data = "5km"
                     )
-
                 }
                 // Available Space
                 Row(
@@ -306,7 +282,6 @@ fun RouteDetailGeneralScreen(navHost: NavHostController, routeID: Int, mapViewMo
                     color = OrangeRC,
                     thickness = 2.dp
                 )
-
                 // Vehicle Type
                 Row(
                     modifier = Modifier
@@ -321,5 +296,5 @@ fun RouteDetailGeneralScreen(navHost: NavHostController, routeID: Int, mapViewMo
                 }
             }
         }
-    }
+    )
 }

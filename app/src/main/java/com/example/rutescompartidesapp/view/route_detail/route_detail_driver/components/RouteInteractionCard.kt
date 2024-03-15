@@ -106,7 +106,7 @@ fun RouteInteractionCard(interaction: RouteInteraction, routeDetailDriverViewMod
 
     ElevatedCard(modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.elevatedCardColors(
-            containerColor = Color.White)) {
+            containerColor = MaterialTheme.colorScheme.background)) {
         Row(modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)) {

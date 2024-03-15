@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -13,7 +12,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.ButtonDefaults
@@ -24,18 +22,14 @@ import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -50,6 +44,7 @@ import com.example.rutescompartidesapp.ui.theme.BlueRC
 import com.example.rutescompartidesapp.ui.theme.MateBlackRC
 import com.example.rutescompartidesapp.ui.theme.OrangeRC
 import com.example.rutescompartidesapp.ui.theme.RedRC
+import com.example.rutescompartidesapp.view.generic_components.TopAppBarWithBackNav
 import com.example.rutescompartidesapp.view.route_detail.route_detail_driver.components.RouteInteractionCard
 import com.example.rutescompartidesapp.view.routes_order_list.ListConstants
 import com.example.rutescompartidesapp.view.routes_order_list.components.RouteCardHeader
@@ -66,28 +61,9 @@ fun RouteDetailDriverScreen(routeID: Int, navHost: NavHostController) {
     // TODO Fer un if per comprovar el boleà i mostrar el popup per completar ruta
     val isCompletePopupShowing by routeDetailDriverViewModel.isCompletePopupShowing.collectAsStateWithLifecycle()
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
-    Scaffold( modifier = Modifier.fillMaxSize()
-        .nestedScroll(scrollBehavior.nestedScrollConnection),
-        topBar = {
-            TopAppBar(
-                title = { Text(text = "Ruta #$routeID") },
-                navigationIcon = {
-                    IconButton(onClick = { navHost.navigate("RoutesOrderListScreen") }) {
-                        Icon(imageVector = Icons.Filled.ArrowBackIosNew, contentDescription = "Go Back")
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.background,
-                    titleContentColor = MaterialTheme.colorScheme.onBackground
-                ),
-                scrollBehavior = scrollBehavior,
-            )
-        }) { paddingValues ->
-        Column(modifier = Modifier
-            .fillMaxSize()
-            .padding(top = paddingValues.calculateTopPadding() + 8.dp, bottom = paddingValues.calculateBottomPadding() + 8.dp, start = 8.dp, end = 8.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally){
+
+    TopAppBarWithBackNav(title = "Ruta #$routeID", onBack = { navHost.popBackStack() },
+        content =  {
             ElevatedCard (modifier = Modifier.fillMaxWidth(),
                 colors = CardDefaults.elevatedCardColors(
                     containerColor = MaterialTheme.colorScheme.background)) {
@@ -121,7 +97,7 @@ fun RouteDetailDriverScreen(routeID: Int, navHost: NavHostController) {
                             style = SpanStyle(
                                 fontWeight = FontWeight.Bold,
 
-                            )
+                                )
                         ) {
                             append("Data sortida: ")
                         }
@@ -283,13 +259,7 @@ fun RouteDetailDriverScreen(routeID: Int, navHost: NavHostController) {
                 }
 
             }
-
-        }
-
-    }
-
-
-
+        })
     }
 @Composable
 fun RouteData(icon: Int, dataHeader: String, data: String) {
