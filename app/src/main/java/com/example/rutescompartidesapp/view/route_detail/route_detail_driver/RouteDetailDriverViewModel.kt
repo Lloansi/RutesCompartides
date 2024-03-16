@@ -1,5 +1,7 @@
 package com.example.rutescompartidesapp.view.route_detail.route_detail_driver
 
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import com.example.rutescompartidesapp.data.domain.RouteForList
 import com.example.rutescompartidesapp.view.route_detail.route_detail_driver.DetailUtils.RouteInteraction
@@ -8,18 +10,31 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-class RouteDetailDriverViewModel (interactionList: List<RouteInteraction>): ViewModel(){
+class RouteDetailDriverViewModel (routeID: Int): ViewModel(){
 
-    private val _interactions = MutableStateFlow(interactionList)
-    val interactions = _interactions.asStateFlow()
+    //private val _interactions: SnapshotStateList<RouteInteraction> = mutableStateListOf<RouteInteraction>()
+
+    init {
+        // TODO GET a la API per obtenir les interaccions de la ruta
+        //_interactions.addAll(DetailUtils.interactionList.filter { it.routeID == routeID })
+    }
+    //private val _interactions = MutableStateFlow(DetailUtils.interactionList.filter { it.routeID == routeID })
+    //val interactions = _interactions.asStateFlow()
+
+    private val _interactions = mutableStateListOf<RouteInteraction>().apply {
+        addAll(DetailUtils.interactionList.filter { it.routeID == routeID })
+    }
+    val interactions = _interactions
 
     private val _isCompletePopupShowing = MutableStateFlow(false)
     val isCompletePopupShowing = _isCompletePopupShowing.asStateFlow()
 
-    fun modifyInteractionStatus(routeInteraction: RouteInteraction, status: String){
-        val newList = interactions.value
-        newList[interactions.value.indexOf(routeInteraction)].status = status
-        _interactions.value = newList
+    fun modifyInteractionStatus(routeInteraction: RouteInteraction, index: Int, status: String){
+        _interactions[index] = routeInteraction.copy(status = status)
+        // TODO POST a la API per modificar l'estat de la interacció
+        //val newList = interactions.value
+        //newList[interactions.value.indexOf(routeInteraction)].status = status
+        //_interactions.value = newList
     }
 
 
@@ -29,12 +44,7 @@ class RouteDetailDriverViewModel (interactionList: List<RouteInteraction>): View
 
     // This function is called when the user confirms the delivery of the order
     fun completeOrder(routeInteraction: RouteInteraction){
-        _interactions.update { list ->
-            list[list.indexOf(routeInteraction)].apply {
-                status = "Entregada"
-            }
-            list
-        }
+
         // Closes the popup
         showCompletePopup(false)
     }

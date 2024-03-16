@@ -37,7 +37,7 @@ import com.example.rutescompartidesapp.view.route_detail.route_detail_driver.Det
 import com.example.rutescompartidesapp.view.route_detail.route_detail_driver.RouteDetailDriverViewModel
 
 @Composable
-fun RouteInteractionCard(interaction: RouteInteraction, routeDetailDriverViewModel: RouteDetailDriverViewModel){
+fun RouteInteractionCard(interaction: RouteInteraction, index: Int, routeDetailDriverViewModel: RouteDetailDriverViewModel){
     var firstText = ""
     var secondText = ""
     var chipText = ""
@@ -69,7 +69,7 @@ fun RouteInteractionCard(interaction: RouteInteraction, routeDetailDriverViewMod
             button2Text = "Declinar"
             button2Color = RedRC
             button2Icon = Icons.Default.Cancel
-            button2OnClick = { routeDetailDriverViewModel.modifyInteractionStatus(interaction, "Declinada") }
+            button2OnClick = { routeDetailDriverViewModel.modifyInteractionStatus(interaction, index,"Declinada") }
 
         }
         "Entregada" -> {
@@ -86,11 +86,11 @@ fun RouteInteractionCard(interaction: RouteInteraction, routeDetailDriverViewMod
             button1Text = "Acceptar"
             button1Color = MaterialTheme.colorScheme.primary
             button1Icon = Icons.Filled.Check
-            button1OnClick = { routeDetailDriverViewModel.modifyInteractionStatus(interaction, "Acceptada") }
+            button1OnClick = { routeDetailDriverViewModel.modifyInteractionStatus(interaction, index,"Acceptada") }
             button2Text = "Declinar"
             button2Color = RedRC
             button2Icon = Icons.Filled.Cancel
-            button2OnClick = { routeDetailDriverViewModel.modifyInteractionStatus(interaction, "Declinada") }
+            button2OnClick = { routeDetailDriverViewModel.modifyInteractionStatus(interaction, index,"Declinada") }
             button1IconTint = Color.White
             button2IconTint = Color.Black
             chipTextColor = Color.Black

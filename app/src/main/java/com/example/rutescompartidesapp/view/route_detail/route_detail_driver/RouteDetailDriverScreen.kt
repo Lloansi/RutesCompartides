@@ -55,9 +55,11 @@ import com.example.rutescompartidesapp.view.routes_order_list.components.RouteCa
 fun RouteDetailDriverScreen(routeID: Int, navHost: NavHostController) {
     // TODO Amb el ID hauría de fer una trucada a la API per obtenir la ruta
     // TODO i una altra per obtenir les interaccions de la ruta
-    val interactions = DetailUtils.interactionList.filter { it.routeID == routeID }
+    // val interactions = DetailUtils.interactionList.filter { it.routeID == routeID }
     val route: RouteForList = ListConstants.routeList.first { it.routeID == routeID }
-    val routeDetailDriverViewModel = RouteDetailDriverViewModel(interactions)
+    val routeDetailDriverViewModel = RouteDetailDriverViewModel(routeID)
+    val interactions = routeDetailDriverViewModel.interactions
+
     // TODO Fer un if per comprovar el boleà i mostrar el popup per completar ruta
     val isCompletePopupShowing by routeDetailDriverViewModel.isCompletePopupShowing.collectAsStateWithLifecycle()
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
@@ -253,9 +255,11 @@ fun RouteDetailDriverScreen(routeID: Int, navHost: NavHostController) {
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                items(interactions.size) { interaction ->
+                items(interactions.size) { index ->
                     Spacer(modifier = Modifier.padding(8.dp))
-                    RouteInteractionCard(interaction = interactions[interaction], routeDetailDriverViewModel = routeDetailDriverViewModel)
+                    RouteInteractionCard(interaction = interactions[index],
+                        index = index,
+                        routeDetailDriverViewModel = routeDetailDriverViewModel)
                 }
 
             }
