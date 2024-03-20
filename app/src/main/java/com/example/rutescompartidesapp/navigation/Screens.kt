@@ -22,6 +22,7 @@ sealed class Screens(
     object DrawScreen: Screens("DrawScreen")
     object CameraScreen: Screens("CameraScreen")
     object RouteDetailGeneralScreen: Screens("RouteDetailGeneralScreen/{routeId}")
+    object ChatScreen: Screens("ChatScreen")
 
 
 }

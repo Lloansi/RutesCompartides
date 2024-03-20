@@ -53,6 +53,7 @@ import com.example.rutescompartidesapp.view.map.MapScreen
 import com.example.rutescompartidesapp.view.map.viewModels.MapViewModel
 import com.example.rutescompartidesapp.view.profile.ProfileScreen
 import com.example.rutescompartidesapp.view.profile.ProfileViewModel
+import com.example.rutescompartidesapp.view.prueba.ChatScreen
 import com.example.rutescompartidesapp.view.publish_order.PublishOrderScreen
 import com.example.rutescompartidesapp.view.publish_route.PublishRouteScreen
 import com.example.rutescompartidesapp.view.route_detail.route_detail_driver.RouteDetailDriverScreen
@@ -187,8 +188,11 @@ fun ScreenNavigationConfiguration( mapViewModel: MapViewModel,drawViewModel: Dra
                                    routeOrderListViewModel: RoutesOrderListViewModel, filterPopupViewModel: FilterPopupViewModel,
                                    navController: NavHostController, paddingModifier: Modifier) {
 
-    NavHost(navController = navController, startDestination = Screens.RoutesOrderListScreen.route, modifier = paddingModifier) {
+    NavHost(navController = navController, startDestination = Screens.ChatScreen.route, modifier = paddingModifier) {
 
+        composable(Screens.ChatScreen.route) {
+            ChatScreen(navController)
+        }
         composable(Screens.MapScreen.route) {
             MapScreen(navController, mapViewModel)
         }
