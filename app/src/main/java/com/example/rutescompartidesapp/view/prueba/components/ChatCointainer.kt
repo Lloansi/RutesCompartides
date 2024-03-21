@@ -11,9 +11,12 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.rutescompartidesapp.data.domain.Message
+import com.example.rutescompartidesapp.data.domain.user.User
+import com.example.rutescompartidesapp.view.prueba.ChatViewModel
 
 @Composable
-fun Chat(messages: List<String>) {
+fun Chat(messages: List<Message>, chatViewModel: ChatViewModel, user: User) {
     Surface(
         modifier = Modifier
             .fillMaxSize()
@@ -23,6 +26,7 @@ fun Chat(messages: List<String>) {
         Column(
             modifier = Modifier.fillMaxHeight(0.9f)
         ){
+            TopInfoContainer(user = user)
             LazyColumn(
                 modifier = Modifier.fillMaxHeight(0.9f),
                 state = listState,
@@ -33,7 +37,8 @@ fun Chat(messages: List<String>) {
                     ChatMessage(
                         text = messages[messageIndex],
                         isMyMessage = isMyMessage,
-                        modifier = Modifier.padding(vertical = 4.dp)
+                        modifier = Modifier.padding(vertical = 4.dp),
+                        user
                     )
                 }
             }
@@ -41,7 +46,7 @@ fun Chat(messages: List<String>) {
                 modifier = Modifier.fillMaxHeight(0.8f),
                 verticalArrangement = Arrangement.Bottom
             ){
-                SendMessage()
+                SendMessage(chatViewModel)
             }
         }
     }

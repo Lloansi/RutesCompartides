@@ -20,10 +20,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
+import com.example.rutescompartidesapp.data.domain.Message
+import com.example.rutescompartidesapp.view.prueba.ChatViewModel
 
 
 @Composable
-fun SendMessage() {
+fun SendMessage(chatViewModel: ChatViewModel) {
     Row (
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.Center,
@@ -34,7 +36,7 @@ fun SendMessage() {
         OutlinedTextField(
             value = messageText,
             onValueChange = { messageText = it },
-            label = { Text("Escribe tu mensaje") },
+            label = { Text("Escribe tu mensaje ...") },
             modifier = Modifier
                 .fillMaxWidth(0.70f),
             //singleLine = false,
@@ -43,7 +45,12 @@ fun SendMessage() {
         Button(
             onClick = {
                 if (messageText.isNotBlank()) {
-                    // TODO sendMessage(messageText)
+                    chatViewModel.sendMessage(Message(
+                        name = "Mi Nombre",
+                        text =  messageText
+                        )
+                    )
+
                     messageText = ""
                 }
             },
@@ -51,7 +58,7 @@ fun SendMessage() {
                 //.fillMaxWidth(0.75f)
                 .wrapContentWidth()
                 .padding()
-                .padding(start = (LocalConfiguration.current.screenWidthDp.dp / 40))
+                .padding(start = (LocalConfiguration.current.screenWidthDp.dp / 40), top = (LocalConfiguration.current.screenHeightDp.dp/75))
         ) {
             Icon(
                 imageVector = Icons.Default.Send,

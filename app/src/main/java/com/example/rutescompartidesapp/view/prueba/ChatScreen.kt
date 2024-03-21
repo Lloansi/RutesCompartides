@@ -1,12 +1,30 @@
 package com.example.rutescompartidesapp.view.prueba
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.navigation.NavHostController
+import com.example.rutescompartidesapp.data.domain.user.User
 import com.example.rutescompartidesapp.view.prueba.components.Chat
 
 @Composable
-fun ChatScreen(navHost: NavHostController) {
-    val messages = listOf(
+fun ChatScreen(navHost: NavHostController, chatViewModel: ChatViewModel, user: User) {
+
+    LaunchedEffect(key1 = Unit) {
+        chatViewModel.connect()
+    }
+
+    DisposableEffect(key1 = Unit) {
+        onDispose {
+            chatViewModel.shutdown()
+        }
+    }
+
+    val messages by chatViewModel.messages.collectAsState()
+
+    val messages2 = listOf(
         "Hola, ¿cómo estás?",
         "¡Hola! Estoy bien, ¿y tú?",
         "Muy bien, gracias.",
@@ -69,5 +87,5 @@ fun ChatScreen(navHost: NavHostController) {
         "Es un tema complicado, ¿verdad?"
     )
 
-    Chat(messages = messages)
+    Chat(messages = messages, chatViewModel = chatViewModel, user = user )
 }

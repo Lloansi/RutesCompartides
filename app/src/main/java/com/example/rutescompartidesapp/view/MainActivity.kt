@@ -33,6 +33,7 @@ import com.PratikFagadiya.smoothanimationbottombar.model.SmoothAnimationBottomBa
 import com.PratikFagadiya.smoothanimationbottombar.properties.BottomBarProperties
 import com.PratikFagadiya.smoothanimationbottombar.ui.SmoothAnimationBottomBar
 import com.example.rutescompartidesapp.R
+import com.example.rutescompartidesapp.data.domain.user.User
 import com.example.rutescompartidesapp.navigation.Screens
 import com.example.rutescompartidesapp.ui.theme.MateBlackRC
 import com.example.rutescompartidesapp.ui.theme.RutesCompartidesAppTheme
@@ -54,6 +55,7 @@ import com.example.rutescompartidesapp.view.map.viewModels.MapViewModel
 import com.example.rutescompartidesapp.view.profile.ProfileScreen
 import com.example.rutescompartidesapp.view.profile.ProfileViewModel
 import com.example.rutescompartidesapp.view.prueba.ChatScreen
+import com.example.rutescompartidesapp.view.prueba.ChatViewModel
 import com.example.rutescompartidesapp.view.publish_order.PublishOrderScreen
 import com.example.rutescompartidesapp.view.publish_route.PublishRouteScreen
 import com.example.rutescompartidesapp.view.route_detail.route_detail_driver.RouteDetailDriverScreen
@@ -63,6 +65,7 @@ import com.example.rutescompartidesapp.view.routes_order_list.viewmodels.FilterP
 import com.example.rutescompartidesapp.view.routes_order_list.viewmodels.RoutesOrderListViewModel
 import com.example.rutescompartidesapp.view.signup.SignUpScreen
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.Date
 
 
 @AndroidEntryPoint
@@ -108,6 +111,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             RutesCompartidesAppTheme {
                 val mapViewModel: MapViewModel = hiltViewModel()
+                val chatViewModel: ChatViewModel = hiltViewModel()
                 val drawViewModel = DrawViewModel()
                 val cameraViewModel = CameraViewModel()
                 val filterPopupViewModel = FilterPopupViewModel()
@@ -170,6 +174,7 @@ class MainActivity : ComponentActivity() {
                 ) { paddingValues ->
                     ScreenNavigationConfiguration(
                         mapViewModel,
+                        chatViewModel,
                         drawViewModel,
                         cameraViewModel,
                         routeOrderListViewModel,
@@ -184,14 +189,15 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun ScreenNavigationConfiguration( mapViewModel: MapViewModel,drawViewModel: DrawViewModel, cameraViewModel: CameraViewModel,
+fun ScreenNavigationConfiguration( mapViewModel: MapViewModel,chatViewModel:ChatViewModel,drawViewModel: DrawViewModel, cameraViewModel: CameraViewModel,
                                    routeOrderListViewModel: RoutesOrderListViewModel, filterPopupViewModel: FilterPopupViewModel,
                                    navController: NavHostController, paddingModifier: Modifier) {
 
     NavHost(navController = navController, startDestination = Screens.ChatScreen.route, modifier = paddingModifier) {
 
+        val user = User("adsgfasg","asd","34fas","asd@asfa.com",false,true, Date())
         composable(Screens.ChatScreen.route) {
-            ChatScreen(navController)
+            ChatScreen(navController,chatViewModel,user)
         }
         composable(Screens.MapScreen.route) {
             MapScreen(navController, mapViewModel)
