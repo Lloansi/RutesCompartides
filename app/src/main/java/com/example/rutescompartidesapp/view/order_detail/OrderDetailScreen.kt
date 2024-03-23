@@ -32,6 +32,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.rutescompartidesapp.R
 import com.example.rutescompartidesapp.data.domain.Order
+import com.example.rutescompartidesapp.ui.theme.MateBlackRC
 import com.example.rutescompartidesapp.view.generic_components.TopAppBarWithBackNav
 import com.example.rutescompartidesapp.view.order_detail.components.AcceptDenyContainer
 import com.example.rutescompartidesapp.view.order_detail.components.CompletedContainer
@@ -60,7 +61,6 @@ fun OrderDetailScreen(packageId: Int, navHost: NavHostController) {
 
 @Composable
 fun CompleteCard(order: Order, responsiveHeight: Dp, isVisible: Boolean, completeViewModel: CompleteViewModel) {
-    val mateBlack = Color(0xFF282826)
     ElevatedCard (modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.elevatedCardColors(
             contentColor = MaterialTheme.colorScheme.onBackground,
@@ -158,7 +158,7 @@ fun CompleteCard(order: Order, responsiveHeight: Dp, isVisible: Boolean, complet
         OrangeLine(responsiveHeight)
         Spacer(modifier = Modifier.height(responsiveHeight / 40))
 
-        AcceptDenyContainer(colorDenyButton = mateBlack, isVisible, completeViewModel)
+        AcceptDenyContainer(colorDenyButton = MateBlackRC, isVisible, completeViewModel)
 
         CompletedContainer(isVisible)
 

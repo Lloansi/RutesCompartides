@@ -40,11 +40,11 @@ fun TopCardInfo(order : Order) {
                 .padding(24.dp),
             verticalArrangement = Arrangement.Center
         ){
-            TopCardDetails(Icons.Outlined.Flag, heading = "Origen", value = order.packageStartPoint, color = Color.White, padding = 8.dp)
+            TopCardDetails(Icons.Outlined.Flag, heading = "Origen", value = order.packageStartPoint, color = MaterialTheme.colorScheme.primary, padding = 8.dp)
 
-            TopCardDetails(Icons.Filled.Flag, heading = "Destinació", value = order.packageEndPoint, color = Color.White, padding = 8.dp)
+            TopCardDetails(Icons.Filled.Flag, heading = "Destinació", value = order.packageEndPoint, color = MaterialTheme.colorScheme.primary, padding = 8.dp)
 
-            TopCardDetails(Icons.Outlined.Route, heading = "Distància", value = "17km", color = Color.White, padding = 8.dp)
+            TopCardDetails(Icons.Outlined.Route, heading = "Distància", value = "17km", color = MaterialTheme.colorScheme.primary, padding = 8.dp)
 
         }
 
@@ -67,10 +67,10 @@ fun TopCardDetails(icon : ImageVector, heading: String, value : String, padding 
         )
 
         Text(text = "$heading: ",
-            style = MaterialTheme.typography.bodyLarge.copy(
+            style = MaterialTheme.typography.bodyMedium.copy(
                 fontWeight = FontWeight.Bold
             ),
-            fontSize = 22.sp,
+            fontSize = 20.sp,
             color = Color.White
         )
 

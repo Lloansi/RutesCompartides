@@ -89,9 +89,7 @@ fun ComandaCard(comanda: Order) {
         ),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(10.dp)
-            //.background(color = Color.White)
-            .clickable { },
+            .padding(10.dp),
     ) {
         Row (
             modifier = Modifier
@@ -195,7 +193,8 @@ fun MeasuresText(icon: ImageVector, typeOfMeasure:String, value: String) {
                 .size(20.dp),
             imageVector = icon,
             contentDescription = null,
-            tint = Color.Black
+            tint = MaterialTheme.colorScheme.onBackground
+
         )
         Spacer(modifier = Modifier.width(2.dp))
         Text(

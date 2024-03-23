@@ -1,5 +1,6 @@
 package com.example.rutescompartidesapp.view.routes_order_list.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -111,7 +112,12 @@ fun RouteCardHeader(route: RouteForList){
 @Composable
 fun RouteCard(route: RouteForList, navController: NavHostController) {
     Column{
-        ElevatedCard (modifier = Modifier.fillMaxWidth(0.95f),
+        ElevatedCard (modifier = Modifier.fillMaxWidth(0.95f)
+            .clickable {  navController.navigate("RouteDetailDriverScreen/{routeId}".replace(
+                oldValue = "{routeId}",
+                newValue = "${route.routeID}"
+            ) )
+            },
             colors = CardDefaults.elevatedCardColors(
                 containerColor = Color.White)) {
             Row {
@@ -129,7 +135,8 @@ fun RouteCard(route: RouteForList, navController: NavHostController) {
                         append("Data sortida: ")
                     }
                     append(route.dataSortida)
-                })
+                },
+                    color =  MaterialTheme.colorScheme.onBackground)
             }
             Spacer(modifier = Modifier.padding(4.dp))
             Row {
@@ -175,7 +182,11 @@ fun RouteCard(route: RouteForList, navController: NavHostController) {
 @Composable
 fun OrderCard(order: OrderForList, navController: NavHostController) {
     Column{
-        ElevatedCard (modifier = Modifier.fillMaxWidth(0.95f),
+        ElevatedCard (modifier = Modifier.fillMaxWidth(0.95f)
+            .clickable {  navController.navigate("OrderDetailScreen/{packageId}".replace(
+                oldValue = "{packageId}",
+                newValue = "${order.orderID}"
+            ) )  },
             colors = CardDefaults.elevatedCardColors(
                 containerColor = Color.White)){
             Row {
@@ -234,13 +245,14 @@ fun OrderCard(order: OrderForList, navController: NavHostController) {
                 Text(text = buildAnnotatedString {
                     withStyle(
                         style = SpanStyle(
-                            fontWeight = FontWeight.Bold
+                            fontWeight = FontWeight.Bold,
                         )
                     ) {
                         append("Data sortida: ")
                     }
                     append(order.dataSortida)
-                })
+                },
+                  color =  MaterialTheme.colorScheme.onBackground)
             }
             Spacer(modifier = Modifier.padding(4.dp))
             Row {
@@ -292,7 +304,8 @@ fun EmptyResults(type: String) {
     ) {
         Row(verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center) {
-            Text(text = "No s'ha trobat cap $type", style = MaterialTheme.typography.headlineLarge)
+            Text(text = "No s'ha trobat cap $type", style = MaterialTheme.typography.headlineLarge,
+                color = MaterialTheme.colorScheme.onBackground)
         }
     }
 }

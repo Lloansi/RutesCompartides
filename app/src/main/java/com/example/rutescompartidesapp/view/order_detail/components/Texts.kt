@@ -32,15 +32,17 @@ fun TwoTexts(value1: String, value2: String) {
     ){
         Text( value1,
             style = MaterialTheme.typography.bodyMedium.copy(
-                fontWeight = FontWeight.Normal
-            )
+                fontWeight = FontWeight.Normal,
+            ),
+            color = Color.White
         )
         Spacer(modifier = Modifier.width(4.dp))
         Text( value2,
             style = MaterialTheme.typography.bodyMedium.copy(
                 fontWeight = FontWeight.Bold
             ),
-            color = Color.Black
+            color = Color.White
+
         )
     }
 }
@@ -78,11 +80,14 @@ fun IconWithText(icon: Int, value: String) {
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ){
-        Icon(painter = painterResource(icon), contentDescription = null, modifier = Modifier
+        Icon(painter = painterResource(icon),
+            tint = MaterialTheme.colorScheme.onBackground,
+            contentDescription = null, modifier = Modifier
             .height(LocalConfiguration.current.screenHeightDp.dp / 25)
             .width(LocalConfiguration.current.screenWidthDp.dp / 10)
         )
         Spacer(modifier = Modifier.width(LocalConfiguration.current.screenWidthDp.dp/75))
-        Text(text = value, fontSize = 14.sp)
+        Text(text = value, fontSize = 14.sp,
+            color = Color.White)
     }
 }

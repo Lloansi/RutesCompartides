@@ -34,9 +34,12 @@ fun AcceptDenyButtons(colorDenyButton: Color, completeViewModel: CompleteViewMod
             containerColor = MaterialTheme.colorScheme.tertiary,
             onClick = { completeViewModel.toggleVisibility() }
         ) {
-            Icon(imageVector = Icons.Filled.ThumbUp, contentDescription = "Accept order")
+            Icon(imageVector = Icons.Filled.ThumbUp, contentDescription = "Accept order",
+                tint = Color.White)
             Spacer(modifier = Modifier.width(5.dp))
-            Text(text = "Acceptar")
+            Text(text = "Acceptar",
+                color = Color.White
+            )
         }
 
         ExtendedFloatingActionButton(

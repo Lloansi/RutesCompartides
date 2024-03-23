@@ -130,7 +130,7 @@ fun TimePickerDialog(
     PickerDialog(
         modifier = modifier,
         onDismissRequest = onCancel,
-        title = { Text("Select hour") },
+        title = { Text("Selecciona l'hora") },
         buttons = {
             DisplayModeToggleButton(
                 displayMode = mode,
@@ -138,10 +138,10 @@ fun TimePickerDialog(
             )
             Spacer(Modifier.weight(1f))
             TextButton(onClick = onCancel) {
-                Text("Cancel")
+                Text("Cancelar")
             }
             TextButton(onClick = ::onConfirmClicked) {
-                Text("Confirm")
+                Text("Confirmar")
             }
         },
     ) {

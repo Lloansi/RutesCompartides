@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -28,16 +29,25 @@ fun ConditionScrollPopup(){
                 Text(text = buildAnnotatedString {
                     withStyle(
                         style = SpanStyle(
-                            fontWeight = FontWeight.Bold
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.onBackground
                         ) ){
-                        append(condicionsTransportInfo[condicio].split(":")[0])
+                        append(condicionsTransportInfo[condicio].split(":")[0],
+                            )
                     }
-                }
+
+                },
+                    color = MaterialTheme.colorScheme.onBackground
+
                 )
             } else {
-                Text(text = condicionsTransportInfo[condicio].split(":")[0])
+                Text(text = condicionsTransportInfo[condicio].split(":")[0],
+                    color = MaterialTheme.colorScheme.onBackground
+                )
             }
-            Text(condicionsTransportInfo[condicio].split(":")[1])
+            Text(condicionsTransportInfo[condicio].split(":")[1],
+                color = MaterialTheme.colorScheme.onBackground
+            )
             Spacer(Modifier.padding(4.dp))
         }
     }

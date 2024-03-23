@@ -97,7 +97,7 @@ fun FilterPopup(routesOrderListViewModel: RoutesOrderListViewModel, filterPopupV
         ){
             ElevatedCard(modifier = Modifier
                 .fillMaxWidth(0.9f),
-                colors = CardDefaults.cardColors(containerColor = Color.White)
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
             ){
                 Row(modifier = Modifier.fillMaxWidth()) {
                     Column (
@@ -107,7 +107,8 @@ fun FilterPopup(routesOrderListViewModel: RoutesOrderListViewModel, filterPopupV
                     ) {
                         Spacer(modifier = Modifier.padding(8.dp))
                         Text(text = "Entra el punt de sortida o d'arribada",
-                            style = MaterialTheme.typography.headlineMedium)
+                            style = MaterialTheme.typography.headlineMedium,
+                            color = MaterialTheme.colorScheme.onBackground)
                         Spacer(modifier = Modifier.padding(8.dp))
                         // Sortida TextField
                         OutlinedFilterTextField(
@@ -139,11 +140,13 @@ fun FilterPopup(routesOrderListViewModel: RoutesOrderListViewModel, filterPopupV
                             if (areExtraFiltersShowing) {
                                 Icon(
                                     imageVector = Icons.Filled.KeyboardArrowUp,
+                                    tint = MaterialTheme.colorScheme.primary,
                                     contentDescription = "Mostrar menys filtres"
                                 )
                             } else {
                                 Icon(
                                     imageVector = Icons.Filled.KeyboardArrowDown,
+                                    tint = MaterialTheme.colorScheme.primary,
                                     contentDescription = "Mostrar més filtres"
                                 )
                             }
@@ -173,10 +176,10 @@ fun FilterPopup(routesOrderListViewModel: RoutesOrderListViewModel, filterPopupV
                                 colors = TextFieldDefaults.colors(
                                     focusedIndicatorColor = MaterialTheme.colorScheme.primary,
                                     unfocusedIndicatorColor = Color.Gray,
-                                    disabledContainerColor = Color.White,
+                                    disabledContainerColor = MaterialTheme.colorScheme.background,
                                     disabledIndicatorColor = Color.Gray,
-                                    focusedContainerColor = Color.White,
-                                    unfocusedContainerColor = Color.White,
+                                    focusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
+                                    unfocusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
                                     disabledTextColor = Color.Black
                                 ),
                                 keyboardOptions = KeyboardOptions(
@@ -207,7 +210,7 @@ fun FilterPopup(routesOrderListViewModel: RoutesOrderListViewModel, filterPopupV
                                     },
                                     dismissButton = {
                                         ElevatedButton(onClick = {filterPopupViewModel.onDatePickerDialogShow(false)}) {
-                                            Text(text = "Salir")
+                                            Text(text = "Sortir")
                                         }
                                     }
                                 ){
@@ -245,10 +248,10 @@ fun FilterPopup(routesOrderListViewModel: RoutesOrderListViewModel, filterPopupV
                                 colors = TextFieldDefaults.colors(
                                     focusedIndicatorColor = MaterialTheme.colorScheme.primary,
                                     unfocusedIndicatorColor = Color.Gray,
-                                    disabledContainerColor = Color.White,
+                                    disabledContainerColor = MaterialTheme.colorScheme.background,
                                     disabledIndicatorColor = Color.Gray,
-                                    focusedContainerColor = Color.White,
-                                    unfocusedContainerColor = Color.White,
+                                    focusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
+                                    unfocusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
                                     disabledTextColor = Color.Black
                                 ),
                                 keyboardOptions = KeyboardOptions(
@@ -257,17 +260,17 @@ fun FilterPopup(routesOrderListViewModel: RoutesOrderListViewModel, filterPopupV
                                 singleLine = true,
 
                                 )
-                            Spacer(modifier = Modifier.padding(8.dp))
+                            Spacer(modifier = Modifier.padding(4.dp))
 
                             Row(modifier = Modifier.fillMaxWidth(),
                                 horizontalArrangement = Arrangement.Center,
                                 verticalAlignment = Alignment.CenterVertically){
-                                Column(modifier = Modifier.weight(1f),
+                                Column(modifier = Modifier.weight(0.75f),
                                     verticalArrangement = Arrangement.Center,
                                     horizontalAlignment = Alignment.CenterHorizontally) {
                                     // Conditions Button
                                     FloatingActionButton(onClick = { filterPopupViewModel.onCondicionsPopupShow(true) },
-                                        containerColor = MateBlackRC) {
+                                        containerColor = MaterialTheme.colorScheme.primary) {
                                         Icon(imageVector = Icons.Filled.QuestionMark,
                                             contentDescription = "Question Icon",
                                             tint = Color.White)
@@ -282,7 +285,7 @@ fun FilterPopup(routesOrderListViewModel: RoutesOrderListViewModel, filterPopupV
                                                 dismissOnClickOutside=  true)){
                                                 ElevatedCard(modifier = Modifier
                                                     .fillMaxWidth(0.65f),
-                                                    colors = CardDefaults.cardColors(containerColor = Color.White)) {
+                                                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background)) {
                                                     Row (Modifier.fillMaxWidth()) {
                                                         Column(Modifier.fillMaxWidth(),
                                                             verticalArrangement = Arrangement.Center,
@@ -290,18 +293,19 @@ fun FilterPopup(routesOrderListViewModel: RoutesOrderListViewModel, filterPopupV
                                                             Row(modifier = Modifier
                                                                 .fillMaxWidth()
                                                                 .height(40.dp)
-                                                                .background(Color.LightGray),
+                                                                .background(MaterialTheme.colorScheme.background),
                                                                 verticalAlignment = Alignment.CenterVertically,
                                                                 horizontalArrangement = Arrangement.Center
                                                                 ){
                                                                 Text("Condicions de transport",
-                                                                    style = MaterialTheme.typography.titleLarge,)
+                                                                    style = MaterialTheme.typography.titleLarge,
+                                                                    color = MaterialTheme.colorScheme.onBackground)
                                                             }
                                                             Row (
                                                                 Modifier
                                                                     .height(10.dp)
-                                                                    .background(Color.LightGray)) {
-                                                                Divider(color = MateBlackRC, thickness = 4.dp)
+                                                                    .background(MaterialTheme.colorScheme.background)) {
+                                                                Divider(color = MaterialTheme.colorScheme.onBackground, thickness = 4.dp)
                                                             }
                                                             Row(Modifier.padding(12.dp)) {
                                                                 ConditionScrollPopup()
@@ -314,7 +318,7 @@ fun FilterPopup(routesOrderListViewModel: RoutesOrderListViewModel, filterPopupV
                                     }
                                 }
                                 // Chips & Info Button
-                                Column(modifier = Modifier.weight(3f),
+                                Column(modifier = Modifier.weight(3f).padding(end = 6.dp),
                                     verticalArrangement = Arrangement.Center) {
                                     Row(modifier = Modifier.fillMaxWidth(),
                                         horizontalArrangement = Arrangement.SpaceAround) {
@@ -328,6 +332,7 @@ fun FilterPopup(routesOrderListViewModel: RoutesOrderListViewModel, filterPopupV
                                                     style = MaterialTheme.typography.bodyLarge,)
                                             } else {
                                                 Text("Isoterm",
+                                                    color = Color.Gray,
                                                     style = MaterialTheme.typography.bodyLarge,)
                                             }
                                             },
@@ -353,6 +358,7 @@ fun FilterPopup(routesOrderListViewModel: RoutesOrderListViewModel, filterPopupV
                                                         style = MaterialTheme.typography.bodyLarge,)
                                                 } else {
                                                     Text("Refrigerat",
+                                                        color = Color.Gray,
                                                         style = MaterialTheme.typography.bodyLarge,)
                                                 }
                                             },
@@ -380,6 +386,7 @@ fun FilterPopup(routesOrderListViewModel: RoutesOrderListViewModel, filterPopupV
                                                     style = MaterialTheme.typography.bodyLarge,)
                                             } else {
                                                 Text("Congelat",
+                                                    color = Color.Gray,
                                                     style = MaterialTheme.typography.bodyLarge,)
                                             }
                                             },
@@ -404,6 +411,7 @@ fun FilterPopup(routesOrderListViewModel: RoutesOrderListViewModel, filterPopupV
                                                     style = MaterialTheme.typography.bodyLarge,)
                                             } else {
                                                 Text("Sense Humitat",
+                                                    color = Color.Gray,
                                                     style = MaterialTheme.typography.bodyLarge,)
                                             } },
                                             leadingIcon = {
@@ -448,9 +456,10 @@ fun FilterPopup(routesOrderListViewModel: RoutesOrderListViewModel, filterPopupV
                                 colors = TextFieldDefaults.colors(
                                     focusedIndicatorColor = MaterialTheme.colorScheme.primary,
                                     unfocusedIndicatorColor = Color.Gray,
-                                    disabledIndicatorColor = Color.Transparent,
-                                    focusedContainerColor = Color.White,
-                                    unfocusedContainerColor = Color.White,
+                                    disabledContainerColor = MaterialTheme.colorScheme.background,
+                                    disabledIndicatorColor = Color.Gray,
+                                    focusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
+                                    unfocusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
                                     errorTextColor = MaterialTheme.colorScheme.primary,
                                     errorContainerColor = GrayRC
                                 ),

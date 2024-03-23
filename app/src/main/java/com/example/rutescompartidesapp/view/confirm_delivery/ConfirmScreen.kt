@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Upload
 import androidx.compose.material3.Card
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -178,7 +177,7 @@ fun UserCommentContainer() {
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight(0.3f),
-        label = { Text(color = Color.Gray ,text = "Escriu aquí el teu comentari aquí ...") },
+        label = { Text(color = Color.Gray ,text = "Escriu aquí el teu comentari") },
         singleLine = false,
         maxLines = 4,
         colors = TextFieldDefaults.colors(
@@ -189,17 +188,5 @@ fun UserCommentContainer() {
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent,
         )
-    )
-}
-
-
-@Composable
-fun OrangeLine(responsiveHeight: Dp) {
-    Divider(
-        color = MaterialTheme.colorScheme.primary,
-        thickness = 2.dp,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = responsiveHeight / 90, end = responsiveHeight / 90)
     )
 }
