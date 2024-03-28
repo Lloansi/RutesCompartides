@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Send
+import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
@@ -46,7 +46,7 @@ fun SendMessage(chatViewModel: ChatViewModel) {
             onClick = {
                 if (messageText.isNotBlank()) {
                     chatViewModel.sendMessage(Message(
-                        name = "Mi Nombre",
+                        name = "Mi Nombre", //TODO Añadr aquí la variable donde se guarde el nombre que se consiga al hacer login
                         text =  messageText
                         )
                     )
@@ -61,7 +61,7 @@ fun SendMessage(chatViewModel: ChatViewModel) {
                 .padding(start = (LocalConfiguration.current.screenWidthDp.dp / 40), top = (LocalConfiguration.current.screenHeightDp.dp/75))
         ) {
             Icon(
-                imageVector = Icons.Default.Send,
+                imageVector = Icons.AutoMirrored.Filled.Send,
                 contentDescription = "Send"
             )
         }

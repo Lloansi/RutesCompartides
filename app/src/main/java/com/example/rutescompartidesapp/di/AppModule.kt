@@ -1,6 +1,6 @@
 package com.example.rutescompartidesapp.di
 
-import com.example.rutescompartidesapp.data.network.repository.RutesCompartidesRepository
+import com.example.rutescompartidesapp.data.network.rutes_compartides.repository.RutesCompartidesRepository
 import com.example.rutescompartidesapp.data.network.rutes_compartides.ApiRutesCompartides
 import com.example.rutescompartidesapp.data.network.rutes_compartides.RutesCompartidesService
 import com.example.rutescompartidesapp.utils.Constants
@@ -10,6 +10,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.WebSocket
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.create
@@ -19,6 +21,22 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
+    /*
+    @Provides
+    @Singleton
+    fun provideChatApi(): WebSocket {
+
+        val client = OkHttpClient.Builder()
+            .build()
+
+        val request = Request.Builder()
+            .url("ws://localhost/chatbueno")
+            .build()
+
+        return client.newWebSocket(request, ) //TODO Falta añadir el WebSocketListener, que provee de las funciones basicas de un websocket
+    }
+
+     */
 
 
     @Provides

@@ -20,15 +20,26 @@ class ChatViewModel: ViewModel() {
     private val client: OkHttpClient = OkHttpClient()
     var webSocket: WebSocket? = null
 
+    fun createRequest(): Request {
+        return Request
+            .Builder()
+            .url("ws://localhost:6969/chatbueno")
+            .build()
+    }
+
+    // En vez de crear una clase, creamos un objecto y lo linkeamos a una variable, a efectos prácticos, lo mismo
+    // El WebSocketListener() nos da metodos básicos de websocket, como en este caso, enviar un mensaje
+    private val listener = object : WebSocketListener () {
+        override fun onMessage(webSocket: WebSocket, text: String) {
+            super.onMessage(webSocket, text)
+            val jsonToString = Json.decodeFromString<Message>(text)
+            println("New message received")
+            _messages.update { it + jsonToString }
+        }
+    }
+
     fun connect(){
-        webSocket = client.newWebSocket(createRequest(), object : WebSocketListener() {
-            override fun onMessage(webSocket: WebSocket, text: String) {
-                super.onMessage(webSocket, text)
-                val jsonToString = Json.decodeFromString<Message>(text)
-                println("New message received")
-                _messages.update { it + jsonToString }
-            }
-        })
+        webSocket = client.newWebSocket(createRequest() ,listener)
     }
     fun sendMessage (message: Message){
         val stringToJson = Json.encodeToString(message)
@@ -38,12 +49,4 @@ class ChatViewModel: ViewModel() {
         webSocket?.close(100,"Closed Manually")
         client.dispatcher.executorService.shutdown()
     }
-
-    fun createRequest(): Request {
-        return Request
-            .Builder()
-            .url("http://localhost:6969/chat3")
-            .build()
-    }
-
 }
