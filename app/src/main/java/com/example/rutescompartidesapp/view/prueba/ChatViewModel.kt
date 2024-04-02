@@ -23,7 +23,7 @@ class ChatViewModel: ViewModel() {
     fun createRequest(): Request {
         return Request
             .Builder()
-            .url("ws://localhost:6969/chatbueno")
+            .url("ws://89.47.29.153:27040/chat")
             .build()
     }
 

@@ -31,11 +31,11 @@ fun SendMessage(chatViewModel: ChatViewModel) {
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ){
-        var messageText by remember { mutableStateOf("") }
+        var userInputMessage by remember { mutableStateOf("") }
 
         OutlinedTextField(
-            value = messageText,
-            onValueChange = { messageText = it },
+            value = userInputMessage,
+            onValueChange = { userInputMessage = it },
             label = { Text("Escribe tu mensaje ...") },
             modifier = Modifier
                 .fillMaxWidth(0.70f),
@@ -44,14 +44,14 @@ fun SendMessage(chatViewModel: ChatViewModel) {
         )
         Button(
             onClick = {
-                if (messageText.isNotBlank()) {
+                if (userInputMessage.isNotBlank()) {
                     chatViewModel.sendMessage(Message(
                         name = "Mi Nombre", //TODO Añadr aquí la variable donde se guarde el nombre que se consiga al hacer login
-                        text =  messageText
+                        text =  userInputMessage
                         )
                     )
 
-                    messageText = ""
+                    userInputMessage = ""
                 }
             },
             modifier = Modifier

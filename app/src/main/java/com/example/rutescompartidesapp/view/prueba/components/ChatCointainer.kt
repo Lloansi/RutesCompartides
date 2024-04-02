@@ -26,7 +26,7 @@ fun Chat(messages: List<Message>, chatViewModel: ChatViewModel, user: User) {
         Column(
             modifier = Modifier.fillMaxHeight(0.9f)
         ){
-            TopInfoContainer(user = user)
+            // List of messages
             LazyColumn(
                 modifier = Modifier.fillMaxHeight(0.9f),
                 state = listState,
@@ -42,6 +42,7 @@ fun Chat(messages: List<Message>, chatViewModel: ChatViewModel, user: User) {
                     )
                 }
             }
+            // Writteable box and send message button
             Column (
                 modifier = Modifier.fillMaxHeight(0.8f),
                 verticalArrangement = Arrangement.Bottom
