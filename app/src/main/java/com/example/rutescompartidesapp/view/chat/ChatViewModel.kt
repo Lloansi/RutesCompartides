@@ -1,11 +1,7 @@
-package com.example.rutescompartidesapp.view.prueba
+package com.example.rutescompartidesapp.view.chat
 
 import androidx.lifecycle.ViewModel
-import com.example.rutescompartidesapp.data.domain.Message
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
-import kotlinx.serialization.decodeFromString
+import com.example.rutescompartidesapp.data.domain.chat.Message
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import okhttp3.OkHttpClient
@@ -14,11 +10,12 @@ import okhttp3.WebSocket
 import okhttp3.WebSocketListener
 
 class ChatViewModel: ViewModel() {
-    private val _messages = MutableStateFlow<List<Message>>(emptyList())
-    val messages = _messages.asStateFlow()
+    //private val _messages = MutableStateFlow<List<Message>>(emptyList())
+    //val messages = _messages.asStateFlow()
 
     private val client: OkHttpClient = OkHttpClient()
-    var webSocket: WebSocket? = null
+    private lateinit var webSocket: WebSocket
+    //var webSocket: WebSocket? = null
 
     fun createRequest(): Request {
         return Request
@@ -34,19 +31,30 @@ class ChatViewModel: ViewModel() {
             super.onMessage(webSocket, text)
             val jsonToString = Json.decodeFromString<Message>(text)
             println("New message received")
-            _messages.update { it + jsonToString }
+            //_messages.update { it + jsonToString }
+        }
+
+        override fun onClosing(webSocket: WebSocket, code: Int, reason: String) {
+            super.onClosing(webSocket, code, reason)
+            println("Closing socket | Reason: $reason Code: $code")
+        }
+
+        override fun onClosed(webSocket: WebSocket, code: Int, reason: String) {
+            super.onClosed(webSocket, code, reason)
+            println("Closed socket | Reason: $reason Code: $code")
+
         }
     }
 
-    fun connect(){
+     fun connect(){
         webSocket = client.newWebSocket(createRequest() ,listener)
     }
     fun sendMessage (message: Message){
         val stringToJson = Json.encodeToString(message)
-        webSocket?.send(stringToJson)
+        webSocket.send(stringToJson)
     }
     fun shutdown (){
-        webSocket?.close(100,"Closed Manually")
+        webSocket.close(100,"Closed Manually")
         client.dispatcher.executorService.shutdown()
     }
 }

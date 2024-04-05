@@ -1,4 +1,4 @@
-package com.example.rutescompartidesapp.view.prueba.components
+package com.example.rutescompartidesapp.view.chat.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -20,12 +20,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
-import com.example.rutescompartidesapp.data.domain.Message
-import com.example.rutescompartidesapp.view.prueba.ChatViewModel
+import com.example.rutescompartidesapp.data.domain.chat.Message
+import com.example.rutescompartidesapp.view.chat.ChatViewModel2
 
 
 @Composable
-fun SendMessage(chatViewModel: ChatViewModel) {
+fun MessageContainerAndSendButton(chatViewModel: ChatViewModel2) {
     Row (
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.Center,
@@ -45,7 +45,8 @@ fun SendMessage(chatViewModel: ChatViewModel) {
         Button(
             onClick = {
                 if (userInputMessage.isNotBlank()) {
-                    chatViewModel.sendMessage(Message(
+                    chatViewModel.sendMessage(
+                        Message(
                         name = "Mi Nombre", //TODO Añadr aquí la variable donde se guarde el nombre que se consiga al hacer login
                         text =  userInputMessage
                         )

@@ -25,8 +25,8 @@ import com.example.rutescompartidesapp.view.map.viewModels.MapViewModel
 import com.example.rutescompartidesapp.view.order_detail.OrderDetailScreen
 import com.example.rutescompartidesapp.view.profile.ProfileScreen
 import com.example.rutescompartidesapp.view.profile.ProfileViewModel
-import com.example.rutescompartidesapp.view.prueba.ChatScreen
-import com.example.rutescompartidesapp.view.prueba.ChatViewModel
+import com.example.rutescompartidesapp.view.chat.ChatScreen
+import com.example.rutescompartidesapp.view.chat.ChatViewModel2
 import com.example.rutescompartidesapp.view.publish_order.PublishOrderScreen
 import com.example.rutescompartidesapp.view.publish_route.PublishRouteScreen
 import com.example.rutescompartidesapp.view.route_detail.RouteDetailGeneralScreen
@@ -38,7 +38,7 @@ import com.example.rutescompartidesapp.view.signup.SignUpScreen
 import java.util.Date
 
 @Composable
-fun ScreenNavigationConfiguration(mapViewModel: MapViewModel, chatViewModel: ChatViewModel, drawViewModel: DrawViewModel, cameraViewModel: CameraViewModel,
+fun ScreenNavigationConfiguration(mapViewModel: MapViewModel, chatViewModel: ChatViewModel2, drawViewModel: DrawViewModel, cameraViewModel: CameraViewModel,
                                   routeOrderListViewModel: RoutesOrderListViewModel, filterPopupViewModel: FilterPopupViewModel,
                                   navController: NavHostController, paddingModifier: Modifier
 ) {

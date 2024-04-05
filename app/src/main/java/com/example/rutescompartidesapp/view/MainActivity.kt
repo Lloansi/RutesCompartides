@@ -8,7 +8,6 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -22,50 +21,23 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavDestination.Companion.hierarchy
-import androidx.navigation.NavHostController
-import androidx.navigation.NavType
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import com.PratikFagadiya.smoothanimationbottombar.model.SmoothAnimationBottomBarScreens
 import com.PratikFagadiya.smoothanimationbottombar.properties.BottomBarProperties
 import com.PratikFagadiya.smoothanimationbottombar.ui.SmoothAnimationBottomBar
 import com.example.rutescompartidesapp.R
-import com.example.rutescompartidesapp.data.domain.user.User
 import com.example.rutescompartidesapp.navigation.Screens
 import com.example.rutescompartidesapp.ui.theme.MateBlackRC
 import com.example.rutescompartidesapp.ui.theme.RutesCompartidesAppTheme
-import com.example.rutescompartidesapp.view.com_funciona.ComFuncionaScreen
-import com.example.rutescompartidesapp.view.edit_profile.EditProfileScreen
-import com.example.rutescompartidesapp.view.edit_profile.EditProfileViewModel
-import com.example.rutescompartidesapp.view.faq.FaqScreen
-import com.example.rutescompartidesapp.view.faq.FaqViewModel
 import com.example.rutescompartidesapp.utils.Constants.ALL_PERMISSIONS
-import com.example.rutescompartidesapp.view.order_detail.OrderDetailScreen
-import com.example.rutescompartidesapp.view.confirm_delivery.components.camera.CameraScreen
-import com.example.rutescompartidesapp.view.confirm_delivery.ConfirmScreen
-import com.example.rutescompartidesapp.view.confirm_delivery.components.draw.DrawScreen
 import com.example.rutescompartidesapp.view.confirm_delivery.viewmodel.CameraViewModel
 import com.example.rutescompartidesapp.view.confirm_delivery.viewmodel.DrawViewModel
-import com.example.rutescompartidesapp.view.login.LoginScreen
-import com.example.rutescompartidesapp.view.map.MapScreen
 import com.example.rutescompartidesapp.view.map.viewModels.MapViewModel
-import com.example.rutescompartidesapp.view.profile.ProfileScreen
-import com.example.rutescompartidesapp.view.profile.ProfileViewModel
-import com.example.rutescompartidesapp.view.prueba.ChatScreen
-import com.example.rutescompartidesapp.view.prueba.ChatViewModel
-import com.example.rutescompartidesapp.view.publish_order.PublishOrderScreen
-import com.example.rutescompartidesapp.view.publish_route.PublishRouteScreen
-import com.example.rutescompartidesapp.view.route_detail.route_detail_driver.RouteDetailDriverScreen
-import com.example.rutescompartidesapp.view.route_detail.RouteDetailGeneralScreen
-import com.example.rutescompartidesapp.view.routes_order_list.RoutesOrderListScreen
+import com.example.rutescompartidesapp.view.chat.ChatViewModel2
 import com.example.rutescompartidesapp.view.routes_order_list.viewmodels.FilterPopupViewModel
 import com.example.rutescompartidesapp.view.routes_order_list.viewmodels.RoutesOrderListViewModel
-import com.example.rutescompartidesapp.view.signup.SignUpScreen
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.Date
 
 
 @AndroidEntryPoint
@@ -111,7 +83,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             RutesCompartidesAppTheme {
                 val mapViewModel: MapViewModel = hiltViewModel()
-                val chatViewModel: ChatViewModel = hiltViewModel()
+                val chatViewModel: ChatViewModel2 = hiltViewModel()
                 val drawViewModel = DrawViewModel()
                 val cameraViewModel = CameraViewModel()
                 val filterPopupViewModel = FilterPopupViewModel()

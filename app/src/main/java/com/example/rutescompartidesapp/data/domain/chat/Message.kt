@@ -1,4 +1,4 @@
-package com.example.rutescompartidesapp.data.domain
+package com.example.rutescompartidesapp.data.domain.chat
 
 import kotlinx.serialization.Serializable
 
