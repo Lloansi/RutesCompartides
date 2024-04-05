@@ -54,6 +54,8 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("com.android.volley:volley:1.2.1")
     implementation("androidx.preference:preference-ktx:1.2.1")
+    implementation("androidx.wear.compose:compose-material:1.3.1")
+    implementation("androidx.tv:tv-material:1.0.0-alpha10")
     val voyagerVersion = "1.0.0"
 
     implementation("androidx.core:core-ktx:1.12.0")

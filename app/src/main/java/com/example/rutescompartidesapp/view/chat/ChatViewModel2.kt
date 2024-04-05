@@ -1,5 +1,6 @@
 package com.example.rutescompartidesapp.view.chat
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.rutescompartidesapp.data.domain.chat.Message
 import kotlinx.coroutines.Dispatchers
@@ -7,21 +8,17 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.withContext
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
 import okhttp3.WebSocket
 import okhttp3.WebSocketListener
-import java.util.concurrent.TimeUnit
 
 class ChatViewModel2: ViewModel()  {
     private val _messages = MutableStateFlow<List<Message>>(emptyList())
     val messages = _messages.asStateFlow()
     private lateinit var client: OkHttpClient
     private lateinit var webSocket: WebSocket
-
 
     private val listener = object : WebSocketListener() {
         override fun onOpen(webSocket: WebSocket, response: Response) {
@@ -67,7 +64,6 @@ class ChatViewModel2: ViewModel()  {
 
             webSocket = client.newWebSocket(request, listener)
         }
-
     }
 
     fun sendMessage (message: Message){
