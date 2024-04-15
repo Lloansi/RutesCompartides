@@ -1,6 +1,8 @@
 package com.example.rutescompartidesapp.view.publish_route
 
 import androidx.lifecycle.ViewModel
+import com.example.rutescompartidesapp.data.domain.RouteForList
+import com.example.rutescompartidesapp.view.routes_order_list.ListConstants
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import java.time.Instant
@@ -46,24 +48,25 @@ class PublishRouteViewModel: ViewModel(){
 
     // Step location 1 name
     private val _stepName1 = MutableStateFlow("")
-    val stepName1 = _stepName1
+    val stepName1 = _stepName1.asStateFlow()
     // Step location 2 name
     private val _stepName2 = MutableStateFlow("")
-    val stepName2 = _stepName2
+    val stepName2 = _stepName2.asStateFlow()
     // Step location 3 name
     private val _stepName3 = MutableStateFlow("")
-    val stepName3 = _stepName3
+    val stepName3 = _stepName3.asStateFlow()
     // Step location 4 name
     private val _stepName4 = MutableStateFlow("")
-    val stepName4 = _stepName4
+    val stepName4 = _stepName4.asStateFlow()
     // Step location 5 name
     private val _stepName5 = MutableStateFlow("")
-    val stepName5 = _stepName5
+    val stepName5 = _stepName5.asStateFlow()
     // Step location 6 name
     private val _stepName6 = MutableStateFlow("")
-    val stepName6 = _stepName6
+    val stepName6 = _stepName6.asStateFlow()
 
-    private val _stepNameList = MutableStateFlow(listOf(stepName1, stepName2, stepName3, stepName4, stepName5, stepName6))
+    private val _stepNameList = MutableStateFlow(listOf(stepName1.value, stepName2.value,
+        stepName3.value, stepName4.value, stepName5.value, stepName6.value))
     val stepNameList = _stepNameList.asStateFlow()
 
     private val _stepLocationsNumber = MutableStateFlow(1)
@@ -207,50 +210,78 @@ class PublishRouteViewModel: ViewModel(){
 
     // Next button
     private val _isFirstFormCompleted = MutableStateFlow(false)
-    val isFirstFormCompleted = _isFirstFormCompleted
+
+    private val _isSecondFormCompleted = MutableStateFlow(false)
+
+    private val _isFormCompletedPopup = MutableStateFlow(false)
+    val isFormCompletedPopup = _isFormCompletedPopup
+
     fun checkAllValues(){
-        _isFirstFormCompleted.value = _internalRouteName.value.isNotEmpty() &&
-                _originName.value.isNotEmpty() &&
-                _destinationName.value.isNotEmpty()
+        when (step.value) {
+            1 -> {
+                _isFirstFormCompleted.value = _internalRouteName.value.isNotEmpty() &&
+                        _originName.value.isNotEmpty() && _destinationName.value.isNotEmpty() &&
+                        _dateDepart.value.isNotEmpty() && _dateArrival.value.isNotEmpty() &&
+                        _timeDepartText.value.isNotEmpty() && _timeArrivalText.value.isNotEmpty()
+                if (_isFirstFormCompleted.value) {
+                    nextStep()
+                } else {
+                    missingValuesPopupToggle()
+                }
+            }
+            2 -> {
+                _isSecondFormCompleted.value = _availableSpace.value.isNotEmpty()
+                        && _vehicle.value.isNotEmpty()
+                if (_isSecondFormCompleted.value) {
+                    nextStep()
+                } else {
+                    missingValuesPopupToggle()
+                }
+            }
+        }
+    }
+
+    private fun missingValuesPopupToggle(){
+        _isFormCompletedPopup.value = !_isFormCompletedPopup.value
     }
 
     // Screen 2
 
     // Max Detour KM
-    private val _maxDetourKm = MutableStateFlow(0.0f)
-    val maxDetourKm = _maxDetourKm
+    private val _maxDetourKm = MutableStateFlow("")
+    val maxDetourKm = _maxDetourKm.asStateFlow()
 
     fun setMaxDetourKm(km: String){
-        _maxDetourKm.value = km.toFloat()
+        _maxDetourKm.value = km
     }
 
     // Available Seats
 
-    private val _availableSeats = MutableStateFlow(0)
-    val availableSeats = _availableSeats
+    private val _availableSeats = MutableStateFlow("")
+    val availableSeats = _availableSeats.asStateFlow()
 
     fun setSeats(seats: String){
-        _availableSeats.value = seats.toInt()
+        _availableSeats.value = seats
     }
 
     // Available Space
     private val _availableSpace = MutableStateFlow("")
-    val availableSpace = _availableSpace
+    val availableSpace = _availableSpace.asStateFlow()
 
     fun setAvailableSpace(text: String){
         _availableSpace.value = text
     }
     // Cost KM
-    private val _costKM = MutableStateFlow(0.0f)
-    val costKM = _costKM
+    private val _costKM = MutableStateFlow("")
+    val costKM = _costKM.asStateFlow()
 
     fun setCostKM(cost: String){
-        _costKM.value = cost.toFloat()
+        _costKM.value = cost
     }
 
     // Vehicle
     private val _vehicle = MutableStateFlow("")
-    val vehicle = _vehicle
+    val vehicle = _vehicle.asStateFlow()
 
     fun setVehicle(vehicle: String){
         _vehicle.value = vehicle
@@ -293,6 +324,7 @@ class PublishRouteViewModel: ViewModel(){
     fun onTagsAddToListChange(etiqueta: String){
         _tagsList.value.add(etiqueta)
         _tagsText.value = ""
+        println("TAG ADDED $etiqueta")
     }
 
     // Reasigna el valor de la llista de etiquetas sense l'etiqueta que volem eliminar
@@ -307,6 +339,7 @@ class PublishRouteViewModel: ViewModel(){
     }
     fun onTagsChange(text: String){
         _tagsText.value = text
+        println("TAG CHANGE $text")
     }
 
     // Popup Transport Conditions
@@ -336,6 +369,37 @@ class PublishRouteViewModel: ViewModel(){
 
     fun setComment(comment: String){
         _comment.value = comment
+    }
+
+    private val _routeAdded = MutableStateFlow(false)
+    val routeAdded = _routeAdded.asStateFlow()
+    fun addRoute(){
+        // TODO Cambiar la classe de la ruta i fer servir la oficial
+        val newRoute = RouteForList(user = "Admin",
+            routeID = 0,
+            routeName = _internalRouteName.value,
+            puntSortida = _originName.value,
+            puntArribada = _destinationName.value,
+            puntsIntermedis = stepNameList.value,
+            dataSortida = _dateDepart.value,
+            horaSortida = timeDepartText.value,
+            dataArribada = dateArrival.value,
+            horaArribada = timeArrivalText.value,
+            isIsoterm = _isIsoterm.value,
+            isRefrigerat = _isRefrigerat.value,
+            isCongelat = _isCongelat.value,
+            isSenseHumitat = _isSenseHumitat.value,
+            etiquetes = tagsList.value
+            )
+        // TODO Fer un POST a la API per duplicar la ruta
+
+        if (ListConstants.routeList.add(newRoute)){
+            onRouteAdded(true)
+        }
+    }
+
+    fun onRouteAdded(isRouteAdded: Boolean){
+        _routeAdded.value = isRouteAdded
     }
 
 }

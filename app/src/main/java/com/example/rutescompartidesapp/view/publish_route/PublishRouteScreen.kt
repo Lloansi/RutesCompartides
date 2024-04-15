@@ -1,6 +1,7 @@
 package com.example.rutescompartidesapp.view.publish_route
 
 import android.annotation.SuppressLint
+import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -58,11 +59,15 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.IntOffset
@@ -74,6 +79,7 @@ import com.example.rutescompartidesapp.ui.theme.BlueRC
 import com.example.rutescompartidesapp.ui.theme.GrayRC
 import com.example.rutescompartidesapp.ui.theme.MateBlackRC
 import com.example.rutescompartidesapp.ui.theme.OrangeRC
+import com.example.rutescompartidesapp.utils.Constants
 import com.example.rutescompartidesapp.view.generic_components.BasicTextField
 import com.example.rutescompartidesapp.view.generic_components.DateTimePickerTextField
 import com.example.rutescompartidesapp.view.generic_components.IconTextField
@@ -91,6 +97,8 @@ import com.example.rutescompartidesapp.view.generic_components.popups.PopupScrol
 fun PublishRouteScreen(navHost: NavHostController){
     val publishRouteViewModel = PublishRouteViewModel()
 
+    val isFormCompletedPopup by publishRouteViewModel.isFormCompletedPopup.collectAsStateWithLifecycle()
+
     val currentStep by publishRouteViewModel.step.collectAsStateWithLifecycle()
     val routeName by publishRouteViewModel.internalRouteName.collectAsStateWithLifecycle()
     val originName by publishRouteViewModel.originName.collectAsStateWithLifecycle()
@@ -105,7 +113,6 @@ fun PublishRouteScreen(navHost: NavHostController){
     val destinationName by publishRouteViewModel.destinationName.collectAsStateWithLifecycle()
     val isDropdownExpanded by publishRouteViewModel.isDropdownExpanded.collectAsStateWithLifecycle()
     val routeFrequency by publishRouteViewModel.routeFrequency.collectAsStateWithLifecycle()
-    val isFirstFormCompleted by publishRouteViewModel.isFirstFormCompleted.collectAsStateWithLifecycle()
     val isFreqPopupShowing by publishRouteViewModel.isFreqPopupShowing.collectAsStateWithLifecycle()
     val isCostPopupShowing by publishRouteViewModel.isCostPopupShowing.collectAsStateWithLifecycle()
 
@@ -126,6 +133,7 @@ fun PublishRouteScreen(navHost: NavHostController){
     val costKm by publishRouteViewModel.costKM.collectAsStateWithLifecycle()
     val vehicle by publishRouteViewModel.vehicle.collectAsStateWithLifecycle()
 
+
     // Screen 3 variables
     val isCondicionsPopupShowing by publishRouteViewModel.isCondicionsPopupShowing.collectAsStateWithLifecycle()
     val isIsoterm by publishRouteViewModel.isIsoterm.collectAsStateWithLifecycle()
@@ -136,6 +144,13 @@ fun PublishRouteScreen(navHost: NavHostController){
     val tagsList by publishRouteViewModel.tagsList.collectAsStateWithLifecycle()
     val tagsError by publishRouteViewModel.tagsError.collectAsStateWithLifecycle()
     val comment by publishRouteViewModel.comment.collectAsStateWithLifecycle()
+
+    val routeAdded by publishRouteViewModel.routeAdded.collectAsStateWithLifecycle()
+    if (routeAdded) {
+        // Resets the routeAdded state
+        publishRouteViewModel.onRouteAdded(false)
+        navHost.navigate("MapScreen")
+    }
 
     Scaffold( modifier = Modifier
         .fillMaxSize(),
@@ -164,7 +179,8 @@ fun PublishRouteScreen(navHost: NavHostController){
                     bottom = paddingValues.calculateBottomPadding() + 8.dp,
                     start = 8.dp,
                     end = 8.dp
-                ).verticalScroll(rememberScrollState()),
+                )
+                .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             when (currentStep) {
@@ -182,8 +198,7 @@ fun PublishRouteScreen(navHost: NavHostController){
                     dateDepart,
                     timeDepart,
                     dateArrival,
-                    timeArrival,
-                    isFirstFormCompleted
+                    timeArrival
                 )
                 2 -> {
                     PublishRouteContent2(
@@ -232,6 +247,7 @@ private fun PublishRouteContent3(
     tagsList: MutableList<String>,
     comment: String
 ) {
+
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.Center,
@@ -452,19 +468,13 @@ private fun PublishRouteContent3(
         singleLine = true,
     )
     // Tags
-    FlowRow(
-        modifier = Modifier.fillMaxWidth(0.9f),
-        horizontalArrangement = Arrangement.Start,
-    ) {
-        tagsList.forEach { etiqueta ->
+    FlowRow(modifier = Modifier.fillMaxWidth(0.9f),
+        horizontalArrangement = Arrangement.Start,){
+        tagsList.forEach{ etiqueta ->
             InputChip(selected = true,
                 onClick = { publishRouteViewModel.onTagDelete(etiqueta) },
-                label = {
-                    Text(
-                        etiqueta,
-                        color = Color.White
-                    )
-                },
+                label = { Text(etiqueta,
+                    color = Color.White) },
                 colors = FilterChipDefaults.elevatedFilterChipColors(
                     selectedContainerColor = BlueRC
                 ),
@@ -475,6 +485,7 @@ private fun PublishRouteContent3(
                         modifier = Modifier.clickable {
                             publishRouteViewModel.onTagDelete(etiqueta)
                         })
+
                 })
             Spacer(Modifier.padding(4.dp))
         }
@@ -500,7 +511,7 @@ private fun PublishRouteContent3(
         // Back button
         PublishBackButton(publishRouteViewModel::previousStep)
         // Publish route button
-        PublishButton( onClick = {/*TODO*/}, text = "Publicar ruta")
+        PublishButton( onClick = {publishRouteViewModel.addRoute()}, text = "Publicar ruta")
     }
 }
 
@@ -510,12 +521,12 @@ private fun PublishRouteContent2(
     isDropdownExpanded: Boolean,
     isFreqPopupShowing: Boolean,
     routeFrequency: String,
-    maxDetourKm: Float,
+    maxDetourKm: String,
     publishRouteViewModel: PublishRouteViewModel,
-    availableSeats: Int,
+    availableSeats: String,
     availableSpace: String,
     isCostPopupShowing: Boolean,
-    costKm: Float,
+    costKm: String,
     vehicle: String
 ) {
     // Frequency
@@ -682,7 +693,8 @@ private fun PublishRouteContent2(
         // Back button
         PublishBackButton(publishRouteViewModel::previousStep)
         // Next Button
-        PublishNextButton(onClickCheck = null, isCompleted = true, onClickNext = publishRouteViewModel::nextStep)
+        PublishNextButton(onClickCheck = publishRouteViewModel::checkAllValues)
+
     }
 }
 
@@ -705,8 +717,7 @@ private fun PublishRouteContent1(
     dateDepart: String,
     timeDepart: String,
     dateArrival: String,
-    timeArrival: String,
-    isFirstFormCompleted: Boolean
+    timeArrival: String
 ) {
     BasicTextField(
         value = routeName,
@@ -720,7 +731,9 @@ private fun PublishRouteContent1(
             Icon(imageVector = Icons.Filled.House, contentDescription = "Origin Location Icon")
         })
     LazyColumn(
-        modifier = Modifier.fillMaxWidth(0.95f).height(70.dp * stepLocationsNumber),
+        modifier = Modifier
+            .fillMaxWidth(0.95f)
+            .height(70.dp * stepLocationsNumber),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -888,7 +901,8 @@ private fun PublishRouteContent1(
             onConfirm = publishRouteViewModel::onTimePickerDialogConfirm )
     }
 
-    PublishNextButton(publishRouteViewModel::checkAllValues, isFirstFormCompleted, publishRouteViewModel::nextStep)
+    PublishNextButton(publishRouteViewModel::checkAllValues)
+
 }
 
 

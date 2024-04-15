@@ -31,18 +31,11 @@ fun PublishButton(onClick: () -> Unit, text: String){
 }
 
 @Composable
-fun PublishNextButton(onClickCheck: (() -> Unit)?, isCompleted: Boolean, onClickNext: () -> Unit){
+fun PublishNextButton(onClickCheck: (() -> Unit)){
     ElevatedButton(
         shape = RoundedCornerShape(16.dp),
         onClick = {
-            if (onClickCheck != null) {
                 onClickCheck()
-            }
-            if (isCompleted){
-                onClickNext()
-            } else {
-                println("Falten camps per omplir")
-            }
         },
         colors = ButtonDefaults.elevatedButtonColors(
             containerColor = OrangeRC
@@ -53,6 +46,7 @@ fun PublishNextButton(onClickCheck: (() -> Unit)?, isCompleted: Boolean, onClick
             style = MaterialTheme.typography.headlineMedium
         )
     }
+
 }
 @Composable
 fun PublishBackButton(onClickBack: () -> Unit){

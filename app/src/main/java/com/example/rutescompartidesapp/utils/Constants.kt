@@ -1,6 +1,7 @@
 package com.example.rutescompartidesapp.utils
 
 import android.Manifest
+import androidx.compose.runtime.Stable
 import com.example.rutescompartidesapp.data.domain.User2
 
 object Constants {
@@ -14,6 +15,9 @@ object Constants {
         Manifest.permission.INTERNET,
         Manifest.permission.ACCESS_NETWORK_STATE
     )
+
+    @Stable
+    data class StableWrapper<T>(val value: T)
 
 
 }

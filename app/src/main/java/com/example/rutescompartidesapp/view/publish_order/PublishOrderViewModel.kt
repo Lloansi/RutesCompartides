@@ -1,6 +1,9 @@
 package com.example.rutescompartidesapp.view.publish_order
 
 import androidx.lifecycle.ViewModel
+import com.example.rutescompartidesapp.data.domain.OrderForList
+import com.example.rutescompartidesapp.data.domain.RouteForList
+import com.example.rutescompartidesapp.view.routes_order_list.ListConstants
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import java.time.Instant
@@ -189,11 +192,27 @@ class PublishOrderViewModel: ViewModel(){
     // Next button
     private val _isFirstFormCompleted = MutableStateFlow(false)
     val isFirstFormCompleted = _isFirstFormCompleted
+    private val _isSecondFormCompleted = MutableStateFlow(false)
+    val isSecondFormCompleted = _isSecondFormCompleted
     fun checkAllValues(){
-        _isFirstFormCompleted.value = _internalOrderName.value.isNotEmpty() &&
-                _originName.value.isNotEmpty() &&
-                _destinationName.value.isNotEmpty() &&
-                _minTimeArrivalText.value.isNotEmpty()
+        when (step.value) {
+            1 -> {
+                _isFirstFormCompleted.value = _internalOrderName.value.isNotEmpty() &&
+                        _originName.value.isNotEmpty() &&
+                        _destinationName.value.isNotEmpty() &&
+                        _minTimeArrivalText.value.isNotEmpty()
+                if (_isFirstFormCompleted.value){
+                    nextStep()
+                }
+            }
+            2 -> {
+            _isSecondFormCompleted.value = _packagesNum.value.isNotEmpty()
+                if (_isSecondFormCompleted.value){
+                    nextStep()
+                }
+            }
+        }
+
     }
     // Screen 2
 
@@ -213,28 +232,28 @@ class PublishOrderViewModel: ViewModel(){
 
     // Packages measurements
 
-    private val _packagesLength = MutableStateFlow(0f)
-    val packagesLength = _packagesLength
+    private val _packagesLength = MutableStateFlow("")
+    val packagesLength = _packagesLength.asStateFlow()
     fun setPackagesLength(length: String){
-        _packagesLength.value = length.toFloat()
+        _packagesLength.value = length
     }
 
-    private val _packagesWidth = MutableStateFlow(0f)
-    val packagesWidth = _packagesWidth
+    private val _packagesWidth = MutableStateFlow("")
+    val packagesWidth = _packagesWidth.asStateFlow()
     fun setPackagesWidth(width: String){
-        _packagesWidth.value = width.toFloat()
+        _packagesWidth.value = width
     }
 
-    private val _packagesHeight = MutableStateFlow(0f)
-    val packagesHeight = _packagesHeight
+    private val _packagesHeight = MutableStateFlow("")
+    val packagesHeight = _packagesHeight.asStateFlow()
     fun setPackagesHeight(height: String){
-        _packagesHeight.value = height.toFloat()
+        _packagesHeight.value = height
     }
 
-    private val _packagesWeight = MutableStateFlow(0f)
-    val packagesWeight = _packagesWeight
+    private val _packagesWeight = MutableStateFlow("")
+    val packagesWeight = _packagesWeight.asStateFlow()
     fun setPackagesWeight(weight: String){
-        _packagesWeight.value = weight.toFloat()
+        _packagesWeight.value = weight
     }
 
     // Notification
@@ -302,6 +321,33 @@ class PublishOrderViewModel: ViewModel(){
         _comment.value = text
     }
 
+    private val _orderAdded = MutableStateFlow(false)
+    val orderAdded = _orderAdded.asStateFlow()
+    fun addOrder(){
+        // TODO Cambiar la classe de la order i fer servir la oficial
+        val newOrder = OrderForList(user = "Admin",
+            orderID = 0,
+            orderName = _internalOrderName.value,
+            puntSortida = _originName.value,
+            puntArribada = _destinationName.value,
+            dataSortida = _minTimeArrivalText.value,
+            horaSortida = _maxTimeArrivalText.value,
+            isIsoterm = _isIsoterm.value,
+            isRefrigerat = _isRefrigerat.value,
+            isCongelat = _isCongelat.value,
+            isSenseHumitat = _isSenseHumitat.value,
+            etiquetes = tagsList.value
+        )
+        // TODO Fer un POST a la API per duplicar la ruta
+
+        if (ListConstants.orderList.add(newOrder)){
+            onOrderAdded(true)
+        }
+    }
+
+    fun onOrderAdded(isOrderAdded: Boolean){
+        _orderAdded.value = isOrderAdded
+    }
 
 
 

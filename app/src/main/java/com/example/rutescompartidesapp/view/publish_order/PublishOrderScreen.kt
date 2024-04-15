@@ -1,5 +1,6 @@
 package com.example.rutescompartidesapp.view.publish_order
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -58,6 +59,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.IntOffset
@@ -117,6 +119,7 @@ fun PublishOrderScreen(navHost: NavHostController) {
     val packageHeight by publishOrderViewModel.packagesHeight.collectAsStateWithLifecycle()
     val packageWeight by publishOrderViewModel.packagesWeight.collectAsStateWithLifecycle()
     val wantsDeliveryNotification by publishOrderViewModel.wantsDeliveryNotification.collectAsStateWithLifecycle()
+    val isSecondFormCompleted by publishOrderViewModel.isSecondFormCompleted.collectAsStateWithLifecycle()
 
     // Screen 3 variables
     val deliveryNote by publishOrderViewModel.deliveryNote.collectAsStateWithLifecycle()
@@ -126,6 +129,12 @@ fun PublishOrderScreen(navHost: NavHostController) {
     val clientPhone by publishOrderViewModel.deliveryTelephoneNumber.collectAsStateWithLifecycle()
     val comment by publishOrderViewModel.comment.collectAsStateWithLifecycle()
 
+    val orderAdded by publishOrderViewModel.orderAdded.collectAsStateWithLifecycle()
+    if (orderAdded) {
+        // Resets the orderAdded state
+        publishOrderViewModel.onOrderAdded(false)
+        navHost.navigate("MapScreen")
+    }
 
     Scaffold( modifier = Modifier
         .fillMaxSize(),
@@ -180,8 +189,7 @@ fun PublishOrderScreen(navHost: NavHostController) {
                         isSenseHumitat,
                         tagsText,
                         tagsError,
-                        tagsList,
-                        isFirstFormCompleted
+                        tagsList
                     )
                 }
                 2 -> {
@@ -311,7 +319,7 @@ private fun PublishOrderContent3(
         PublishBackButton(publishOrderViewModel::previousStep)
         // Next Button
         PublishButton(
-            onClick = {  /* TODO POST DE LA COMANDA */ },
+            onClick = {  publishOrderViewModel.addOrder() },
             text = "Publicar comanda"
         )
     }
@@ -322,10 +330,10 @@ private fun PublishOrderContent2(
     packageNumber: String,
     publishOrderViewModel: PublishOrderViewModel,
     arePackagesFragile: Boolean,
-    packageHeight: Float,
-    packageWidth: Float,
-    packageLength: Float,
-    packageWeight: Float,
+    packageHeight: String,
+    packageWidth: String,
+    packageLength: String,
+    packageWeight: String,
     wantsDeliveryNotification: Boolean
 ) {
     Row(
@@ -435,9 +443,7 @@ private fun PublishOrderContent2(
         PublishBackButton(publishOrderViewModel::previousStep)
         // Next Button
         PublishNextButton(
-            onClickCheck = null,
-            isCompleted = true,
-            onClickNext = publishOrderViewModel::nextStep
+            onClickCheck = publishOrderViewModel::checkAllValues,
         )
     }
 }
@@ -464,8 +470,7 @@ private fun PublishOrderContent1(
     isSenseHumitat: Boolean,
     tagsText: String,
     tagsError: Boolean,
-    tagsList: MutableList<String>,
-    isFirstFormCompleted: Boolean
+    tagsList: MutableList<String>
 ) {
     BasicTextField(
         value = orderName,
@@ -946,6 +951,6 @@ private fun PublishOrderContent1(
         }
     }
     // Next Button
-    PublishNextButton(onClickCheck = publishOrderViewModel::checkAllValues,
-        isCompleted = isFirstFormCompleted, onClickNext = publishOrderViewModel::nextStep)
+    PublishNextButton(onClickCheck = publishOrderViewModel::checkAllValues)
+
 }
