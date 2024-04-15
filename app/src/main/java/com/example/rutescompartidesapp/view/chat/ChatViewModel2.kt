@@ -1,6 +1,5 @@
 package com.example.rutescompartidesapp.view.chat
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.rutescompartidesapp.data.domain.chat.Message
 import kotlinx.coroutines.Dispatchers
