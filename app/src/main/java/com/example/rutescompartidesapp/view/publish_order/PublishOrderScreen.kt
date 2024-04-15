@@ -20,6 +20,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
+import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Cancel
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
@@ -517,7 +518,8 @@ private fun PublishOrderContent1(
             },
             time = minTimeArrival,
             onValueChange = publishOrderViewModel::onMinTimeArrivalChange,
-            placeholder = "Data mínima d'arribada"
+            placeholder = "Data mínima d'arribada",
+            icon = Icons.Filled.CalendarMonth
         )
     }
     if (isDataMinPopupShowing){
@@ -564,7 +566,8 @@ private fun PublishOrderContent1(
             },
             time = maxTimeArrival,
             onValueChange = publishOrderViewModel::onMaxTimeArrivalTextChange,
-            placeholder = "Data màxima d'arribada"
+            placeholder = "Data màxima d'arribada",
+            icon = Icons.Filled.CalendarMonth
         )
     }
     // Date Picker Dialog

@@ -3,6 +3,9 @@ package com.example.rutescompartidesapp.view.publish_route
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import java.time.Instant
+import java.time.ZoneId
+import java.util.Calendar
 
 class PublishRouteViewModel: ViewModel(){
 
@@ -106,6 +109,90 @@ class PublishRouteViewModel: ViewModel(){
     private val _isDropdownExpanded = MutableStateFlow(false)
     val isDropdownExpanded = _isDropdownExpanded
 
+    // Depart
+    private val _dateDepart = MutableStateFlow("")
+    val dateDepart = _dateDepart.asStateFlow()
+
+    // Arrival
+    private val _dateArrival = MutableStateFlow("")
+    val dateArrival = _dateArrival.asStateFlow()
+
+    /*
+    Is Depart or Arrival Date & Time ->
+    Variables to check if the date or time that is being changed is the departure or arrival one
+    */
+    private val _isDateDepart = MutableStateFlow(true)
+    private val isDateDepart = _isDateDepart.asStateFlow()
+    private val _isTimeDepart = MutableStateFlow(true)
+    private val isTimeDepart = _isDateDepart.asStateFlow()
+    fun onDateDepartChange(text: String){
+        _dateDepart.value = text
+    }
+
+    fun onDateArrivalChange(text: String){
+        _dateArrival.value = text
+    }
+
+    // Date Picker Dialog
+    private val _datePickerDialogIsShowing = MutableStateFlow(false)
+    val datePickerDialogIsShowing = _datePickerDialogIsShowing
+    fun onDatePickerDialogShow(isDepart: Boolean, isShowing: Boolean){
+        _isDateDepart.value = isDepart
+        _datePickerDialogIsShowing.value = isShowing
+    }
+
+    fun onDatePickerDialogConfirm(datePicked: Long ){
+        datePicked.let {
+            val date = Instant.ofEpochMilli(it).atZone(ZoneId.systemDefault()).toLocalDate()
+            if (_isDateDepart.value){
+                _dateDepart.value = "${date.dayOfMonth}/${date.monthValue}/${date.year}"
+
+            } else {
+                _dateArrival.value = "${date.dayOfMonth}/${date.monthValue}/${date.year}"
+            }
+        }
+        _datePickerDialogIsShowing.value = false
+    }
+
+    // Time
+
+    private val _timeDepartText = MutableStateFlow("")
+    val timeDepartText = _timeDepartText.asStateFlow()
+    fun onTimeDepartChange(text: String){
+        _timeDepartText.value = text
+    }
+    private val _timeArrivalText = MutableStateFlow("")
+    val timeArrivalText = _timeArrivalText.asStateFlow()
+    fun onTimeArrivalChange(text: String){
+        _timeArrivalText.value = text
+    }
+
+    // Time Picker Dialog
+    private val _timePickerDialogIsShowing = MutableStateFlow(false)
+    val timePickerDialogIsShowing = _timePickerDialogIsShowing
+
+    fun onTimePickerDialogShow(isDepart: Boolean, isShowing: Boolean){
+        _isTimeDepart.value = isDepart
+        _timePickerDialogIsShowing.value = isShowing
+    }
+
+    /**
+     * Converts the time picked from the TimePickerDialog to a string and updates the value of
+     * [_timeDepartText] or [_timeArrivalText] to the new value and dismisses the dialog
+     * @param timePicked: The time picked from the TimePickerDialog
+     */
+    fun onTimePickerDialogConfirm(timePicked: Calendar){
+        timePicked.timeInMillis.let {
+            val time = Instant.ofEpochMilli(it).atZone(ZoneId.systemDefault()).toLocalTime()
+            if (_isTimeDepart.value) {
+                _timeDepartText.value = "${time.hour}:${time.minute}"
+            } else {
+                _timeArrivalText.value = "${time.hour}:${time.minute}"
+            }
+        }
+        _timePickerDialogIsShowing.value = false
+    }
+
     fun toggleDropdown(){
         _isDropdownExpanded.value = !_isDropdownExpanded.value
     }
@@ -124,8 +211,7 @@ class PublishRouteViewModel: ViewModel(){
     fun checkAllValues(){
         _isFirstFormCompleted.value = _internalRouteName.value.isNotEmpty() &&
                 _originName.value.isNotEmpty() &&
-                _destinationName.value.isNotEmpty() &&
-                _routeFrequency.value.isNotEmpty()
+                _destinationName.value.isNotEmpty()
     }
 
     // Screen 2

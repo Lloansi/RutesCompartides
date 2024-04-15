@@ -18,6 +18,7 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
@@ -166,7 +167,9 @@ fun StepTextField(modifier: Modifier, value: String, onValueChange: (String) -> 
 }
 
 @Composable
-fun DateTimePickerTextField(invocation: () -> Unit, time: String, onValueChange: (String) -> Unit, placeholder: String){
+fun DateTimePickerTextField(invocation: () -> Unit, time: String,
+                            onValueChange: (String) -> Unit, placeholder: String,
+                            icon: ImageVector){
     // Time Picker TextField
     OutlinedTextField(
         modifier = Modifier
@@ -182,7 +185,7 @@ fun DateTimePickerTextField(invocation: () -> Unit, time: String, onValueChange:
         enabled = false,
         leadingIcon = {
             Icon(
-                imageVector = Icons.Filled.CalendarMonth,
+                imageVector = icon,
                 contentDescription = "$placeholder Icon",
                 tint = Color.Gray
             )
