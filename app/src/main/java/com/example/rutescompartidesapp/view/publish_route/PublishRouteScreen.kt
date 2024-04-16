@@ -1,7 +1,6 @@
 package com.example.rutescompartidesapp.view.publish_route
 
 import android.annotation.SuppressLint
-import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -59,15 +58,11 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.IntOffset
@@ -79,7 +74,6 @@ import com.example.rutescompartidesapp.ui.theme.BlueRC
 import com.example.rutescompartidesapp.ui.theme.GrayRC
 import com.example.rutescompartidesapp.ui.theme.MateBlackRC
 import com.example.rutescompartidesapp.ui.theme.OrangeRC
-import com.example.rutescompartidesapp.utils.Constants
 import com.example.rutescompartidesapp.view.generic_components.BasicTextField
 import com.example.rutescompartidesapp.view.generic_components.DateTimePickerTextField
 import com.example.rutescompartidesapp.view.generic_components.IconTextField
@@ -91,6 +85,7 @@ import com.example.rutescompartidesapp.view.generic_components.StepTextField
 import com.example.rutescompartidesapp.view.generic_components.TimePickerDialog
 import com.example.rutescompartidesapp.view.generic_components.popups.ConditionScrollPopup
 import com.example.rutescompartidesapp.view.generic_components.popups.PopupScrolleable
+import com.example.rutescompartidesapp.view.publish_order.PublishOrderViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -244,7 +239,7 @@ private fun PublishRouteContent3(
     isSenseHumitat: Boolean,
     tagsText: String,
     tagsError: Boolean,
-    tagsList: MutableList<String>,
+    tagsList: List<String>,
     comment: String
 ) {
 
@@ -471,22 +466,7 @@ private fun PublishRouteContent3(
     FlowRow(modifier = Modifier.fillMaxWidth(0.9f),
         horizontalArrangement = Arrangement.Start,){
         tagsList.forEach{ etiqueta ->
-            InputChip(selected = true,
-                onClick = { publishRouteViewModel.onTagDelete(etiqueta) },
-                label = { Text(etiqueta,
-                    color = Color.White) },
-                colors = FilterChipDefaults.elevatedFilterChipColors(
-                    selectedContainerColor = BlueRC
-                ),
-                avatar = {
-                    Icon(imageVector = Icons.Filled.Close,
-                        contentDescription = "Close Icon",
-                        tint = Color.LightGray,
-                        modifier = Modifier.clickable {
-                            publishRouteViewModel.onTagDelete(etiqueta)
-                        })
-
-                })
+            TagItem(publishRouteViewModel = publishRouteViewModel, etiqueta = etiqueta)
             Spacer(Modifier.padding(4.dp))
         }
     }
@@ -903,6 +883,30 @@ private fun PublishRouteContent1(
 
     PublishNextButton(publishRouteViewModel::checkAllValues)
 
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TagItem(publishRouteViewModel: PublishRouteViewModel, etiqueta: String) {
+    InputChip(selected = true,
+        onClick = { publishRouteViewModel.onTagDelete(etiqueta) },
+        label = {
+            Text(
+                etiqueta,
+                color = Color.White
+            )
+        },
+        colors = FilterChipDefaults.elevatedFilterChipColors(
+            selectedContainerColor = BlueRC
+        ),
+        avatar = {
+            Icon(imageVector = Icons.Filled.Close,
+                contentDescription = "Close Icon",
+                tint = Color.LightGray,
+                modifier = Modifier.clickable {
+                    publishRouteViewModel.onTagDelete(etiqueta)
+                })
+        })
 }
 
 

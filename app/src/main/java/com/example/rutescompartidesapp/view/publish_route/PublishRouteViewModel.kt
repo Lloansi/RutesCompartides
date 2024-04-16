@@ -112,6 +112,39 @@ class PublishRouteViewModel: ViewModel(){
     private val _isDropdownExpanded = MutableStateFlow(false)
     val isDropdownExpanded = _isDropdownExpanded
 
+    fun toggleDropdown(){
+        _isDropdownExpanded.value = !_isDropdownExpanded.value
+    }
+    private val _routeFrequency = MutableStateFlow("")
+    val routeFrequency = _routeFrequency
+
+    fun setRouteFrequency(frequency: String){
+        if (_routeFrequency.value != frequency){
+            val updatedTagsList = _tagsList.value.toMutableList()
+
+            if (_routeFrequency.value.lowercase() in updatedTagsList && frequency != "No es repeteix") {
+                updatedTagsList.remove(_routeFrequency.value.lowercase())
+                updatedTagsList.add(frequency.lowercase())
+            } else if (_routeFrequency.value.lowercase() !in updatedTagsList && frequency != "No es repeteix"){
+                updatedTagsList.add(frequency.lowercase())
+            } else if (_routeFrequency.value.lowercase() in updatedTagsList && frequency == "No es repeteix"){
+                updatedTagsList.remove(_routeFrequency.value.lowercase())
+            }
+
+            _routeFrequency.value = frequency
+            _isDropdownExpanded.value = false
+
+            _tagsList.value = updatedTagsList
+        }
+    }
+
+    // Frequency Popup
+    private val _isFreqPopupShowing = MutableStateFlow(false)
+    val isFreqPopupShowing = _isFreqPopupShowing
+    fun onFreqPopupShow(isShowing: Boolean){
+        _isFreqPopupShowing.value = isShowing
+    }
+
     // Depart
     private val _dateDepart = MutableStateFlow("")
     val dateDepart = _dateDepart.asStateFlow()
@@ -195,18 +228,6 @@ class PublishRouteViewModel: ViewModel(){
         }
         _timePickerDialogIsShowing.value = false
     }
-
-    fun toggleDropdown(){
-        _isDropdownExpanded.value = !_isDropdownExpanded.value
-    }
-    private val _routeFrequency = MutableStateFlow("")
-    val routeFrequency = _routeFrequency
-
-    fun setRouteFrequency(frequency: String){
-        _routeFrequency.value = frequency
-        _isDropdownExpanded.value = false
-    }
-
 
     // Next button
     private val _isFirstFormCompleted = MutableStateFlow(false)
@@ -318,13 +339,14 @@ class PublishRouteViewModel: ViewModel(){
     private val _tagsError = MutableStateFlow(false)
     val tagsError = _tagsError.asStateFlow()
 
-    private val _tagsList = MutableStateFlow(mutableListOf<String>())
+    private val _tagsList = MutableStateFlow(listOf<String>())
     val tagsList = _tagsList.asStateFlow()
 
     fun onTagsAddToListChange(etiqueta: String){
-        _tagsList.value.add(etiqueta)
+        val updatedTagsList = _tagsList.value.toMutableList()
+        updatedTagsList.add(etiqueta.lowercase())
+        _tagsList.value = updatedTagsList
         _tagsText.value = ""
-        println("TAG ADDED $etiqueta")
     }
 
     // Reasigna el valor de la llista de etiquetas sense l'etiqueta que volem eliminar
@@ -339,7 +361,6 @@ class PublishRouteViewModel: ViewModel(){
     }
     fun onTagsChange(text: String){
         _tagsText.value = text
-        println("TAG CHANGE $text")
     }
 
     // Popup Transport Conditions
@@ -347,13 +368,6 @@ class PublishRouteViewModel: ViewModel(){
     val isCondicionsPopupShowing = _isCondicionsPopupShowing
     fun onCondicionsPopupShow(isShowing: Boolean){
         _isCondicionsPopupShowing.value = isShowing
-    }
-
-    // Frequency Popup
-    private val _isFreqPopupShowing = MutableStateFlow(false)
-    val isFreqPopupShowing = _isFreqPopupShowing
-    fun onFreqPopupShow(isShowing: Boolean){
-        _isFreqPopupShowing.value = isShowing
     }
 
     // Cost KM Popup

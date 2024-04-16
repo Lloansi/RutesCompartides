@@ -35,7 +35,7 @@ class FilterPopupViewModel: ViewModel() {
     val etiquetesList = _etiquetesList.asStateFlow()
 
     fun onEtiquetesAddToListChange(etiqueta: String){
-        _etiquetesList.value.add(etiqueta)
+        _etiquetesList.value.add(etiqueta.lowercase())
         _etiquetesText.value = ""
     }
 

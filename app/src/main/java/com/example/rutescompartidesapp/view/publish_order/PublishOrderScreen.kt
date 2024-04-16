@@ -1,6 +1,5 @@
 package com.example.rutescompartidesapp.view.publish_order
 
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -54,12 +53,18 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.IntOffset
@@ -82,6 +87,7 @@ import com.example.rutescompartidesapp.view.generic_components.PublishButton
 import com.example.rutescompartidesapp.view.generic_components.PublishNextButton
 import com.example.rutescompartidesapp.view.generic_components.popups.BasicPopup
 import com.example.rutescompartidesapp.view.generic_components.popups.ConditionScrollPopup
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -105,12 +111,10 @@ fun PublishOrderScreen(navHost: NavHostController) {
     val tagsList by publishOrderViewModel.tagsList.collectAsStateWithLifecycle()
     val tagsError by publishOrderViewModel.tagsError.collectAsStateWithLifecycle()
     val datePickerState = rememberDatePickerState()
-    val isFirstFormCompleted by publishOrderViewModel.isFirstFormCompleted.collectAsStateWithLifecycle()
     val wantsCarpool by publishOrderViewModel.wantsCarpool.collectAsStateWithLifecycle()
     val isFlexDate by publishOrderViewModel.isFlexDate.collectAsStateWithLifecycle()
     val isDataMinPopupShowing by publishOrderViewModel.isDataMinPopupShowing.collectAsStateWithLifecycle()
     val isDataMaxPopupShowing by publishOrderViewModel.isDataMaxPopupShowing.collectAsStateWithLifecycle()
-
     // Screen 2 variables
     val packageNumber by publishOrderViewModel.packagesNum.collectAsStateWithLifecycle()
     val arePackagesFragile by publishOrderViewModel.arePackagesFragile.collectAsStateWithLifecycle()
@@ -119,7 +123,6 @@ fun PublishOrderScreen(navHost: NavHostController) {
     val packageHeight by publishOrderViewModel.packagesHeight.collectAsStateWithLifecycle()
     val packageWeight by publishOrderViewModel.packagesWeight.collectAsStateWithLifecycle()
     val wantsDeliveryNotification by publishOrderViewModel.wantsDeliveryNotification.collectAsStateWithLifecycle()
-    val isSecondFormCompleted by publishOrderViewModel.isSecondFormCompleted.collectAsStateWithLifecycle()
 
     // Screen 3 variables
     val deliveryNote by publishOrderViewModel.deliveryNote.collectAsStateWithLifecycle()
@@ -189,7 +192,7 @@ fun PublishOrderScreen(navHost: NavHostController) {
                         isSenseHumitat,
                         tagsText,
                         tagsError,
-                        tagsList
+                        tagsList.toList()
                     )
                 }
                 2 -> {
@@ -470,7 +473,7 @@ private fun PublishOrderContent1(
     isSenseHumitat: Boolean,
     tagsText: String,
     tagsError: Boolean,
-    tagsList: MutableList<String>
+    tagsList: List<String>
 ) {
     BasicTextField(
         value = orderName,
@@ -922,35 +925,42 @@ private fun PublishOrderContent1(
             }),
         singleLine = true,
     )
+
     // Tags Row
     FlowRow(
         modifier = Modifier.fillMaxWidth(0.9f),
         horizontalArrangement = Arrangement.Start,
     ) {
         tagsList.forEach { etiqueta ->
-            InputChip(selected = true,
-                onClick = { publishOrderViewModel.onTagDelete(etiqueta) },
-                label = {
-                    Text(
-                        etiqueta,
-                        color = Color.White
-                    )
-                },
-                colors = FilterChipDefaults.elevatedFilterChipColors(
-                    selectedContainerColor = BlueRC
-                ),
-                avatar = {
-                    Icon(imageVector = Icons.Filled.Close,
-                        contentDescription = "Close Icon",
-                        tint = Color.LightGray,
-                        modifier = Modifier.clickable {
-                            publishOrderViewModel.onTagDelete(etiqueta)
-                        })
-                })
+            TagItem(publishOrderViewModel = publishOrderViewModel, etiqueta = etiqueta)
             Spacer(Modifier.padding(4.dp))
         }
     }
     // Next Button
     PublishNextButton(onClickCheck = publishOrderViewModel::checkAllValues)
 
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TagItem(publishOrderViewModel: PublishOrderViewModel, etiqueta: String) {
+    InputChip(selected = true,
+        onClick = { publishOrderViewModel.onTagDelete(etiqueta) },
+        label = {
+            Text(
+                etiqueta,
+                color = Color.White
+            )
+        },
+        colors = FilterChipDefaults.elevatedFilterChipColors(
+            selectedContainerColor = BlueRC
+        ),
+        avatar = {
+            Icon(imageVector = Icons.Filled.Close,
+                contentDescription = "Close Icon",
+                tint = Color.LightGray,
+                modifier = Modifier.clickable {
+                    publishOrderViewModel.onTagDelete(etiqueta)
+                })
+        })
 }
