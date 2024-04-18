@@ -42,7 +42,8 @@ import com.example.rutescompartidesapp.view.map.fredokaOneFamily
 
 
 @Composable
-fun ConfirmScreen(navController: NavHostController, cameraViewModel: CameraViewModel, drawViewModel: DrawViewModel) {
+fun
+        ConfirmScreen(navController: NavHostController, cameraViewModel: CameraViewModel, drawViewModel: DrawViewModel) {
     val bitmapPhoto by cameraViewModel.bitmapPhoto.collectAsState()
     val bitmapDraw by drawViewModel.drawBitmap.collectAsState()
     val responsiveHeight = LocalConfiguration.current.screenHeightDp.dp

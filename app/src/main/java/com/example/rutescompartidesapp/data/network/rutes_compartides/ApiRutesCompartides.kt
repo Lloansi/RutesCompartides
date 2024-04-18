@@ -1,14 +1,22 @@
 package com.example.rutescompartidesapp.data.network.rutes_compartides
 
+import com.example.rutescompartidesapp.data.domain.auth.AuthRequest
+import com.example.rutescompartidesapp.data.domain.auth.AuthToken
 import com.example.rutescompartidesapp.data.domain.comandes.TripRequest
 import com.example.rutescompartidesapp.data.domain.rutes.TripOffer
 import com.example.rutescompartidesapp.data.domain.user.User
 import com.example.rutescompartidesapp.data.domain.map.MapOrder
 import com.example.rutescompartidesapp.data.domain.map.MapRoute
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Path
 
 interface ApiRutesCompartides {
+
+    // Auth
+    @POST("api/token/")
+    suspend fun getToken(@Body authRequest: AuthRequest): AuthToken
 
     // Users
     @GET("accounts/login")

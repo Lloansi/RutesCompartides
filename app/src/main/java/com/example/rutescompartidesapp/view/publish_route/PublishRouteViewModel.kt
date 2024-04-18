@@ -14,7 +14,7 @@ class PublishRouteViewModel: ViewModel(){
     private val _step = MutableStateFlow(1)
     val step = _step
 
-    fun nextStep(){
+    private fun nextStep(){
         _step.value = _step.value + 1
     }
 
@@ -46,27 +46,16 @@ class PublishRouteViewModel: ViewModel(){
         _originLocation.value = coordinates
     }
 
-    // Step location 1 name
+    // Step location names
     private val _stepName1 = MutableStateFlow("")
-    val stepName1 = _stepName1.asStateFlow()
-    // Step location 2 name
     private val _stepName2 = MutableStateFlow("")
-    val stepName2 = _stepName2.asStateFlow()
-    // Step location 3 name
     private val _stepName3 = MutableStateFlow("")
-    val stepName3 = _stepName3.asStateFlow()
-    // Step location 4 name
     private val _stepName4 = MutableStateFlow("")
-    val stepName4 = _stepName4.asStateFlow()
-    // Step location 5 name
     private val _stepName5 = MutableStateFlow("")
-    val stepName5 = _stepName5.asStateFlow()
-    // Step location 6 name
     private val _stepName6 = MutableStateFlow("")
-    val stepName6 = _stepName6.asStateFlow()
 
-    private val _stepNameList = MutableStateFlow(listOf(stepName1.value, stepName2.value,
-        stepName3.value, stepName4.value, stepName5.value, stepName6.value))
+    private val _stepNameList = MutableStateFlow(listOf(_stepName1.value, _stepName2.value,
+        _stepName3.value, _stepName4.value, _stepName5.value, _stepName6.value))
     val stepNameList = _stepNameList.asStateFlow()
 
     private val _stepLocationsNumber = MutableStateFlow(1)
@@ -77,23 +66,40 @@ class PublishRouteViewModel: ViewModel(){
             _stepLocationsNumber.value = _stepLocationsNumber.value + 1
         }
     }
-    fun removeStepLocation(){
+    fun removeStepLocation(index: Int){
         if (_stepLocationsNumber.value != 1) {
             _stepLocationsNumber.value = _stepLocationsNumber.value - 1
+
+            val updatedStepNameList = _stepNameList.value.toMutableList()
+            if (index != 5) {
+                for (i in index until _stepNameList.value.size - 1) {
+                    updatedStepNameList[i] = _stepNameList.value[i+1]
+                }
+                updatedStepNameList[updatedStepNameList.size - 1] = ""
+            } else {
+                updatedStepNameList[index] = ""
+            }
+
+            updateStepNameList(updatedStepNameList)
         }
     }
     fun setStepLocationName(number: Int, name: String){
         when(number){
-            0 ->{
-                _stepName1.value = name
-                println("Step 1: ${_stepName1.value}/$name")
-            }
+            0 -> _stepName1.value = name
             1 -> _stepName2.value = name
             2 -> _stepName3.value = name
             3 -> _stepName4.value = name
             4 -> _stepName5.value = name
             5 -> _stepName6.value = name
         }
+        val newList =  listOf(_stepName1.value, _stepName2.value,
+            _stepName3.value, _stepName4.value, _stepName5.value, _stepName6.value)
+        updateStepNameList(newList)
+    }
+
+    private fun updateStepNameList(newList: List<String>){
+        println(newList)
+        _stepNameList.value = newList
     }
 
     // End location name

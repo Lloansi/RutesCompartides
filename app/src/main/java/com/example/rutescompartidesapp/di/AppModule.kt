@@ -10,6 +10,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.create
@@ -24,10 +25,18 @@ object AppModule {
     @Provides
     @Singleton
     fun provideRutesCompartidesApi(): ApiRutesCompartides {
+
+        val interceptor = HttpLoggingInterceptor()
+        interceptor.level = HttpLoggingInterceptor.Level.BODY
+
         val gson = GsonBuilder()
             .serializeNulls()
             .create()
         val client = OkHttpClient.Builder()
+            .hostnameVerifier { hostname, session ->
+            hostname == "dev.rutescompartides.cat"
+        }
+            .addInterceptor(interceptor)
             .build()
 
         return Retrofit.Builder()

@@ -49,6 +49,7 @@ import com.example.rutescompartidesapp.view.confirm_delivery.components.draw.Dra
 import com.example.rutescompartidesapp.view.confirm_delivery.viewmodel.CameraViewModel
 import com.example.rutescompartidesapp.view.confirm_delivery.viewmodel.DrawViewModel
 import com.example.rutescompartidesapp.view.login.LoginScreen
+import com.example.rutescompartidesapp.view.login.LoginViewModel
 import com.example.rutescompartidesapp.view.map.MapScreen
 import com.example.rutescompartidesapp.view.map.viewModels.MapViewModel
 import com.example.rutescompartidesapp.view.profile.ProfileScreen
@@ -107,6 +108,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             RutesCompartidesAppTheme {
                 val mapViewModel: MapViewModel = hiltViewModel()
+                val loginViewModel: LoginViewModel = hiltViewModel()
                 val drawViewModel = DrawViewModel()
                 val cameraViewModel = CameraViewModel()
                 val filterPopupViewModel = FilterPopupViewModel()
@@ -169,6 +171,7 @@ class MainActivity : ComponentActivity() {
                 ) { paddingValues ->
                     ScreenNavigationConfiguration(
                         mapViewModel,
+                        loginViewModel,
                         drawViewModel,
                         cameraViewModel,
                         routeOrderListViewModel,
@@ -183,11 +186,11 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun ScreenNavigationConfiguration( mapViewModel: MapViewModel,drawViewModel: DrawViewModel, cameraViewModel: CameraViewModel,
+fun ScreenNavigationConfiguration( mapViewModel: MapViewModel,loginViewModel: LoginViewModel, drawViewModel: DrawViewModel, cameraViewModel: CameraViewModel,
                                    routeOrderListViewModel: RoutesOrderListViewModel, filterPopupViewModel: FilterPopupViewModel,
                                    navController: NavHostController, paddingModifier: Modifier) {
 
-    NavHost(navController = navController, startDestination = Screens.MapScreen.route, modifier = paddingModifier) {
+    NavHost(navController = navController, startDestination = Screens.LoginScreen.route, modifier = paddingModifier) {
 
         composable(Screens.MapScreen.route) {
             MapScreen(navController, mapViewModel)
@@ -225,7 +228,7 @@ fun ScreenNavigationConfiguration( mapViewModel: MapViewModel,drawViewModel: Dra
             ProfileScreen(ProfileViewModel(), navController)
         }
         composable(Screens.LoginScreen.route) {
-            LoginScreen(navController)
+            LoginScreen(loginViewModel, navController)
         }
         composable(Screens.SignUpScreen.route) {
             SignUpScreen(navController)

@@ -1,17 +1,12 @@
 package com.example.rutescompartidesapp.view.publish_order
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.example.rutescompartidesapp.data.domain.OrderForList
-import com.example.rutescompartidesapp.data.domain.RouteForList
 import com.example.rutescompartidesapp.view.routes_order_list.ListConstants
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.ZoneId
-import kotlin.coroutines.coroutineContext
 
 class PublishOrderViewModel: ViewModel(){
 

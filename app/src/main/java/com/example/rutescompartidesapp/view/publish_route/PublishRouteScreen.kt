@@ -52,11 +52,9 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.material3.TimePickerState
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDatePickerState
-import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -85,7 +83,6 @@ import com.example.rutescompartidesapp.view.generic_components.StepTextField
 import com.example.rutescompartidesapp.view.generic_components.TimePickerDialog
 import com.example.rutescompartidesapp.view.generic_components.popups.ConditionScrollPopup
 import com.example.rutescompartidesapp.view.generic_components.popups.PopupScrolleable
-import com.example.rutescompartidesapp.view.publish_order.PublishOrderViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -98,13 +95,7 @@ fun PublishRouteScreen(navHost: NavHostController){
     val routeName by publishRouteViewModel.internalRouteName.collectAsStateWithLifecycle()
     val originName by publishRouteViewModel.originName.collectAsStateWithLifecycle()
     val stepLocationsNumber by publishRouteViewModel.stepLocationsNumber.collectAsStateWithLifecycle()
-    val stepName1 by publishRouteViewModel.stepName1.collectAsStateWithLifecycle()
-    val stepName2 by publishRouteViewModel.stepName2.collectAsStateWithLifecycle()
-    val stepName3 by publishRouteViewModel.stepName3.collectAsStateWithLifecycle()
-    val stepName4 by publishRouteViewModel.stepName4.collectAsStateWithLifecycle()
-    val stepName5 by publishRouteViewModel.stepName5.collectAsStateWithLifecycle()
-    val stepName6 by publishRouteViewModel.stepName6.collectAsStateWithLifecycle()
-    val stepNameList = listOf(stepName1, stepName2, stepName3, stepName4, stepName5, stepName6)
+    val stepNameList by publishRouteViewModel.stepNameList.collectAsStateWithLifecycle()
     val destinationName by publishRouteViewModel.destinationName.collectAsStateWithLifecycle()
     val isDropdownExpanded by publishRouteViewModel.isDropdownExpanded.collectAsStateWithLifecycle()
     val routeFrequency by publishRouteViewModel.routeFrequency.collectAsStateWithLifecycle()
@@ -112,7 +103,6 @@ fun PublishRouteScreen(navHost: NavHostController){
     val isCostPopupShowing by publishRouteViewModel.isCostPopupShowing.collectAsStateWithLifecycle()
 
     val datePickerState = rememberDatePickerState()
-    val timePickerState = rememberTimePickerState()
     val dateDepart by publishRouteViewModel.dateDepart.collectAsStateWithLifecycle()
     val dateArrival by publishRouteViewModel.dateArrival.collectAsStateWithLifecycle()
     val timeDepart by publishRouteViewModel.timeDepartText.collectAsStateWithLifecycle()
@@ -189,7 +179,6 @@ fun PublishRouteScreen(navHost: NavHostController){
                     isDatePickerShowing,
                     isTimePickerShowing,
                     datePickerState,
-                    timePickerState,
                     dateDepart,
                     timeDepart,
                     dateArrival,
@@ -609,12 +598,12 @@ private fun PublishRouteContent2(
     Spacer(modifier = Modifier.padding(8.dp))
 
     // Max Detour KM
-    BasicTextField(value = maxDetourKm.toString(),
+    BasicTextField(value = maxDetourKm,
         onValueChange = publishRouteViewModel::setMaxDetourKm,
         placeholder = "Max desviament (km)"
     )
     // Available Seats
-    BasicTextField(value = availableSeats.toString(),
+    BasicTextField(value = availableSeats,
         onValueChange = publishRouteViewModel::setSeats,
         placeholder = "Seients disponibles"
     )
@@ -652,7 +641,7 @@ private fun PublishRouteContent2(
     }
     // KM Cost
     BasicTextField(
-        value = costKm.toString(),
+        value = costKm,
         onValueChange = publishRouteViewModel::setCostKM,
         placeholder = "0"
     )
@@ -693,7 +682,6 @@ private fun PublishRouteContent1(
     isDatePickerShowing: Boolean,
     isTimePickerShowing: Boolean,
     datePickerState: DatePickerState,
-    timePickerState: TimePickerState,
     dateDepart: String,
     timeDepart: String,
     dateArrival: String,
@@ -727,11 +715,12 @@ private fun PublishRouteContent1(
                         .weight(2f),
                     value = stepNameList[index],
                     onValueChange = {
-                        println("Name : $it")
-                        publishRouteViewModel.setStepLocationName(index, stepNameList[index]) }
+                            publishRouteViewModel.setStepLocationName(index, it)
+                           }
                 )
+
                 IconButton(
-                    onClick = { publishRouteViewModel.removeStepLocation() },
+                    onClick = { publishRouteViewModel.removeStepLocation(index) },
                     colors = IconButtonDefaults.iconButtonColors(
                         containerColor = MaterialTheme.colorScheme.secondaryContainer
                     )
@@ -753,7 +742,8 @@ private fun PublishRouteContent1(
             onClick = { publishRouteViewModel.addStepLocation() },
             colors = ButtonDefaults.elevatedButtonColors(
                 containerColor = OrangeRC
-            )
+            ),
+            enabled = stepLocationsNumber != 6
         ) {
             Icon(
                 imageVector = Icons.Filled.Add,

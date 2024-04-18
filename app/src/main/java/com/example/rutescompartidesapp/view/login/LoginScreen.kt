@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -22,8 +23,11 @@ import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material.icons.outlined.LockOpen
 import androidx.compose.material.icons.outlined.Mail
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedButton
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -31,6 +35,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -49,16 +54,17 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.rutescompartidesapp.R
 import com.example.rutescompartidesapp.ui.theme.OrangeRC
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginScreen(navController: NavController){
+fun LoginScreen(loginViewModel: LoginViewModel, navController: NavController){
     //Email
-    val loginViewModel: LoginViewModel = hiltViewModel()
     val userEmailError by loginViewModel.userEmailError.collectAsStateWithLifecycle()
     val userEmailText by loginViewModel.userEmail.collectAsStateWithLifecycle()
     //Password
@@ -67,6 +73,9 @@ fun LoginScreen(navController: NavController){
     val isPasswordVisible by loginViewModel.isPasswordVisible.collectAsStateWithLifecycle()
     //User is logged
     val userIsLogged by loginViewModel.userIsLogged.collectAsStateWithLifecycle()
+    val userWantsToLogin by loginViewModel.userWantsToLogin.collectAsStateWithLifecycle()
+    // Loading state
+    val isLoading by loginViewModel.isLoading.collectAsStateWithLifecycle()
 
 
     Column(modifier= Modifier
@@ -75,6 +84,7 @@ fun LoginScreen(navController: NavController){
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center) {
         Box(modifier = Modifier.fillMaxSize()) {
+
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -139,7 +149,7 @@ fun LoginScreen(navController: NavController){
                     Spacer(modifier = Modifier.padding(8.dp))
 
                     //User Email
-                    Row () {
+                    Row {
                         OutlinedTextField(modifier = Modifier.fillMaxWidth(0.85f),
                             value = userEmailText, onValueChange = loginViewModel::onUserEmailTextChange,
                             leadingIcon = {
@@ -182,7 +192,7 @@ fun LoginScreen(navController: NavController){
                     }
                     Spacer(modifier = Modifier.padding(4.dp))
                     //User Password
-                    Row () {
+                    Row{
 
 
                         OutlinedTextField( modifier = Modifier.fillMaxWidth(0.85f),
@@ -260,7 +270,8 @@ fun LoginScreen(navController: NavController){
                     Row (){
                         ElevatedButton(
                             onClick = loginViewModel::onLoginButtonClick,
-                            modifier = Modifier.fillMaxWidth(0.85f)
+                            modifier = Modifier
+                                .fillMaxWidth(0.85f)
                                 .height(LocalConfiguration.current.screenHeightDp.dp / 16),
                             colors = ButtonDefaults.elevatedButtonColors(
                                 containerColor = MaterialTheme.colorScheme.primary,
@@ -300,7 +311,21 @@ fun LoginScreen(navController: NavController){
                             }
                         )
                     }
+                    if (isLoading) {
+                        Box(contentAlignment = Alignment.Center) {
+                                CircularProgressIndicator()
+                        }
+                    }
+
+                    if(userWantsToLogin){
+                        loginViewModel.onLoading(true)
+                        LaunchedEffect(isLoading){
+                            loginViewModel.login()
+                        }
+                    }
                     if (userIsLogged){
+                        loginViewModel.onLoading(false)
+
                         // Navigate to home
                         navController.navigate("MapScreen") {
                             popUpTo("MapScreen") { inclusive = true }

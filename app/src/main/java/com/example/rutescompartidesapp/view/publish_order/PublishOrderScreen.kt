@@ -53,14 +53,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -87,7 +80,6 @@ import com.example.rutescompartidesapp.view.generic_components.PublishButton
 import com.example.rutescompartidesapp.view.generic_components.PublishNextButton
 import com.example.rutescompartidesapp.view.generic_components.popups.BasicPopup
 import com.example.rutescompartidesapp.view.generic_components.popups.ConditionScrollPopup
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -395,25 +387,25 @@ private fun PublishOrderContent2(
     }
     // Height, Width, Length, Weight
     MeasurementsTextField(
-        value = packageHeight.toString(),
+        value = packageHeight,
         onValueChange = publishOrderViewModel::setPackagesHeight,
         placeholder = "Alçària (cm)",
         suffix = "cm"
     )
     MeasurementsTextField(
-        value = packageWidth.toString(),
+        value = packageWidth,
         onValueChange = publishOrderViewModel::setPackagesWidth,
         placeholder = "Amplada (cm)",
         suffix = "cm"
     )
     MeasurementsTextField(
-        value = packageLength.toString(),
+        value = packageLength,
         onValueChange = publishOrderViewModel::setPackagesLength,
         placeholder = "Llargada (cm)",
         suffix = "cm"
     )
     MeasurementsTextField(
-        value = packageWeight.toString(),
+        value = packageWeight,
         onValueChange = publishOrderViewModel::setPackagesWeight,
         placeholder = "Pes (kg)",
         suffix = "kg"

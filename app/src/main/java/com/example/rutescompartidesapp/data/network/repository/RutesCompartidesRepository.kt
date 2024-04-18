@@ -1,5 +1,7 @@
 package com.example.rutescompartidesapp.data.network.repository
 
+import com.example.rutescompartidesapp.data.domain.auth.AuthRequest
+import com.example.rutescompartidesapp.data.domain.auth.AuthToken
 import com.example.rutescompartidesapp.data.domain.comandes.TripRequest
 import com.example.rutescompartidesapp.data.domain.rutes.TripOffer
 import com.example.rutescompartidesapp.data.domain.map.MapOrder
@@ -13,6 +15,11 @@ import javax.inject.Inject
 class RutesCompartidesRepository @Inject constructor(
     private val apiRutesCompartides: ApiRutesCompartides
 ): RutesCompartidesService {
+    override suspend fun getToken(authRequest: AuthRequest): AuthToken {
+        return withContext(Dispatchers.IO) {
+                apiRutesCompartides.getToken(authRequest)
+        }
+    }
 
     // Routes
     override suspend fun getAllMapRoutes(): List<MapRoute> {

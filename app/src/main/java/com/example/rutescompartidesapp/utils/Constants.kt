@@ -7,7 +7,7 @@ import com.example.rutescompartidesapp.data.domain.User2
 object Constants {
 
     val userList = mutableListOf<User2>(User2(0, "Admin", "admin@admin.com", 666666666, "Admin"))
-    const val RUTES_COMPARTIDES_URL = "https://rutescompartides.cat/"
+    const val RUTES_COMPARTIDES_URL = "https://dev.rutescompartides.cat/"
 
     val ALL_PERMISSIONS = arrayOf(
         Manifest.permission.CAMERA,
