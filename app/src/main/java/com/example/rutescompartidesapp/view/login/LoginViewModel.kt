@@ -7,10 +7,13 @@ import com.example.rutescompartidesapp.data.domain.auth.AuthRequest
 import com.example.rutescompartidesapp.data.domain.auth.AuthToken
 import com.example.rutescompartidesapp.data.network.repository.RutesCompartidesRepository
 import com.example.rutescompartidesapp.utils.Constants
+import com.example.rutescompartidesapp.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -20,20 +23,43 @@ class LoginViewModel @Inject constructor (
     val rutesCompartidesRepository: RutesCompartidesRepository
 ): ViewModel(){
 
-    val authToken = MutableStateFlow(AuthToken(""))
+    private val _authToken = MutableStateFlow("")
+    val authToken = _authToken.asStateFlow()
+    private val _showErrorToastChannel = Channel<Boolean>()
+    val showErrorToastChannel = _showErrorToastChannel.receiveAsFlow()
+
+    private val _errorText = MutableStateFlow("")
+    val errorText = _errorText.asStateFlow()
 
     private suspend fun getToken(authRequest: AuthRequest){
         viewModelScope.launch{
             val result = rutesCompartidesRepository.getToken(authRequest)
-            if (result.token != ""){
-                authToken.value = result
-                _userIsLogged.value = true
-                _isLoading.value = false
-            } else {
-                println("Error getting token")
-                _userIsLogged.value = false
-                _isLoading.value = false
+            when (result) {
+                is Resource.Success -> {
+                    result.data?.let { authResult ->
+                        _authToken.value = authResult.token
+                        _userIsLogged.value = true
+                        _isLoading.value = false
+                    }
+                }
+                is Resource.Error -> {
+                    when (result.message ) {
+                        "Not Found" -> {
+                            _errorText.value = "Este correo electrónico no está registrado"
+                        }
+                        "Unauthorized" -> {
+                            _errorText.value = "Credenciales erróneas"
+                        }
+                        else -> {
+                            _errorText.value = result.message!!
+                        }
+                    }
+                    _showErrorToastChannel.send(true)
+                    _userIsLogged.value = false
+                }
+                else -> {}
             }
+
         }
     }
 
@@ -79,7 +105,8 @@ class LoginViewModel @Inject constructor (
     //Password visibility
     private val _isPasswordVisible = MutableStateFlow(false)
     val isPasswordVisible = _isPasswordVisible.asStateFlow()
-
+    
+    //User password hide and show
     fun togglePasswordVisibility() {
         _isPasswordVisible.value = !_isPasswordVisible.value
     }
@@ -93,7 +120,6 @@ class LoginViewModel @Inject constructor (
         return isError
     }
 
-    //User password hide and show
 
     private val _userWantsToLogin = MutableStateFlow(false)
     val userWantsToLogin = _userWantsToLogin.asStateFlow()
@@ -114,8 +140,6 @@ class LoginViewModel @Inject constructor (
             !onUserPasswordError(userPassword.isEmpty())){
             _userWantsToLogin.value = true
         }
-
-
     }
 
     //User exists

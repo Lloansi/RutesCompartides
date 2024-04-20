@@ -1,5 +1,6 @@
 package com.example.rutescompartidesapp.view.login
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -43,6 +44,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -60,6 +62,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.rutescompartidesapp.R
 import com.example.rutescompartidesapp.ui.theme.OrangeRC
+import kotlinx.coroutines.flow.collectLatest
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -77,7 +80,17 @@ fun LoginScreen(loginViewModel: LoginViewModel, navController: NavController){
     // Loading state
     val isLoading by loginViewModel.isLoading.collectAsStateWithLifecycle()
 
-
+    // Error text
+    val authErrorText by loginViewModel.errorText.collectAsStateWithLifecycle()
+    val context = LocalContext.current
+    // Toast with the error
+    LaunchedEffect(key1 = loginViewModel.showErrorToastChannel){
+        loginViewModel.showErrorToastChannel.collectLatest { showErrorToast ->
+            if (showErrorToast){
+                Toast.makeText(context, authErrorText, Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
     Column(modifier= Modifier
         .fillMaxSize()
         .background(color = MaterialTheme.colorScheme.background),
@@ -188,7 +201,6 @@ fun LoginScreen(loginViewModel: LoginViewModel, navController: NavController){
                                 errorContainerColor = MaterialTheme.colorScheme.primaryContainer,
                             )
                         )
-
                     }
                     Spacer(modifier = Modifier.padding(4.dp))
                     //User Password
@@ -237,7 +249,6 @@ fun LoginScreen(loginViewModel: LoginViewModel, navController: NavController){
                                     }
                                 }
                             },
-
                             //User Password Text
                             supportingText = {
 

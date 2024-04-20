@@ -8,17 +8,30 @@ import com.example.rutescompartidesapp.data.domain.map.MapOrder
 import com.example.rutescompartidesapp.data.domain.map.MapRoute
 import com.example.rutescompartidesapp.data.network.rutes_compartides.ApiRutesCompartides
 import com.example.rutescompartidesapp.data.network.rutes_compartides.RutesCompartidesService
+import com.example.rutescompartidesapp.utils.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import retrofit2.HttpException
+import java.io.IOException
 import javax.inject.Inject
 
 class RutesCompartidesRepository @Inject constructor(
     private val apiRutesCompartides: ApiRutesCompartides
 ): RutesCompartidesService {
-    override suspend fun getToken(authRequest: AuthRequest): AuthToken {
-        return withContext(Dispatchers.IO) {
-                apiRutesCompartides.getToken(authRequest)
+    override suspend fun getToken(authRequest: AuthRequest): Resource<AuthToken> {
+        val response = try {
+            apiRutesCompartides.getToken(authRequest)
+        } catch (e: IOException) {
+            e.printStackTrace()
+            return Resource.Error("Error getting token")
+        } catch (e: HttpException) {
+            e.printStackTrace()
+            return Resource.Error("Error getting token")
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return Resource.Error("Error getting token")
         }
+        return Resource.Success(response)
     }
 
     // Routes

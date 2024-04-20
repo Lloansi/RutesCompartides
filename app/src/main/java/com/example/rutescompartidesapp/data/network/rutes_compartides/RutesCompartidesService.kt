@@ -6,11 +6,12 @@ import com.example.rutescompartidesapp.data.domain.comandes.TripRequest
 import com.example.rutescompartidesapp.data.domain.rutes.TripOffer
 import com.example.rutescompartidesapp.data.domain.map.MapOrder
 import com.example.rutescompartidesapp.data.domain.map.MapRoute
+import com.example.rutescompartidesapp.utils.Resource
 
 interface RutesCompartidesService {
 
     // Auth
-    suspend fun getToken(authRequest: AuthRequest): AuthToken
+    suspend fun getToken(authRequest: AuthRequest): Resource<AuthToken>
 
     // Rutes
     suspend fun getAllMapRoutes(): List<MapRoute>
