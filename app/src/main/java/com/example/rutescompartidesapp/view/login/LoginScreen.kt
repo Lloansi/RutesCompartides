@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -24,11 +23,9 @@ import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material.icons.outlined.LockOpen
 import androidx.compose.material.icons.outlined.Mail
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedButton
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -56,15 +53,12 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.DialogProperties
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.rutescompartidesapp.R
 import com.example.rutescompartidesapp.ui.theme.OrangeRC
 import kotlinx.coroutines.flow.collectLatest
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(loginViewModel: LoginViewModel, navController: NavController){
     //Email
@@ -278,7 +272,7 @@ fun LoginScreen(loginViewModel: LoginViewModel, navController: NavController){
                     Spacer(modifier = Modifier.padding(4.dp))
 
                     //Sing Up Button
-                    Row (){
+                    Row {
                         ElevatedButton(
                             onClick = loginViewModel::onLoginButtonClick,
                             modifier = Modifier
@@ -334,12 +328,14 @@ fun LoginScreen(loginViewModel: LoginViewModel, navController: NavController){
                             loginViewModel.login()
                         }
                     }
-                    if (userIsLogged){
-                        loginViewModel.onLoading(false)
+                    LaunchedEffect (userIsLogged){
+                        if (userIsLogged) {
+                            loginViewModel.onLoading(false)
 
-                        // Navigate to home
-                        navController.navigate("MapScreen") {
-                            popUpTo("MapScreen") { inclusive = true }
+                            // Navigate to home
+                            navController.navigate("MapScreen") {
+                                popUpTo("MapScreen") { inclusive = true }
+                            }
                         }
                     }
 
