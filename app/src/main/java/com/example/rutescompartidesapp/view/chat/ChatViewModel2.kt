@@ -19,6 +19,8 @@ class ChatViewModel2: ViewModel()  {
     private lateinit var client: OkHttpClient
     private lateinit var webSocket: WebSocket
 
+    // En vez de crear una clase, creamos un objecto y lo linkeamos a una variable, a efectos prácticos, lo mismo
+    // El WebSocketListener() nos da metodos básicos de websocket, como en este caso, enviar un mensaje
     private val listener = object : WebSocketListener() {
         override fun onOpen(webSocket: WebSocket, response: Response) {
             super.onOpen(webSocket, response)
