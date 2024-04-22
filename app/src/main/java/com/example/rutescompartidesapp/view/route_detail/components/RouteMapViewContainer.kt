@@ -1,10 +1,22 @@
 package com.example.rutescompartidesapp.view.route_detail.components
 
 import android.content.Context
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.content.ContextCompat
+import com.example.rutescompartidesapp.R
+import com.example.rutescompartidesapp.utils.getResponsivePadding
 import com.example.rutescompartidesapp.view.map.viewModels.MapViewModel
+import com.example.rutescompartidesapp.view.map.viewModels.MapViewModel2
 import org.osmdroid.bonuspack.routing.OSRMRoadManager
 import org.osmdroid.bonuspack.routing.RoadManager
 import org.osmdroid.config.Configuration
@@ -16,9 +28,11 @@ import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 
 
 @Composable
-fun RouteMapViewContainer(viewModel: MapViewModel, ctx : Context, startPoint: GeoPoint, endPoint: GeoPoint, zoomMap : Double){
+fun RouteMapViewContainer(viewModel: MapViewModel, viewModel2: MapViewModel2, ctx : Context, startPoint: GeoPoint, endPoint: GeoPoint, zoomMap : Double){
 
     val agentNameMap = "rutescompartides"
+    val routeIconMarker = ContextCompat.getDrawable(ctx, R.drawable.little_map_marker_routes_svg)
+
 
     // Load/initialize the osmdroid configuration
     Configuration.getInstance().load(
@@ -27,11 +41,11 @@ fun RouteMapViewContainer(viewModel: MapViewModel, ctx : Context, startPoint: Ge
     )
     Configuration.getInstance().userAgentValue = agentNameMap
 
+
     AndroidView(
         modifier = Modifier
-            //.height(150.dp)
-            //.width(150.dp)
-                ,
+            .fillMaxSize()
+            .padding(getResponsivePadding()),
         factory = { context ->
 
             // We instance the MapView
@@ -39,6 +53,7 @@ fun RouteMapViewContainer(viewModel: MapViewModel, ctx : Context, startPoint: Ge
 
             // Set tile source for the map
             mapView.setTileSource(TileSourceFactory.MAPNIK)
+
 
             // Get center of route
             val centerRoute = viewModel.getCenterRoute(startPoint.latitude,startPoint.longitude,endPoint.latitude,endPoint.longitude)
@@ -48,16 +63,25 @@ fun RouteMapViewContainer(viewModel: MapViewModel, ctx : Context, startPoint: Ge
             controller.setCenter(centerRoute)
             controller.setZoom(zoomMap)
 
+
+            /*
             // Create and add the location overlay
             val locationOverlay = MyLocationNewOverlay(GpsMyLocationProvider(ctx), mapView)
             locationOverlay.enableMyLocation()
             mapView.overlays.add(locationOverlay)
+             */
 
             // We create the static route to show
             val roadManager: RoadManager = OSRMRoadManager(ctx, agentNameMap)
-            viewModel.showPathBetweenPoints(startPoint, endPoint, mapView, roadManager)
+
+            // When the map initialize, the function to print the path and points take place
+            viewModel2.createPathAndRoutePoints(viewModel,startPoint,endPoint,mapView,roadManager,routeIconMarker)
 
             mapView
+        },
+        update = { mapView ->
+            viewModel2.clickStateMap(mapView)
         }
+
     )
 }

@@ -52,6 +52,7 @@ import com.example.rutescompartidesapp.view.login.LoginScreen
 import com.example.rutescompartidesapp.view.login.LoginViewModel
 import com.example.rutescompartidesapp.view.map.MapScreen
 import com.example.rutescompartidesapp.view.map.viewModels.MapViewModel
+import com.example.rutescompartidesapp.view.map.viewModels.MapViewModel2
 import com.example.rutescompartidesapp.view.profile.ProfileScreen
 import com.example.rutescompartidesapp.view.profile.ProfileViewModel
 import com.example.rutescompartidesapp.view.publish_order.PublishOrderScreen
@@ -108,6 +109,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             RutesCompartidesAppTheme {
                 val mapViewModel: MapViewModel = hiltViewModel()
+                val mapViewModel2: MapViewModel2 = hiltViewModel()
                 val loginViewModel: LoginViewModel = hiltViewModel()
                 val profileViewModel: ProfileViewModel = hiltViewModel()
                 val drawViewModel = DrawViewModel()
@@ -172,6 +174,7 @@ class MainActivity : ComponentActivity() {
                 ) { paddingValues ->
                     ScreenNavigationConfiguration(
                         mapViewModel,
+                        mapViewModel2,
                         loginViewModel,
                         profileViewModel,
                         drawViewModel,
@@ -188,11 +191,11 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun ScreenNavigationConfiguration( mapViewModel: MapViewModel,loginViewModel: LoginViewModel, profileViewModel: ProfileViewModel, drawViewModel: DrawViewModel, cameraViewModel: CameraViewModel,
+fun ScreenNavigationConfiguration( mapViewModel: MapViewModel,mapViewModel2: MapViewModel2,loginViewModel: LoginViewModel, profileViewModel: ProfileViewModel, drawViewModel: DrawViewModel, cameraViewModel: CameraViewModel,
                                    routeOrderListViewModel: RoutesOrderListViewModel, filterPopupViewModel: FilterPopupViewModel,
                                    navController: NavHostController, paddingModifier: Modifier) {
 
-    NavHost(navController = navController, startDestination = Screens.LoginScreen.route, modifier = paddingModifier) {
+    NavHost(navController = navController, startDestination = Screens.RouteDetailGeneralScreen.route, modifier = paddingModifier) {
 
         composable(Screens.MapScreen.route) {
             MapScreen(navController, mapViewModel)
@@ -220,7 +223,7 @@ fun ScreenNavigationConfiguration( mapViewModel: MapViewModel,loginViewModel: Lo
             type = NavType.IntType
         })) {
             val routeID = it.arguments?.getInt("routeId")
-            RouteDetailGeneralScreen(navController, 1, mapViewModel, routeOrderListViewModel)
+            RouteDetailGeneralScreen(navController, 1, mapViewModel,mapViewModel2, routeOrderListViewModel)
         }
 
         composable(Screens.RoutesOrderListScreen.route) {

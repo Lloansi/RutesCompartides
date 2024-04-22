@@ -1,8 +1,9 @@
 package com.example.rutescompartidesapp.view.route_detail
 
 import android.annotation.SuppressLint
+import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -21,11 +22,16 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.ElevatedAssistChip
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ElevatedCard
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -48,6 +54,7 @@ import com.example.rutescompartidesapp.ui.theme.OrangeRC
 import com.example.rutescompartidesapp.view.generic_components.TopAppBarWithBackNav
 import com.example.rutescompartidesapp.view.map.components.allRoute
 import com.example.rutescompartidesapp.view.map.viewModels.MapViewModel
+import com.example.rutescompartidesapp.view.map.viewModels.MapViewModel2
 import com.example.rutescompartidesapp.view.route_detail.route_detail_driver.RouteData
 import com.example.rutescompartidesapp.view.route_detail.route_detail_driver.TransportOptions
 import com.example.rutescompartidesapp.view.route_detail.components.RouteMapViewContainer
@@ -58,13 +65,15 @@ import org.osmdroid.util.GeoPoint
 
 @SuppressLint("UnusedBoxWithConstraintsScope")
 @Composable
-fun RouteDetailGeneralScreen(navHost: NavHostController, routeID: Int, mapViewModel: MapViewModel, routesOrderListViewModel: RoutesOrderListViewModel) {
+fun RouteDetailGeneralScreen(navHost: NavHostController, routeID: Int, mapViewModel: MapViewModel,mapViewModel2: MapViewModel2, routesOrderListViewModel: RoutesOrderListViewModel) {
 
     val routeGeo: Route = allRoute.first { it.routeId == routeID }
     val routeInfo: RouteForList = ListConstants.routeList.first { it.routeID == routeID }
     val startGeoPoint = GeoPoint(routeGeo.startLat.toDouble(), routeGeo.startLon.toDouble())
     val endGeoPoint = GeoPoint(routeGeo.endLat.toDouble(), routeGeo.endLon.toDouble())
     val routeDetailViewModel = RouteDetailViewModel()
+
+    val isMapExpanded by mapViewModel2.isBoxMapClicked.collectAsState()
 
     TopAppBarWithBackNav(
         title = "Ruta #$routeID",
@@ -74,22 +83,20 @@ fun RouteDetailGeneralScreen(navHost: NavHostController, routeID: Int, mapViewMo
             BoxWithConstraints(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .fillMaxHeight(0.25f)
+                    .fillMaxHeight(if (isMapExpanded) 1f else 0.25f)
+                    .clip(RoundedCornerShape(16.dp))
+                    .clickable {
+                        mapViewModel2.updateClickState(!isMapExpanded)
+                    }
             ) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .fillMaxHeight()
-                        .clip(RoundedCornerShape(16.dp))
-                ) {
-                    RouteMapViewContainer(
-                        viewModel = mapViewModel,
-                        ctx,
-                        startGeoPoint,
-                        endGeoPoint,
-                        13.5
-                    )
-                }
+                RouteMapViewContainer(
+                    viewModel = mapViewModel,
+                    viewModel2 = mapViewModel2,
+                    ctx,
+                    startGeoPoint,
+                    endGeoPoint,
+                    13.5
+                )
             }
             Row(
                 modifier = Modifier

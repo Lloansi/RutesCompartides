@@ -75,7 +75,7 @@ class MapViewModel @Inject constructor (
         //markerPosition.value = GeoPoint(40.796788, -73.949232)
     }
 
-    private fun createMarker(type: String, point: GeoPoint, mapView: MapView, iconMarker: Drawable? = null){
+    fun createMarker(type: String, point: GeoPoint, mapView: MapView, iconMarker: Drawable? = null){
         val marker = Marker(mapView)
         marker.position =  point
         marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER)
