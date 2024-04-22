@@ -1,39 +1,29 @@
 package com.example.rutescompartidesapp.view.profile.components
 
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import androidx.compose.ui.window.Popup
-import androidx.compose.ui.window.PopupProperties
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.rutescompartidesapp.ui.theme.MateBlackRC
 import com.example.rutescompartidesapp.view.profile.ProfileViewModel
@@ -42,14 +32,29 @@ import com.example.rutescompartidesapp.view.profile.ProfileViewModel
 @Composable
 fun LogOutPopup(viewModelProfile: ProfileViewModel, navigator: NavController) {
 
-    val isLogOutPopUpShowing by viewModelProfile.isLogOutPopUpShowing.collectAsState()
+    val isLogOutPopUpShowing by viewModelProfile.isLogOutPopUpShowing.collectAsStateWithLifecycle()
+    val wantsToLogOut by viewModelProfile.wantsToLogOut.collectAsStateWithLifecycle()
+    val isLoggedOut by viewModelProfile.isLoggedOut.collectAsStateWithLifecycle()
+
+    if (wantsToLogOut){
+    LaunchedEffect(wantsToLogOut){
+        viewModelProfile.updateSession()
+        viewModelProfile.onClickLogOut(false)
+        }
+    }
+    if (isLoggedOut){
+        viewModelProfile.onLogOutChange(false)
+        navigator.navigate("LoginScreen") {
+            popUpTo("LoginScreen") { inclusive = true }
+        }
+    }
 
     if (isLogOutPopUpShowing) {
         AlertDialog(
             modifier = Modifier
                 .fillMaxWidth()
                 .wrapContentHeight(),
-            onDismissRequest = { viewModelProfile.onClickLogOut(false) },
+            onDismissRequest = { viewModelProfile.onClickLogOutPopUpShow(false) },
             properties = DialogProperties(
                 dismissOnBackPress = true,
                 dismissOnClickOutside = true
@@ -76,12 +81,10 @@ fun LogOutPopup(viewModelProfile: ProfileViewModel, navigator: NavController) {
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.Center
                     ) {
-                        LogOutButton(buttonText = "No") { viewModelProfile.onClickLogOut(false) }
+                        LogOutButton(buttonText = "No") { viewModelProfile.onClickLogOutPopUpShow(false) }
                         LogOutButton(buttonText = "Si") {
-                            viewModelProfile.onClickLogOut(false)
-                            navigator.navigate("LoginScreen") {
-                                popUpTo("LoginScreen") { inclusive = true }
-                            }
+                            viewModelProfile.onClickLogOutPopUpShow(false)
+                            viewModelProfile.onClickLogOut(true)
                         }
                     }
                 }

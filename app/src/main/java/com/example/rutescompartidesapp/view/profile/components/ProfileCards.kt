@@ -78,7 +78,7 @@ fun CreateCardsWithItems(list: List<ProfileItems>, paddingBottom: Dp, paddingTop
                             }
                         }
                         "Tanca la sessió" -> {
-                            viewModel.onClickLogOut(true)
+                            viewModel.onClickLogOutPopUpShow(true)
                             viewModel.changeBgOpacity(0.5f)
                         }
                         else -> println("El item ${list[i].title} no existe")

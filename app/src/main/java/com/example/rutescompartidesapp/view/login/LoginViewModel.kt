@@ -2,26 +2,30 @@ package com.example.rutescompartidesapp.view.login
 
 import android.util.Patterns
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import com.example.rutescompartidesapp.data.domain.auth.AuthRequest
-import com.example.rutescompartidesapp.data.domain.auth.AuthToken
+import com.example.rutescompartidesapp.data.domain.session.SessionRepository
 import com.example.rutescompartidesapp.data.network.repository.RutesCompartidesRepository
 import com.example.rutescompartidesapp.utils.Constants
 import com.example.rutescompartidesapp.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor (
-    val rutesCompartidesRepository: RutesCompartidesRepository
+    val rutesCompartidesRepository: RutesCompartidesRepository,
+    private val sessionRepository: SessionRepository
 ): ViewModel(){
+
+
+
 
     private val _authToken = MutableStateFlow("")
     val authToken = _authToken.asStateFlow()
@@ -40,6 +44,12 @@ class LoginViewModel @Inject constructor (
                         _authToken.value = authResult.token
                         _userIsLogged.value = true
                         _isLoading.value = false
+                        // Save the credentials in the session
+                        sessionRepository.updateIsLogged(true)
+                        sessionRepository.updateEmail(authRequest.username)
+                        sessionRepository.updatePassword(authRequest.password)
+                        _userWantsToLogin.value = false
+
                     }
                 }
                 is Resource.Error -> {
@@ -56,6 +66,7 @@ class LoginViewModel @Inject constructor (
                     }
                     _showErrorToastChannel.send(true)
                     _userIsLogged.value = false
+                    _userWantsToLogin.value = false
                 }
                 else -> {}
             }
@@ -124,6 +135,8 @@ class LoginViewModel @Inject constructor (
     private val _userWantsToLogin = MutableStateFlow(false)
     val userWantsToLogin = _userWantsToLogin.asStateFlow()
 
+
+
     //Sing Up Button
     fun onLoginButtonClick() {
 
@@ -145,7 +158,7 @@ class LoginViewModel @Inject constructor (
     //User exists
     private val _userIsLogged = MutableStateFlow(false)
     val userIsLogged = _userIsLogged.asStateFlow()
-     fun login2(userEmail: String): Boolean {
+     fun loginLocal(userEmail: String): Boolean {
          return if (!Constants.userList.filter { user -> user.email == userEmail }.isEmpty()){
              _userIsLogged.value = true
              println("Login okey")
@@ -160,4 +173,22 @@ class LoginViewModel @Inject constructor (
    suspend fun login() {
        getToken(AuthRequest(_userEmail.value, _userPassword.value))
    }
+
+    val initialSetupEvent = liveData {
+        emit(sessionRepository.fetchInitialPreferences())
+    }
+
+    // Keep the user preferences as a stream of changes
+    private val userPreferencesFlow = sessionRepository.sessionPreferencesFlow
+
+
+    init {
+        viewModelScope.launch {
+            userPreferencesFlow.collectLatest { session ->
+                _userEmail.value = session.email
+                _userPassword.value = session.password
+                _userIsLogged.value = session.isLogged
+            }
+        }
+    }
 }

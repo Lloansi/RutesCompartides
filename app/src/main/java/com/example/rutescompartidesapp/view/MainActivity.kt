@@ -109,6 +109,7 @@ class MainActivity : ComponentActivity() {
             RutesCompartidesAppTheme {
                 val mapViewModel: MapViewModel = hiltViewModel()
                 val loginViewModel: LoginViewModel = hiltViewModel()
+                val profileViewModel: ProfileViewModel = hiltViewModel()
                 val drawViewModel = DrawViewModel()
                 val cameraViewModel = CameraViewModel()
                 val filterPopupViewModel = FilterPopupViewModel()
@@ -172,6 +173,7 @@ class MainActivity : ComponentActivity() {
                     ScreenNavigationConfiguration(
                         mapViewModel,
                         loginViewModel,
+                        profileViewModel,
                         drawViewModel,
                         cameraViewModel,
                         routeOrderListViewModel,
@@ -186,7 +188,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun ScreenNavigationConfiguration( mapViewModel: MapViewModel,loginViewModel: LoginViewModel, drawViewModel: DrawViewModel, cameraViewModel: CameraViewModel,
+fun ScreenNavigationConfiguration( mapViewModel: MapViewModel,loginViewModel: LoginViewModel, profileViewModel: ProfileViewModel, drawViewModel: DrawViewModel, cameraViewModel: CameraViewModel,
                                    routeOrderListViewModel: RoutesOrderListViewModel, filterPopupViewModel: FilterPopupViewModel,
                                    navController: NavHostController, paddingModifier: Modifier) {
 
@@ -225,7 +227,7 @@ fun ScreenNavigationConfiguration( mapViewModel: MapViewModel,loginViewModel: Lo
             RoutesOrderListScreen(navController, routeOrderListViewModel, filterPopupViewModel)
         }
         composable(Screens.ProfileScreen.route) {
-            ProfileScreen(ProfileViewModel(), navController)
+            ProfileScreen(profileViewModel, navController)
         }
         composable(Screens.LoginScreen.route) {
             LoginScreen(loginViewModel, navController)

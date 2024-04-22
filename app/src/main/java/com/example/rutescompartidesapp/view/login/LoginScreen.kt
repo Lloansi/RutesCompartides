@@ -53,6 +53,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.rutescompartidesapp.R
@@ -81,6 +82,7 @@ fun LoginScreen(loginViewModel: LoginViewModel, navController: NavController){
     LaunchedEffect(key1 = loginViewModel.showErrorToastChannel){
         loginViewModel.showErrorToastChannel.collectLatest { showErrorToast ->
             if (showErrorToast){
+                loginViewModel.onLoading(false)
                 Toast.makeText(context, authErrorText, Toast.LENGTH_SHORT).show()
             }
         }
@@ -317,7 +319,7 @@ fun LoginScreen(loginViewModel: LoginViewModel, navController: NavController){
                         )
                     }
                     if (isLoading) {
-                        Box(contentAlignment = Alignment.Center) {
+                        Dialog(onDismissRequest = { loginViewModel.onLoading(false)}) {
                                 CircularProgressIndicator()
                         }
                     }
@@ -331,17 +333,14 @@ fun LoginScreen(loginViewModel: LoginViewModel, navController: NavController){
                     LaunchedEffect (userIsLogged){
                         if (userIsLogged) {
                             loginViewModel.onLoading(false)
-
                             // Navigate to home
                             navController.navigate("MapScreen") {
                                 popUpTo("MapScreen") { inclusive = true }
                             }
                         }
                     }
-
-                }
-            }
-
                 }
             }
         }
+    }
+}
