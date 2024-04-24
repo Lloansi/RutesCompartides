@@ -27,7 +27,7 @@ fun SearchView(searchViewModel : SearchViewModel) {
 
     val searchText by searchViewModel.searchText.collectAsState()
     val isSearching by searchViewModel.isSearching.collectAsState()
-    val search by searchViewModel.search.collectAsState()
+    //val search by searchViewModel.search.collectAsState()
 
     SearchBar(
         modifier= Modifier
@@ -59,7 +59,6 @@ fun SearchView(searchViewModel : SearchViewModel) {
             Modifier.size(4.dp)
         },*/
         onActiveChange = { searchViewModel::onToogleSearch }) {
-
     }
 
 }

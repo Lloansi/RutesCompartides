@@ -53,6 +53,7 @@ import com.example.rutescompartidesapp.view.login.LoginViewModel
 import com.example.rutescompartidesapp.view.map.MapScreen
 import com.example.rutescompartidesapp.view.map.viewModels.MapViewModel
 import com.example.rutescompartidesapp.view.map.viewModels.MapViewModel2
+import com.example.rutescompartidesapp.view.map.viewModels.SearchViewModel
 import com.example.rutescompartidesapp.view.profile.ProfileScreen
 import com.example.rutescompartidesapp.view.profile.ProfileViewModel
 import com.example.rutescompartidesapp.view.publish_order.PublishOrderScreen
@@ -116,6 +117,7 @@ class MainActivity : ComponentActivity() {
                 val cameraViewModel = CameraViewModel()
                 val filterPopupViewModel = FilterPopupViewModel()
                 val routeOrderListViewModel = RoutesOrderListViewModel()
+                val searchViewModel: SearchViewModel = hiltViewModel()
 
                 val navController = rememberNavController()
 
@@ -181,6 +183,7 @@ class MainActivity : ComponentActivity() {
                         cameraViewModel,
                         routeOrderListViewModel,
                         filterPopupViewModel,
+                        searchViewModel,
                         navController,
                         Modifier.padding(paddingValues),
                     )
@@ -192,13 +195,13 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun ScreenNavigationConfiguration( mapViewModel: MapViewModel,mapViewModel2: MapViewModel2,loginViewModel: LoginViewModel, profileViewModel: ProfileViewModel, drawViewModel: DrawViewModel, cameraViewModel: CameraViewModel,
-                                   routeOrderListViewModel: RoutesOrderListViewModel, filterPopupViewModel: FilterPopupViewModel,
+                                   routeOrderListViewModel: RoutesOrderListViewModel, filterPopupViewModel: FilterPopupViewModel, searchViewModel: SearchViewModel,
                                    navController: NavHostController, paddingModifier: Modifier) {
 
     NavHost(navController = navController, startDestination = Screens.MapScreen.route, modifier = paddingModifier) {
 
         composable(Screens.MapScreen.route) {
-            MapScreen(navController, mapViewModel)
+            MapScreen(navController, mapViewModel, searchViewModel)
         }
         composable(Screens.OrderDetailScreen.route,
             arguments = listOf(navArgument("packageId"){
