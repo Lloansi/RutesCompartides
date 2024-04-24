@@ -9,6 +9,7 @@ interface ApiGeoNames {
     suspend fun searchCities(
         @Query("q") query: String,
         @Query("maxRows") maxRows: Int = 100,
+        @Query("country") country: String = "ES",
         @Query("username") username: String
     ): GeoNamesResponse
 

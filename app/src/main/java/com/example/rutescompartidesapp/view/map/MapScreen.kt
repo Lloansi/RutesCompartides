@@ -46,7 +46,7 @@ val fredokaOneFamily = FontFamily(
 
 
 object MapScreen: Screen {
-    const val maxKmFog = 5
+    const val maxKmFog = 7
 
     @Composable
     override fun Content() {
@@ -59,10 +59,6 @@ object MapScreen: Screen {
 fun MapScreen(navController: NavHostController, mapViewModel: MapViewModel, searchViewModel: SearchViewModel) {
     val ordersFiltered by mapViewModel.filteredOrders.collectAsState()
     val routesFiltered by mapViewModel.filteredRoutes.collectAsState()
-    val routesFilteredSearchBar by searchViewModel.routesFilteredPerSearchedText.collectAsStateWithLifecycle()
-    val ordersFilteredSearchBar by searchViewModel.ordersFilteredPerSearchedText.collectAsStateWithLifecycle()
-    val locationsFilteredSearchBar by searchViewModel.locationsFilteredPerSearchedText.collectAsStateWithLifecycle()
-    val isSearching by searchViewModel.isSearching.collectAsState()
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -92,8 +88,10 @@ fun MapScreen(navController: NavHostController, mapViewModel: MapViewModel, sear
                     .padding(16.dp)
                     .align(Alignment.TopStart)
             ) {
-                SearchViewContainer(searchViewModel)
-                FilteredListsBelowSearchBar(routesFilteredSearchBar, ordersFilteredSearchBar,locationsFilteredSearchBar, isSearching)
+                Column {
+                    SearchViewContainer(searchViewModel)
+                    FilteredListsBelowSearchBar(searchViewModel)
+                }
             }
 
             //Card orders/routes & Floatting buttons

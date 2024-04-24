@@ -10,8 +10,7 @@ class GeoName(
 ){
     fun doesMatchSearchQuery(query: String): Boolean {
         val matchingCombinations = listOf(
-            name,
-            "${name.first()}",
+            name
         )
         return matchingCombinations.any {
             it.contains(query, ignoreCase = true)
