@@ -48,7 +48,7 @@ fun TopAppBarWithBackNav(title: String, onBack: () -> Unit, content: @Composable
                     start = 8.dp,
                     end = 8.dp
                 ),
-            verticalArrangement = Arrangement.SpaceEvenly,
+           // verticalArrangement = Arrangement.SpaceEvenly,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             content()
