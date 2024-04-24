@@ -18,7 +18,7 @@ sealed class Screens(
     object EditProfileScreen: Screens("EditProfileScreen")
     object ComFuncionaScreen: Screens("ComFuncionaScreen")
 
-    object ConfirmDeliveryScreen: Screens("ConfirmDeliveryScreen")
+    object ConfirmDeliveryScreen: Screens("ConfirmDeliveryScreen/{routeID}")
     object DrawScreen: Screens("DrawScreen")
     object CameraScreen: Screens("CameraScreen")
     object RouteDetailGeneralScreen: Screens("RouteDetailGeneralScreen/{routeId}")

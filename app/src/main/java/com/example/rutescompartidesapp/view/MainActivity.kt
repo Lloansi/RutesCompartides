@@ -60,6 +60,7 @@ import com.example.rutescompartidesapp.view.publish_order.PublishOrderScreen
 import com.example.rutescompartidesapp.view.publish_route.PublishRouteScreen
 import com.example.rutescompartidesapp.view.route_detail.route_detail_driver.RouteDetailDriverScreen
 import com.example.rutescompartidesapp.view.route_detail.RouteDetailGeneralScreen
+import com.example.rutescompartidesapp.view.route_detail.route_detail_driver.RouteDetailDriverViewModel
 import com.example.rutescompartidesapp.view.routes_order_list.RoutesOrderListScreen
 import com.example.rutescompartidesapp.view.routes_order_list.viewmodels.FilterPopupViewModel
 import com.example.rutescompartidesapp.view.routes_order_list.viewmodels.RoutesOrderListViewModel
@@ -113,8 +114,6 @@ class MainActivity : ComponentActivity() {
                 val mapViewModel2: MapViewModel2 = hiltViewModel()
                 val loginViewModel: LoginViewModel = hiltViewModel()
                 val profileViewModel: ProfileViewModel = hiltViewModel()
-                val drawViewModel = DrawViewModel()
-                val cameraViewModel = CameraViewModel()
                 val filterPopupViewModel = FilterPopupViewModel()
                 val routeOrderListViewModel = RoutesOrderListViewModel()
                 val searchViewModel: SearchViewModel = hiltViewModel()
@@ -179,8 +178,6 @@ class MainActivity : ComponentActivity() {
                         mapViewModel2,
                         loginViewModel,
                         profileViewModel,
-                        drawViewModel,
-                        cameraViewModel,
                         routeOrderListViewModel,
                         filterPopupViewModel,
                         searchViewModel,
@@ -194,11 +191,11 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun ScreenNavigationConfiguration( mapViewModel: MapViewModel,mapViewModel2: MapViewModel2,loginViewModel: LoginViewModel, profileViewModel: ProfileViewModel, drawViewModel: DrawViewModel, cameraViewModel: CameraViewModel,
+fun ScreenNavigationConfiguration( mapViewModel: MapViewModel,mapViewModel2: MapViewModel2,loginViewModel: LoginViewModel, profileViewModel: ProfileViewModel,
                                    routeOrderListViewModel: RoutesOrderListViewModel, filterPopupViewModel: FilterPopupViewModel, searchViewModel: SearchViewModel,
                                    navController: NavHostController, paddingModifier: Modifier) {
 
-    NavHost(navController = navController, startDestination = Screens.MapScreen.route, modifier = paddingModifier) {
+    NavHost(navController = navController, startDestination = Screens.RoutesOrderListScreen.route, modifier = paddingModifier) {
 
         composable(Screens.MapScreen.route) {
             MapScreen(navController, mapViewModel, searchViewModel)
@@ -210,15 +207,6 @@ fun ScreenNavigationConfiguration( mapViewModel: MapViewModel,mapViewModel2: Map
             )) {
             val packageId = it.arguments?.getInt("packageId")
             OrderDetailScreen(1, navController)
-        }
-        composable(Screens.ConfirmDeliveryScreen.route){
-            ConfirmScreen(navController, cameraViewModel, drawViewModel)
-        }
-        composable(Screens.CameraScreen.route){
-            CameraScreen(navController, cameraViewModel)
-        }
-        composable(Screens.DrawScreen.route){
-            DrawScreen(navController, drawViewModel)
         }
 
         composable(Screens.RouteDetailGeneralScreen.route,
@@ -246,7 +234,8 @@ fun ScreenNavigationConfiguration( mapViewModel: MapViewModel,mapViewModel2: Map
             type = NavType.IntType
         })) {
             val routeID = it.arguments?.getInt("routeId")
-            RouteDetailDriverScreen(routeID!!, navController)
+            val routeDetailDriverViewModel = RouteDetailDriverViewModel(routeID!!)
+            RouteDetailDriverScreen(routeID, navController, routeDetailDriverViewModel)
         }
         composable(Screens.FaqScreen.route) {
             FaqScreen(navController, FaqViewModel())
@@ -263,6 +252,9 @@ fun ScreenNavigationConfiguration( mapViewModel: MapViewModel,mapViewModel2: Map
         composable(Screens.PublishOrderScreen.route) {
             PublishOrderScreen(navController)
         }
+
+
+
     }
 
 }

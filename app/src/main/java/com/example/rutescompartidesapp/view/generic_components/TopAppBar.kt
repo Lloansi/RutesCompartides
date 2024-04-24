@@ -1,6 +1,5 @@
 package com.example.rutescompartidesapp.view.generic_components
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -48,7 +47,6 @@ fun TopAppBarWithBackNav(title: String, onBack: () -> Unit, content: @Composable
                     start = 8.dp,
                     end = 8.dp
                 ),
-            verticalArrangement = Arrangement.SpaceEvenly,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             content()

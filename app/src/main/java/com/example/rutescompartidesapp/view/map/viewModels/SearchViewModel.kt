@@ -14,10 +14,11 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import com.example.rutescompartidesapp.data.domain.Route
 import com.example.rutescompartidesapp.data.network.GeoNames.repository.GeoNamesRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-
+@HiltViewModel
 class SearchViewModel @Inject constructor(
     private val geoNamesRepository: GeoNamesRepository
 ) : ViewModel() {
