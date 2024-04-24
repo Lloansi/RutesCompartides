@@ -7,8 +7,7 @@ import com.example.rutescompartidesapp.data.domain.ProfileItems
 val routeProfileItemsList = listOf(
     ProfileItems(0, "Les meves rutes", "Consulta les teves rutes aquí"),
     ProfileItems(1, "Les meves comandes", "Consulta les teves comandes aquí"),
-    ProfileItems(2, "Punts habituals", "Consulta i crea els punts on sols anar"),
-    ProfileItems(3, "Notificacions", "Personalitza les notificacions al teu gust"),
+    ProfileItems(2, "Notificacions", "Personalitza les notificacions al teu gust"),
 )
 
 val userProfileItemsList = listOf(
@@ -20,7 +19,6 @@ val userProfileItemsList = listOf(
 val routeItemsListIcons = listOf(
     R.drawable.my_routes_icon,
     R.drawable.my_orders_icon,
-    R.drawable.common_points_icon,
     R.drawable.notification_icon_profile,
 )
 

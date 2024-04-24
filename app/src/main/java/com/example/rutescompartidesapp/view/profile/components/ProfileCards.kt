@@ -61,9 +61,6 @@ fun CreateCardsWithItems(list: List<ProfileItems>, paddingBottom: Dp, paddingTop
                         "Les meves comandes" -> {
                             viewModel.onClickItemPlaceholder(true)
                         }
-                        "Punts habituals" -> {
-                            viewModel.onClickItemPlaceholder(true)
-                        }
                         "Notificacions" -> {
                             viewModel.onClickItemPlaceholder(true)
                         }
