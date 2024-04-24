@@ -42,8 +42,7 @@ import com.example.rutescompartidesapp.view.map.fredokaOneFamily
 
 
 @Composable
-fun
-        ConfirmScreen(navController: NavHostController, cameraViewModel: CameraViewModel, drawViewModel: DrawViewModel) {
+fun ConfirmScreen(navController: NavHostController, cameraViewModel: CameraViewModel, drawViewModel: DrawViewModel) {
     val bitmapPhoto by cameraViewModel.bitmapPhoto.collectAsState()
     val bitmapDraw by drawViewModel.drawBitmap.collectAsState()
     val responsiveHeight = LocalConfiguration.current.screenHeightDp.dp
@@ -168,19 +167,20 @@ fun UploadImageOrSignature(icon : ImageVector, navController: NavHostController,
 
 @Composable
 fun UserCommentContainer() {
-    var userComment by rememberSaveable { mutableStateOf("") }
+
+    var userCommentBox by rememberSaveable { mutableStateOf("") }
 
     TextField(
-        value = userComment ,
+        value = userCommentBox ,
         onValueChange = {
-           userComment = it
+            userCommentBox = it
         },
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight(0.3f),
-        label = { Text(color = Color.Gray ,text = "Escriu aquí el teu comentari") },
         singleLine = false,
         maxLines = 4,
+        label = { Text(color = Color.Gray, text = "Escriu aquí el teu comentari")},
         colors = TextFieldDefaults.colors(
             focusedContainerColor = MaterialTheme.colorScheme.surface,
             unfocusedContainerColor = MaterialTheme.colorScheme.surface,

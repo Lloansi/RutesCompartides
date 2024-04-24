@@ -260,9 +260,6 @@ fun ScreenNavigationConfiguration( mapViewModel: MapViewModel,mapViewModel2: Map
         composable(Screens.PublishOrderScreen.route) {
             PublishOrderScreen(navController)
         }
-
-
-
     }
 
 }
