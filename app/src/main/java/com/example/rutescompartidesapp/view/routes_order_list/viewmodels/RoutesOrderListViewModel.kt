@@ -102,9 +102,6 @@ class RoutesOrderListViewModel: ViewModel() {
         _searchText.value = text
     }
 
-    fun onToogleSearch(isSearching: Boolean) {
-        _isSearching.value = isSearching
-    }
 
     /**
      * Function to filter the routes and orders.

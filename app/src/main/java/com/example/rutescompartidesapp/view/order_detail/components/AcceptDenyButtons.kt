@@ -18,11 +18,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
-import com.example.rutescompartidesapp.view.order_detail.CompleteViewModel
+import com.example.rutescompartidesapp.view.order_detail.OrderDetailViewModel
 
 
 @Composable
-fun AcceptDenyButtons(colorDenyButton: Color, completeViewModel: CompleteViewModel) {
+fun AcceptDenyButtons(colorDenyButton: Color, orderDetailViewModel: OrderDetailViewModel) {
     Row (
         modifier = Modifier
             .fillMaxWidth()
@@ -32,7 +32,7 @@ fun AcceptDenyButtons(colorDenyButton: Color, completeViewModel: CompleteViewMod
     ){
         ExtendedFloatingActionButton(
             containerColor = MaterialTheme.colorScheme.tertiary,
-            onClick = { completeViewModel.toggleVisibility() }
+            onClick = { orderDetailViewModel.toggleVisibility() }
         ) {
             Icon(imageVector = Icons.Filled.ThumbUp, contentDescription = "Accept order",
                 tint = Color.White)
@@ -45,7 +45,7 @@ fun AcceptDenyButtons(colorDenyButton: Color, completeViewModel: CompleteViewMod
         ExtendedFloatingActionButton(
             containerColor = colorDenyButton,
             contentColor = Color.White,
-            onClick = { completeViewModel.toggleVisibility() }
+            onClick = { orderDetailViewModel.toggleVisibility() }
         ) {
             Icon(imageVector = Icons.Filled.ThumbDown, contentDescription = "Accept order")
             Spacer(modifier = Modifier.width(5.dp))

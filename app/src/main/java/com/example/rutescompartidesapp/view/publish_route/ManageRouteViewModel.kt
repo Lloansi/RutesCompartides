@@ -419,7 +419,13 @@ class ManageRouteViewModel: ViewModel(){
             isRefrigerat = _isRefrigerat.value,
             isCongelat = _isCongelat.value,
             isSenseHumitat = _isSenseHumitat.value,
-            etiquetes = tagsList.value
+            etiquetes = tagsList.value,
+            vehicle = _vehicle.value,
+            costKm = _costKM.value.toFloat(),
+            maxDetourKm = _maxDetourKm.value.toFloat(),
+            availableSeats = _availableSeats.value.toInt(),
+            availableSpace = _availableSpace.value,
+            comment = _comment.value
             )
         // TODO Fer un POST a la API per duplicar la ruta
 
@@ -453,6 +459,12 @@ class ManageRouteViewModel: ViewModel(){
         _isRefrigerat.value = _routeToEdit.value!!.isRefrigerat
         _isCongelat.value = _routeToEdit.value!!.isCongelat
         _isSenseHumitat.value = _routeToEdit.value!!.isSenseHumitat
+        _vehicle.value = _routeToEdit.value!!.vehicle ?: ""
+        _costKM.value = _routeToEdit.value!!.costKm.toString()
+        _maxDetourKm.value = _routeToEdit.value!!.maxDetourKm.toString()
+        _availableSeats.value = _routeToEdit.value!!.availableSeats.toString()
+        _availableSpace.value = _routeToEdit.value!!.availableSpace ?: ""
+        _comment.value = _routeToEdit.value!!.comment ?: ""
 
         // Etiquetes i freqüència
         _routeToEdit.value?.etiquetes.let { etiquetes ->
@@ -494,7 +506,14 @@ class ManageRouteViewModel: ViewModel(){
             isRefrigerat = _isRefrigerat.value,
             isCongelat = _isCongelat.value,
             isSenseHumitat = _isSenseHumitat.value,
-            etiquetes = _tagsList.value
+            etiquetes = _tagsList.value,
+            vehicle = _vehicle.value,
+            costKm = _costKM.value.toFloat(),
+            maxDetourKm = _maxDetourKm.value.toFloat(),
+            availableSeats = _availableSeats.value.toInt(),
+            availableSpace = _availableSpace.value,
+            comment = _comment.value
+
         )
         println(updatedRoute)
         // TODO Fer un PUT a la API per actualitzar la ruta

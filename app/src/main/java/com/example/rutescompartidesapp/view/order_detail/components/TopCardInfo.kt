@@ -23,12 +23,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.rutescompartidesapp.data.domain.Order
+import com.example.rutescompartidesapp.data.domain.OrderForList
 import com.example.rutescompartidesapp.ui.theme.MateBlackRC
+import com.example.rutescompartidesapp.ui.theme.OrangeRC
+import com.example.rutescompartidesapp.utils.roundTo1Decimal
 
 
 @Composable
-fun TopCardInfo(order : Order) {
+fun TopCardInfo(order : OrderForList) {
     ElevatedCard (
         modifier = Modifier.fillMaxWidth(),colors = CardDefaults.elevatedCardColors(
         containerColor = MateBlackRC)
@@ -37,14 +39,22 @@ fun TopCardInfo(order : Order) {
         Column (
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(24.dp),
+                .padding(12.dp),
             verticalArrangement = Arrangement.Center
         ){
-            TopCardDetails(Icons.Outlined.Flag, heading = "Origen", value = order.packageStartPoint, color = MaterialTheme.colorScheme.primary, padding = 8.dp)
+            Row(horizontalArrangement = Arrangement.SpaceBetween) {
+                Row (modifier = Modifier.weight(2f),horizontalArrangement = Arrangement.Start) {
+                    Text(text = order.orderName, color = Color.White)
+                }
+                Row(modifier = Modifier.weight(2f), horizontalArrangement = Arrangement.End) {
+                    Text(text = order.user, color = OrangeRC, fontWeight = FontWeight.Bold)
+                }
+            }
+            TopCardDetails(Icons.Outlined.Flag, heading = "Origen", value = order.puntSortida, color = MaterialTheme.colorScheme.primary, padding = 4.dp)
 
-            TopCardDetails(Icons.Filled.Flag, heading = "Destinació", value = order.packageEndPoint, color = MaterialTheme.colorScheme.primary, padding = 8.dp)
+            TopCardDetails(Icons.Filled.Flag, heading = "Destinació", value = order.puntArribada, color = MaterialTheme.colorScheme.primary, padding = 4.dp)
 
-            TopCardDetails(Icons.Outlined.Route, heading = "Distància", value = "17km", color = MaterialTheme.colorScheme.primary, padding = 8.dp)
+            TopCardDetails(Icons.Outlined.Route, heading = "Distància", value = "${order.distance.roundTo1Decimal()} km", color = MaterialTheme.colorScheme.primary, padding = 4.dp)
 
         }
 
@@ -67,13 +77,10 @@ fun TopCardDetails(icon : ImageVector, heading: String, value : String, padding 
         )
 
         Text(text = "$heading: ",
-            style = MaterialTheme.typography.bodyMedium.copy(
-                fontWeight = FontWeight.Bold
-            ),
-            fontSize = 20.sp,
-            color = Color.White
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.primary
         )
 
-        Text(text = value,fontSize = 18.sp, color = Color.White)
+        Text(text = value, color = Color.White)
     }
 }

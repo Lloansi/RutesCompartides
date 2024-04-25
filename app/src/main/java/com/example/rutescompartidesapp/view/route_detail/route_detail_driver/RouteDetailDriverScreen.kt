@@ -72,9 +72,7 @@ fun RouteDetailDriverScreen(routeID: Int, navHost: NavHostController, routeDetai
     val routeInteractionToConfirm by routeDetailDriverViewModel.routeInteractionToConfirm.collectAsStateWithLifecycle()
 
 
-    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     val verticalScroll = rememberScrollState()
-    val lazyListState = rememberLazyListState()
 
 
     TopAppBarWithBackNav(title = if (!isCompleteScreenShowing) {
@@ -112,6 +110,7 @@ fun RouteDetailDriverScreen(routeID: Int, navHost: NavHostController, routeDetai
                     Row {
                         RouteCardHeader(route = route!!)
                     }
+                    // Etiquetes
                     Row {
                         LazyRow(modifier = Modifier
                             .fillMaxWidth()
@@ -198,7 +197,7 @@ fun RouteDetailDriverScreen(routeID: Int, navHost: NavHostController, routeDetai
                         RouteData(
                             icon = R.drawable.seat_icon_svg,
                             dataHeader = "Seients lliures",
-                            data = "2"
+                            data = route!!.availableSeats.toString()
                         )
                     }
                     // Max Deviation
@@ -210,7 +209,7 @@ fun RouteDetailDriverScreen(routeID: Int, navHost: NavHostController, routeDetai
                         RouteData(
                             icon = R.drawable.max_deviation_svg,
                             dataHeader = "Màxim desviament",
-                            data = "5km"
+                            data = route!!.maxDetourKm.toString() + " km"
                         )
 
                     }
@@ -223,7 +222,7 @@ fun RouteDetailDriverScreen(routeID: Int, navHost: NavHostController, routeDetai
                         RouteData(
                             icon = R.drawable.carrier_icon_svg,
                             dataHeader = "Espai disponible",
-                            data = "Volum similair a 1 palet i mig"
+                            data = route!!.availableSpace.toString()
                         )
                     }
                     Divider(
@@ -243,7 +242,7 @@ fun RouteDetailDriverScreen(routeID: Int, navHost: NavHostController, routeDetai
                         RouteData(
                             icon = R.drawable.transport_icon_svg,
                             dataHeader = "Vehicle",
-                            data = "Wolkswagen"
+                            data = route!!.vehicle.toString()
                         )
                     }
                     Divider(
@@ -274,8 +273,11 @@ fun RouteDetailDriverScreen(routeID: Int, navHost: NavHostController, routeDetai
                                 ElevatedButton(
                                     shape = RoundedCornerShape(16.dp),
                                     onClick = { navHost.navigate(
-                                        "EditRouteScreen/{routeId}".replace(
-                                            oldValue = "{routeId}",
+                                        "PublishRouteScreen/{command}/{routeID}".replace(
+                                            oldValue = "{command}",
+                                            newValue = "edit"
+                                        ).replace(
+                                            oldValue = "{routeID}",
                                             newValue = "$routeID"
                                         )) },
                                     colors = ButtonDefaults.elevatedButtonColors(
@@ -312,7 +314,8 @@ fun RouteDetailDriverScreen(routeID: Int, navHost: NavHostController, routeDetai
 
                             ElevatedButton(
                                 shape = RoundedCornerShape(16.dp),
-                                onClick = { routeDetailDriverViewModel.deleteRoute(route!!) },
+                                onClick = { routeDetailDriverViewModel.deleteRoute(route!!)
+                                    navHost.popBackStack()},
                                 colors = ButtonDefaults.elevatedButtonColors(
                                     containerColor = RedRC
                                 )
@@ -320,7 +323,7 @@ fun RouteDetailDriverScreen(routeID: Int, navHost: NavHostController, routeDetai
                                 Icon(
                                     modifier = Modifier.size(28.dp),
                                     imageVector = Icons.Filled.Delete,
-                                    contentDescription = "Edit route icon",
+                                    contentDescription = "Delete route icon",
                                     tint = Color.White
                                 )
                             }

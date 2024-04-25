@@ -43,11 +43,6 @@ import com.example.rutescompartidesapp.view.faq.FaqScreen
 import com.example.rutescompartidesapp.view.faq.FaqViewModel
 import com.example.rutescompartidesapp.utils.Constants.ALL_PERMISSIONS
 import com.example.rutescompartidesapp.view.order_detail.OrderDetailScreen
-import com.example.rutescompartidesapp.view.confirm_delivery.components.camera.CameraScreen
-import com.example.rutescompartidesapp.view.confirm_delivery.ConfirmScreen
-import com.example.rutescompartidesapp.view.confirm_delivery.components.draw.DrawScreen
-import com.example.rutescompartidesapp.view.confirm_delivery.viewmodel.CameraViewModel
-import com.example.rutescompartidesapp.view.confirm_delivery.viewmodel.DrawViewModel
 import com.example.rutescompartidesapp.view.login.LoginScreen
 import com.example.rutescompartidesapp.view.login.LoginViewModel
 import com.example.rutescompartidesapp.view.map.MapScreen
@@ -60,7 +55,6 @@ import com.example.rutescompartidesapp.view.publish_order.PublishOrderScreen
 import com.example.rutescompartidesapp.view.publish_route.PublishRouteScreen
 import com.example.rutescompartidesapp.view.route_detail.route_detail_driver.RouteDetailDriverScreen
 import com.example.rutescompartidesapp.view.route_detail.RouteDetailGeneralScreen
-import com.example.rutescompartidesapp.view.route_detail.edit_route.EditRouteScreen
 import com.example.rutescompartidesapp.view.route_detail.route_detail_driver.RouteDetailDriverViewModel
 import com.example.rutescompartidesapp.view.routes_order_list.RoutesOrderListScreen
 import com.example.rutescompartidesapp.view.routes_order_list.viewmodels.FilterPopupViewModel
@@ -202,12 +196,12 @@ fun ScreenNavigationConfiguration( mapViewModel: MapViewModel,mapViewModel2: Map
             MapScreen(navController, mapViewModel, searchViewModel)
         }
         composable(Screens.OrderDetailScreen.route,
-            arguments = listOf(navArgument("packageId"){
+            arguments = listOf(navArgument("orderID"){
                 type = NavType.IntType
             }
             )) {
-            val packageId = it.arguments?.getInt("packageId")
-            OrderDetailScreen(1, navController)
+            val orderID = it.arguments?.getInt("orderID")
+            OrderDetailScreen(orderID!!, navController)
         }
 
         composable(Screens.RouteDetailGeneralScreen.route,
@@ -239,13 +233,17 @@ fun ScreenNavigationConfiguration( mapViewModel: MapViewModel,mapViewModel2: Map
             RouteDetailDriverScreen(routeID, navController, routeDetailDriverViewModel)
         }
 
+        /*
         composable(Screens.EditRouteScreen.route,
             arguments = listOf(navArgument("routeId"){
                 type = NavType.IntType
-            })) {
+            },
+                )) {
             val routeID = it.arguments?.getInt("routeId")
             EditRouteScreen(routeID!!, navController)
         }
+         */
+
         composable(Screens.FaqScreen.route) {
             FaqScreen(navController, FaqViewModel())
         }
@@ -255,11 +253,27 @@ fun ScreenNavigationConfiguration( mapViewModel: MapViewModel,mapViewModel2: Map
         composable(Screens.ComFuncionaScreen.route) {
             ComFuncionaScreen(navController)
         }
-        composable(Screens.PublishRouteScreen.route) {
-            PublishRouteScreen(navController)
+        composable(Screens.PublishRouteScreen.route,
+            arguments = listOf(navArgument("command"){
+                type = NavType.StringType
+            },
+                navArgument("routeID"){
+                    type = NavType.IntType
+                })) {
+            val command = it.arguments?.getString("command")
+            val routeID = it.arguments?.getInt("routeID")
+            PublishRouteScreen(command!!, routeID = routeID!!, navController)
         }
-        composable(Screens.PublishOrderScreen.route) {
-            PublishOrderScreen(navController)
+        composable(Screens.PublishOrderScreen.route,
+            arguments = listOf(navArgument("command"){
+                type = NavType.StringType
+            },
+                navArgument("orderID"){
+                type = NavType.IntType
+            })) {
+            val command = it.arguments?.getString("command")
+            val orderID = it.arguments?.getInt("orderID")
+            PublishOrderScreen(command!!, orderID = orderID!!, navController)
         }
 
 

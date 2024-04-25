@@ -31,6 +31,7 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.House
 import androidx.compose.material.icons.filled.QuestionMark
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDefaults
 import androidx.compose.material3.DatePickerDialog
@@ -86,7 +87,7 @@ import com.example.rutescompartidesapp.view.generic_components.popups.PopupScrol
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PublishRouteScreen(navHost: NavHostController){
+fun PublishRouteScreen(command: String, routeID: Int, navHost: NavHostController){
     val manageRouteViewModel = ManageRouteViewModel()
 
     val currentStep by manageRouteViewModel.step.collectAsStateWithLifecycle()
@@ -128,15 +129,36 @@ fun PublishRouteScreen(navHost: NavHostController){
     val tagsError by manageRouteViewModel.tagsError.collectAsStateWithLifecycle()
     val comment by manageRouteViewModel.comment.collectAsStateWithLifecycle()
 
+    if (command == "edit" && routeID != 0) {
+        manageRouteViewModel.getRoute(routeID)
+    }
+
     // Errors
     val screen1Errors by manageRouteViewModel.screen1Errors.collectAsStateWithLifecycle()
     val screen2Errors by manageRouteViewModel.screen2Errors.collectAsStateWithLifecycle()
 
+    val routeToEdit by manageRouteViewModel.routeToEdit.collectAsStateWithLifecycle()
     val routeAdded by manageRouteViewModel.routeAdded.collectAsStateWithLifecycle()
     if (routeAdded) {
-        // Resets the routeAdded state
+        if (command == "create"){
+            navHost.navigate("MapScreen"){
+                popUpTo("MapScreen") { inclusive = true }
+            }
+        } else {
+            navHost.navigate(
+                "RouteDetailDriverScreen/{routeId}".replace(
+                    oldValue = "{routeId}",
+                    newValue = "$routeID")
+            ) {
+                popUpTo(
+                    "RouteDetailDriverScreen/{routeId}".replace(
+                        oldValue = "{routeId}",
+                        newValue = "$routeID"
+                    )) { inclusive = true }
+            }
+        }
+        // Resets the orderAdded state
         manageRouteViewModel.onRouteAdded(false)
-        navHost.navigate("MapScreen")
     }
 
     Scaffold( modifier = Modifier
@@ -170,52 +192,59 @@ fun PublishRouteScreen(navHost: NavHostController){
                 .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            when (currentStep) {
-                1 -> PublishRouteContent1(
-                    routeName,
-                    manageRouteViewModel,
-                    originName,
-                    stepLocationsNumber,
-                    stepNameList,
-                    destinationName,
-                    isDatePickerShowing,
-                    isTimePickerShowing,
-                    datePickerState,
-                    dateDepart,
-                    timeDepart,
-                    dateArrival,
-                    timeArrival,
-                    screen1Errors
-                )
-                2 -> {
-                    PublishRouteContent2(
-                        isDropdownExpanded,
-                        isFreqPopupShowing,
-                        routeFrequency,
-                        maxDetourKm,
+            if ((command == "edit" && routeID != 0 && routeToEdit != null) || command == "create") {
+                when (currentStep) {
+                    1 -> PublishRouteContent1(
+                        routeName,
                         manageRouteViewModel,
-                        availableSeats,
-                        availableSpace,
-                        isCostPopupShowing,
-                        costKm,
-                        vehicle,
-                        screen2Errors
+                        originName,
+                        stepLocationsNumber,
+                        stepNameList,
+                        destinationName,
+                        isDatePickerShowing,
+                        isTimePickerShowing,
+                        datePickerState,
+                        dateDepart,
+                        timeDepart,
+                        dateArrival,
+                        timeArrival,
+                        screen1Errors
                     )
+
+                    2 -> {
+                        PublishRouteContent2(
+                            isDropdownExpanded,
+                            isFreqPopupShowing,
+                            routeFrequency,
+                            maxDetourKm,
+                            manageRouteViewModel,
+                            availableSeats,
+                            availableSpace,
+                            isCostPopupShowing,
+                            costKm,
+                            vehicle,
+                            screen2Errors
+                        )
+                    }
+
+                    3 -> {
+                        PublishRouteContent3(
+                            manageRouteViewModel,
+                            isCondicionsPopupShowing,
+                            isIsoterm,
+                            isRefrigerat,
+                            isCongelat,
+                            isSenseHumitat,
+                            tagsText,
+                            tagsError,
+                            tagsList,
+                            comment,
+                            command
+                        )
+                    }
                 }
-                3 -> {
-                    PublishRouteContent3(
-                        manageRouteViewModel,
-                        isCondicionsPopupShowing,
-                        isIsoterm,
-                        isRefrigerat,
-                        isCongelat,
-                        isSenseHumitat,
-                        tagsText,
-                        tagsError,
-                        tagsList,
-                        comment
-                    )
-                }
+            }  else {
+                CircularProgressIndicator()
             }
         }
     }
@@ -233,7 +262,8 @@ private fun PublishRouteContent3(
     tagsText: String,
     tagsError: Boolean,
     tagsList: List<String>,
-    comment: String
+    comment: String,
+    command: String
 ) {
 
     Row(
@@ -485,7 +515,11 @@ private fun PublishRouteContent3(
         // Back button
         PublishBackButton(manageRouteViewModel::previousStep)
         // Publish route button
-        PublishButton( onClick = {manageRouteViewModel.addRoute()}, text = "Publicar ruta")
+        PublishButton( onClick = {  if(command == "create"){
+            manageRouteViewModel.addRoute()
+        } else manageRouteViewModel.updateRoute() },
+
+            text = if(command == "create") "Publicar ruta" else "Editar ruta")
     }
 }
 

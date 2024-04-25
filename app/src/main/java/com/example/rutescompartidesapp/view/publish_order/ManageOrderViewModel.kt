@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import java.time.Instant
 import java.time.ZoneId
 
-class PublishOrderViewModel: ViewModel(){
+class ManageOrderViewModel: ViewModel(){
 
     private val _step = MutableStateFlow(1)
     val step = _step
@@ -158,7 +158,7 @@ class PublishOrderViewModel: ViewModel(){
     }
     /**
      * Converts the time picked from the DatePickerDialog to a string and updates the value of
-     * [_dataSortidaText] to the new value and dismisses the dialog
+     * [_minTimeArrivalText] or [_maxTimeArrivalText] to the new value and dismisses the dialog
      * @param datePicked Long: The time picked from the TimePickerDialog
      */
     fun onDatePickerDialogConfirm(datePicked: Long ){
@@ -347,7 +347,17 @@ class PublishOrderViewModel: ViewModel(){
             isRefrigerat = _isRefrigerat.value,
             isCongelat = _isCongelat.value,
             isSenseHumitat = _isSenseHumitat.value,
-            etiquetes = tagsList.value
+            etiquetes = tagsList.value,
+            packagesNum = _packagesNum.value.toInt(),
+            packagesLength = _packagesLength.value.toFloat(),
+            packagesWidth = _packagesWidth.value.toFloat(),
+            packagesHeight = packagesHeight.value.toFloat(),
+            packagesWeight = _packagesWeight.value.toFloat(),
+            packagesFragile = _arePackagesFragile.value,
+            co2Saved = 0.0f,
+            distance = 0.0f,
+            comment = _comment.value
+
         )
         // TODO Fer un POST a la API per duplicar la ruta
 
@@ -358,6 +368,72 @@ class PublishOrderViewModel: ViewModel(){
 
     fun onOrderAdded(isOrderAdded: Boolean){
         _orderAdded.value = isOrderAdded
+    }
+
+    // Edit Order
+    // Get the order
+    private val _orderToEdit = MutableStateFlow<OrderForList?>(null)
+    val orderToEdit = _orderToEdit.asStateFlow()
+    fun getOrder(orderID: Int) {
+        _orderToEdit.value =  ListConstants.orderList.find { order -> order.orderID == orderID }!!
+        updateOrderInfo()
+    }
+
+    private fun updateOrderInfo(){
+        _internalOrderName.value = _orderToEdit.value!!.orderName
+        _originName.value = _orderToEdit.value!!.puntSortida
+        _destinationName.value = _orderToEdit.value!!.puntArribada
+        //TODO revisar esto
+        _minTimeArrivalText.value = _orderToEdit.value!!.dataSortida
+        _maxTimeArrivalText.value = _orderToEdit.value!!.horaSortida
+        _isIsoterm.value = _orderToEdit.value!!.isIsoterm
+        _isRefrigerat.value = _orderToEdit.value!!.isRefrigerat
+        _isCongelat.value = _orderToEdit.value!!.isCongelat
+        _isSenseHumitat.value = _orderToEdit.value!!.isSenseHumitat
+        _packagesNum.value = _orderToEdit.value!!.packagesNum.toString()
+        _packagesLength.value = _orderToEdit.value!!.packagesLength.toString()
+        _packagesWidth.value = _orderToEdit.value!!.packagesWidth.toString()
+        _packagesHeight.value = _orderToEdit.value!!.packagesHeight.toString()
+        _packagesWeight.value = _orderToEdit.value!!.packagesWeight.toString()
+        _arePackagesFragile.value = _orderToEdit.value!!.packagesFragile
+        _comment.value = _orderToEdit.value!!.comment ?: ""
+
+        // Etiquetes i freqüència
+        _orderToEdit.value?.etiquetes.let { etiquetes ->
+            if (etiquetes != null) {
+                _tagsList.value = etiquetes
+            }
+        }
+    }
+
+    fun updateOrder(){
+        val updatedOrder = OrderForList(user = "Admin",
+            orderID = _orderToEdit.value!!.orderID,
+            orderName = _internalOrderName.value,
+            puntSortida = _originName.value,
+            puntArribada = _destinationName.value,
+            dataSortida = _minTimeArrivalText.value,
+            horaSortida = _maxTimeArrivalText.value,
+            isIsoterm = _isIsoterm.value,
+            isRefrigerat = _isRefrigerat.value,
+            isCongelat = _isCongelat.value,
+            isSenseHumitat = _isSenseHumitat.value,
+            etiquetes = tagsList.value,
+            packagesNum = _packagesNum.value.toInt(),
+            packagesLength = _packagesLength.value.toFloat(),
+            packagesWidth = _packagesWidth.value.toFloat(),
+            packagesHeight = packagesHeight.value.toFloat(),
+            packagesWeight = _packagesWeight.value.toFloat(),
+            packagesFragile = _arePackagesFragile.value,
+            co2Saved = 0.0f,
+            distance = 0.0f,
+            comment = _comment.value
+        )
+        // TODO Fer un PUT a la API per actualitzar la ruta
+        if (ListConstants.orderList.removeIf { order -> order.orderID == updatedOrder.orderID }){
+            ListConstants.orderList.add(updatedOrder)
+            onOrderAdded(true)
+        }
     }
 
     // Control de errors

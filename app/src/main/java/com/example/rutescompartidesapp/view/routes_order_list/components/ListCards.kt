@@ -192,8 +192,8 @@ fun OrderCard(order: OrderForList, navController: NavHostController) {
             .fillMaxWidth(0.95f)
             .clickable {
                 navController.navigate(
-                    "OrderDetailScreen/{packageId}".replace(
-                        oldValue = "{packageId}",
+                    "OrderDetailScreen/{orderID}".replace(
+                        oldValue = "{orderID}",
                         newValue = "${order.orderID}"
                     )
                 )
