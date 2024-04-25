@@ -10,6 +10,8 @@ sealed class Screens(
     object LoginScreen: Screens("LoginScreen")
     object SignUpScreen: Screens("SignUpScreen")
     object RouteDetailDriverScreen: Screens("RouteDetailDriverScreen/{routeId}")
+    object EditRouteScreen: Screens("EditRouteScreen/{routeId}")
+
     object OrderDetailScreen: Screens("OrderDetailScreen/{packageId}")
     object PublishRouteScreen: Screens("PublishRouteScreen")
     object PublishOrderScreen: Screens("PublishOrderScreen")
@@ -17,8 +19,6 @@ sealed class Screens(
     object FaqScreen: Screens("FaqScreen")
     object EditProfileScreen: Screens("EditProfileScreen")
     object ComFuncionaScreen: Screens("ComFuncionaScreen")
-
-    object ConfirmDeliveryScreen: Screens("ConfirmDeliveryScreen/{routeID}")
     object DrawScreen: Screens("DrawScreen")
     object CameraScreen: Screens("CameraScreen")
     object RouteDetailGeneralScreen: Screens("RouteDetailGeneralScreen/{routeId}")

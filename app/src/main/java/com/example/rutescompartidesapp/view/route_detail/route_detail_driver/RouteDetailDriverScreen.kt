@@ -83,6 +83,7 @@ fun RouteDetailDriverScreen(routeID: Int, navHost: NavHostController, routeDetai
         "Confirmar entrega de la comanda ${routeInteractionToConfirm!!.orderID}"
     },
         onBack = {
+            println(isCompleteScreenShowing)
             if (isCompleteScreenShowing) {
                 routeDetailDriverViewModel.showCompleteScreen(false)
             } else {
@@ -272,7 +273,11 @@ fun RouteDetailDriverScreen(routeID: Int, navHost: NavHostController, routeDetai
                             ) {
                                 ElevatedButton(
                                     shape = RoundedCornerShape(16.dp),
-                                    onClick = { routeDetailDriverViewModel.editRoute(route!!) },
+                                    onClick = { navHost.navigate(
+                                        "EditRouteScreen/{routeId}".replace(
+                                            oldValue = "{routeId}",
+                                            newValue = "$routeID"
+                                        )) },
                                     colors = ButtonDefaults.elevatedButtonColors(
                                         containerColor = MateBlackRC
                                     )

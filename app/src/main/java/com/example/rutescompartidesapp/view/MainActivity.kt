@@ -60,6 +60,7 @@ import com.example.rutescompartidesapp.view.publish_order.PublishOrderScreen
 import com.example.rutescompartidesapp.view.publish_route.PublishRouteScreen
 import com.example.rutescompartidesapp.view.route_detail.route_detail_driver.RouteDetailDriverScreen
 import com.example.rutescompartidesapp.view.route_detail.RouteDetailGeneralScreen
+import com.example.rutescompartidesapp.view.route_detail.edit_route.EditRouteScreen
 import com.example.rutescompartidesapp.view.route_detail.route_detail_driver.RouteDetailDriverViewModel
 import com.example.rutescompartidesapp.view.routes_order_list.RoutesOrderListScreen
 import com.example.rutescompartidesapp.view.routes_order_list.viewmodels.FilterPopupViewModel
@@ -195,7 +196,7 @@ fun ScreenNavigationConfiguration( mapViewModel: MapViewModel,mapViewModel2: Map
                                    routeOrderListViewModel: RoutesOrderListViewModel, filterPopupViewModel: FilterPopupViewModel, searchViewModel: SearchViewModel,
                                    navController: NavHostController, paddingModifier: Modifier) {
 
-    NavHost(navController = navController, startDestination = Screens.MapScreen.route, modifier = paddingModifier) {
+    NavHost(navController = navController, startDestination = Screens.RoutesOrderListScreen.route, modifier = paddingModifier) {
 
         composable(Screens.MapScreen.route) {
             MapScreen(navController, mapViewModel, searchViewModel)
@@ -214,7 +215,7 @@ fun ScreenNavigationConfiguration( mapViewModel: MapViewModel,mapViewModel2: Map
             type = NavType.IntType
         })) {
             val routeID = it.arguments?.getInt("routeId")
-            RouteDetailGeneralScreen(navController, 1, mapViewModel,mapViewModel2, routeOrderListViewModel)
+            RouteDetailGeneralScreen(navController, routeID!!, mapViewModel,mapViewModel2, routeOrderListViewModel)
         }
 
         composable(Screens.RoutesOrderListScreen.route) {
@@ -236,6 +237,14 @@ fun ScreenNavigationConfiguration( mapViewModel: MapViewModel,mapViewModel2: Map
             val routeID = it.arguments?.getInt("routeId")
             val routeDetailDriverViewModel = RouteDetailDriverViewModel(routeID!!)
             RouteDetailDriverScreen(routeID, navController, routeDetailDriverViewModel)
+        }
+
+        composable(Screens.EditRouteScreen.route,
+            arguments = listOf(navArgument("routeId"){
+                type = NavType.IntType
+            })) {
+            val routeID = it.arguments?.getInt("routeId")
+            EditRouteScreen(routeID!!, navController)
         }
         composable(Screens.FaqScreen.route) {
             FaqScreen(navController, FaqViewModel())
