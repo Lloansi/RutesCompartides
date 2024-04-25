@@ -91,8 +91,6 @@ import com.example.rutescompartidesapp.view.publish_route.ManageRouteViewModel
 fun EditRouteScreen(routeID: Int, navHost: NavHostController ){
     val manageRouteViewModel = ManageRouteViewModel()
 
-    val isFormCompletedPopup by manageRouteViewModel.isFormCompletedPopup.collectAsStateWithLifecycle()
-
     val currentStep by manageRouteViewModel.step.collectAsStateWithLifecycle()
     val routeName by manageRouteViewModel.internalRouteName.collectAsStateWithLifecycle()
     val originName by manageRouteViewModel.originName.collectAsStateWithLifecycle()

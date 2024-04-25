@@ -87,53 +87,55 @@ import com.example.rutescompartidesapp.view.generic_components.popups.PopupScrol
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PublishRouteScreen(navHost: NavHostController){
-    val publishRouteViewModel = PublishRouteViewModel()
+    val manageRouteViewModel = ManageRouteViewModel()
 
-    val isFormCompletedPopup by publishRouteViewModel.isFormCompletedPopup.collectAsStateWithLifecycle()
-
-    val currentStep by publishRouteViewModel.step.collectAsStateWithLifecycle()
-    val routeName by publishRouteViewModel.internalRouteName.collectAsStateWithLifecycle()
-    val originName by publishRouteViewModel.originName.collectAsStateWithLifecycle()
-    val stepLocationsNumber by publishRouteViewModel.stepLocationsNumber.collectAsStateWithLifecycle()
-    val stepNameList by publishRouteViewModel.stepNameList.collectAsStateWithLifecycle()
-    val destinationName by publishRouteViewModel.destinationName.collectAsStateWithLifecycle()
-    val isDropdownExpanded by publishRouteViewModel.isDropdownExpanded.collectAsStateWithLifecycle()
-    val routeFrequency by publishRouteViewModel.routeFrequency.collectAsStateWithLifecycle()
-    val isFreqPopupShowing by publishRouteViewModel.isFreqPopupShowing.collectAsStateWithLifecycle()
-    val isCostPopupShowing by publishRouteViewModel.isCostPopupShowing.collectAsStateWithLifecycle()
+    val currentStep by manageRouteViewModel.step.collectAsStateWithLifecycle()
+    val routeName by manageRouteViewModel.internalRouteName.collectAsStateWithLifecycle()
+    val originName by manageRouteViewModel.originName.collectAsStateWithLifecycle()
+    val stepLocationsNumber by manageRouteViewModel.stepLocationsNumber.collectAsStateWithLifecycle()
+    val stepNameList by manageRouteViewModel.stepNameList.collectAsStateWithLifecycle()
+    val destinationName by manageRouteViewModel.destinationName.collectAsStateWithLifecycle()
+    val isDropdownExpanded by manageRouteViewModel.isDropdownExpanded.collectAsStateWithLifecycle()
+    val routeFrequency by manageRouteViewModel.routeFrequency.collectAsStateWithLifecycle()
+    val isFreqPopupShowing by manageRouteViewModel.isFreqPopupShowing.collectAsStateWithLifecycle()
+    val isCostPopupShowing by manageRouteViewModel.isCostPopupShowing.collectAsStateWithLifecycle()
 
     val datePickerState = rememberDatePickerState()
-    val dateDepart by publishRouteViewModel.dateDepart.collectAsStateWithLifecycle()
-    val dateArrival by publishRouteViewModel.dateArrival.collectAsStateWithLifecycle()
-    val timeDepart by publishRouteViewModel.timeDepartText.collectAsStateWithLifecycle()
-    val timeArrival by publishRouteViewModel.timeArrivalText.collectAsStateWithLifecycle()
+    val dateDepart by manageRouteViewModel.dateDepart.collectAsStateWithLifecycle()
+    val dateArrival by manageRouteViewModel.dateArrival.collectAsStateWithLifecycle()
+    val timeDepart by manageRouteViewModel.timeDepartText.collectAsStateWithLifecycle()
+    val timeArrival by manageRouteViewModel.timeArrivalText.collectAsStateWithLifecycle()
 
-    val isDatePickerShowing by publishRouteViewModel.datePickerDialogIsShowing.collectAsStateWithLifecycle()
-    val isTimePickerShowing by publishRouteViewModel.timePickerDialogIsShowing.collectAsStateWithLifecycle()
+    val isDatePickerShowing by manageRouteViewModel.datePickerDialogIsShowing.collectAsStateWithLifecycle()
+    val isTimePickerShowing by manageRouteViewModel.timePickerDialogIsShowing.collectAsStateWithLifecycle()
 
     // Screen 2 variables
-    val maxDetourKm by publishRouteViewModel.maxDetourKm.collectAsStateWithLifecycle()
-    val availableSeats by publishRouteViewModel.availableSeats.collectAsStateWithLifecycle()
-    val availableSpace by publishRouteViewModel.availableSpace.collectAsStateWithLifecycle()
-    val costKm by publishRouteViewModel.costKM.collectAsStateWithLifecycle()
-    val vehicle by publishRouteViewModel.vehicle.collectAsStateWithLifecycle()
+    val maxDetourKm by manageRouteViewModel.maxDetourKm.collectAsStateWithLifecycle()
+    val availableSeats by manageRouteViewModel.availableSeats.collectAsStateWithLifecycle()
+    val availableSpace by manageRouteViewModel.availableSpace.collectAsStateWithLifecycle()
+    val costKm by manageRouteViewModel.costKM.collectAsStateWithLifecycle()
+    val vehicle by manageRouteViewModel.vehicle.collectAsStateWithLifecycle()
 
 
     // Screen 3 variables
-    val isCondicionsPopupShowing by publishRouteViewModel.isCondicionsPopupShowing.collectAsStateWithLifecycle()
-    val isIsoterm by publishRouteViewModel.isIsoterm.collectAsStateWithLifecycle()
-    val isRefrigerat by publishRouteViewModel.isRefrigerat.collectAsStateWithLifecycle()
-    val isCongelat by publishRouteViewModel.isCongelat.collectAsStateWithLifecycle()
-    val isSenseHumitat by publishRouteViewModel.isSenseHumitat.collectAsStateWithLifecycle()
-    val tagsText by publishRouteViewModel.tagsText.collectAsStateWithLifecycle()
-    val tagsList by publishRouteViewModel.tagsList.collectAsStateWithLifecycle()
-    val tagsError by publishRouteViewModel.tagsError.collectAsStateWithLifecycle()
-    val comment by publishRouteViewModel.comment.collectAsStateWithLifecycle()
+    val isCondicionsPopupShowing by manageRouteViewModel.isCondicionsPopupShowing.collectAsStateWithLifecycle()
+    val isIsoterm by manageRouteViewModel.isIsoterm.collectAsStateWithLifecycle()
+    val isRefrigerat by manageRouteViewModel.isRefrigerat.collectAsStateWithLifecycle()
+    val isCongelat by manageRouteViewModel.isCongelat.collectAsStateWithLifecycle()
+    val isSenseHumitat by manageRouteViewModel.isSenseHumitat.collectAsStateWithLifecycle()
+    val tagsText by manageRouteViewModel.tagsText.collectAsStateWithLifecycle()
+    val tagsList by manageRouteViewModel.tagsList.collectAsStateWithLifecycle()
+    val tagsError by manageRouteViewModel.tagsError.collectAsStateWithLifecycle()
+    val comment by manageRouteViewModel.comment.collectAsStateWithLifecycle()
 
-    val routeAdded by publishRouteViewModel.routeAdded.collectAsStateWithLifecycle()
+    // Errors
+    val screen1Errors by manageRouteViewModel.screen1Errors.collectAsStateWithLifecycle()
+    val screen2Errors by manageRouteViewModel.screen2Errors.collectAsStateWithLifecycle()
+
+    val routeAdded by manageRouteViewModel.routeAdded.collectAsStateWithLifecycle()
     if (routeAdded) {
         // Resets the routeAdded state
-        publishRouteViewModel.onRouteAdded(false)
+        manageRouteViewModel.onRouteAdded(false)
         navHost.navigate("MapScreen")
     }
 
@@ -145,7 +147,7 @@ fun PublishRouteScreen(navHost: NavHostController){
                 navigationIcon = {
                     IconButton(onClick = {
                         if (currentStep == 1) navHost.popBackStack()
-                        else publishRouteViewModel.previousStep() }
+                        else manageRouteViewModel.previousStep() }
                     ) {
                         Icon(imageVector = Icons.Filled.ArrowBackIosNew, contentDescription = "Go Back")
                     }
@@ -171,7 +173,7 @@ fun PublishRouteScreen(navHost: NavHostController){
             when (currentStep) {
                 1 -> PublishRouteContent1(
                     routeName,
-                    publishRouteViewModel,
+                    manageRouteViewModel,
                     originName,
                     stepLocationsNumber,
                     stepNameList,
@@ -182,7 +184,8 @@ fun PublishRouteScreen(navHost: NavHostController){
                     dateDepart,
                     timeDepart,
                     dateArrival,
-                    timeArrival
+                    timeArrival,
+                    screen1Errors
                 )
                 2 -> {
                     PublishRouteContent2(
@@ -190,17 +193,18 @@ fun PublishRouteScreen(navHost: NavHostController){
                         isFreqPopupShowing,
                         routeFrequency,
                         maxDetourKm,
-                        publishRouteViewModel,
+                        manageRouteViewModel,
                         availableSeats,
                         availableSpace,
                         isCostPopupShowing,
                         costKm,
-                        vehicle
+                        vehicle,
+                        screen2Errors
                     )
                 }
                 3 -> {
                     PublishRouteContent3(
-                        publishRouteViewModel,
+                        manageRouteViewModel,
                         isCondicionsPopupShowing,
                         isIsoterm,
                         isRefrigerat,
@@ -220,7 +224,7 @@ fun PublishRouteScreen(navHost: NavHostController){
 @Composable
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 private fun PublishRouteContent3(
-    publishRouteViewModel: PublishRouteViewModel,
+    manageRouteViewModel: ManageRouteViewModel,
     isCondicionsPopupShowing: Boolean,
     isIsoterm: Boolean,
     isRefrigerat: Boolean,
@@ -244,7 +248,7 @@ private fun PublishRouteContent3(
         ) {
             // Conditions Button
             FloatingActionButton(
-                onClick = { publishRouteViewModel.onCondicionsPopupShow(true) },
+                onClick = { manageRouteViewModel.onCondicionsPopupShow(true) },
                 containerColor = MateBlackRC
             ) {
                 Icon(
@@ -256,7 +260,7 @@ private fun PublishRouteContent3(
             // Conditions Popup
             if (isCondicionsPopupShowing) {
                 PopupScrolleable(offset = IntOffset((LocalConfiguration.current.screenWidthDp / 2), -100),
-                    title = "Condicions de transport" , onDismisRequest = { publishRouteViewModel.onCondicionsPopupShow(
+                    title = "Condicions de transport" , onDismisRequest = { manageRouteViewModel.onCondicionsPopupShow(
                         false ) },
                     content = { ConditionScrollPopup() })
             }
@@ -273,7 +277,7 @@ private fun PublishRouteContent3(
                 // Isoterm Chip
                 ElevatedFilterChip(
                     selected = isIsoterm,
-                    onClick = { publishRouteViewModel.onCheckChip("Isoterm") },
+                    onClick = { manageRouteViewModel.onCheckChip("Isoterm") },
                     label = {
                         if (isIsoterm) {
                             Text(
@@ -303,7 +307,7 @@ private fun PublishRouteContent3(
                 // Refrigerat Chip
                 ElevatedFilterChip(
                     selected = isRefrigerat,
-                    onClick = { publishRouteViewModel.onCheckChip("Refrigerat") },
+                    onClick = { manageRouteViewModel.onCheckChip("Refrigerat") },
                     label = {
                         if (isRefrigerat) {
                             Text(
@@ -338,7 +342,7 @@ private fun PublishRouteContent3(
                 // Congelat Chip
                 ElevatedFilterChip(
                     selected = isCongelat,
-                    onClick = { publishRouteViewModel.onCheckChip("Congelat") },
+                    onClick = { manageRouteViewModel.onCheckChip("Congelat") },
                     label = {
                         if (isCongelat) {
                             Text(
@@ -368,7 +372,7 @@ private fun PublishRouteContent3(
                 // Sense Humitat Chip
                 ElevatedFilterChip(
                     selected = isSenseHumitat,
-                    onClick = { publishRouteViewModel.onCheckChip("SenseHumitat") },
+                    onClick = { manageRouteViewModel.onCheckChip("SenseHumitat") },
                     label = {
                         if (isSenseHumitat) {
                             Text(
@@ -405,7 +409,7 @@ private fun PublishRouteContent3(
             .fillMaxWidth(0.95f)
             .padding(top = 8.dp),
         value = tagsText,
-        onValueChange = publishRouteViewModel::onTagsChange,
+        onValueChange = manageRouteViewModel::onTagsChange,
         placeholder = {
             Text(text = "Etiquetes (diaria, setmanal...)", color = Color.Gray)
         },
@@ -443,11 +447,11 @@ private fun PublishRouteContent3(
         keyboardActions = KeyboardActions(
             onSend = {
                 if (tagsText.isEmpty() || tagsText in tagsList) {
-                    publishRouteViewModel.onTagsErrorChange(true)
+                    manageRouteViewModel.onTagsErrorChange(true)
                     return@KeyboardActions
                 }
-                publishRouteViewModel.onTagsErrorChange(false)
-                publishRouteViewModel.onTagsAddToListChange(tagsText)
+                manageRouteViewModel.onTagsErrorChange(false)
+                manageRouteViewModel.onTagsAddToListChange(tagsText)
             }),
         singleLine = true,
     )
@@ -455,7 +459,7 @@ private fun PublishRouteContent3(
     FlowRow(modifier = Modifier.fillMaxWidth(0.9f),
         horizontalArrangement = Arrangement.Start,){
         tagsList.forEach{ etiqueta ->
-            TagItem(publishRouteViewModel = publishRouteViewModel, etiqueta = etiqueta)
+            TagItem(manageRouteViewModel = manageRouteViewModel, etiqueta = etiqueta)
             Spacer(Modifier.padding(4.dp))
         }
     }
@@ -467,8 +471,9 @@ private fun PublishRouteContent3(
     ) {
         Text(text = "Comentaris", color = MaterialTheme.colorScheme.onBackground)
     }
-    MultilineTextField(value = comment, onValueChange = publishRouteViewModel::setComment,
-        placeholder = "Condicions especials quant a la recollida, entrega, transport (ex: faré una parada de 6 hores a la meva ruta abans d’arribar al destí final; necessito confirmació d’horari d’entrega als comentaris; acepto productes com forma de pagament...)" )
+    MultilineTextField(value = comment, onValueChange = manageRouteViewModel::setComment,
+        placeholder = "Condicions especials quant a la recollida, entrega, transport (ex: faré una parada de 6 hores a la meva ruta abans d’arribar al destí final; necessito confirmació d’horari d’entrega als comentaris; acepto productes com forma de pagament...)",
+        isError = false )
     // Buttons
     Row(
         modifier = Modifier
@@ -478,9 +483,9 @@ private fun PublishRouteContent3(
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
         // Back button
-        PublishBackButton(publishRouteViewModel::previousStep)
+        PublishBackButton(manageRouteViewModel::previousStep)
         // Publish route button
-        PublishButton( onClick = {publishRouteViewModel.addRoute()}, text = "Publicar ruta")
+        PublishButton( onClick = {manageRouteViewModel.addRoute()}, text = "Publicar ruta")
     }
 }
 
@@ -491,12 +496,13 @@ private fun PublishRouteContent2(
     isFreqPopupShowing: Boolean,
     routeFrequency: String,
     maxDetourKm: String,
-    publishRouteViewModel: PublishRouteViewModel,
+    manageRouteViewModel: ManageRouteViewModel,
     availableSeats: String,
     availableSpace: String,
     isCostPopupShowing: Boolean,
     costKm: String,
-    vehicle: String
+    vehicle: String,
+    screen2Errors: List<Boolean>
 ) {
     // Frequency
     Row(
@@ -506,7 +512,7 @@ private fun PublishRouteContent2(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         IconButton(
-            onClick = { publishRouteViewModel.onFreqPopupShow(true) },
+            onClick = { manageRouteViewModel.onFreqPopupShow(true) },
             colors = IconButtonDefaults.iconButtonColors(
                 containerColor = MateBlackRC
             )
@@ -520,7 +526,7 @@ private fun PublishRouteContent2(
     }
     if (isFreqPopupShowing){
         PopupScrolleable(offset = IntOffset((LocalConfiguration.current.screenWidthDp / 2), (LocalConfiguration.current.screenHeightDp / 2)),
-            title = "Freqüència de la ruta" , onDismisRequest = { publishRouteViewModel.onFreqPopupShow(
+            title = "Freqüència de la ruta" , onDismisRequest = { manageRouteViewModel.onFreqPopupShow(
                 false ) },
             content = { Text(text = "Crearà totes  les rutes que pertoqui fins a la data final indicada, amb un màxim de 3  mesos. Recorda editar o eliminar les rutes si canvien a posteriori o  n'hi ha alguna que finalment no faràs. La freqüència mensual implica  aquell dia de la setmana i la mateixa setmana de cada mes (és a dir, el  1er dimecres de mes, o el 2on dijous de mes, etc).",
                 color = MaterialTheme.colorScheme.onBackground) })
@@ -532,7 +538,7 @@ private fun PublishRouteContent2(
     ) {
         ExposedDropdownMenuBox(
             expanded = isDropdownExpanded,
-            onExpandedChange = { publishRouteViewModel.toggleDropdown() }) {
+            onExpandedChange = { manageRouteViewModel.toggleDropdown() }) {
             OutlinedTextField(
                 value = routeFrequency,
                 onValueChange = {},
@@ -559,37 +565,37 @@ private fun PublishRouteContent2(
             )
             ExposedDropdownMenu(
                 expanded = isDropdownExpanded,
-                onDismissRequest = { publishRouteViewModel.toggleDropdown() }
+                onDismissRequest = { manageRouteViewModel.toggleDropdown() }
             ) {
                 DropdownMenuItem(
                     text = {
                         Text(text = "No es repeteix")
                     },
-                    onClick = { publishRouteViewModel.setRouteFrequency("No es repeteix") }
+                    onClick = { manageRouteViewModel.setRouteFrequency("No es repeteix") }
                 )
                 DropdownMenuItem(
                     text = {
                         Text(text = "Diaria")
                     },
-                    onClick = { publishRouteViewModel.setRouteFrequency("Diaria") }
+                    onClick = { manageRouteViewModel.setRouteFrequency("Diaria") }
                 )
                 DropdownMenuItem(
                     text = {
                         Text(text = "Setmanal")
                     },
-                    onClick = { publishRouteViewModel.setRouteFrequency("Setmanal") }
+                    onClick = { manageRouteViewModel.setRouteFrequency("Setmanal") }
                 )
                 DropdownMenuItem(
                     text = {
                         Text(text = "Bisetmanal")
                     },
-                    onClick = { publishRouteViewModel.setRouteFrequency("Bisetmanal") }
+                    onClick = { manageRouteViewModel.setRouteFrequency("Bisetmanal") }
                 )
                 DropdownMenuItem(
                     text = {
                         Text(text = "Mensual")
                     },
-                    onClick = { publishRouteViewModel.setRouteFrequency("Mensual") }
+                    onClick = { manageRouteViewModel.setRouteFrequency("Mensual") }
                 )
             }
 
@@ -599,17 +605,20 @@ private fun PublishRouteContent2(
 
     // Max Detour KM
     BasicTextField(value = maxDetourKm,
-        onValueChange = publishRouteViewModel::setMaxDetourKm,
-        placeholder = "Max desviament (km)"
+        onValueChange = manageRouteViewModel::setMaxDetourKm,
+        placeholder = "Max desviament (km)",
+        isError = screen2Errors[0]
     )
     // Available Seats
     BasicTextField(value = availableSeats,
-        onValueChange = publishRouteViewModel::setSeats,
-        placeholder = "Seients disponibles"
+        onValueChange = manageRouteViewModel::setSeats,
+        placeholder = "Seients disponibles",
+        isError = screen2Errors[1]
     )
     // Available Space
     MultilineTextField(value = availableSpace,
-        onValueChange = publishRouteViewModel::setAvailableSpace , placeholder = "Espai disponible al vehicle")
+        onValueChange = manageRouteViewModel::setAvailableSpace , placeholder = "Espai disponible al vehicle",
+        isError = screen2Errors[2])
     // KM Cost
     Row(modifier = Modifier
         .fillMaxWidth(0.95f)
@@ -617,7 +626,7 @@ private fun PublishRouteContent2(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         IconButton(
-            onClick = { publishRouteViewModel.onCostPopupShow(true) },
+            onClick = { manageRouteViewModel.onCostPopupShow(true) },
             colors = IconButtonDefaults.iconButtonColors(
                 containerColor = MaterialTheme.colorScheme.secondaryContainer
             )
@@ -628,7 +637,7 @@ private fun PublishRouteContent2(
         }
         if (isCostPopupShowing){
             PopupScrolleable(offset = IntOffset((LocalConfiguration.current.screenWidthDp / 2), (LocalConfiguration.current.screenHeightDp)),
-                title = "Cost per KM" , onDismisRequest = { publishRouteViewModel.onCostPopupShow(
+                title = "Cost per KM" , onDismisRequest = { manageRouteViewModel.onCostPopupShow(
                     false ) },
                 content = { Text(text = "Per ajudar amb  una estimació del preu del transport compartit. En cas que prefereixis  oferir una alternativa (productes a canvi del transport, altres monedes,  etc.) pots utilitzar el camp \"Comentaris\" (a sota) per especificar la  teva proposta i l'etiqueta \"intercanvi\" o \"monedasocial\" al camp  \"Etiquetes\"",
                     color = MaterialTheme.colorScheme.onBackground) })
@@ -642,14 +651,16 @@ private fun PublishRouteContent2(
     // KM Cost
     BasicTextField(
         value = costKm,
-        onValueChange = publishRouteViewModel::setCostKM,
-        placeholder = "0"
+        onValueChange = manageRouteViewModel::setCostKM,
+        placeholder = "0",
+        isError = screen2Errors[3]
     )
     // Vehicle Model
     BasicTextField(
         value = vehicle,
-        onValueChange = publishRouteViewModel::setVehicle,
-        placeholder = "Model de vehicle / furgoneta"
+        onValueChange = manageRouteViewModel::setVehicle,
+        placeholder = "Model de vehicle / furgoneta",
+        isError = screen2Errors[4]
     )
     // Buttons
     Row(
@@ -660,9 +671,9 @@ private fun PublishRouteContent2(
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
         // Back button
-        PublishBackButton(publishRouteViewModel::previousStep)
+        PublishBackButton(manageRouteViewModel::previousStep)
         // Next Button
-        PublishNextButton(onClickCheck = publishRouteViewModel::checkAllValues)
+        PublishNextButton(onClickCheck = manageRouteViewModel::checkAllValues)
 
     }
 }
@@ -674,7 +685,7 @@ private fun PublishRouteContent2(
 @OptIn(ExperimentalMaterial3Api::class)
 private fun PublishRouteContent1(
     routeName: String,
-    publishRouteViewModel: PublishRouteViewModel,
+    manageRouteViewModel: ManageRouteViewModel,
     originName: String,
     stepLocationsNumber: Int,
     stepNameList: List<String>,
@@ -685,19 +696,23 @@ private fun PublishRouteContent1(
     dateDepart: String,
     timeDepart: String,
     dateArrival: String,
-    timeArrival: String
+    timeArrival: String,
+    screen1Errors: List<Boolean>
 ) {
     BasicTextField(
         value = routeName,
-        onValueChange = publishRouteViewModel::setInternalRouteName,
-        placeholder = "Nom intern de la ruta"
+        onValueChange = manageRouteViewModel::setInternalRouteName,
+        placeholder = "Nom intern de la ruta",
+        isError = screen1Errors[0]
     )
     IconTextField(value = originName,
-        onValueChange = publishRouteViewModel::setOriginName,
+        onValueChange = manageRouteViewModel::setOriginName,
         placeholder = "Punt de sortida",
         leadingIcon = {
             Icon(imageVector = Icons.Filled.House, contentDescription = "Origin Location Icon")
-        })
+        },
+        isError = screen1Errors[1]
+    )
     LazyColumn(
         modifier = Modifier
             .fillMaxWidth(0.95f)
@@ -715,12 +730,12 @@ private fun PublishRouteContent1(
                         .weight(2f),
                     value = stepNameList[index],
                     onValueChange = {
-                            publishRouteViewModel.setStepLocationName(index, it)
+                            manageRouteViewModel.setStepLocationName(index, it)
                            }
                 )
 
                 IconButton(
-                    onClick = { publishRouteViewModel.removeStepLocation(index) },
+                    onClick = { manageRouteViewModel.removeStepLocation(index) },
                     colors = IconButtonDefaults.iconButtonColors(
                         containerColor = MaterialTheme.colorScheme.secondaryContainer
                     )
@@ -739,7 +754,7 @@ private fun PublishRouteContent1(
                 .fillMaxWidth(0.7f)
                 .padding(bottom = 8.dp),
             shape = RoundedCornerShape(16.dp),
-            onClick = { publishRouteViewModel.addStepLocation() },
+            onClick = { manageRouteViewModel.addStepLocation() },
             colors = ButtonDefaults.elevatedButtonColors(
                 containerColor = OrangeRC
             ),
@@ -757,7 +772,7 @@ private fun PublishRouteContent1(
         }
     }
     IconTextField(value = destinationName,
-        onValueChange = publishRouteViewModel::setDestinationName,
+        onValueChange = manageRouteViewModel::setDestinationName,
         placeholder = "Punt d'arribada",
         leadingIcon = {
             Icon(
@@ -765,58 +780,63 @@ private fun PublishRouteContent1(
                 painter = painterResource(id = R.drawable.map_icon),
                 contentDescription = "Destination Location Icon"
             )
-        })
+        },
+        isError = screen1Errors[2])
 
     DateTimePickerTextField(
         invocation = {
-            publishRouteViewModel.onDatePickerDialogShow(
+            manageRouteViewModel.onDatePickerDialogShow(
                 isDepart = true,
                 isShowing = true
             )
         },
         time = dateDepart,
-        onValueChange = publishRouteViewModel::onDateDepartChange,
+        onValueChange = manageRouteViewModel::onDateDepartChange,
         placeholder = "Data de sortida",
-        icon = Icons.Filled.CalendarMonth
+        icon = Icons.Filled.CalendarMonth,
+        isError = screen1Errors[3]
     )
 
     DateTimePickerTextField(
         invocation = {
-            publishRouteViewModel.onTimePickerDialogShow(
+            manageRouteViewModel.onTimePickerDialogShow(
                 isDepart = true,
                 isShowing = true
             )
         },
         time = timeDepart,
-        onValueChange = publishRouteViewModel::onTimeDepartChange,
+        onValueChange = manageRouteViewModel::onTimeDepartChange,
         placeholder = "Hora d'arribada",
-        icon = Icons.Filled.AccessTime
+        icon = Icons.Filled.AccessTime,
+        isError = screen1Errors[4]
     )
 
     DateTimePickerTextField(
         invocation = {
-            publishRouteViewModel.onDatePickerDialogShow(
+            manageRouteViewModel.onDatePickerDialogShow(
                 isDepart = false,
                 isShowing = true
             )
         },
         time = dateArrival,
-        onValueChange = publishRouteViewModel::onDateArrivalChange,
+        onValueChange = manageRouteViewModel::onDateArrivalChange,
         placeholder = "Data d'arribada",
-        icon = Icons.Filled.CalendarMonth
+        icon = Icons.Filled.CalendarMonth,
+        isError = screen1Errors[5]
     )
 
     DateTimePickerTextField(
         invocation = {
-            publishRouteViewModel.onTimePickerDialogShow(
+            manageRouteViewModel.onTimePickerDialogShow(
                 isDepart = false,
                 isShowing = true
             )
         },
         time = timeArrival,
-        onValueChange = publishRouteViewModel::onTimeArrivalChange,
+        onValueChange = manageRouteViewModel::onTimeArrivalChange,
         placeholder = "Hora d'arribada",
-        icon = Icons.Filled.AccessTime
+        icon = Icons.Filled.AccessTime,
+        isError = screen1Errors[6]
     )
 
     // Date Picker Dialog
@@ -826,7 +846,7 @@ private fun PublishRouteContent1(
                 //containerColor = Color.White
             ),
             onDismissRequest = {
-                publishRouteViewModel.onDatePickerDialogShow(
+                manageRouteViewModel.onDatePickerDialogShow(
                     isDepart  = true,
                     isShowing = false
                 )
@@ -835,7 +855,7 @@ private fun PublishRouteContent1(
                 ElevatedButton(
                     onClick = {
                         datePickerState.selectedDateMillis?.let { dateInMillis ->
-                            publishRouteViewModel.onDatePickerDialogConfirm(dateInMillis)
+                            manageRouteViewModel.onDatePickerDialogConfirm(dateInMillis)
                         }
                     },
                     colors = ButtonDefaults.elevatedButtonColors(
@@ -848,7 +868,7 @@ private fun PublishRouteContent1(
             },
             dismissButton = {
                 ElevatedButton(onClick = {
-                    publishRouteViewModel.onDatePickerDialogShow(
+                    manageRouteViewModel.onDatePickerDialogShow(
                         isDepart = true ,
                         isShowing = true
                     )
@@ -864,22 +884,22 @@ private fun PublishRouteContent1(
     // Time Picker Dialog
     if (isTimePickerShowing){
         TimePickerDialog(
-            onCancel = { publishRouteViewModel.onTimePickerDialogShow(
+            onCancel = { manageRouteViewModel.onTimePickerDialogShow(
                 isDepart = true,
                 isShowing =false)
                        },
-            onConfirm = publishRouteViewModel::onTimePickerDialogConfirm )
+            onConfirm = manageRouteViewModel::onTimePickerDialogConfirm )
     }
 
-    PublishNextButton(publishRouteViewModel::checkAllValues)
+    PublishNextButton(manageRouteViewModel::checkAllValues)
 
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TagItem(publishRouteViewModel: PublishRouteViewModel, etiqueta: String) {
+fun TagItem(manageRouteViewModel: ManageRouteViewModel, etiqueta: String) {
     InputChip(selected = true,
-        onClick = { publishRouteViewModel.onTagDelete(etiqueta) },
+        onClick = { manageRouteViewModel.onTagDelete(etiqueta) },
         label = {
             Text(
                 etiqueta,
@@ -894,7 +914,7 @@ fun TagItem(publishRouteViewModel: PublishRouteViewModel, etiqueta: String) {
                 contentDescription = "Close Icon",
                 tint = Color.LightGray,
                 modifier = Modifier.clickable {
-                    publishRouteViewModel.onTagDelete(etiqueta)
+                    manageRouteViewModel.onTagDelete(etiqueta)
                 })
         })
 }

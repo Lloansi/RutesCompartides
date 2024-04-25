@@ -13,7 +13,7 @@ class PublishOrderViewModel: ViewModel(){
     private val _step = MutableStateFlow(1)
     val step = _step
 
-    fun nextStep(){
+    private fun nextStep(){
         _step.value = _step.value + 1
     }
 
@@ -179,6 +179,9 @@ class PublishOrderViewModel: ViewModel(){
 
     fun onFlexDateChange(){
         _isFlexDate.value = !_isFlexDate.value
+        if (_isFlexDate.value){
+            _maxTimeArrivalText.value = ""
+        }
     }
 
     // WantsCarpoolCheckbox
@@ -200,13 +203,19 @@ class PublishOrderViewModel: ViewModel(){
                 _isFirstFormCompleted.value = _internalOrderName.value.isNotEmpty() &&
                         _originName.value.isNotEmpty() &&
                         _destinationName.value.isNotEmpty() &&
-                        _minTimeArrivalText.value.isNotEmpty()
+                        _minTimeArrivalText.value.isNotEmpty() && if (_isFlexDate.value) true else _maxTimeArrivalText.value.isNotEmpty()
+                checkIfEmpty(1)
                 if (_isFirstFormCompleted.value){
                     nextStep()
                 }
             }
             2 -> {
-            _isSecondFormCompleted.value = _packagesNum.value.isNotEmpty()
+            _isSecondFormCompleted.value = _packagesNum.value.isNotEmpty() &&
+                    _packagesLength.value.isNotEmpty() &&
+                    _packagesWidth.value.isNotEmpty() &&
+                    packagesHeight.value.isNotEmpty() &&
+                    _packagesWeight.value.isNotEmpty()
+                checkIfEmpty(2)
                 if (_isSecondFormCompleted.value){
                     nextStep()
                 }
@@ -325,8 +334,10 @@ class PublishOrderViewModel: ViewModel(){
     val orderAdded = _orderAdded.asStateFlow()
     fun addOrder(){
         // TODO Cambiar la classe de la order i fer servir la oficial
+        val lastOrderID = ListConstants.orderList.maxByOrNull { order -> order.orderID }!!.orderID
+
         val newOrder = OrderForList(user = "Admin",
-            orderID = 0,
+            orderID = lastOrderID+1,
             orderName = _internalOrderName.value,
             puntSortida = _originName.value,
             puntArribada = _destinationName.value,
@@ -347,6 +358,43 @@ class PublishOrderViewModel: ViewModel(){
 
     fun onOrderAdded(isOrderAdded: Boolean){
         _orderAdded.value = isOrderAdded
+    }
+
+    // Control de errors
+    private val _screen1Errors = MutableStateFlow(List(5) { false })
+    val screen1Errors = _screen1Errors.asStateFlow()
+
+    private val _screen2Errors = MutableStateFlow(List(5) { false })
+    val screen2Errors = _screen2Errors.asStateFlow()
+
+    private fun checkIfEmpty(step: Int){
+
+        when(step){
+            1 -> {
+                val maxTimeisEmpty = !_isFlexDate.value
+
+                val screen1Errors = listOf(
+                    _internalOrderName.value.isEmpty(),
+                    _originName.value.isEmpty(),
+                    _destinationName.value.isEmpty(),
+                    _minTimeArrivalText.value.isEmpty(),
+                    maxTimeisEmpty
+                )
+
+                _screen1Errors.value = screen1Errors
+            }
+            2 -> {
+                val screen2Errors = listOf(
+                    _packagesNum.value.isEmpty(),
+                    _packagesLength.value.isEmpty(),
+                    _packagesWidth.value.isEmpty(),
+                    packagesHeight.value.isEmpty(),
+                    _packagesWeight.value.isEmpty(),
+                    )
+                _screen2Errors.value = screen2Errors
+            }
+        }
+
     }
 
 

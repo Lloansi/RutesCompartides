@@ -124,6 +124,10 @@ fun PublishOrderScreen(navHost: NavHostController) {
     val clientPhone by publishOrderViewModel.deliveryTelephoneNumber.collectAsStateWithLifecycle()
     val comment by publishOrderViewModel.comment.collectAsStateWithLifecycle()
 
+    // Errors
+    val screen1Errors by publishOrderViewModel.screen1Errors.collectAsStateWithLifecycle()
+    val screen2Errors by publishOrderViewModel.screen2Errors.collectAsStateWithLifecycle()
+
     val orderAdded by publishOrderViewModel.orderAdded.collectAsStateWithLifecycle()
     if (orderAdded) {
         // Resets the orderAdded state
@@ -184,7 +188,8 @@ fun PublishOrderScreen(navHost: NavHostController) {
                         isSenseHumitat,
                         tagsText,
                         tagsError,
-                        tagsList.toList()
+                        tagsList.toList(),
+                        screen1Errors
                     )
                 }
                 2 -> {
@@ -196,7 +201,8 @@ fun PublishOrderScreen(navHost: NavHostController) {
                         packageWidth,
                         packageLength,
                         packageWeight,
-                        wantsDeliveryNotification
+                        wantsDeliveryNotification,
+                        screen2Errors
                     )
                 }
                 3 -> {
@@ -241,7 +247,8 @@ private fun PublishOrderContent3(
     MultilineTextField(
         value = deliveryNote,
         onValueChange = publishOrderViewModel::setDeliveryNote,
-        placeholder = "Dades de contacte per al transportista"
+        placeholder = "Dades de contacte per al transportista",
+        isError = false
     )
     // Delivery note checkboxes
     Row(
@@ -300,8 +307,9 @@ private fun PublishOrderContent3(
         value = comment,
         onValueChange = publishOrderViewModel::setComment,
         placeholder = "Condicions especials quant a la recollida, entrega, transport, etc. " +
-                "Tipus de punt d’entrega final, adreça, horari del punt d’entrega..."
-    )
+                "Tipus de punt d’entrega final, adreça, horari del punt d’entrega...",
+        isError = false
+        )
     // Buttons
     Row(
         modifier = Modifier
@@ -329,7 +337,8 @@ private fun PublishOrderContent2(
     packageWidth: String,
     packageLength: String,
     packageWeight: String,
-    wantsDeliveryNotification: Boolean
+    wantsDeliveryNotification: Boolean,
+    screen2Errors: List<Boolean>
 ) {
     Row(
         modifier = Modifier
@@ -357,7 +366,8 @@ private fun PublishOrderContent2(
             keyboardOptions = KeyboardOptions(
                 imeAction = ImeAction.Next
             ),
-            singleLine = true
+            singleLine = true,
+            isError = screen2Errors[0]
         )
         // Fragile Checkbox
         Checkbox(
@@ -390,25 +400,29 @@ private fun PublishOrderContent2(
         value = packageHeight,
         onValueChange = publishOrderViewModel::setPackagesHeight,
         placeholder = "Alçària (cm)",
-        suffix = "cm"
+        suffix = "cm",
+        isError = screen2Errors[1]
     )
     MeasurementsTextField(
         value = packageWidth,
         onValueChange = publishOrderViewModel::setPackagesWidth,
         placeholder = "Amplada (cm)",
-        suffix = "cm"
+        suffix = "cm",
+        isError = screen2Errors[2]
     )
     MeasurementsTextField(
         value = packageLength,
         onValueChange = publishOrderViewModel::setPackagesLength,
         placeholder = "Llargada (cm)",
-        suffix = "cm"
+        suffix = "cm",
+        isError = screen2Errors[3]
     )
     MeasurementsTextField(
         value = packageWeight,
         onValueChange = publishOrderViewModel::setPackagesWeight,
         placeholder = "Pes (kg)",
-        suffix = "kg"
+        suffix = "kg",
+        isError = screen2Errors[4]
     )
 
     // Notification Checkbox
@@ -465,19 +479,22 @@ private fun PublishOrderContent1(
     isSenseHumitat: Boolean,
     tagsText: String,
     tagsError: Boolean,
-    tagsList: List<String>
+    tagsList: List<String>,
+    screen1Errors: List<Boolean>
 ) {
     BasicTextField(
         value = orderName,
         onValueChange = publishOrderViewModel::setInternalOrderName,
-        placeholder = "Nom intern de la ruta"
+        placeholder = "Nom intern de la comanda",
+        isError = screen1Errors[0]
     )
     IconTextField(value = originName,
         onValueChange = publishOrderViewModel::setOriginName,
         placeholder = "Punt de sortida",
         leadingIcon = {
             Icon(imageVector = Icons.Filled.House, contentDescription = "Origin Location Icon")
-        })
+        },
+        isError = screen1Errors[1])
     IconTextField(value = destinationName,
         onValueChange = publishOrderViewModel::setDestinationName,
         placeholder = "Punt d'arribada",
@@ -487,7 +504,8 @@ private fun PublishOrderContent1(
                 painter = painterResource(id = R.drawable.map_icon),
                 contentDescription = "Destination Location Icon"
             )
-        })
+        },
+        isError = screen1Errors[2])
     // MinTimeArrival
     Row(
         modifier = Modifier
@@ -519,7 +537,8 @@ private fun PublishOrderContent1(
             time = minTimeArrival,
             onValueChange = publishOrderViewModel::onMinTimeArrivalChange,
             placeholder = "Data mínima d'arribada",
-            icon = Icons.Filled.CalendarMonth
+            icon = Icons.Filled.CalendarMonth,
+            isError = screen1Errors[3]
         )
     }
     if (isDataMinPopupShowing){
@@ -567,7 +586,8 @@ private fun PublishOrderContent1(
             time = maxTimeArrival,
             onValueChange = publishOrderViewModel::onMaxTimeArrivalTextChange,
             placeholder = "Data màxima d'arribada",
-            icon = Icons.Filled.CalendarMonth
+            icon = Icons.Filled.CalendarMonth,
+            isError = screen1Errors[4]
         )
     }
     // Date Picker Dialog

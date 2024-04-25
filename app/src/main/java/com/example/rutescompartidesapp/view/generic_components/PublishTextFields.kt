@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CalendarMonth
+import androidx.compose.material.icons.filled.Cancel
 import androidx.compose.material.icons.filled.Route
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -24,7 +24,8 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun MeasurementsTextField(value: String, onValueChange: (String) -> Unit, placeholder: String, suffix: String){
+fun MeasurementsTextField(value: String, onValueChange: (String) -> Unit, placeholder: String, suffix: String,
+                          isError: Boolean){
     OutlinedTextField(
         modifier = Modifier.fillMaxWidth(0.95f),
         value = value,
@@ -47,14 +48,25 @@ fun MeasurementsTextField(value: String, onValueChange: (String) -> Unit, placeh
         keyboardOptions = KeyboardOptions(
             imeAction = ImeAction.Next),
         singleLine = true,
-
+        isError = isError,
+        supportingText = {
+            if (isError) {
+                Text(text = "Aquest camp és obligatori", color = Color.Red)
+            }
+        },
+        trailingIcon = {
+            if (isError){
+                Icon(imageVector = Icons.Filled.Cancel,
+                    contentDescription = "Error Icon",
+                    tint = MaterialTheme.colorScheme.primary)
+            }
+        }
         )
-    Spacer(modifier = Modifier.padding(8.dp))
-
+    Spacer(modifier = Modifier.padding(4.dp))
 }
 
 @Composable
-fun MultilineTextField(value: String, onValueChange: (String) -> Unit, placeholder: String){
+fun MultilineTextField(value: String, onValueChange: (String) -> Unit, placeholder: String, isError: Boolean){
     OutlinedTextField(
         modifier = Modifier
             .fillMaxWidth(0.95f)
@@ -78,12 +90,25 @@ fun MultilineTextField(value: String, onValueChange: (String) -> Unit, placehold
         ),
         singleLine = false,
         maxLines = 7,
+        isError = isError,
+        supportingText = {
+            if (isError) {
+                Text(text = "Aquest camp és obligatori", color = Color.Red)
+            }
+        },
+        trailingIcon = {
+            if (isError){
+                Icon(imageVector = Icons.Filled.Cancel,
+                    contentDescription = "Error Icon",
+                    tint = MaterialTheme.colorScheme.primary)
+            }
+        }
     )
-    Spacer(modifier = Modifier.padding(8.dp))
+    Spacer(modifier = Modifier.padding(4.dp))
 }
 
 @Composable
-fun BasicTextField(value: String, onValueChange: (String) -> Unit, placeholder: String){
+fun BasicTextField(value: String, onValueChange: (String) -> Unit, placeholder: String, isError: Boolean){
     OutlinedTextField(
         modifier = Modifier.fillMaxWidth(0.95f),
         value = value,
@@ -103,13 +128,26 @@ fun BasicTextField(value: String, onValueChange: (String) -> Unit, placeholder: 
         keyboardOptions = KeyboardOptions(
             imeAction = ImeAction.Next),
         singleLine = true,
-
+        isError = isError,
+        supportingText = {
+            if (isError) {
+                Text(text = "Aquest camp és obligatori", color = Color.Red)
+            }
+        },
+        trailingIcon = {
+            if (isError){
+                Icon(imageVector = Icons.Filled.Cancel,
+                    contentDescription = "Error Icon",
+                    tint = MaterialTheme.colorScheme.primary)
+            }
+        }
         )
-    Spacer(modifier = Modifier.padding(8.dp))
+    Spacer(modifier = Modifier.padding(4.dp))
 }
 
 @Composable
-fun IconTextField(value: String, onValueChange: (String) -> Unit, placeholder: String, leadingIcon: @Composable () -> Unit){
+fun IconTextField(value: String, onValueChange: (String) -> Unit, placeholder: String, leadingIcon: @Composable () -> Unit,
+                  isError: Boolean){
     OutlinedTextField(
         modifier = Modifier.fillMaxWidth(0.95f),
         value = value,
@@ -132,9 +170,21 @@ fun IconTextField(value: String, onValueChange: (String) -> Unit, placeholder: S
         keyboardOptions = KeyboardOptions(
             imeAction = ImeAction.Next),
         singleLine = true,
-
+        isError = isError,
+        supportingText = {
+            if (isError) {
+                Text(text = "Aquest camp és obligatori", color = Color.Red)
+            }
+        },
+        trailingIcon = {
+            if (isError){
+                Icon(imageVector = Icons.Filled.Cancel,
+                    contentDescription = "Error Icon",
+                    tint = MaterialTheme.colorScheme.primary)
+            }
+        }
         )
-    Spacer(modifier = Modifier.padding(8.dp))
+    Spacer(modifier = Modifier.padding(4.dp))
 }
 
 @Composable
@@ -161,15 +211,14 @@ fun StepTextField(modifier: Modifier, value: String, onValueChange: (String) -> 
         keyboardOptions = KeyboardOptions(
             imeAction = ImeAction.Next),
         singleLine = true,
-
         )
-    Spacer(modifier = Modifier.padding(8.dp))
+    Spacer(modifier = Modifier.padding(4.dp))
 }
 
 @Composable
-fun DateTimePickerTextField(invocation: () -> Unit, time: String,
-                            onValueChange: (String) -> Unit, placeholder: String,
-                            icon: ImageVector){
+fun DateTimePickerTextField(
+    invocation: () -> Unit, time: String, onValueChange: (String) -> Unit,
+    placeholder: String, icon: ImageVector, isError: Boolean){
     // Time Picker TextField
     OutlinedTextField(
         modifier = Modifier
@@ -194,17 +243,29 @@ fun DateTimePickerTextField(invocation: () -> Unit, time: String,
         colors = TextFieldDefaults.colors(
             focusedIndicatorColor = MaterialTheme.colorScheme.primary,
             unfocusedIndicatorColor = Color.Gray,
-            disabledContainerColor = MaterialTheme.colorScheme.onSecondaryContainer,
+            disabledContainerColor = MaterialTheme.colorScheme.background,
             disabledIndicatorColor = Color.Gray,
+            disabledTextColor = MaterialTheme.colorScheme.onBackground,
             focusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
             unfocusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
-            disabledTextColor = Color.Black
         ),
         keyboardOptions = KeyboardOptions(
             imeAction = ImeAction.Next
         ),
         singleLine = true,
-
+        isError = isError,
+        supportingText = {
+            if (isError) {
+                Text(text = "Aquest camp és obligatori", color = Color.Red)
+            }
+        },
+        trailingIcon = {
+            if (isError){
+                Icon(imageVector = Icons.Filled.Cancel,
+                    contentDescription = "Error Icon",
+                    tint = MaterialTheme.colorScheme.primary)
+            }
+        }
         )
-    Spacer(modifier = Modifier.padding(8.dp))
+    Spacer(modifier = Modifier.padding(4.dp))
 }
