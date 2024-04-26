@@ -3,7 +3,7 @@ package com.example.rutescompartidesapp.data.domain
 import com.example.rutescompartidesapp.data.domain.map.Itinerary
 
 data class OrderForList(
-    val user: String,
+    val userID: Int,
     val orderID: Int,
     val orderName: String,
     val puntSortida: String,

@@ -1,13 +1,9 @@
 package com.example.rutescompartidesapp.utils
 
 import android.Manifest
-import androidx.compose.runtime.Stable
-import com.example.rutescompartidesapp.data.domain.User2
-import com.example.rutescompartidesapp.data.domain.review.Review
 
 object Constants {
 
-    val userList = mutableListOf<User2>(User2(0, "Admin", "admin@admin.com", 666666666, "Admin"))
     const val RUTES_COMPARTIDES_URL = "https://dev.rutescompartides.cat/"
     const val GEO_NAMES_URL = "http://api.geonames.org/"
 
@@ -19,9 +15,6 @@ object Constants {
         Manifest.permission.INTERNET,
         Manifest.permission.ACCESS_NETWORK_STATE
     )
-
-    val reviewList = mutableListOf<Review>()
-
 
 
 }

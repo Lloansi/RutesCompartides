@@ -34,6 +34,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
+import com.example.rutescompartidesapp.view.login.LoginViewModel
 import com.example.rutescompartidesapp.view.routes_order_list.components.FilterPopup
 import com.example.rutescompartidesapp.view.routes_order_list.components.TabRows
 import com.example.rutescompartidesapp.view.routes_order_list.viewmodels.FilterPopupViewModel
@@ -41,12 +42,12 @@ import com.example.rutescompartidesapp.view.routes_order_list.viewmodels.RoutesO
 
 
 @Composable
-fun RoutesOrderListScreen(navController: NavHostController, routeOrderListViewModel: RoutesOrderListViewModel, filterPopupViewModel: FilterPopupViewModel) {
+fun RoutesOrderListScreen(navController: NavHostController, routeOrderListViewModel: RoutesOrderListViewModel, filterPopupViewModel: FilterPopupViewModel, loginViewModel: LoginViewModel) {
     val searchText by routeOrderListViewModel.searchText.collectAsStateWithLifecycle()
     val isSearching by routeOrderListViewModel.isSearching.collectAsStateWithLifecycle()
     val areFilterActive by routeOrderListViewModel.activeFilters.collectAsStateWithLifecycle()
     val focusManager = LocalFocusManager.current
-
+    val user by loginViewModel.user.collectAsStateWithLifecycle()
     Column (Modifier.fillMaxSize()) {
         Row (Modifier.padding(12.dp),
             horizontalArrangement = Arrangement.SpaceAround,
@@ -128,7 +129,7 @@ fun RoutesOrderListScreen(navController: NavHostController, routeOrderListViewMo
         }
         // Tabs and lists
         Row (Modifier.fillMaxWidth()) {
-            TabRows(routeOrderListViewModel, navController)
+            TabRows(routeOrderListViewModel, navController, user!!)
         }
     }
 }

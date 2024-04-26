@@ -327,7 +327,7 @@ fun LoginScreen(loginViewModel: LoginViewModel, navController: NavController){
                     if(userWantsToLogin){
                         loginViewModel.onLoading(true)
                         LaunchedEffect(isLoading){
-                            loginViewModel.login()
+                            loginViewModel.loginLocal(userEmailText, userPasswordText)
                         }
                     }
                     LaunchedEffect (userIsLogged){

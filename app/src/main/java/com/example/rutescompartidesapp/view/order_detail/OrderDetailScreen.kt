@@ -1,6 +1,5 @@
 package com.example.rutescompartidesapp.view.order_detail
 
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -28,7 +27,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -41,29 +39,28 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.example.rutescompartidesapp.R
-import com.example.rutescompartidesapp.data.domain.Order
 import com.example.rutescompartidesapp.data.domain.OrderForList
 import com.example.rutescompartidesapp.ui.theme.BlueRC
 import com.example.rutescompartidesapp.ui.theme.MateBlackRC
 import com.example.rutescompartidesapp.ui.theme.RedRC
 import com.example.rutescompartidesapp.view.generic_components.TopAppBarWithBackNav
+import com.example.rutescompartidesapp.view.login.LoginViewModel
 import com.example.rutescompartidesapp.view.order_detail.components.AcceptDenyContainer
 import com.example.rutescompartidesapp.view.order_detail.components.CompletedContainer
 import com.example.rutescompartidesapp.view.order_detail.components.DetailsConfirm
 import com.example.rutescompartidesapp.view.order_detail.components.TopCardInfo
 import com.example.rutescompartidesapp.view.map.components.MeasuresText
-import com.example.rutescompartidesapp.view.map.components.allOrders
 
 @Composable
-fun OrderDetailScreen(orderID: Int, navHost: NavHostController, ) {
+fun OrderDetailScreen(orderID: Int, navHost: NavHostController, loginViewModel: LoginViewModel ) {
     val orderDetailViewModel =  OrderDetailViewModel()
     orderDetailViewModel.getOrder(orderID)
+    val user by loginViewModel.user.collectAsStateWithLifecycle()
     val order by orderDetailViewModel.order.collectAsStateWithLifecycle()
-    val isVisible by orderDetailViewModel.isVisible.collectAsState()
+    val isVisible by orderDetailViewModel.isVisible.collectAsStateWithLifecycle()
     val responsiveHeight = LocalConfiguration.current.screenHeightDp.dp
     val verticalScroll = rememberScrollState()
 
@@ -73,7 +70,7 @@ fun OrderDetailScreen(orderID: Int, navHost: NavHostController, ) {
         content = {
             if (order != null){
                 Column (modifier = Modifier.verticalScroll(verticalScroll)) {
-                    CompleteCard(order!!, responsiveHeight, isVisible, orderDetailViewModel, navHost)
+                    CompleteCard(order!!, responsiveHeight, isVisible, orderDetailViewModel, navHost, user!!.userId)
                 }
             } else {
                 CircularProgressIndicator()
@@ -84,7 +81,14 @@ fun OrderDetailScreen(orderID: Int, navHost: NavHostController, ) {
 }
 
 @Composable
-fun CompleteCard(order: OrderForList, responsiveHeight: Dp, isVisible: Boolean, orderDetailViewModel: OrderDetailViewModel, navHost: NavHostController) {
+fun CompleteCard(
+    order: OrderForList,
+    responsiveHeight: Dp,
+    isVisible: Boolean,
+    orderDetailViewModel: OrderDetailViewModel,
+    navHost: NavHostController,
+    userId: Int
+) {
     ElevatedCard (modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.elevatedCardColors(
             contentColor = MaterialTheme.colorScheme.onBackground,
@@ -208,77 +212,79 @@ fun CompleteCard(order: OrderForList, responsiveHeight: Dp, isVisible: Boolean, 
         // si es así, mostrar los botones de editar y eliminar
         // sino, mostrar los botones de aceptar y rechazar
         // Botones de editar y eliminar
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 8.dp),
-            verticalAlignment = Alignment.Bottom
-        ) {
-            Column(
+        if (order.userID == userId){
+            Row(
                 modifier = Modifier
-                    .weight(2f)
-                    .padding(bottom = 4.dp)
+                    .fillMaxWidth()
+                    .padding(start = 8.dp),
+                verticalAlignment = Alignment.Bottom
             ) {
-                Row(
+                Column(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 8.dp),
-                    verticalAlignment = Alignment.CenterVertically
+                        .weight(2f)
+                        .padding(bottom = 4.dp)
                 ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 8.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        ElevatedButton(
+                            shape = RoundedCornerShape(16.dp),
+                            onClick = { navHost.navigate(
+                                "PublishOrderScreen/{command}/{orderID}".replace(
+                                    oldValue = "{command}",
+                                    newValue = "edit"
+                                ).replace(
+                                    oldValue = "{orderID}",
+                                    newValue = "${order.orderID}"
+                                )) },
+                            colors = ButtonDefaults.elevatedButtonColors(
+                                containerColor = MateBlackRC
+                            )
+                        ) {
+                            Icon(
+                                modifier = Modifier.size(28.dp),
+                                painter = painterResource(id = R.drawable.edit_route_svg),
+                                contentDescription = "Edit route icon",
+                                tint = Color.White
+                            )
+                        }
+                    }
+                }
+                Column(
+                    modifier = Modifier
+                        .weight(0.75f)
+                        .fillMaxWidth()
+                        .padding(end = 8.dp, bottom = 4.dp),
+                    verticalArrangement = Arrangement.Bottom,
+                    horizontalAlignment = Alignment.End
+                ) {
+
                     ElevatedButton(
                         shape = RoundedCornerShape(16.dp),
-                        onClick = { navHost.navigate(
-                            "PublishOrderScreen/{command}/{orderID}".replace(
-                                oldValue = "{command}",
-                                newValue = "edit"
-                            ).replace(
-                                oldValue = "{orderID}",
-                                newValue = "${order.orderID}"
-                            )) },
+                        onClick = { navHost.popBackStack()
+                            orderDetailViewModel.deleteOrder(order.orderID)
+                        },
                         colors = ButtonDefaults.elevatedButtonColors(
-                            containerColor = MateBlackRC
+                            containerColor = RedRC
                         )
                     ) {
                         Icon(
                             modifier = Modifier.size(28.dp),
-                            painter = painterResource(id = R.drawable.edit_route_svg),
-                            contentDescription = "Edit route icon",
+                            imageVector = Icons.Filled.Delete,
+                            contentDescription = "Delete order icon",
                             tint = Color.White
                         )
                     }
-                }
-            }
-            Column(
-                modifier = Modifier
-                    .weight(0.75f)
-                    .fillMaxWidth()
-                    .padding(end = 8.dp, bottom = 4.dp),
-                verticalArrangement = Arrangement.Bottom,
-                horizontalAlignment = Alignment.End
-            ) {
 
-                ElevatedButton(
-                    shape = RoundedCornerShape(16.dp),
-                    onClick = { navHost.popBackStack()
-                        orderDetailViewModel.deleteOrder(order.orderID)
-                              },
-                    colors = ButtonDefaults.elevatedButtonColors(
-                        containerColor = RedRC
-                    )
-                ) {
-                    Icon(
-                        modifier = Modifier.size(28.dp),
-                        imageVector = Icons.Filled.Delete,
-                        contentDescription = "Delete order icon",
-                        tint = Color.White
-                    )
                 }
 
             }
-
+        } else {
+            AcceptDenyContainer(colorDenyButton = MateBlackRC, isVisible, orderDetailViewModel)
         }
-
-        AcceptDenyContainer(colorDenyButton = MateBlackRC, isVisible, orderDetailViewModel)
 
         CompletedContainer(isVisible)
 

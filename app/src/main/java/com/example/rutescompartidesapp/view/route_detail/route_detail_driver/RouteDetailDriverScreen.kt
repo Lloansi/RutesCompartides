@@ -58,9 +58,9 @@ import com.example.rutescompartidesapp.view.route_detail.route_detail_driver.com
 import com.example.rutescompartidesapp.view.routes_order_list.components.RouteCardHeader
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RouteDetailDriverScreen(routeID: Int, navHost: NavHostController, routeDetailDriverViewModel : RouteDetailDriverViewModel) {
+fun RouteDetailDriverScreen(routeID: Int, navHost: NavHostController, routeDetailDriverViewModel : RouteDetailDriverViewModel,
+                            cameraViewModel: CameraViewModel, drawViewModel: DrawViewModel){
     // TODO Amb el ID hauría de fer una trucada a la API per obtenir la ruta
     // TODO i una altra per obtenir les interaccions de la ruta
     // val interactions = DetailUtils.interactionList.filter { it.routeID == routeID }
@@ -91,14 +91,13 @@ fun RouteDetailDriverScreen(routeID: Int, navHost: NavHostController, routeDetai
         content = {
             if (route != null){
 
-
             Column (modifier = Modifier.verticalScroll(verticalScroll))  {
                 if (isCompleteScreenShowing) {
                 ConfirmScreen(
                     routeDetailDriverViewModel = routeDetailDriverViewModel,
                     navController = navHost,
-                    cameraViewModel = CameraViewModel(),
-                    drawViewModel = DrawViewModel()
+                    cameraViewModel = cameraViewModel,
+                    drawViewModel = drawViewModel
                 )
             } else {
                 ElevatedCard(
@@ -279,7 +278,15 @@ fun RouteDetailDriverScreen(routeID: Int, navHost: NavHostController, routeDetai
                                         ).replace(
                                             oldValue = "{routeID}",
                                             newValue = "$routeID"
-                                        )) },
+                                        )){popUpTo(
+                                        "PublishRouteScreen/{command}/{routeID}".replace(
+                                            oldValue = "{command}",
+                                            newValue = "edit"
+                                        ).replace(
+                                            oldValue = "{routeID}",
+                                            newValue = "$routeID"
+                                        )) {inclusive = true}
+                                    }  } ,
                                     colors = ButtonDefaults.elevatedButtonColors(
                                         containerColor = MateBlackRC
                                     )

@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import com.example.rutescompartidesapp.data.domain.OrderForList
 import com.example.rutescompartidesapp.data.domain.RouteForList
 import com.example.rutescompartidesapp.view.route_detail.route_detail_driver.DetailUtils.RouteInteraction
-import com.example.rutescompartidesapp.view.routes_order_list.ListConstants
+import com.example.rutescompartidesapp.utils.LocalConstants
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
@@ -74,29 +74,36 @@ class RouteDetailDriverViewModel (routeID: Int): ViewModel(){
 
 
     fun getRoute(routeID: Int){
-        val route = ListConstants.routeList.first { it.routeID == routeID }
+        val route = LocalConstants.routeList.first { it.routeID == routeID }
         _route.value = route
     }
 
 
     private fun getOrder(orderID: Int){
-        val order = ListConstants.orderList.first { it.orderID == orderID }
+        val order = LocalConstants.orderList.first { it.orderID == orderID }
         _order.value = order
     }
 
     fun duplicateRoute(route: RouteForList){
-        ListConstants.routeList.add(route)
+        val newRoute = route.copy(routeID = LocalConstants.routeList.first { it.routeID == route.routeID }.routeID + 1)
+        LocalConstants.routeList.add(newRoute)
        // TODO Fer un POST a la API per duplicar la ruta
     }
 
     fun editRoute(route: RouteForList){
-        // TODO Obre un questionari amb les dades de la ruta i permet editar-les,
-        // TODO després fa un PUT a la API per editar la ruta
+        /**
+         * TODO Obre el questionari de PublishRouteScreen amb les dades de la ruta i permet editar-les,
+         * navHost.navigate("PublishRouteScreen/{command}/{routeID}".replace(
+         *   oldValue = "{command}", newValue = "edit")
+         * .replace(oldValue = "{routeID}",newValue = "$routeID"))
+         * TODO després fa un PUT a la API per editar la ruta
+         */
+
     }
 
 
     fun deleteRoute(route: RouteForList){
-        ListConstants.routeList.remove(route)
+        LocalConstants.routeList.remove(route)
         // TODO Fer un DELETE a la API per eliminar la ruta
     }
 

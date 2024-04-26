@@ -30,7 +30,7 @@ import com.example.rutescompartidesapp.data.domain.OrderForList
 import com.example.rutescompartidesapp.data.domain.RouteForList
 import com.example.rutescompartidesapp.ui.theme.MateBlackRC
 import com.example.rutescompartidesapp.ui.theme.OrangeRC
-import com.example.rutescompartidesapp.view.routes_order_list.ListConstants
+import com.example.rutescompartidesapp.utils.LocalConstants
 
 @Composable
 fun RouteOrderHeader(route: RouteForList, order: OrderForList) {
@@ -50,7 +50,7 @@ fun RouteOrderHeader(route: RouteForList, order: OrderForList) {
 @Preview(showBackground = true)
 @Composable
 fun RouteOrderHeaderPreview(){
-    RouteOrderHeader(ListConstants.routeList.first(),ListConstants.orderList.first())
+    RouteOrderHeader(LocalConstants.routeList.first(), LocalConstants.orderList.first())
 }
 
 @OptIn(ExperimentalLayoutApi::class)

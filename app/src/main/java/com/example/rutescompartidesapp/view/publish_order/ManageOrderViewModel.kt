@@ -2,7 +2,7 @@ package com.example.rutescompartidesapp.view.publish_order
 
 import androidx.lifecycle.ViewModel
 import com.example.rutescompartidesapp.data.domain.OrderForList
-import com.example.rutescompartidesapp.view.routes_order_list.ListConstants
+import com.example.rutescompartidesapp.utils.LocalConstants
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import java.time.Instant
@@ -332,11 +332,11 @@ class ManageOrderViewModel: ViewModel(){
 
     private val _orderAdded = MutableStateFlow(false)
     val orderAdded = _orderAdded.asStateFlow()
-    fun addOrder(){
+    fun addOrder(userID: Int){
         // TODO Cambiar la classe de la order i fer servir la oficial
-        val lastOrderID = ListConstants.orderList.maxByOrNull { order -> order.orderID }!!.orderID
+        val lastOrderID = LocalConstants.orderList.maxByOrNull { order -> order.orderID }!!.orderID
 
-        val newOrder = OrderForList(user = "Admin",
+        val newOrder = OrderForList(userID = userID,
             orderID = lastOrderID+1,
             orderName = _internalOrderName.value,
             puntSortida = _originName.value,
@@ -361,7 +361,7 @@ class ManageOrderViewModel: ViewModel(){
         )
         // TODO Fer un POST a la API per duplicar la ruta
 
-        if (ListConstants.orderList.add(newOrder)){
+        if (LocalConstants.orderList.add(newOrder)){
             onOrderAdded(true)
         }
     }
@@ -375,7 +375,7 @@ class ManageOrderViewModel: ViewModel(){
     private val _orderToEdit = MutableStateFlow<OrderForList?>(null)
     val orderToEdit = _orderToEdit.asStateFlow()
     fun getOrder(orderID: Int) {
-        _orderToEdit.value =  ListConstants.orderList.find { order -> order.orderID == orderID }!!
+        _orderToEdit.value =  LocalConstants.orderList.find { order -> order.orderID == orderID }!!
         updateOrderInfo()
     }
 
@@ -406,8 +406,8 @@ class ManageOrderViewModel: ViewModel(){
         }
     }
 
-    fun updateOrder(){
-        val updatedOrder = OrderForList(user = "Admin",
+    fun updateOrder(userID: Int){
+        val updatedOrder = OrderForList(userID = userID,
             orderID = _orderToEdit.value!!.orderID,
             orderName = _internalOrderName.value,
             puntSortida = _originName.value,
@@ -430,8 +430,8 @@ class ManageOrderViewModel: ViewModel(){
             comment = _comment.value
         )
         // TODO Fer un PUT a la API per actualitzar la ruta
-        if (ListConstants.orderList.removeIf { order -> order.orderID == updatedOrder.orderID }){
-            ListConstants.orderList.add(updatedOrder)
+        if (LocalConstants.orderList.removeIf { order -> order.orderID == updatedOrder.orderID }){
+            LocalConstants.orderList.add(updatedOrder)
             onOrderAdded(true)
         }
     }

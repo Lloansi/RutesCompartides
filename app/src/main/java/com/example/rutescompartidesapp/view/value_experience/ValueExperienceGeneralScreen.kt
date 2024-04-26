@@ -2,19 +2,13 @@ package com.example.rutescompartidesapp.view.value_experience
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
@@ -25,20 +19,15 @@ import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -47,27 +36,20 @@ import androidx.navigation.compose.rememberNavController
 import com.example.rutescompartidesapp.data.domain.OrderForList
 import com.example.rutescompartidesapp.data.domain.RouteForList
 import com.example.rutescompartidesapp.ui.theme.OrangeRC
+import com.example.rutescompartidesapp.utils.LocalConstants
 import com.example.rutescompartidesapp.view.generic_components.MultilineTextField
-import com.example.rutescompartidesapp.view.generic_components.PublishBackButton
-import com.example.rutescompartidesapp.view.generic_components.PublishNextButton
 import com.example.rutescompartidesapp.view.generic_components.RouteOrderHeader
 import com.example.rutescompartidesapp.view.generic_components.TopAppBarWithBackNav
-import com.example.rutescompartidesapp.view.route_detail.route_detail_driver.RouteDetailDriverViewModel
-import com.example.rutescompartidesapp.view.routes_order_list.ListConstants
-import com.example.rutescompartidesapp.view.routes_order_list.components.RouteCardHeader
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 
 @Composable
 fun ValueExperienceGeneralScreen(routeID: Int, orderID: Int, navHost: NavHostController) {
-    // TODO Amb el ID hauría de fer una trucada a la API per obtenir la ruta
-    // TODO i una altra per obtenir les interaccions de la ruta
-    // val interactions = DetailUtils.interactionList.filter { it.routeID == routeID }
-    val route: RouteForList = ListConstants.routeList.first { it.routeID == routeID }
-    val order: OrderForList = ListConstants.orderList.first { it.orderID == orderID }
 
     val valueExperienceViewModel = ValueExperienceViewModel()
+    val route: RouteForList = LocalConstants.routeList.first { it.routeID == routeID }
+    val order: OrderForList = LocalConstants.orderList.first { it.orderID == orderID }
     val isPackageDelivered by valueExperienceViewModel.isPackageDelivered.collectAsStateWithLifecycle()
     val comment by valueExperienceViewModel.comment.collectAsStateWithLifecycle()
     val experienceScore by valueExperienceViewModel.experienceScore.collectAsStateWithLifecycle()
@@ -145,7 +127,7 @@ fun ValueExperienceGeneralScreen(routeID: Int, orderID: Int, navHost: NavHostCon
                             expanded = isDropdownExpanded,
                             onDismissRequest = {valueExperienceViewModel.toggleDropdown() }
                         ) {
-                            LazyColumn(){
+                            LazyColumn{
                                 items(10){puntuació ->
                                     DropdownMenuItem(
                                         text = {

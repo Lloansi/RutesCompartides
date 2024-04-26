@@ -45,6 +45,7 @@ class ProfileViewModel @Inject constructor(
     fun onLogOutChange(isLoggedOut : Boolean){
         _isLoggedOut.value = isLoggedOut
     }
+
     suspend fun updateSession(){
         viewModelScope.launch {
             sessionRepository.updateIsLogged(false)

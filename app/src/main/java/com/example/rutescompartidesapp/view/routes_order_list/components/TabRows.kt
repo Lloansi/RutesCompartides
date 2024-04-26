@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
+import com.example.rutescompartidesapp.data.domain.UserLocal
 import com.example.rutescompartidesapp.ui.theme.GrayRC
 import com.example.rutescompartidesapp.view.routes_order_list.viewmodels.RoutesOrderListViewModel
 import com.example.rutescompartidesapp.view.routes_order_list.viewmodels.TabRowViewModel
@@ -47,7 +48,7 @@ data class TabItems(
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun TabRows(routesOrderListViewModel: RoutesOrderListViewModel, navController: NavHostController){
+fun TabRows(routesOrderListViewModel: RoutesOrderListViewModel, navController: NavHostController, user: UserLocal){
     val tabRowViewModel: TabRowViewModel = hiltViewModel()
     val selectedTabIndex by tabRowViewModel.selectedTabIndex.collectAsStateWithLifecycle()
     val tabItems = tabRowViewModel.tabItems
@@ -95,7 +96,7 @@ fun TabRows(routesOrderListViewModel: RoutesOrderListViewModel, navController: N
             horizontalArrangement = Arrangement.Start) {
             ElevatedFilterChip(
                 selected = isMyFilterActive ,
-                onClick = { routesOrderListViewModel.onMyFilterActive("ivan") },
+                onClick = { routesOrderListViewModel.onMyFilterActive(user.userId) },
                 label = { if (isMyFilterActive) {
                     Text("Mostrar meves",
                         color = Color.White,
@@ -142,7 +143,7 @@ fun TabRows(routesOrderListViewModel: RoutesOrderListViewModel, navController: N
                             }else {
                                 items(routes.size) { index ->
                                     Spacer(modifier = Modifier.padding(6.dp))
-                                    RouteCard(route = routes[index], navController)
+                                    RouteCard(route = routes[index], navController, user.userId)
                                 }
                             }
                         } else {

@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.rutescompartidesapp.data.domain.ListQuery
 import com.example.rutescompartidesapp.data.domain.OrderForList
 import com.example.rutescompartidesapp.data.domain.RouteForList
-import com.example.rutescompartidesapp.view.routes_order_list.ListConstants
+import com.example.rutescompartidesapp.utils.LocalConstants
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -28,17 +28,17 @@ class RoutesOrderListViewModel: ViewModel() {
     private val _isMyFilterActive = MutableStateFlow(false)
     val isMyFilterActive = _isMyFilterActive.asStateFlow()
 
-    fun onMyFilterActive(username: String) {
+    fun onMyFilterActive(userID: Int) {
         _isMyFilterActive.value = !_isMyFilterActive.value
-        val myRoutes = _routes.value.filter { it.user == username}.toMutableList()
-        val myOrders = _orders.value.filter { it.user == username}.toMutableList()
+        val myRoutes = _routes.value.filter { it.userID == userID}.toMutableList()
+        val myOrders = _orders.value.filter { it.userID == userID}.toMutableList()
 
         if (_isMyFilterActive.value){
             _routes.value = myRoutes
             _orders.value = myOrders
         } else {
-            _routes.value = ListConstants.routeList
-            _orders.value = ListConstants.orderList
+            _routes.value = LocalConstants.routeList
+            _orders.value = LocalConstants.orderList
         }
     }
 
@@ -55,7 +55,7 @@ class RoutesOrderListViewModel: ViewModel() {
 
 
     // List of routes from the backend
-    private val _routesOriginal = MutableStateFlow(ListConstants.routeList)
+    private val _routesOriginal = MutableStateFlow(LocalConstants.routeList)
 
     // List of routes, it's initial value it's the list of routes from the BackEnd
     private var _routes = _routesOriginal
@@ -77,7 +77,7 @@ class RoutesOrderListViewModel: ViewModel() {
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), _routes.value)
 
     // List of routes from the backend
-    private val _ordersOriginal = MutableStateFlow(ListConstants.orderList)
+    private val _ordersOriginal = MutableStateFlow(LocalConstants.orderList)
 
     // List of orders, it's initial value it's the list of routes from the BackEnd
     private var _orders = _ordersOriginal
@@ -153,9 +153,9 @@ class RoutesOrderListViewModel: ViewModel() {
 
         _activeFilters.value = List(9) { false }
 
-        _routes.value = ListConstants.routeList
+        _routes.value = LocalConstants.routeList
 
-        _orders.value = ListConstants.orderList
+        _orders.value = LocalConstants.orderList
     }
 
     /**

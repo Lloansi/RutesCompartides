@@ -2,11 +2,12 @@ package com.example.rutescompartidesapp.view.value_experience
 
 import androidx.lifecycle.ViewModel
 import com.example.rutescompartidesapp.data.domain.review.Review
-import com.example.rutescompartidesapp.utils.Constants.reviewList
+import com.example.rutescompartidesapp.utils.LocalConstants.reviewList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 class ValueExperienceViewModel:ViewModel() {
+
 
     // PackageDeliveredCheckbox
     private val _isPackageDelivered = MutableStateFlow(false)
@@ -39,7 +40,7 @@ class ValueExperienceViewModel:ViewModel() {
         val newReview = Review(1,
             reviewList.maxOf { review ->
             review.reviewId
-        }+1, _comment.value)
+        }+1,1, _comment.value)
         reviewList.add(newReview)
     }
 

@@ -42,6 +42,7 @@ import com.example.rutescompartidesapp.data.domain.RouteForList
 import com.example.rutescompartidesapp.ui.theme.BlueRC
 import com.example.rutescompartidesapp.ui.theme.MateBlackRC
 import com.example.rutescompartidesapp.ui.theme.OrangeRC
+import com.example.rutescompartidesapp.utils.LocalConstants
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -103,7 +104,8 @@ fun RouteCardHeader(route: RouteForList){
                     Text(text = route.routeName, color = Color.White)
                 }
                 Row(modifier = Modifier.weight(2f), horizontalArrangement = Arrangement.End) {
-                    Text(text = route.user, color = OrangeRC, fontWeight = FontWeight.Bold)
+                    Text(text = LocalConstants.userList.first{ user -> user.userId == route.userID }.name
+                        , color = OrangeRC, fontWeight = FontWeight.Bold)
                 }
             }
             RoutePoints(route = route)
@@ -112,17 +114,27 @@ fun RouteCardHeader(route: RouteForList){
 }
 
 @Composable
-fun RouteCard(route: RouteForList, navController: NavHostController) {
+fun RouteCard(route: RouteForList, navController: NavHostController, userID: Int) {
     Column{
         ElevatedCard (modifier = Modifier
             .fillMaxWidth(0.95f)
             .clickable {
-                navController.navigate(
-                    "RouteDetailDriverScreen/{routeId}".replace(
-                        oldValue = "{routeId}",
-                        newValue = "${route.routeID}"
+                if (route.userID == userID) {
+                    navController.navigate(
+                        "RouteDetailDriverScreen/{routeId}".replace(
+                            oldValue = "{routeId}",
+                            newValue = "${route.routeID}"
+                        )
                     )
-                )
+                } else {
+                    navController.navigate(
+                        "RouteDetailGeneralScreen/{routeId}".replace(
+                            oldValue = "{routeId}",
+                            newValue = "${route.routeID}"
+                        )
+                    )
+                }
+
             },
             colors = CardDefaults.elevatedCardColors(
                 containerColor = Color.White)) {
@@ -164,10 +176,21 @@ fun RouteCard(route: RouteForList, navController: NavHostController) {
                 })
                 Spacer(modifier = Modifier.padding(4.dp))
                 ElevatedButton( shape = RoundedCornerShape(16.dp),
-                    onClick = { navController.navigate("RouteDetailDriverScreen/{routeId}".replace(
-                        oldValue = "{routeId}",
-                        newValue = "${route.routeID}"
-                    ) )
+                    onClick = { if (route.userID == userID) {
+                        navController.navigate(
+                            "RouteDetailDriverScreen/{routeId}".replace(
+                                oldValue = "{routeId}",
+                                newValue = "${route.routeID}"
+                            )
+                        )
+                    } else {
+                        navController.navigate(
+                            "RouteDetailGeneralScreen/{routeId}".replace(
+                                oldValue = "{routeId}",
+                                newValue = "${route.routeID}"
+                            )
+                        )
+                    }
                         },
                     colors = ButtonDefaults.elevatedButtonColors(
                         containerColor = MaterialTheme.colorScheme.primary
@@ -210,7 +233,7 @@ fun OrderCard(order: OrderForList, navController: NavHostController) {
                                 Text(text = order.orderName, color = Color.White)
                             }
                             Row(modifier = Modifier.weight(2f), horizontalArrangement = Arrangement.End) {
-                                Text(text = order.user, color = OrangeRC, fontWeight = FontWeight.Bold)
+                                Text(text = LocalConstants.userList.first{ user -> user.userId == order.userID }.name, color = OrangeRC, fontWeight = FontWeight.Bold)
                             }
                         }
                         Row(modifier = Modifier.padding(bottom = 2.dp, top = 2.dp), horizontalArrangement = Arrangement.SpaceBetween,

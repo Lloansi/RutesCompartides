@@ -2,26 +2,43 @@ package com.example.rutescompartidesapp.view.edit_profile
 
 import android.util.Patterns
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
+import com.example.rutescompartidesapp.data.domain.UserLocal
+import com.example.rutescompartidesapp.data.domain.session.SessionRepository
 import com.example.rutescompartidesapp.utils.Constants
+import com.example.rutescompartidesapp.utils.LocalConstants
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class EditProfileViewModel : ViewModel() {
+@HiltViewModel
+class EditProfileViewModel @Inject constructor(
+    private val sessionRepository: SessionRepository) : ViewModel() {
 
-    private val _userNameText = MutableStateFlow(Constants.userList[0].name)
+    private val _user = MutableStateFlow<UserLocal?>(null)
+    val user = _user.asStateFlow()
+
+    fun setUser(user: UserLocal){
+        _user.value = user
+    }
+
+
+    private val _userNameText = MutableStateFlow("")
     val userNameText = _userNameText.asStateFlow()
 
-    private val _firstNameText = MutableStateFlow(Constants.userList[0].name)
+    private val _firstNameText = MutableStateFlow("")
     val firstNameText = _firstNameText.asStateFlow()
 
-    private val _lastNameText = MutableStateFlow(Constants.userList[0].name)
+    private val _lastNameText = MutableStateFlow("")
     val lastNameText = _lastNameText.asStateFlow()
 
-    private val _emailText = MutableStateFlow(Constants.userList[0].email)
+    private val _emailText = MutableStateFlow("")
     val emailText = _emailText.asStateFlow()
 
-    private val _phoneText = MutableStateFlow(Constants.userList[0].phone.toString())
+    private val _phoneText = MutableStateFlow("")
     val phoneText = _phoneText.asStateFlow()
 
     fun userNameOnTextChange(value: String) {
@@ -79,16 +96,41 @@ class EditProfileViewModel : ViewModel() {
             _userNameText.value.isEmpty() ||
             _phoneText.value.isEmpty()
 
-        if (!Constants.userList.none { user -> user.name == _userNameText.value } ){
+
+        if (!LocalConstants.userList.none { user -> user.name == _userNameText.value } ){
             onUserNameError(true)
         } else if (!Patterns.EMAIL_ADDRESS.matcher(_emailText.value).matches()){
             onUserEmailError(true)
         } else if (!_phoneText.value.matches(Regex("^\\s?\\(?\\d{3}\\)?\\d{3}\\d{3}$"))) {
             onUserPhoneError(true)
         } else {
+            updateUser()
             navController.navigate("ProfileScreen") {
                 popUpTo("ProfileScreen") { inclusive = true }
             }
         }
     }
+
+    fun updateTextFieldsWithUserInfo(){
+        _userNameText.value = _user.value!!.name
+        _emailText.value = _user.value!!.email
+        _phoneText.value = _user.value!!.phone.toString()
+    }
+
+    private fun updateUser(){
+        LocalConstants.userList.first { it.userId == user.value!!.userId }.email = _emailText.value
+        LocalConstants.userList.first {  it.userId == user.value!!.userId }.name = _userNameText.value
+        LocalConstants.userList.first {  it.userId == user.value!!.userId }.phone = _phoneText.value.toInt()
+
+        /* Updatearía el email pero como lo hacemos en LOCAL
+         si hacemos esto no podremos hacer login porque
+         el email no será el mismo
+
+         viewModelScope.launch {
+            sessionRepository.updateEmail(_emailText.value)
+        }
+         */
+
+    }
+
 }

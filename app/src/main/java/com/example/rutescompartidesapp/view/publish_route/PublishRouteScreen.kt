@@ -84,12 +84,13 @@ import com.example.rutescompartidesapp.view.generic_components.StepTextField
 import com.example.rutescompartidesapp.view.generic_components.TimePickerDialog
 import com.example.rutescompartidesapp.view.generic_components.popups.ConditionScrollPopup
 import com.example.rutescompartidesapp.view.generic_components.popups.PopupScrolleable
+import com.example.rutescompartidesapp.view.login.LoginViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PublishRouteScreen(command: String, routeID: Int, navHost: NavHostController){
+fun PublishRouteScreen(command: String, routeID: Int, navHost: NavHostController, loginViewModel: LoginViewModel){
     val manageRouteViewModel = ManageRouteViewModel()
-
+    val user by loginViewModel.user.collectAsStateWithLifecycle()
     val currentStep by manageRouteViewModel.step.collectAsStateWithLifecycle()
     val routeName by manageRouteViewModel.internalRouteName.collectAsStateWithLifecycle()
     val originName by manageRouteViewModel.originName.collectAsStateWithLifecycle()
@@ -239,7 +240,8 @@ fun PublishRouteScreen(command: String, routeID: Int, navHost: NavHostController
                             tagsError,
                             tagsList,
                             comment,
-                            command
+                            command,
+                            user!!.userId
                         )
                     }
                 }
@@ -263,7 +265,8 @@ private fun PublishRouteContent3(
     tagsError: Boolean,
     tagsList: List<String>,
     comment: String,
-    command: String
+    command: String,
+    userID: Int
 ) {
 
     Row(
@@ -516,8 +519,8 @@ private fun PublishRouteContent3(
         PublishBackButton(manageRouteViewModel::previousStep)
         // Publish route button
         PublishButton( onClick = {  if(command == "create"){
-            manageRouteViewModel.addRoute()
-        } else manageRouteViewModel.updateRoute() },
+            manageRouteViewModel.addRoute(userID)
+        } else manageRouteViewModel.updateRoute(userID) },
 
             text = if(command == "create") "Publicar ruta" else "Editar ruta")
     }

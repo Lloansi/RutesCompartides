@@ -90,7 +90,7 @@ fun MapScreen(navController: NavHostController, mapViewModel: MapViewModel, sear
             ) {
                 Column {
                     SearchViewContainer(searchViewModel)
-                    FilteredListsBelowSearchBar(searchViewModel)
+                   // FilteredListsBelowSearchBar(searchViewModel)
                 }
             }
 

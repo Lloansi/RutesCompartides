@@ -2,7 +2,7 @@ package com.example.rutescompartidesapp.view.publish_route
 
 import androidx.lifecycle.ViewModel
 import com.example.rutescompartidesapp.data.domain.RouteForList
-import com.example.rutescompartidesapp.view.routes_order_list.ListConstants
+import com.example.rutescompartidesapp.utils.LocalConstants
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import java.time.Instant
@@ -400,12 +400,12 @@ class ManageRouteViewModel: ViewModel(){
 
     private val _routeAdded = MutableStateFlow(false)
     val routeAdded = _routeAdded.asStateFlow()
-    fun addRoute(){
+    fun addRoute(userID: Int){
         // TODO Cambiar la classe de la ruta i fer servir la oficial
-        val lastRouteID = ListConstants.routeList.maxByOrNull { route -> route.routeID }!!.routeID
+        val lastRouteID = LocalConstants.routeList.maxByOrNull { route -> route.routeID }!!.routeID
         // Elimina els punts intermitjos buits
         val cleanStepNameList = stepNameList.value.filter { step -> step.isNotEmpty() }
-        val newRoute = RouteForList(user = "Admin",
+        val newRoute = RouteForList(userID = userID,
             routeID = lastRouteID+1,
             routeName = _internalRouteName.value,
             puntSortida = _originName.value,
@@ -429,7 +429,7 @@ class ManageRouteViewModel: ViewModel(){
             )
         // TODO Fer un POST a la API per duplicar la ruta
 
-        if (ListConstants.routeList.add(newRoute)){
+        if (LocalConstants.routeList.add(newRoute)){
             onRouteAdded(true)
         }
     }
@@ -443,7 +443,7 @@ class ManageRouteViewModel: ViewModel(){
     private val _routeToEdit = MutableStateFlow<RouteForList?>(null)
     val routeToEdit = _routeToEdit.asStateFlow()
     fun getRoute(routeID: Int) {
-        _routeToEdit.value =  ListConstants.routeList.find { route -> route.routeID == routeID }!!
+        _routeToEdit.value =  LocalConstants.routeList.find { route -> route.routeID == routeID }!!
         updateRouteInfo()
     }
 
@@ -489,10 +489,10 @@ class ManageRouteViewModel: ViewModel(){
         }
     }
 
-    fun updateRoute(){
+    fun updateRoute(userID: Int){
         val cleanStepNameList = stepNameList.value.filter { step -> step.isNotEmpty() }
 
-        val updatedRoute = RouteForList(user = "Admin",
+        val updatedRoute = RouteForList(userID = userID,
             routeID = _routeToEdit.value!!.routeID,
             routeName = _internalRouteName.value,
             puntSortida = _originName.value,
@@ -517,8 +517,8 @@ class ManageRouteViewModel: ViewModel(){
         )
         println(updatedRoute)
         // TODO Fer un PUT a la API per actualitzar la ruta
-        if (ListConstants.routeList.removeIf { route -> route.routeID == updatedRoute.routeID }){
-            ListConstants.routeList.add(updatedRoute)
+        if (LocalConstants.routeList.removeIf { route -> route.routeID == updatedRoute.routeID }){
+            LocalConstants.routeList.add(updatedRoute)
             onRouteAdded(true)
         }
     }

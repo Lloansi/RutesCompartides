@@ -42,6 +42,10 @@ import com.example.rutescompartidesapp.view.edit_profile.EditProfileViewModel
 import com.example.rutescompartidesapp.view.faq.FaqScreen
 import com.example.rutescompartidesapp.view.faq.FaqViewModel
 import com.example.rutescompartidesapp.utils.Constants.ALL_PERMISSIONS
+import com.example.rutescompartidesapp.view.confirm_delivery.components.camera.CameraScreen
+import com.example.rutescompartidesapp.view.confirm_delivery.components.draw.DrawScreen
+import com.example.rutescompartidesapp.view.confirm_delivery.viewmodel.CameraViewModel
+import com.example.rutescompartidesapp.view.confirm_delivery.viewmodel.DrawViewModel
 import com.example.rutescompartidesapp.view.order_detail.OrderDetailScreen
 import com.example.rutescompartidesapp.view.login.LoginScreen
 import com.example.rutescompartidesapp.view.login.LoginViewModel
@@ -112,6 +116,8 @@ class MainActivity : ComponentActivity() {
                 val filterPopupViewModel = FilterPopupViewModel()
                 val routeOrderListViewModel = RoutesOrderListViewModel()
                 val searchViewModel: SearchViewModel = hiltViewModel()
+                val cameraViewModel = CameraViewModel()
+                val drawViewModel = DrawViewModel()
 
                 val navController = rememberNavController()
 
@@ -177,6 +183,8 @@ class MainActivity : ComponentActivity() {
                         filterPopupViewModel,
                         searchViewModel,
                         navController,
+                        cameraViewModel,
+                        drawViewModel,
                         Modifier.padding(paddingValues),
                     )
                 }
@@ -188,9 +196,11 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun ScreenNavigationConfiguration( mapViewModel: MapViewModel,mapViewModel2: MapViewModel2,loginViewModel: LoginViewModel, profileViewModel: ProfileViewModel,
                                    routeOrderListViewModel: RoutesOrderListViewModel, filterPopupViewModel: FilterPopupViewModel, searchViewModel: SearchViewModel,
-                                   navController: NavHostController, paddingModifier: Modifier) {
+                                   navController: NavHostController, cameraViewModel: CameraViewModel, drawViewModel: DrawViewModel,
 
-    NavHost(navController = navController, startDestination = Screens.RoutesOrderListScreen.route, modifier = paddingModifier) {
+                                   paddingModifier: Modifier) {
+
+    NavHost(navController = navController, startDestination = Screens.LoginScreen.route, modifier = paddingModifier) {
 
         composable(Screens.MapScreen.route) {
             MapScreen(navController, mapViewModel, searchViewModel)
@@ -201,7 +211,7 @@ fun ScreenNavigationConfiguration( mapViewModel: MapViewModel,mapViewModel2: Map
             }
             )) {
             val orderID = it.arguments?.getInt("orderID")
-            OrderDetailScreen(orderID!!, navController)
+            OrderDetailScreen(orderID!!, navController, loginViewModel)
         }
 
         composable(Screens.RouteDetailGeneralScreen.route,
@@ -213,10 +223,10 @@ fun ScreenNavigationConfiguration( mapViewModel: MapViewModel,mapViewModel2: Map
         }
 
         composable(Screens.RoutesOrderListScreen.route) {
-            RoutesOrderListScreen(navController, routeOrderListViewModel, filterPopupViewModel)
+            RoutesOrderListScreen(navController, routeOrderListViewModel, filterPopupViewModel, loginViewModel)
         }
         composable(Screens.ProfileScreen.route) {
-            ProfileScreen(profileViewModel, navController)
+            ProfileScreen(profileViewModel, loginViewModel, navController)
         }
         composable(Screens.LoginScreen.route) {
             LoginScreen(loginViewModel, navController)
@@ -230,7 +240,14 @@ fun ScreenNavigationConfiguration( mapViewModel: MapViewModel,mapViewModel2: Map
         })) {
             val routeID = it.arguments?.getInt("routeId")
             val routeDetailDriverViewModel = RouteDetailDriverViewModel(routeID!!)
-            RouteDetailDriverScreen(routeID, navController, routeDetailDriverViewModel)
+            RouteDetailDriverScreen(routeID, navController, routeDetailDriverViewModel,
+                cameraViewModel, drawViewModel)
+        }
+        composable(Screens.CameraScreen.route) {
+            CameraScreen(navController, cameraViewModel)
+        }
+        composable(Screens.DrawScreen.route) {
+            DrawScreen(navController, drawViewModel)
         }
 
         /*
@@ -248,7 +265,7 @@ fun ScreenNavigationConfiguration( mapViewModel: MapViewModel,mapViewModel2: Map
             FaqScreen(navController, FaqViewModel())
         }
         composable(Screens.EditProfileScreen.route) {
-            EditProfileScreen(EditProfileViewModel(), navController)
+            EditProfileScreen(loginViewModel, navController)
         }
         composable(Screens.ComFuncionaScreen.route) {
             ComFuncionaScreen(navController)
@@ -262,7 +279,7 @@ fun ScreenNavigationConfiguration( mapViewModel: MapViewModel,mapViewModel2: Map
                 })) {
             val command = it.arguments?.getString("command")
             val routeID = it.arguments?.getInt("routeID")
-            PublishRouteScreen(command!!, routeID = routeID!!, navController)
+            PublishRouteScreen(command!!, routeID = routeID!!, navController, loginViewModel)
         }
         composable(Screens.PublishOrderScreen.route,
             arguments = listOf(navArgument("command"){
@@ -273,7 +290,7 @@ fun ScreenNavigationConfiguration( mapViewModel: MapViewModel,mapViewModel2: Map
             })) {
             val command = it.arguments?.getString("command")
             val orderID = it.arguments?.getInt("orderID")
-            PublishOrderScreen(command!!, orderID = orderID!!, navController)
+            PublishOrderScreen(command!!, orderID = orderID!!, navController, loginViewModel)
         }
 
 

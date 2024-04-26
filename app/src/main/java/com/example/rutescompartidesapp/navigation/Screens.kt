@@ -22,4 +22,10 @@ sealed class Screens(
     object RouteDetailGeneralScreen: Screens("RouteDetailGeneralScreen/{routeId}")
 
 
+    /**
+     * Lista -> Detalle -> Editar ruta -> Detalle -> Detalle -> Editar ruta
+     * Deberia ser
+     * Lista -> Detalle -> Editar ruta -> Detalle -> Lista
+     */
+
 }

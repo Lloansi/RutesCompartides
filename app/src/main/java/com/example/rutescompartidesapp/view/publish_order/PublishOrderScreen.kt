@@ -81,12 +81,14 @@ import com.example.rutescompartidesapp.view.generic_components.PublishButton
 import com.example.rutescompartidesapp.view.generic_components.PublishNextButton
 import com.example.rutescompartidesapp.view.generic_components.popups.BasicPopup
 import com.example.rutescompartidesapp.view.generic_components.popups.ConditionScrollPopup
+import com.example.rutescompartidesapp.view.login.LoginViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PublishOrderScreen(command: String, orderID: Int, navHost: NavHostController) {
+fun PublishOrderScreen(command: String, orderID: Int, navHost: NavHostController, loginViewModel: LoginViewModel) {
     val manageOrderViewModel = ManageOrderViewModel()
 
+    val user by loginViewModel.user.collectAsStateWithLifecycle()
     // Screen 1 variables
     val currentStep by manageOrderViewModel.step.collectAsStateWithLifecycle()
     val orderName by manageOrderViewModel.internalOrderName.collectAsStateWithLifecycle()
@@ -233,7 +235,8 @@ fun PublishOrderScreen(command: String, orderID: Int, navHost: NavHostController
                         clientPhone,
                         isPuntHabitualDataChecked,
                         comment,
-                        command
+                        command,
+                        user!!.userId
                     )
                 }
             }
@@ -253,7 +256,8 @@ private fun PublishOrderContent3(
     clientPhone: String,
     isPuntHabitualDataChecked: Boolean,
     comment: String,
-    command: String
+    command: String,
+    userID: Int
 ) {
     // Delivery Note TextField
     Row(
@@ -347,8 +351,8 @@ private fun PublishOrderContent3(
         // Next Button
         PublishButton(
             onClick = {  if(command == "create"){
-                manageOrderViewModel.addOrder()
-            } else manageOrderViewModel.updateOrder() },
+                manageOrderViewModel.addOrder(userID)
+            } else manageOrderViewModel.updateOrder(userID) },
 
             text = if(command == "create") "Publicar comanda" else "Editar comanda"
         )
