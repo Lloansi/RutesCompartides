@@ -13,8 +13,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.rutescompartidesapp.view.map.viewModels.SearchViewModel
 
 @Composable
-fun SearchViewContainer() {
-    val searchViewModel: SearchViewModel = hiltViewModel()
+fun SearchViewContainer(searchViewModel: SearchViewModel) {
     Row (modifier = Modifier
         .offset(y = -(4).dp)
         .fillMaxWidth()

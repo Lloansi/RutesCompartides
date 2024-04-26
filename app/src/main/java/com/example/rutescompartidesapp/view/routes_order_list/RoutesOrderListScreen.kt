@@ -16,14 +16,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FilterAlt
 import androidx.compose.material.icons.filled.FilterAltOff
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.SearchBar
-import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -38,13 +35,11 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.example.rutescompartidesapp.view.routes_order_list.components.FilterPopup
-import com.example.rutescompartidesapp.view.routes_order_list.components.OutlinedFilterTextField
 import com.example.rutescompartidesapp.view.routes_order_list.components.TabRows
 import com.example.rutescompartidesapp.view.routes_order_list.viewmodels.FilterPopupViewModel
 import com.example.rutescompartidesapp.view.routes_order_list.viewmodels.RoutesOrderListViewModel
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RoutesOrderListScreen(navController: NavHostController, routeOrderListViewModel: RoutesOrderListViewModel, filterPopupViewModel: FilterPopupViewModel) {
     val searchText by routeOrderListViewModel.searchText.collectAsStateWithLifecycle()

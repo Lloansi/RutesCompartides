@@ -8,12 +8,12 @@ import kotlinx.coroutines.flow.asStateFlow
 import java.time.Instant
 import java.time.ZoneId
 
-class PublishOrderViewModel: ViewModel(){
+class ManageOrderViewModel: ViewModel(){
 
     private val _step = MutableStateFlow(1)
     val step = _step
 
-    fun nextStep(){
+    private fun nextStep(){
         _step.value = _step.value + 1
     }
 
@@ -158,7 +158,7 @@ class PublishOrderViewModel: ViewModel(){
     }
     /**
      * Converts the time picked from the DatePickerDialog to a string and updates the value of
-     * [_dataSortidaText] to the new value and dismisses the dialog
+     * [_minTimeArrivalText] or [_maxTimeArrivalText] to the new value and dismisses the dialog
      * @param datePicked Long: The time picked from the TimePickerDialog
      */
     fun onDatePickerDialogConfirm(datePicked: Long ){
@@ -179,6 +179,9 @@ class PublishOrderViewModel: ViewModel(){
 
     fun onFlexDateChange(){
         _isFlexDate.value = !_isFlexDate.value
+        if (_isFlexDate.value){
+            _maxTimeArrivalText.value = ""
+        }
     }
 
     // WantsCarpoolCheckbox
@@ -200,13 +203,19 @@ class PublishOrderViewModel: ViewModel(){
                 _isFirstFormCompleted.value = _internalOrderName.value.isNotEmpty() &&
                         _originName.value.isNotEmpty() &&
                         _destinationName.value.isNotEmpty() &&
-                        _minTimeArrivalText.value.isNotEmpty()
+                        _minTimeArrivalText.value.isNotEmpty() && if (_isFlexDate.value) true else _maxTimeArrivalText.value.isNotEmpty()
+                checkIfEmpty(1)
                 if (_isFirstFormCompleted.value){
                     nextStep()
                 }
             }
             2 -> {
-            _isSecondFormCompleted.value = _packagesNum.value.isNotEmpty()
+            _isSecondFormCompleted.value = _packagesNum.value.isNotEmpty() &&
+                    _packagesLength.value.isNotEmpty() &&
+                    _packagesWidth.value.isNotEmpty() &&
+                    packagesHeight.value.isNotEmpty() &&
+                    _packagesWeight.value.isNotEmpty()
+                checkIfEmpty(2)
                 if (_isSecondFormCompleted.value){
                     nextStep()
                 }
@@ -325,8 +334,10 @@ class PublishOrderViewModel: ViewModel(){
     val orderAdded = _orderAdded.asStateFlow()
     fun addOrder(){
         // TODO Cambiar la classe de la order i fer servir la oficial
+        val lastOrderID = ListConstants.orderList.maxByOrNull { order -> order.orderID }!!.orderID
+
         val newOrder = OrderForList(user = "Admin",
-            orderID = 0,
+            orderID = lastOrderID+1,
             orderName = _internalOrderName.value,
             puntSortida = _originName.value,
             puntArribada = _destinationName.value,
@@ -336,7 +347,17 @@ class PublishOrderViewModel: ViewModel(){
             isRefrigerat = _isRefrigerat.value,
             isCongelat = _isCongelat.value,
             isSenseHumitat = _isSenseHumitat.value,
-            etiquetes = tagsList.value
+            etiquetes = tagsList.value,
+            packagesNum = _packagesNum.value.toInt(),
+            packagesLength = _packagesLength.value.toFloat(),
+            packagesWidth = _packagesWidth.value.toFloat(),
+            packagesHeight = packagesHeight.value.toFloat(),
+            packagesWeight = _packagesWeight.value.toFloat(),
+            packagesFragile = _arePackagesFragile.value,
+            co2Saved = 0.0f,
+            distance = 0.0f,
+            comment = _comment.value
+
         )
         // TODO Fer un POST a la API per duplicar la ruta
 
@@ -347,6 +368,109 @@ class PublishOrderViewModel: ViewModel(){
 
     fun onOrderAdded(isOrderAdded: Boolean){
         _orderAdded.value = isOrderAdded
+    }
+
+    // Edit Order
+    // Get the order
+    private val _orderToEdit = MutableStateFlow<OrderForList?>(null)
+    val orderToEdit = _orderToEdit.asStateFlow()
+    fun getOrder(orderID: Int) {
+        _orderToEdit.value =  ListConstants.orderList.find { order -> order.orderID == orderID }!!
+        updateOrderInfo()
+    }
+
+    private fun updateOrderInfo(){
+        _internalOrderName.value = _orderToEdit.value!!.orderName
+        _originName.value = _orderToEdit.value!!.puntSortida
+        _destinationName.value = _orderToEdit.value!!.puntArribada
+        //TODO revisar esto
+        _minTimeArrivalText.value = _orderToEdit.value!!.dataSortida
+        _maxTimeArrivalText.value = _orderToEdit.value!!.horaSortida
+        _isIsoterm.value = _orderToEdit.value!!.isIsoterm
+        _isRefrigerat.value = _orderToEdit.value!!.isRefrigerat
+        _isCongelat.value = _orderToEdit.value!!.isCongelat
+        _isSenseHumitat.value = _orderToEdit.value!!.isSenseHumitat
+        _packagesNum.value = _orderToEdit.value!!.packagesNum.toString()
+        _packagesLength.value = _orderToEdit.value!!.packagesLength.toString()
+        _packagesWidth.value = _orderToEdit.value!!.packagesWidth.toString()
+        _packagesHeight.value = _orderToEdit.value!!.packagesHeight.toString()
+        _packagesWeight.value = _orderToEdit.value!!.packagesWeight.toString()
+        _arePackagesFragile.value = _orderToEdit.value!!.packagesFragile
+        _comment.value = _orderToEdit.value!!.comment ?: ""
+
+        // Etiquetes i freqüència
+        _orderToEdit.value?.etiquetes.let { etiquetes ->
+            if (etiquetes != null) {
+                _tagsList.value = etiquetes
+            }
+        }
+    }
+
+    fun updateOrder(){
+        val updatedOrder = OrderForList(user = "Admin",
+            orderID = _orderToEdit.value!!.orderID,
+            orderName = _internalOrderName.value,
+            puntSortida = _originName.value,
+            puntArribada = _destinationName.value,
+            dataSortida = _minTimeArrivalText.value,
+            horaSortida = _maxTimeArrivalText.value,
+            isIsoterm = _isIsoterm.value,
+            isRefrigerat = _isRefrigerat.value,
+            isCongelat = _isCongelat.value,
+            isSenseHumitat = _isSenseHumitat.value,
+            etiquetes = tagsList.value,
+            packagesNum = _packagesNum.value.toInt(),
+            packagesLength = _packagesLength.value.toFloat(),
+            packagesWidth = _packagesWidth.value.toFloat(),
+            packagesHeight = packagesHeight.value.toFloat(),
+            packagesWeight = _packagesWeight.value.toFloat(),
+            packagesFragile = _arePackagesFragile.value,
+            co2Saved = 0.0f,
+            distance = 0.0f,
+            comment = _comment.value
+        )
+        // TODO Fer un PUT a la API per actualitzar la ruta
+        if (ListConstants.orderList.removeIf { order -> order.orderID == updatedOrder.orderID }){
+            ListConstants.orderList.add(updatedOrder)
+            onOrderAdded(true)
+        }
+    }
+
+    // Control de errors
+    private val _screen1Errors = MutableStateFlow(List(5) { false })
+    val screen1Errors = _screen1Errors.asStateFlow()
+
+    private val _screen2Errors = MutableStateFlow(List(5) { false })
+    val screen2Errors = _screen2Errors.asStateFlow()
+
+    private fun checkIfEmpty(step: Int){
+
+        when(step){
+            1 -> {
+                val maxTimeisEmpty = !_isFlexDate.value
+
+                val screen1Errors = listOf(
+                    _internalOrderName.value.isEmpty(),
+                    _originName.value.isEmpty(),
+                    _destinationName.value.isEmpty(),
+                    _minTimeArrivalText.value.isEmpty(),
+                    maxTimeisEmpty
+                )
+
+                _screen1Errors.value = screen1Errors
+            }
+            2 -> {
+                val screen2Errors = listOf(
+                    _packagesNum.value.isEmpty(),
+                    _packagesLength.value.isEmpty(),
+                    _packagesWidth.value.isEmpty(),
+                    packagesHeight.value.isEmpty(),
+                    _packagesWeight.value.isEmpty(),
+                    )
+                _screen2Errors.value = screen2Errors
+            }
+        }
+
     }
 
 

@@ -28,11 +28,27 @@ fun ExpandableFloatingButton(navController: NavHostController) {
         if (isExpanded) {
             MiniFloatingButton(
                 icon = Icons.Filled.Directions,
-                onClick = { navController.navigate("PublishRouteScreen") }
+                onClick = {
+                    navController.navigate(
+                        "PublishRouteScreen/{command}/{routeID}".replace(
+                            oldValue = "{command}",
+                            newValue = "create"
+                        ).replace(
+                            oldValue = "{routeID}",
+                            newValue = "0"
+                        ))
+                }
             )
             MiniFloatingButton(
                 icon = Icons.Default.CardTravel,
-                onClick = { navController.navigate("PublishOrderScreen") }
+                onClick = {  navController.navigate(
+                    "PublishOrderScreen/{command}/{orderID}".replace(
+                        oldValue = "{command}",
+                        newValue = "create"
+                    ).replace(
+                        oldValue = "{orderID}",
+                        newValue = "0"
+                    )) }
             )
         }
         FloatingActionButton(

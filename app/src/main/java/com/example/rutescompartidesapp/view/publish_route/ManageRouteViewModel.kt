@@ -9,7 +9,7 @@ import java.time.Instant
 import java.time.ZoneId
 import java.util.Calendar
 
-class PublishRouteViewModel: ViewModel(){
+class ManageRouteViewModel: ViewModel(){
 
     private val _step = MutableStateFlow(1)
     val step = _step
@@ -250,6 +250,8 @@ class PublishRouteViewModel: ViewModel(){
                         _originName.value.isNotEmpty() && _destinationName.value.isNotEmpty() &&
                         _dateDepart.value.isNotEmpty() && _dateArrival.value.isNotEmpty() &&
                         _timeDepartText.value.isNotEmpty() && _timeArrivalText.value.isNotEmpty()
+                checkIfEmpty(1)
+
                 if (_isFirstFormCompleted.value) {
                     nextStep()
                 } else {
@@ -258,7 +260,12 @@ class PublishRouteViewModel: ViewModel(){
             }
             2 -> {
                 _isSecondFormCompleted.value = _availableSpace.value.isNotEmpty()
-                        && _vehicle.value.isNotEmpty()
+                        && _vehicle.value.isNotEmpty() && _availableSeats.value.isNotEmpty()
+                        && _costKM.value.isNotEmpty() && _maxDetourKm.value.isNotEmpty()
+
+                checkIfEmpty(2)
+
+
                 if (_isSecondFormCompleted.value) {
                     nextStep()
                 } else {
@@ -395,12 +402,15 @@ class PublishRouteViewModel: ViewModel(){
     val routeAdded = _routeAdded.asStateFlow()
     fun addRoute(){
         // TODO Cambiar la classe de la ruta i fer servir la oficial
+        val lastRouteID = ListConstants.routeList.maxByOrNull { route -> route.routeID }!!.routeID
+        // Elimina els punts intermitjos buits
+        val cleanStepNameList = stepNameList.value.filter { step -> step.isNotEmpty() }
         val newRoute = RouteForList(user = "Admin",
-            routeID = 0,
+            routeID = lastRouteID+1,
             routeName = _internalRouteName.value,
             puntSortida = _originName.value,
             puntArribada = _destinationName.value,
-            puntsIntermedis = stepNameList.value,
+            puntsIntermedis = cleanStepNameList,
             dataSortida = _dateDepart.value,
             horaSortida = timeDepartText.value,
             dataArribada = dateArrival.value,
@@ -409,7 +419,13 @@ class PublishRouteViewModel: ViewModel(){
             isRefrigerat = _isRefrigerat.value,
             isCongelat = _isCongelat.value,
             isSenseHumitat = _isSenseHumitat.value,
-            etiquetes = tagsList.value
+            etiquetes = tagsList.value,
+            vehicle = _vehicle.value,
+            costKm = _costKM.value.toFloat(),
+            maxDetourKm = _maxDetourKm.value.toFloat(),
+            availableSeats = _availableSeats.value.toInt(),
+            availableSpace = _availableSpace.value,
+            comment = _comment.value
             )
         // TODO Fer un POST a la API per duplicar la ruta
 
@@ -420,6 +436,127 @@ class PublishRouteViewModel: ViewModel(){
 
     fun onRouteAdded(isRouteAdded: Boolean){
         _routeAdded.value = isRouteAdded
+    }
+
+
+    // Get the route
+    private val _routeToEdit = MutableStateFlow<RouteForList?>(null)
+    val routeToEdit = _routeToEdit.asStateFlow()
+    fun getRoute(routeID: Int) {
+        _routeToEdit.value =  ListConstants.routeList.find { route -> route.routeID == routeID }!!
+        updateRouteInfo()
+    }
+
+    private fun updateRouteInfo(){
+        _internalRouteName.value = _routeToEdit.value!!.routeName
+        _originName.value = _routeToEdit.value!!.puntSortida
+        _destinationName.value = _routeToEdit.value!!.puntArribada
+        _dateDepart.value = _routeToEdit.value!!.dataSortida
+        _timeDepartText.value = _routeToEdit.value!!.horaSortida
+        _dateArrival.value = _routeToEdit.value!!.dataArribada
+        _timeArrivalText.value = _routeToEdit.value!!.horaArribada
+        _isIsoterm.value = _routeToEdit.value!!.isIsoterm
+        _isRefrigerat.value = _routeToEdit.value!!.isRefrigerat
+        _isCongelat.value = _routeToEdit.value!!.isCongelat
+        _isSenseHumitat.value = _routeToEdit.value!!.isSenseHumitat
+        _vehicle.value = _routeToEdit.value!!.vehicle ?: ""
+        _costKM.value = _routeToEdit.value!!.costKm.toString()
+        _maxDetourKm.value = _routeToEdit.value!!.maxDetourKm.toString()
+        _availableSeats.value = _routeToEdit.value!!.availableSeats.toString()
+        _availableSpace.value = _routeToEdit.value!!.availableSpace ?: ""
+        _comment.value = _routeToEdit.value!!.comment ?: ""
+
+        // Etiquetes i freqüència
+        _routeToEdit.value?.etiquetes.let { etiquetes ->
+            if (etiquetes != null) {
+                _tagsList.value = etiquetes
+                _tagsList.value.forEach { tag ->
+                    when (tag) {
+                        "diaria" -> _routeFrequency.value = "Diaria"
+                        "setmanal" -> _routeFrequency.value = "Setmanal"
+                        "mensual" -> _routeFrequency.value = "Mensual"
+                        "bimensual" -> _routeFrequency.value = "Bimensual"
+                    }
+                }
+            }
+        }
+        // Punts intermitjos
+        _routeToEdit.value?.puntsIntermedis.let { puntsIntermedis ->
+            if (puntsIntermedis != null) {
+                _stepLocationsNumber.value = puntsIntermedis.size
+                updateStepNameList(puntsIntermedis)
+            }
+        }
+    }
+
+    fun updateRoute(){
+        val cleanStepNameList = stepNameList.value.filter { step -> step.isNotEmpty() }
+
+        val updatedRoute = RouteForList(user = "Admin",
+            routeID = _routeToEdit.value!!.routeID,
+            routeName = _internalRouteName.value,
+            puntSortida = _originName.value,
+            puntArribada = _destinationName.value,
+            puntsIntermedis = cleanStepNameList,
+            dataSortida = _dateDepart.value,
+            horaSortida = timeDepartText.value,
+            dataArribada = dateArrival.value,
+            horaArribada = timeArrivalText.value,
+            isIsoterm = _isIsoterm.value,
+            isRefrigerat = _isRefrigerat.value,
+            isCongelat = _isCongelat.value,
+            isSenseHumitat = _isSenseHumitat.value,
+            etiquetes = _tagsList.value,
+            vehicle = _vehicle.value,
+            costKm = _costKM.value.toFloat(),
+            maxDetourKm = _maxDetourKm.value.toFloat(),
+            availableSeats = _availableSeats.value.toInt(),
+            availableSpace = _availableSpace.value,
+            comment = _comment.value
+
+        )
+        println(updatedRoute)
+        // TODO Fer un PUT a la API per actualitzar la ruta
+        if (ListConstants.routeList.removeIf { route -> route.routeID == updatedRoute.routeID }){
+            ListConstants.routeList.add(updatedRoute)
+            onRouteAdded(true)
+        }
+    }
+    // Control de errors
+    private val _screen1Errors = MutableStateFlow(List(7) { false })
+    val screen1Errors = _screen1Errors.asStateFlow()
+
+    private val _screen2Errors = MutableStateFlow(List(5) { false })
+    val screen2Errors = _screen2Errors.asStateFlow()
+
+    private fun checkIfEmpty(step: Int){
+
+        when(step){
+            1 -> {
+                val screen1Errors = listOf(
+                    _internalRouteName.value.isEmpty(),
+                    _originName.value.isEmpty(),
+                    _destinationName.value.isEmpty(),
+                    _dateDepart.value.isEmpty(),
+                    _timeDepartText.value.isEmpty(),
+                    _dateArrival.value.isEmpty(),
+                    _timeArrivalText.value.isEmpty()
+                )
+                _screen1Errors.value = screen1Errors
+            }
+            2 -> {
+                val screen2Errors = listOf(
+                    _maxDetourKm.value.isEmpty(),
+                    _availableSeats.value.isEmpty(),
+                    _availableSpace.value.isEmpty(),
+                    _costKM.value.isEmpty(),
+                    _vehicle.value.isEmpty(),
+
+                )
+                _screen2Errors.value = screen2Errors
+            }
+        }
+
     }
 
 }

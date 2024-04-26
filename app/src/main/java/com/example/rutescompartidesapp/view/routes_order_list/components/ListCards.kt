@@ -3,6 +3,8 @@ package com.example.rutescompartidesapp.view.routes_order_list.components
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -41,10 +43,11 @@ import com.example.rutescompartidesapp.ui.theme.BlueRC
 import com.example.rutescompartidesapp.ui.theme.MateBlackRC
 import com.example.rutescompartidesapp.ui.theme.OrangeRC
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun RoutePoints(route: RouteForList){
-    Row (modifier = Modifier.padding(bottom = 2.dp, top = 2.dp), horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically) {
+    FlowRow (modifier = Modifier.padding(bottom = 2.dp, top = 2.dp),
+        verticalArrangement = Arrangement.Center) {
         Icon(
             imageVector = Icons.Outlined.Flag, contentDescription = "Start Point Icon",
             tint = OrangeRC
@@ -61,31 +64,30 @@ fun RoutePoints(route: RouteForList){
         })
         Icon(imageVector = Icons.Filled.ChevronRight, contentDescription = "Intermediate Point Icon",
             tint = Color.White)
-    }
-    if (!route.puntsIntermedis.isNullOrEmpty()){
-        LazyRow(content = {
+        if (!route.puntsIntermedis.isNullOrEmpty()){
             route.puntsIntermedis.forEach { puntIntermig ->
-                item {
-                    Text(text = puntIntermig, color = Color.White)
-                    Icon(imageVector = Icons.Filled.ChevronRight, contentDescription = "Intermediate Point Icon",
-                        tint = Color.White)
+                Text(text = puntIntermig, color = Color.White)
+                Icon(imageVector = Icons.Filled.ChevronRight, contentDescription = "Intermediate Point Icon",
+                    tint = Color.White)
+
+            }
+        }
+       Row {
+            Icon(
+                imageVector = Icons.Filled.Flag, contentDescription = "End Point Icon",
+                tint = OrangeRC
+            )
+            Text(text = buildAnnotatedString {
+                withStyle(
+                    style = SpanStyle(
+                        fontWeight = FontWeight.Bold,
+                        color = OrangeRC
+                    )
+                ) {
+                    append(route.puntArribada)
                 }
-            }
-        })
-    }
-    Row(modifier = Modifier.padding(bottom = 2.dp, top = 2.dp), horizontalArrangement = Arrangement.SpaceBetween) {
-        Icon(imageVector = Icons.Filled.Flag, contentDescription = "End Point Icon",
-            tint = OrangeRC)
-        Text(text = buildAnnotatedString {
-            withStyle(
-                style = SpanStyle(
-                    fontWeight = FontWeight.Bold,
-                    color = OrangeRC
-                )
-            ) {
-                append(route.puntArribada)
-            }
-        })
+            })
+        }
     }
 
 }
@@ -112,11 +114,15 @@ fun RouteCardHeader(route: RouteForList){
 @Composable
 fun RouteCard(route: RouteForList, navController: NavHostController) {
     Column{
-        ElevatedCard (modifier = Modifier.fillMaxWidth(0.95f)
-            .clickable {  navController.navigate("RouteDetailDriverScreen/{routeId}".replace(
-                oldValue = "{routeId}",
-                newValue = "${route.routeID}"
-            ) )
+        ElevatedCard (modifier = Modifier
+            .fillMaxWidth(0.95f)
+            .clickable {
+                navController.navigate(
+                    "RouteDetailDriverScreen/{routeId}".replace(
+                        oldValue = "{routeId}",
+                        newValue = "${route.routeID}"
+                    )
+                )
             },
             colors = CardDefaults.elevatedCardColors(
                 containerColor = Color.White)) {
@@ -182,11 +188,16 @@ fun RouteCard(route: RouteForList, navController: NavHostController) {
 @Composable
 fun OrderCard(order: OrderForList, navController: NavHostController) {
     Column{
-        ElevatedCard (modifier = Modifier.fillMaxWidth(0.95f)
-            .clickable {  navController.navigate("OrderDetailScreen/{packageId}".replace(
-                oldValue = "{packageId}",
-                newValue = "${order.orderID}"
-            ) )  },
+        ElevatedCard (modifier = Modifier
+            .fillMaxWidth(0.95f)
+            .clickable {
+                navController.navigate(
+                    "OrderDetailScreen/{orderID}".replace(
+                        oldValue = "{orderID}",
+                        newValue = "${order.orderID}"
+                    )
+                )
+            },
             colors = CardDefaults.elevatedCardColors(
                 containerColor = Color.White)){
             Row {

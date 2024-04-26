@@ -6,7 +6,7 @@ import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import com.example.rutescompartidesapp.data.domain.auth.AuthRequest
 import com.example.rutescompartidesapp.data.domain.session.SessionRepository
-import com.example.rutescompartidesapp.data.network.repository.RutesCompartidesRepository
+import com.example.rutescompartidesapp.data.network.rutes_compartides.repository.RutesCompartidesRepository
 import com.example.rutescompartidesapp.utils.Constants
 import com.example.rutescompartidesapp.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,7 +20,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor (
-    val rutesCompartidesRepository: RutesCompartidesRepository,
+    private val rutesCompartidesRepository: RutesCompartidesRepository,
     private val sessionRepository: SessionRepository
 ): ViewModel(){
 

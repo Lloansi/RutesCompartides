@@ -3,128 +3,115 @@ package com.example.rutescompartidesapp.view.confirm_delivery
 import android.graphics.Bitmap
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Upload
-import androidx.compose.material3.Card
-import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ElevatedButton
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
+import com.example.rutescompartidesapp.ui.theme.GrayRC
 import com.example.rutescompartidesapp.view.confirm_delivery.viewmodel.CameraViewModel
 import com.example.rutescompartidesapp.view.confirm_delivery.viewmodel.DrawViewModel
+import com.example.rutescompartidesapp.view.generic_components.RouteOrderHeader
 import com.example.rutescompartidesapp.view.map.fredokaOneFamily
+import com.example.rutescompartidesapp.view.route_detail.route_detail_driver.RouteDetailDriverViewModel
 
 
 @Composable
-fun
-        ConfirmScreen(navController: NavHostController, cameraViewModel: CameraViewModel, drawViewModel: DrawViewModel) {
-    val bitmapPhoto by cameraViewModel.bitmapPhoto.collectAsState()
-    val bitmapDraw by drawViewModel.drawBitmap.collectAsState()
-    val responsiveHeight = LocalConfiguration.current.screenHeightDp.dp
-    val responsiveWidth = LocalConfiguration.current.screenWidthDp.dp
-    Surface(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(
-                top = responsiveHeight / 40,
-                bottom = responsiveHeight / 40,
-                start = responsiveWidth / 20,
-                end = responsiveWidth / 20
-            ),
-        //color = Color.White
-    ) {
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            ConfirmCard(responsiveHeight, navController, bitmapPhoto, bitmapDraw)
-        }
+fun ConfirmScreen(
+    routeDetailDriverViewModel : RouteDetailDriverViewModel,
+    navController: NavHostController,
+    cameraViewModel: CameraViewModel, drawViewModel: DrawViewModel) {
+    val bitmapPhoto by cameraViewModel.bitmapPhoto.collectAsStateWithLifecycle()
+    val bitmapDraw by drawViewModel.drawBitmap.collectAsStateWithLifecycle()
+
+    val route by routeDetailDriverViewModel.route.collectAsStateWithLifecycle()
+    val order by routeDetailDriverViewModel.order.collectAsStateWithLifecycle()
+
+    ElevatedCard (
+        modifier = Modifier.fillMaxHeight()
+            .padding(start = 8.dp, end = 8.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.primaryContainer,
+            contentColor = MaterialTheme.colorScheme.onSurface
+        ),
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 4.dp
+        )
+    ){Row {
+        RouteOrderHeader(route = route!!, order!!)
     }
-}
-
-@Composable
-fun ConfirmCard(responsiveHeight: Dp, navController: NavHostController,  bitmap1: Bitmap?,  bitmap2: Bitmap?) {
-    Card (
-        modifier = Modifier
-            .fillMaxWidth(),
-    ){
-        // Card
-        Spacer(modifier = Modifier.height(responsiveHeight/50))
-
         Column (
             modifier = Modifier
-                .padding()
-                .padding(
-                    start = LocalConfiguration.current.screenWidthDp.dp / 15,
-                    end = LocalConfiguration.current.screenWidthDp.dp / 15
-                )
+                .padding(start = 8.dp, end = 8.dp, top = 8.dp)
         ){
-            Column (
-                modifier = Modifier
-                    .padding()
-                    .padding(bottom = responsiveHeight / 90)
-            ){
-                Text(text = "Foto de l'entrega (opcional)", fontFamily = fredokaOneFamily)
-                Spacer(modifier = Modifier.height(responsiveHeight/90))
-                UploadImageOrSignature(icon = Icons.Filled.Upload, navController = navController, destination = "CameraScreen", bitmap = bitmap1)
-                Spacer(modifier = Modifier.height(responsiveHeight/40))
-                Text(text = "Signatura del/de la receptor/a (opcional) ", fontFamily = fredokaOneFamily)
-                Spacer(modifier = Modifier.height(responsiveHeight/90))
-                UploadImageOrSignature(icon = Icons.Filled.Upload, navController = navController, destination = "DrawScreen", bitmap = bitmap2)
-                Spacer(modifier = Modifier.height(responsiveHeight/40))
+            Text(text = "Foto de l'entrega (opcional)", fontFamily = fredokaOneFamily)
+            Spacer(modifier = Modifier.padding(6.dp))
+            UploadImageOrSignature(icon = Icons.Filled.Upload, navController = navController, destination = "CameraScreen", bitmap = bitmapPhoto)
+            Spacer(modifier = Modifier.padding(8.dp))
+            Text(text = "Signatura del/de la receptor/a (opcional) ", fontFamily = fredokaOneFamily)
+            Spacer(modifier = Modifier.padding(6.dp))
+            UploadImageOrSignature(icon = Icons.Filled.Upload, navController = navController, destination = "DrawScreen", bitmap = bitmapDraw)
+            Spacer(modifier = Modifier.padding(8.dp))
+            Text(text = "Comentaris", fontFamily = fredokaOneFamily)
+            Spacer(modifier = Modifier.padding(6.dp))
+            UserCommentContainer(routeDetailDriverViewModel)
+            Spacer(modifier = Modifier.padding(8.dp))
+        }
+
+
+    } // END CARD
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(12.dp),
+        horizontalArrangement = Arrangement.Center
+    ){
+        ElevatedButton(
+            colors = ButtonDefaults.elevatedButtonColors(
+                contentColor = MaterialTheme.colorScheme.secondary,
+                containerColor = MaterialTheme.colorScheme.primary
+            ),
+            contentPadding = PaddingValues(16.dp),
+            onClick = {
+                routeDetailDriverViewModel.completeOrder()
             }
-            Column {
-                Text(text = "Comentaris")
-                UserCommentContainer()
-                Spacer(modifier = Modifier.height(responsiveHeight/40))
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding()
-                        .padding(bottom = responsiveHeight / 40),
-                    horizontalArrangement = Arrangement.Center
-                ){
-                    ExtendedFloatingActionButton(
-                        containerColor = MaterialTheme.colorScheme.primary,
-                        onClick = { /*TODO*/ }
-                    ) {
-                        Text(text = "Confirmar entrega")
-                    }
-                }
-            }
+        ) {
+            Text(text = "Confirmar entrega",
+                style = MaterialTheme.typography.titleMedium
+            )
         }
     }
 }
 
 @Composable
-fun UploadImageOrSignature(icon : ImageVector, navController: NavHostController, destination: String , bitmap: Bitmap?){
+fun UploadImageOrSignature(
+    icon : ImageVector,
+    navController: NavHostController, destination: String , bitmap: Bitmap?){
     Row (
         verticalAlignment = Alignment.CenterVertically
     ){
@@ -140,7 +127,7 @@ fun UploadImageOrSignature(icon : ImageVector, navController: NavHostController,
         ) {
             Icon(imageVector = icon, contentDescription = "Upload")
         }
-        Spacer(modifier = Modifier.width(LocalConfiguration.current.screenWidthDp.dp/75))
+        Spacer(modifier = Modifier.padding(6.dp))
 
         if (bitmap != null){
             Text(text = "Foto seleccionada correctament")
@@ -167,27 +154,28 @@ fun UploadImageOrSignature(icon : ImageVector, navController: NavHostController,
 }
 
 @Composable
-fun UserCommentContainer() {
-    var userComment by rememberSaveable { mutableStateOf("") }
+fun UserCommentContainer(routeDetailDriverViewModel: RouteDetailDriverViewModel) {
+    val userComment by routeDetailDriverViewModel.userComment.collectAsStateWithLifecycle()
 
-    TextField(
+    OutlinedTextField(
         value = userComment ,
-        onValueChange = {
-           userComment = it
-        },
+        onValueChange = { routeDetailDriverViewModel.setUserComment(it) },
         modifier = Modifier
             .fillMaxWidth()
-            .fillMaxHeight(0.3f),
-        label = { Text(color = Color.Gray ,text = "Escriu aquí el teu comentari") },
+            .height(LocalConfiguration.current.screenHeightDp.dp * 0.22f),
+        placeholder = { Text(color = Color.Gray ,text = "Escriu aquí el teu comentari") },
         singleLine = false,
         maxLines = 4,
+        shape = RoundedCornerShape(16.dp),
         colors = TextFieldDefaults.colors(
-            focusedContainerColor = MaterialTheme.colorScheme.surface,
-            unfocusedContainerColor = MaterialTheme.colorScheme.surface,
-            disabledContainerColor = MaterialTheme.colorScheme.surface,
-            cursorColor = MaterialTheme.colorScheme.primary,
-            focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent,
+            focusedIndicatorColor = MaterialTheme.colorScheme.primary,
+            unfocusedIndicatorColor = Color.Gray,
+            disabledContainerColor = MaterialTheme.colorScheme.background,
+            disabledIndicatorColor = Color.Gray,
+            focusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
+            unfocusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
+            errorTextColor = MaterialTheme.colorScheme.primary,
+            errorContainerColor = GrayRC
         )
     )
 }

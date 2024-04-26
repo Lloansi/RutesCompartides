@@ -24,6 +24,24 @@ class RoutesOrderListViewModel: ViewModel() {
     private val _isSearching = MutableStateFlow(false)
     val isSearching = _isSearching.asStateFlow()
 
+    // Filter my list of routes and orders
+    private val _isMyFilterActive = MutableStateFlow(false)
+    val isMyFilterActive = _isMyFilterActive.asStateFlow()
+
+    fun onMyFilterActive(username: String) {
+        _isMyFilterActive.value = !_isMyFilterActive.value
+        val myRoutes = _routes.value.filter { it.user == username}.toMutableList()
+        val myOrders = _orders.value.filter { it.user == username}.toMutableList()
+
+        if (_isMyFilterActive.value){
+            _routes.value = myRoutes
+            _orders.value = myOrders
+        } else {
+            _routes.value = ListConstants.routeList
+            _orders.value = ListConstants.orderList
+        }
+    }
+
     // List of filters queries
     private val _queryList = MutableStateFlow(
         ListQuery("", "", "", "",
@@ -84,9 +102,6 @@ class RoutesOrderListViewModel: ViewModel() {
         _searchText.value = text
     }
 
-    fun onToogleSearch(isSearching: Boolean) {
-        _isSearching.value = isSearching
-    }
 
     /**
      * Function to filter the routes and orders.

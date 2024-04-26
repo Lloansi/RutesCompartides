@@ -182,7 +182,8 @@ fun ValueExperienceGeneralScreen(routeID: Int, navHost: NavHostController) {
                     MultilineTextField(
                         value = comment,
                         onValueChange = valueExperienceViewModel::setComment,
-                        placeholder = ""
+                        placeholder = "",
+                        isError = false
                     )
                 }
                 // Buttons

@@ -51,6 +51,7 @@ fun RouteInteractionCard(interaction: RouteInteraction, index: Int, routeDetailD
     var button2IconTint = Color.White
     var button1Icon = Icons.Default.Delete
     var button2Icon = Icons.Default.Delete
+    // Will change the function later in the when block
     var button1OnClick: () -> Unit = { /*TODO*/ }
     var button2OnClick: () -> Unit = { /*TODO*/ }
 
@@ -64,7 +65,8 @@ fun RouteInteractionCard(interaction: RouteInteraction, index: Int, routeDetailD
             button1Color = MateBlackRC
             button1Icon = Icons.Filled.Check
             button1IconTint = Color.White
-            button1OnClick = { routeDetailDriverViewModel.showCompletePopup(true) }
+            button1OnClick = { routeDetailDriverViewModel.setRouteToConfirm(interaction)
+            }
             button2IconTint = Color.Black
             button2Text = "Declinar"
             button2Color = RedRC

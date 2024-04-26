@@ -25,6 +25,17 @@ data class Order (
         packageWeight = packageWeight.roundTo1Decimal()
     }
      */
+    fun doesMatchSearchQuery(query: String): Boolean {
+        val matchingCombinations = listOf(
+            packageStartPoint,
+            packageEndPoint,
+            "${packageStartPoint.first()}",
+            "${packageEndPoint.first()}"
+        )
+        return matchingCombinations.any {
+            it.contains(query, ignoreCase = true)
+        }
+    }
 
 
 }

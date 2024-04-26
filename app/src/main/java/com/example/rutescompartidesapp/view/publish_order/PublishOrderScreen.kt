@@ -29,6 +29,7 @@ import androidx.compose.material.icons.filled.QuestionMark
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDefaults
 import androidx.compose.material3.DatePickerDialog
@@ -83,52 +84,73 @@ import com.example.rutescompartidesapp.view.generic_components.popups.ConditionS
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PublishOrderScreen(navHost: NavHostController) {
-    val publishOrderViewModel = PublishOrderViewModel()
+fun PublishOrderScreen(command: String, orderID: Int, navHost: NavHostController) {
+    val manageOrderViewModel = ManageOrderViewModel()
 
     // Screen 1 variables
-    val currentStep by publishOrderViewModel.step.collectAsStateWithLifecycle()
-    val orderName by publishOrderViewModel.internalOrderName.collectAsStateWithLifecycle()
-    val originName by publishOrderViewModel.originName.collectAsStateWithLifecycle()
-    val destinationName by publishOrderViewModel.destinationName.collectAsStateWithLifecycle()
-    val minTimeArrival by publishOrderViewModel.minTimeArrivalText.collectAsStateWithLifecycle()
-    val maxTimeArrival by publishOrderViewModel.maxTimeArrivalText.collectAsStateWithLifecycle()
-    val isDatePickerShowing by publishOrderViewModel.datePickerDialogIsShowing.collectAsStateWithLifecycle()
-    val isCondicionsPopupShowing by publishOrderViewModel.isCondicionsPopupShowing.collectAsStateWithLifecycle()
-    val isIsoterm by publishOrderViewModel.isIsoterm.collectAsStateWithLifecycle()
-    val isRefrigerat by publishOrderViewModel.isRefrigerat.collectAsStateWithLifecycle()
-    val isCongelat by publishOrderViewModel.isCongelat.collectAsStateWithLifecycle()
-    val isSenseHumitat by publishOrderViewModel.isSenseHumitat.collectAsStateWithLifecycle()
-    val tagsText by publishOrderViewModel.tagsText.collectAsStateWithLifecycle()
-    val tagsList by publishOrderViewModel.tagsList.collectAsStateWithLifecycle()
-    val tagsError by publishOrderViewModel.tagsError.collectAsStateWithLifecycle()
+    val currentStep by manageOrderViewModel.step.collectAsStateWithLifecycle()
+    val orderName by manageOrderViewModel.internalOrderName.collectAsStateWithLifecycle()
+    val originName by manageOrderViewModel.originName.collectAsStateWithLifecycle()
+    val destinationName by manageOrderViewModel.destinationName.collectAsStateWithLifecycle()
+    val minTimeArrival by manageOrderViewModel.minTimeArrivalText.collectAsStateWithLifecycle()
+    val maxTimeArrival by manageOrderViewModel.maxTimeArrivalText.collectAsStateWithLifecycle()
+    val isDatePickerShowing by manageOrderViewModel.datePickerDialogIsShowing.collectAsStateWithLifecycle()
+    val isCondicionsPopupShowing by manageOrderViewModel.isCondicionsPopupShowing.collectAsStateWithLifecycle()
+    val isIsoterm by manageOrderViewModel.isIsoterm.collectAsStateWithLifecycle()
+    val isRefrigerat by manageOrderViewModel.isRefrigerat.collectAsStateWithLifecycle()
+    val isCongelat by manageOrderViewModel.isCongelat.collectAsStateWithLifecycle()
+    val isSenseHumitat by manageOrderViewModel.isSenseHumitat.collectAsStateWithLifecycle()
+    val tagsText by manageOrderViewModel.tagsText.collectAsStateWithLifecycle()
+    val tagsList by manageOrderViewModel.tagsList.collectAsStateWithLifecycle()
+    val tagsError by manageOrderViewModel.tagsError.collectAsStateWithLifecycle()
     val datePickerState = rememberDatePickerState()
-    val wantsCarpool by publishOrderViewModel.wantsCarpool.collectAsStateWithLifecycle()
-    val isFlexDate by publishOrderViewModel.isFlexDate.collectAsStateWithLifecycle()
-    val isDataMinPopupShowing by publishOrderViewModel.isDataMinPopupShowing.collectAsStateWithLifecycle()
-    val isDataMaxPopupShowing by publishOrderViewModel.isDataMaxPopupShowing.collectAsStateWithLifecycle()
+    val wantsCarpool by manageOrderViewModel.wantsCarpool.collectAsStateWithLifecycle()
+    val isFlexDate by manageOrderViewModel.isFlexDate.collectAsStateWithLifecycle()
+    val isDataMinPopupShowing by manageOrderViewModel.isDataMinPopupShowing.collectAsStateWithLifecycle()
+    val isDataMaxPopupShowing by manageOrderViewModel.isDataMaxPopupShowing.collectAsStateWithLifecycle()
     // Screen 2 variables
-    val packageNumber by publishOrderViewModel.packagesNum.collectAsStateWithLifecycle()
-    val arePackagesFragile by publishOrderViewModel.arePackagesFragile.collectAsStateWithLifecycle()
-    val packageLength by publishOrderViewModel.packagesLength.collectAsStateWithLifecycle()
-    val packageWidth by publishOrderViewModel.packagesWidth.collectAsStateWithLifecycle()
-    val packageHeight by publishOrderViewModel.packagesHeight.collectAsStateWithLifecycle()
-    val packageWeight by publishOrderViewModel.packagesWeight.collectAsStateWithLifecycle()
-    val wantsDeliveryNotification by publishOrderViewModel.wantsDeliveryNotification.collectAsStateWithLifecycle()
+    val packageNumber by manageOrderViewModel.packagesNum.collectAsStateWithLifecycle()
+    val arePackagesFragile by manageOrderViewModel.arePackagesFragile.collectAsStateWithLifecycle()
+    val packageLength by manageOrderViewModel.packagesLength.collectAsStateWithLifecycle()
+    val packageWidth by manageOrderViewModel.packagesWidth.collectAsStateWithLifecycle()
+    val packageHeight by manageOrderViewModel.packagesHeight.collectAsStateWithLifecycle()
+    val packageWeight by manageOrderViewModel.packagesWeight.collectAsStateWithLifecycle()
+    val wantsDeliveryNotification by manageOrderViewModel.wantsDeliveryNotification.collectAsStateWithLifecycle()
 
     // Screen 3 variables
-    val deliveryNote by publishOrderViewModel.deliveryNote.collectAsStateWithLifecycle()
-    val isDeliveryContactDataChecked by publishOrderViewModel.isDeliveryContactDataChecked.collectAsStateWithLifecycle()
-    val isPuntHabitualDataChecked by publishOrderViewModel.isPuntHabitualDataChecked.collectAsStateWithLifecycle()
-    val clientName by publishOrderViewModel.deliveryContact.collectAsStateWithLifecycle()
-    val clientPhone by publishOrderViewModel.deliveryTelephoneNumber.collectAsStateWithLifecycle()
-    val comment by publishOrderViewModel.comment.collectAsStateWithLifecycle()
+    val deliveryNote by manageOrderViewModel.deliveryNote.collectAsStateWithLifecycle()
+    val isDeliveryContactDataChecked by manageOrderViewModel.isDeliveryContactDataChecked.collectAsStateWithLifecycle()
+    val isPuntHabitualDataChecked by manageOrderViewModel.isPuntHabitualDataChecked.collectAsStateWithLifecycle()
+    val clientName by manageOrderViewModel.deliveryContact.collectAsStateWithLifecycle()
+    val clientPhone by manageOrderViewModel.deliveryTelephoneNumber.collectAsStateWithLifecycle()
+    val comment by manageOrderViewModel.comment.collectAsStateWithLifecycle()
 
-    val orderAdded by publishOrderViewModel.orderAdded.collectAsStateWithLifecycle()
+    // Errors
+    val screen1Errors by manageOrderViewModel.screen1Errors.collectAsStateWithLifecycle()
+    val screen2Errors by manageOrderViewModel.screen2Errors.collectAsStateWithLifecycle()
+    if (command == "edit" && orderID != 0) {
+        manageOrderViewModel.getOrder(orderID)
+    }
+    val orderToEdit by manageOrderViewModel.orderToEdit.collectAsStateWithLifecycle()
+    val orderAdded by manageOrderViewModel.orderAdded.collectAsStateWithLifecycle()
     if (orderAdded) {
+        if (command == "create"){
+            navHost.navigate("MapScreen"){
+                popUpTo("MapScreen") { inclusive = true }
+            }
+        } else {
+            navHost.navigate("OrderDetailScreen/{packageId}".replace(
+                "{packageId}", orderID.toString())
+            ){
+                popUpTo("OrderDetailScreen/{packageId}".replace(
+                    "{packageId}", orderID.toString())
+                ){
+                    inclusive = true
+                }
+            }
+        }
         // Resets the orderAdded state
-        publishOrderViewModel.onOrderAdded(false)
-        navHost.navigate("MapScreen")
+        manageOrderViewModel.onOrderAdded(false)
     }
 
     Scaffold( modifier = Modifier
@@ -139,7 +161,7 @@ fun PublishOrderScreen(navHost: NavHostController) {
                 navigationIcon = {
                     IconButton(onClick = {
                         if (currentStep == 1) navHost.popBackStack()
-                        else publishOrderViewModel.previousStep() }
+                        else manageOrderViewModel.previousStep() }
                     ) {
                         Icon(imageVector = Icons.Filled.ArrowBackIosNew, contentDescription = "Go Back")
                     }
@@ -162,11 +184,12 @@ fun PublishOrderScreen(navHost: NavHostController) {
                 ),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            if ((command == "edit" && orderID != 0 && orderToEdit != null) || command == "create"){
             when (currentStep) {
                 1 -> {
                     PublishOrderContent1(
                         orderName,
-                        publishOrderViewModel,
+                        manageOrderViewModel,
                         originName,
                         destinationName,
                         isDataMinPopupShowing,
@@ -184,32 +207,38 @@ fun PublishOrderScreen(navHost: NavHostController) {
                         isSenseHumitat,
                         tagsText,
                         tagsError,
-                        tagsList.toList()
+                        tagsList.toList(),
+                        screen1Errors
                     )
                 }
                 2 -> {
                     PublishOrderContent2(
                         packageNumber,
-                        publishOrderViewModel,
+                        manageOrderViewModel,
                         arePackagesFragile,
                         packageHeight,
                         packageWidth,
                         packageLength,
                         packageWeight,
-                        wantsDeliveryNotification
+                        wantsDeliveryNotification,
+                        screen2Errors
                     )
                 }
                 3 -> {
                     PublishOrderContent3(
                         deliveryNote,
-                        publishOrderViewModel,
+                        manageOrderViewModel,
                         isDeliveryContactDataChecked,
                         clientName,
                         clientPhone,
                         isPuntHabitualDataChecked,
-                        comment
+                        comment,
+                        command
                     )
                 }
+            }
+            } else {
+                CircularProgressIndicator()
             }
         }
     }
@@ -218,12 +247,13 @@ fun PublishOrderScreen(navHost: NavHostController) {
 @Composable
 private fun PublishOrderContent3(
     deliveryNote: String,
-    publishOrderViewModel: PublishOrderViewModel,
+    manageOrderViewModel: ManageOrderViewModel,
     isDeliveryContactDataChecked: Boolean,
     clientName: String,
     clientPhone: String,
     isPuntHabitualDataChecked: Boolean,
-    comment: String
+    comment: String,
+    command: String
 ) {
     // Delivery Note TextField
     Row(
@@ -240,8 +270,9 @@ private fun PublishOrderContent3(
     }
     MultilineTextField(
         value = deliveryNote,
-        onValueChange = publishOrderViewModel::setDeliveryNote,
-        placeholder = "Dades de contacte per al transportista"
+        onValueChange = manageOrderViewModel::setDeliveryNote,
+        placeholder = "Dades de contacte per al transportista",
+        isError = false
     )
     // Delivery note checkboxes
     Row(
@@ -253,8 +284,8 @@ private fun PublishOrderContent3(
         Checkbox(
             checked = isDeliveryContactDataChecked,
             onCheckedChange = {
-                publishOrderViewModel.onDeliveryContactDataCheck()
-                publishOrderViewModel.appendInfoToDeliveryNote("userInfo")
+                manageOrderViewModel.onDeliveryContactDataCheck()
+                manageOrderViewModel.appendInfoToDeliveryNote("userInfo")
             }
         )
         Text(
@@ -273,8 +304,8 @@ private fun PublishOrderContent3(
         Checkbox(
             checked = isPuntHabitualDataChecked,
             onCheckedChange = {
-                publishOrderViewModel.onPuntHabitualDataCheck()
-                publishOrderViewModel.appendInfoToDeliveryNote("puntHabitual")
+                manageOrderViewModel.onPuntHabitualDataCheck()
+                manageOrderViewModel.appendInfoToDeliveryNote("puntHabitual")
             }
         )
         Text(
@@ -298,10 +329,11 @@ private fun PublishOrderContent3(
     }
     MultilineTextField(
         value = comment,
-        onValueChange = publishOrderViewModel::setComment,
+        onValueChange = manageOrderViewModel::setComment,
         placeholder = "Condicions especials quant a la recollida, entrega, transport, etc. " +
-                "Tipus de punt d’entrega final, adreça, horari del punt d’entrega..."
-    )
+                "Tipus de punt d’entrega final, adreça, horari del punt d’entrega...",
+        isError = false
+        )
     // Buttons
     Row(
         modifier = Modifier
@@ -311,11 +343,14 @@ private fun PublishOrderContent3(
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
         // Back button
-        PublishBackButton(publishOrderViewModel::previousStep)
+        PublishBackButton(manageOrderViewModel::previousStep)
         // Next Button
         PublishButton(
-            onClick = {  publishOrderViewModel.addOrder() },
-            text = "Publicar comanda"
+            onClick = {  if(command == "create"){
+                manageOrderViewModel.addOrder()
+            } else manageOrderViewModel.updateOrder() },
+
+            text = if(command == "create") "Publicar comanda" else "Editar comanda"
         )
     }
 }
@@ -323,13 +358,14 @@ private fun PublishOrderContent3(
 @Composable
 private fun PublishOrderContent2(
     packageNumber: String,
-    publishOrderViewModel: PublishOrderViewModel,
+    manageOrderViewModel: ManageOrderViewModel,
     arePackagesFragile: Boolean,
     packageHeight: String,
     packageWidth: String,
     packageLength: String,
     packageWeight: String,
-    wantsDeliveryNotification: Boolean
+    wantsDeliveryNotification: Boolean,
+    screen2Errors: List<Boolean>
 ) {
     Row(
         modifier = Modifier
@@ -341,7 +377,7 @@ private fun PublishOrderContent2(
         OutlinedTextField(
             modifier = Modifier.weight(0.65f),
             value = packageNumber,
-            onValueChange = publishOrderViewModel::setPackagesNum,
+            onValueChange = manageOrderViewModel::setPackagesNum,
             placeholder = {
                 Text(text = "Nombre de paquets", color = Color.Gray)
             },
@@ -357,12 +393,13 @@ private fun PublishOrderContent2(
             keyboardOptions = KeyboardOptions(
                 imeAction = ImeAction.Next
             ),
-            singleLine = true
+            singleLine = true,
+            isError = screen2Errors[0]
         )
         // Fragile Checkbox
         Checkbox(
             checked = arePackagesFragile,
-            onCheckedChange = { publishOrderViewModel.onPackagesFragileChange() }
+            onCheckedChange = { manageOrderViewModel.onPackagesFragileChange() }
         )
         Text(
             modifier = Modifier.weight(0.30f),
@@ -388,27 +425,31 @@ private fun PublishOrderContent2(
     // Height, Width, Length, Weight
     MeasurementsTextField(
         value = packageHeight,
-        onValueChange = publishOrderViewModel::setPackagesHeight,
+        onValueChange = manageOrderViewModel::setPackagesHeight,
         placeholder = "Alçària (cm)",
-        suffix = "cm"
+        suffix = "cm",
+        isError = screen2Errors[1]
     )
     MeasurementsTextField(
         value = packageWidth,
-        onValueChange = publishOrderViewModel::setPackagesWidth,
+        onValueChange = manageOrderViewModel::setPackagesWidth,
         placeholder = "Amplada (cm)",
-        suffix = "cm"
+        suffix = "cm",
+        isError = screen2Errors[2]
     )
     MeasurementsTextField(
         value = packageLength,
-        onValueChange = publishOrderViewModel::setPackagesLength,
+        onValueChange = manageOrderViewModel::setPackagesLength,
         placeholder = "Llargada (cm)",
-        suffix = "cm"
+        suffix = "cm",
+        isError = screen2Errors[3]
     )
     MeasurementsTextField(
         value = packageWeight,
-        onValueChange = publishOrderViewModel::setPackagesWeight,
+        onValueChange = manageOrderViewModel::setPackagesWeight,
         placeholder = "Pes (kg)",
-        suffix = "kg"
+        suffix = "kg",
+        isError = screen2Errors[4]
     )
 
     // Notification Checkbox
@@ -418,7 +459,7 @@ private fun PublishOrderContent2(
     ) {
         Checkbox(
             checked = wantsDeliveryNotification,
-            onCheckedChange = { publishOrderViewModel.onWantsDeliveryNotificationChange() }
+            onCheckedChange = { manageOrderViewModel.onWantsDeliveryNotificationChange() }
         )
         Text(
             text = "Vull rebre una notificació quan s’hagi entregat la comanda.",
@@ -435,10 +476,10 @@ private fun PublishOrderContent2(
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
         // Back button
-        PublishBackButton(publishOrderViewModel::previousStep)
+        PublishBackButton(manageOrderViewModel::previousStep)
         // Next Button
         PublishNextButton(
-            onClickCheck = publishOrderViewModel::checkAllValues,
+            onClickCheck = manageOrderViewModel::checkAllValues,
         )
     }
 }
@@ -447,7 +488,7 @@ private fun PublishOrderContent2(
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 private fun PublishOrderContent1(
     orderName: String,
-    publishOrderViewModel: PublishOrderViewModel,
+    manageOrderViewModel: ManageOrderViewModel,
     originName: String,
     destinationName: String,
     isDataMinPopupShowing: Boolean,
@@ -465,21 +506,24 @@ private fun PublishOrderContent1(
     isSenseHumitat: Boolean,
     tagsText: String,
     tagsError: Boolean,
-    tagsList: List<String>
+    tagsList: List<String>,
+    screen1Errors: List<Boolean>
 ) {
     BasicTextField(
         value = orderName,
-        onValueChange = publishOrderViewModel::setInternalOrderName,
-        placeholder = "Nom intern de la ruta"
+        onValueChange = manageOrderViewModel::setInternalOrderName,
+        placeholder = "Nom intern de la comanda",
+        isError = screen1Errors[0]
     )
     IconTextField(value = originName,
-        onValueChange = publishOrderViewModel::setOriginName,
+        onValueChange = manageOrderViewModel::setOriginName,
         placeholder = "Punt de sortida",
         leadingIcon = {
             Icon(imageVector = Icons.Filled.House, contentDescription = "Origin Location Icon")
-        })
+        },
+        isError = screen1Errors[1])
     IconTextField(value = destinationName,
-        onValueChange = publishOrderViewModel::setDestinationName,
+        onValueChange = manageOrderViewModel::setDestinationName,
         placeholder = "Punt d'arribada",
         leadingIcon = {
             Icon(
@@ -487,7 +531,8 @@ private fun PublishOrderContent1(
                 painter = painterResource(id = R.drawable.map_icon),
                 contentDescription = "Destination Location Icon"
             )
-        })
+        },
+        isError = screen1Errors[2])
     // MinTimeArrival
     Row(
         modifier = Modifier
@@ -497,7 +542,7 @@ private fun PublishOrderContent1(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         IconButton(
-            onClick = { publishOrderViewModel.onDataMinPopupShow(true) },
+            onClick = { manageOrderViewModel.onDataMinPopupShow(true) },
             colors = IconButtonDefaults.iconButtonColors(
                 containerColor = MaterialTheme.colorScheme.secondaryContainer
             )
@@ -511,20 +556,21 @@ private fun PublishOrderContent1(
         // MinTimeArrival Text field
         DateTimePickerTextField(
             invocation = {
-                publishOrderViewModel.onDatePickerDialogShow(
+                manageOrderViewModel.onDatePickerDialogShow(
                     isMin = true,
                     isShowing = true
                 )
             },
             time = minTimeArrival,
-            onValueChange = publishOrderViewModel::onMinTimeArrivalChange,
+            onValueChange = manageOrderViewModel::onMinTimeArrivalChange,
             placeholder = "Data mínima d'arribada",
-            icon = Icons.Filled.CalendarMonth
+            icon = Icons.Filled.CalendarMonth,
+            isError = screen1Errors[3]
         )
     }
     if (isDataMinPopupShowing){
         BasicPopup(offset = IntOffset((LocalConfiguration.current.screenWidthDp / 2), (LocalConfiguration.current.screenHeightDp)),
-            onDismisRequest = { publishOrderViewModel.onDataMaxPopupShow(
+            onDismisRequest = { manageOrderViewModel.onDataMaxPopupShow(
                 false ) },
             content = { Text(text = "Indicar a partir de quin moment podries tenir llesta la teva comanda per iniciar el transport.",
                 color = MaterialTheme.colorScheme.onBackground) })
@@ -538,7 +584,7 @@ private fun PublishOrderContent1(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         IconButton(
-            onClick = { publishOrderViewModel.onDataMaxPopupShow(true)  },
+            onClick = { manageOrderViewModel.onDataMaxPopupShow(true)  },
             colors = IconButtonDefaults.iconButtonColors(
                 containerColor = MaterialTheme.colorScheme.secondaryContainer
             )
@@ -551,7 +597,7 @@ private fun PublishOrderContent1(
         }
         if (isDataMaxPopupShowing){
             BasicPopup(offset = IntOffset((LocalConfiguration.current.screenWidthDp / 2), (LocalConfiguration.current.screenHeightDp)),
-                onDismisRequest = { publishOrderViewModel.onDataMaxPopupShow(
+                onDismisRequest = { manageOrderViewModel.onDataMaxPopupShow(
                     false ) },
                 content = { Text(text = "Indicar la data màxima en què ha d'arribar la teva comanda.",
                     color = MaterialTheme.colorScheme.onBackground) })
@@ -559,15 +605,16 @@ private fun PublishOrderContent1(
         // MaxTimeArrival Text field
         DateTimePickerTextField(
             invocation = {
-                publishOrderViewModel.onDatePickerDialogShow(
+                manageOrderViewModel.onDatePickerDialogShow(
                     isMin = false,
                     isShowing = true
                 )
             },
             time = maxTimeArrival,
-            onValueChange = publishOrderViewModel::onMaxTimeArrivalTextChange,
+            onValueChange = manageOrderViewModel::onMaxTimeArrivalTextChange,
             placeholder = "Data màxima d'arribada",
-            icon = Icons.Filled.CalendarMonth
+            icon = Icons.Filled.CalendarMonth,
+            isError = screen1Errors[4]
         )
     }
     // Date Picker Dialog
@@ -577,7 +624,7 @@ private fun PublishOrderContent1(
                 //containerColor = Color.White
             ),
             onDismissRequest = {
-                publishOrderViewModel.onDatePickerDialogShow(
+                manageOrderViewModel.onDatePickerDialogShow(
                     isMin = true,
                     isShowing = false
                 )
@@ -586,7 +633,7 @@ private fun PublishOrderContent1(
                 ElevatedButton(
                     onClick = {
                         datePickerState.selectedDateMillis?.let { dateInMillis ->
-                            publishOrderViewModel.onDatePickerDialogConfirm(dateInMillis)
+                            manageOrderViewModel.onDatePickerDialogConfirm(dateInMillis)
                         }
                     },
                     colors = ButtonDefaults.elevatedButtonColors(
@@ -599,7 +646,7 @@ private fun PublishOrderContent1(
             },
             dismissButton = {
                 ElevatedButton(onClick = {
-                    publishOrderViewModel.onDatePickerDialogShow(
+                    manageOrderViewModel.onDatePickerDialogShow(
                         isMin = false,
                         isShowing = true
                     )
@@ -618,7 +665,7 @@ private fun PublishOrderContent1(
     ) {
         Checkbox(
             checked = isFlexDate,
-            onCheckedChange = { publishOrderViewModel.onFlexDateChange() }
+            onCheckedChange = { manageOrderViewModel.onFlexDateChange() }
         )
         Text(
             text = "Data d'arribada flexible",
@@ -633,7 +680,7 @@ private fun PublishOrderContent1(
     ) {
         Checkbox(
             checked = wantsCarpool,
-            onCheckedChange = { publishOrderViewModel.onWantsCarpoolChange() }
+            onCheckedChange = { manageOrderViewModel.onWantsCarpoolChange() }
         )
         Text(
             text = "Vull ocupar un seient buit al vehicle",
@@ -654,7 +701,7 @@ private fun PublishOrderContent1(
         ) {
             // Conditions Button
             FloatingActionButton(
-                onClick = { publishOrderViewModel.onCondicionsPopupShow(true) },
+                onClick = { manageOrderViewModel.onCondicionsPopupShow(true) },
                 containerColor = MateBlackRC
             ) {
                 Icon(
@@ -667,7 +714,7 @@ private fun PublishOrderContent1(
             if (isCondicionsPopupShowing) {
                 Popup(
                     onDismissRequest = {
-                        publishOrderViewModel.onCondicionsPopupShow(
+                        manageOrderViewModel.onCondicionsPopupShow(
                             false
                         )
                     },
@@ -731,7 +778,7 @@ private fun PublishOrderContent1(
                 // Isoterm Chip
                 ElevatedFilterChip(
                     selected = isIsoterm,
-                    onClick = { publishOrderViewModel.onCheckChip("Isoterm") },
+                    onClick = { manageOrderViewModel.onCheckChip("Isoterm") },
                     label = {
                         if (isIsoterm) {
                             Text(
@@ -763,7 +810,7 @@ private fun PublishOrderContent1(
                 // Refrigerat Chip
                 ElevatedFilterChip(
                     selected = isRefrigerat,
-                    onClick = { publishOrderViewModel.onCheckChip("Refrigerat") },
+                    onClick = { manageOrderViewModel.onCheckChip("Refrigerat") },
                     label = {
                         if (isRefrigerat) {
                             Text(
@@ -800,7 +847,7 @@ private fun PublishOrderContent1(
                 // Congelat Chip
                 ElevatedFilterChip(
                     selected = isCongelat,
-                    onClick = { publishOrderViewModel.onCheckChip("Congelat") },
+                    onClick = { manageOrderViewModel.onCheckChip("Congelat") },
                     label = {
                         if (isCongelat) {
                             Text(
@@ -832,7 +879,7 @@ private fun PublishOrderContent1(
                 // Sense Humitat Chip
                 ElevatedFilterChip(
                     selected = isSenseHumitat,
-                    onClick = { publishOrderViewModel.onCheckChip("SenseHumitat") },
+                    onClick = { manageOrderViewModel.onCheckChip("SenseHumitat") },
                     label = {
                         if (isSenseHumitat) {
                             Text(
@@ -871,7 +918,7 @@ private fun PublishOrderContent1(
             .fillMaxWidth(0.95f)
             .padding(top = 8.dp),
         value = tagsText,
-        onValueChange = publishOrderViewModel::onTagsChange,
+        onValueChange = manageOrderViewModel::onTagsChange,
         placeholder = {
             Text(text = "Etiquetes (diaria, setmanal...)", color = Color.Gray)
         },
@@ -909,11 +956,11 @@ private fun PublishOrderContent1(
         keyboardActions = KeyboardActions(
             onSend = {
                 if (tagsText.isEmpty() || tagsText in tagsList) {
-                    publishOrderViewModel.onTagsErrorChange(true)
+                    manageOrderViewModel.onTagsErrorChange(true)
                     return@KeyboardActions
                 }
-                publishOrderViewModel.onTagsErrorChange(false)
-                publishOrderViewModel.onTagsAddToListChange(tagsText)
+                manageOrderViewModel.onTagsErrorChange(false)
+                manageOrderViewModel.onTagsAddToListChange(tagsText)
             }),
         singleLine = true,
     )
@@ -924,20 +971,20 @@ private fun PublishOrderContent1(
         horizontalArrangement = Arrangement.Start,
     ) {
         tagsList.forEach { etiqueta ->
-            TagItem(publishOrderViewModel = publishOrderViewModel, etiqueta = etiqueta)
+            TagItem(manageOrderViewModel = manageOrderViewModel, etiqueta = etiqueta)
             Spacer(Modifier.padding(4.dp))
         }
     }
     // Next Button
-    PublishNextButton(onClickCheck = publishOrderViewModel::checkAllValues)
+    PublishNextButton(onClickCheck = manageOrderViewModel::checkAllValues)
 
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TagItem(publishOrderViewModel: PublishOrderViewModel, etiqueta: String) {
+fun TagItem(manageOrderViewModel: ManageOrderViewModel, etiqueta: String) {
     InputChip(selected = true,
-        onClick = { publishOrderViewModel.onTagDelete(etiqueta) },
+        onClick = { manageOrderViewModel.onTagDelete(etiqueta) },
         label = {
             Text(
                 etiqueta,
@@ -952,7 +999,7 @@ fun TagItem(publishOrderViewModel: PublishOrderViewModel, etiqueta: String) {
                 contentDescription = "Close Icon",
                 tint = Color.LightGray,
                 modifier = Modifier.clickable {
-                    publishOrderViewModel.onTagDelete(etiqueta)
+                    manageOrderViewModel.onTagDelete(etiqueta)
                 })
         })
 }

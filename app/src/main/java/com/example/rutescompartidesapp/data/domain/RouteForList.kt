@@ -15,5 +15,11 @@ data class RouteForList(
     val isIsoterm: Boolean,
     val isRefrigerat: Boolean,
     val isCongelat: Boolean,
-    val isSenseHumitat: Boolean
+    val isSenseHumitat: Boolean,
+    val vehicle: String?,
+    val costKm: Float?,
+    val maxDetourKm: Float?,
+    val availableSeats: Int?,
+    val availableSpace: String?,
+    val comment: String?
 )

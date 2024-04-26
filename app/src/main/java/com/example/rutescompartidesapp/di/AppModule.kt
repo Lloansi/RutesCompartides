@@ -8,7 +8,8 @@ import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.preferencesDataStoreFile
-import com.example.rutescompartidesapp.data.network.repository.RutesCompartidesRepository
+import com.example.rutescompartidesapp.data.network.GeoNames.ApiGeoNames
+import com.example.rutescompartidesapp.data.network.rutes_compartides.repository.RutesCompartidesRepository
 import com.example.rutescompartidesapp.data.network.rutes_compartides.ApiRutesCompartides
 import com.example.rutescompartidesapp.data.network.rutes_compartides.RutesCompartidesService
 import com.example.rutescompartidesapp.utils.Constants
@@ -32,7 +33,24 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
+    @Provides
+    @Singleton
+    fun provideGeoNamesApi(): ApiGeoNames {
+        val gson = GsonBuilder()
+            .serializeNulls()
+            .create()
 
+        val client = OkHttpClient
+            .Builder()
+            .build()
+
+        return Retrofit.Builder()
+            .baseUrl(Constants.GEO_NAMES_URL)
+            .addConverterFactory(GsonConverterFactory.create(gson))
+            .client(client)
+            .build()
+            .create()
+    }
 
     @Provides
     @Singleton
@@ -44,10 +62,11 @@ object AppModule {
         val gson = GsonBuilder()
             .serializeNulls()
             .create()
-        val client = OkHttpClient.Builder()
+        val client = OkHttpClient
+            .Builder()
             .hostnameVerifier { hostname, session ->
             hostname == "dev.rutescompartides.cat"
-        }
+            }
             .addInterceptor(interceptor)
             .build()
 

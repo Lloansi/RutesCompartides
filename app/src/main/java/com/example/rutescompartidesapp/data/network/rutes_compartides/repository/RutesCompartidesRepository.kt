@@ -1,4 +1,4 @@
-package com.example.rutescompartidesapp.data.network.repository
+package com.example.rutescompartidesapp.data.network.rutes_compartides.repository
 
 import com.example.rutescompartidesapp.data.domain.auth.AuthRequest
 import com.example.rutescompartidesapp.data.domain.auth.AuthToken

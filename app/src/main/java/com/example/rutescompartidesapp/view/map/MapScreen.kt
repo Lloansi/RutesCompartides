@@ -23,6 +23,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
@@ -30,9 +31,11 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import com.example.rutescompartidesapp.R
 import com.example.rutescompartidesapp.view.map.components.CardBottomMap
 import com.example.rutescompartidesapp.view.map.components.ExpandableFloatingButton
+import com.example.rutescompartidesapp.view.map.components.FilteredListsBelowSearchBar
 import com.example.rutescompartidesapp.view.map.components.MapViewContainer
 import com.example.rutescompartidesapp.view.map.components.SearchViewContainer
 import com.example.rutescompartidesapp.view.map.viewModels.MapViewModel
+import com.example.rutescompartidesapp.view.map.viewModels.SearchViewModel
 
 val openSansFamily = FontFamily(
     Font(R.font.opensans, FontWeight.Normal),
@@ -43,7 +46,7 @@ val fredokaOneFamily = FontFamily(
 
 
 object MapScreen: Screen {
-    const val maxKmFog = 5
+    const val maxKmFog = 7
 
     @Composable
     override fun Content() {
@@ -53,7 +56,7 @@ object MapScreen: Screen {
 }
 
 @Composable
-fun MapScreen(navController: NavHostController, mapViewModel: MapViewModel) {
+fun MapScreen(navController: NavHostController, mapViewModel: MapViewModel, searchViewModel: SearchViewModel) {
     val ordersFiltered by mapViewModel.filteredOrders.collectAsState()
     val routesFiltered by mapViewModel.filteredRoutes.collectAsState()
 
@@ -85,7 +88,10 @@ fun MapScreen(navController: NavHostController, mapViewModel: MapViewModel) {
                     .padding(16.dp)
                     .align(Alignment.TopStart)
             ) {
-                SearchViewContainer()
+                Column {
+                    SearchViewContainer(searchViewModel)
+                    FilteredListsBelowSearchBar(searchViewModel)
+                }
             }
 
             //Card orders/routes & Floatting buttons
