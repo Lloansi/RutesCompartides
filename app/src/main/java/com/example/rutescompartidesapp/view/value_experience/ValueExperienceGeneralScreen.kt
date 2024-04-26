@@ -44,11 +44,13 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.rutescompartidesapp.data.domain.OrderForList
 import com.example.rutescompartidesapp.data.domain.RouteForList
 import com.example.rutescompartidesapp.ui.theme.OrangeRC
 import com.example.rutescompartidesapp.view.generic_components.MultilineTextField
 import com.example.rutescompartidesapp.view.generic_components.PublishBackButton
 import com.example.rutescompartidesapp.view.generic_components.PublishNextButton
+import com.example.rutescompartidesapp.view.generic_components.RouteOrderHeader
 import com.example.rutescompartidesapp.view.generic_components.TopAppBarWithBackNav
 import com.example.rutescompartidesapp.view.route_detail.route_detail_driver.RouteDetailDriverViewModel
 import com.example.rutescompartidesapp.view.routes_order_list.ListConstants
@@ -58,11 +60,13 @@ import com.example.rutescompartidesapp.view.routes_order_list.components.RouteCa
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 
 @Composable
-fun ValueExperienceGeneralScreen(routeID: Int, navHost: NavHostController) {
+fun ValueExperienceGeneralScreen(routeID: Int, orderID: Int, navHost: NavHostController) {
     // TODO Amb el ID hauría de fer una trucada a la API per obtenir la ruta
     // TODO i una altra per obtenir les interaccions de la ruta
     // val interactions = DetailUtils.interactionList.filter { it.routeID == routeID }
     val route: RouteForList = ListConstants.routeList.first { it.routeID == routeID }
+    val order: OrderForList = ListConstants.orderList.first { it.orderID == orderID }
+
     val valueExperienceViewModel = ValueExperienceViewModel()
     val isPackageDelivered by valueExperienceViewModel.isPackageDelivered.collectAsStateWithLifecycle()
     val comment by valueExperienceViewModel.comment.collectAsStateWithLifecycle()
@@ -78,8 +82,9 @@ fun ValueExperienceGeneralScreen(routeID: Int, navHost: NavHostController) {
                     containerColor = MaterialTheme.colorScheme.background
                 )
             ) {
+
                 Row {
-                    RouteCardHeader(route = route)
+                    RouteOrderHeader(route = route, order = order)
                 }
                 Spacer(modifier = Modifier.padding(8.dp))
                 // Delivery note checkboxes
@@ -230,5 +235,5 @@ fun ValueExperienceGeneralScreen(routeID: Int, navHost: NavHostController) {
 fun ValueExperienceGeneralScreenPreview (){
     val navHost = rememberNavController()
 
-    ValueExperienceGeneralScreen(1, navHost)
+    ValueExperienceGeneralScreen(1, 1, navHost)
 }
