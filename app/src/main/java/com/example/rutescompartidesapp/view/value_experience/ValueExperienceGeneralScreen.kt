@@ -15,10 +15,12 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
@@ -191,12 +193,24 @@ fun ValueExperienceGeneralScreen(routeID: Int, navHost: NavHostController) {
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
-                    // Back button
-                    PublishBackButton(publishRouteViewModel::previousStep)
-                    // Next Button
-                    PublishNextButton(onClickCheck = publishRouteViewModel::checkAllValues)
 
-                } // ACABAR LA PANTALLA FALTA EL BOTÓN ENVIAR Y CONEXIÓN
+                    // Next Button
+                    ElevatedButton(
+                        shape = RoundedCornerShape(16.dp),
+                        onClick = {
+                             valueExperienceViewModel.sendReview()
+                        },
+                        colors = ButtonDefaults.elevatedButtonColors(
+                            containerColor = OrangeRC
+                        )
+                    ) {
+                        Text(
+                            text = "Envia", color = Color.White,
+                            style = MaterialTheme.typography.headlineMedium
+                        )
+                    }
+
+                }
             }
         }
     )
