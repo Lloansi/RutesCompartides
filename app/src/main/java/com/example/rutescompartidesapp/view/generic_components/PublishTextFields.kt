@@ -21,11 +21,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 
 @Composable
 fun MeasurementsTextField(value: String, onValueChange: (String) -> Unit, placeholder: String, suffix: String,
-                          isError: Boolean){
+                          isError: Boolean, keyboardType: KeyboardType){
     OutlinedTextField(
         modifier = Modifier.fillMaxWidth(0.95f),
         value = value,
@@ -46,6 +47,7 @@ fun MeasurementsTextField(value: String, onValueChange: (String) -> Unit, placeh
             Text(text = suffix, color = Color.Gray)
         },
         keyboardOptions = KeyboardOptions(
+            keyboardType = keyboardType,
             imeAction = ImeAction.Next),
         singleLine = true,
         isError = isError,
@@ -108,7 +110,8 @@ fun MultilineTextField(value: String, onValueChange: (String) -> Unit, placehold
 }
 
 @Composable
-fun BasicTextField(value: String, onValueChange: (String) -> Unit, placeholder: String, isError: Boolean){
+fun BasicTextField(value: String, onValueChange: (String) -> Unit, placeholder: String, isError: Boolean,
+                   keyboardType: KeyboardType = KeyboardType.Text){
     OutlinedTextField(
         modifier = Modifier.fillMaxWidth(0.95f),
         value = value,
@@ -126,6 +129,7 @@ fun BasicTextField(value: String, onValueChange: (String) -> Unit, placeholder: 
             unfocusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
         ),
         keyboardOptions = KeyboardOptions(
+            keyboardType = keyboardType,
             imeAction = ImeAction.Next),
         singleLine = true,
         isError = isError,

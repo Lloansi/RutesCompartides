@@ -3,6 +3,7 @@ package com.example.rutescompartidesapp.utils
 import com.example.rutescompartidesapp.data.domain.OrderForList
 import com.example.rutescompartidesapp.data.domain.RouteForList
 import com.example.rutescompartidesapp.data.domain.UserLocal
+import com.example.rutescompartidesapp.data.domain.interactions.RouteInteraction
 import com.example.rutescompartidesapp.data.domain.review.Review
 
 object LocalConstants {
@@ -57,11 +58,22 @@ object LocalConstants {
     )
 
     val reviewList = mutableListOf<Review>(
-        Review(1, 5, 1, "Entrega a temps!"),
-        Review(2, 4, 1, "Molt bon viatge"),
-        Review(3, 3, 2, "Molt valent"),
-        Review(4, 1, 5, "M'ha entregat les taronjes en perfecte estat"),
+        Review(1, 5, 1, 7, "Entrega a temps!"),
+        Review(2, 4, 1, 7,"Molt bon viatge"),
+        Review(3, 3, 2, 10,"Molt valent"),
+        Review(4, 1, 5, 8,"M'ha entregat les taronjes en perfecte estat"),
     )
+
+    val interactionList = listOf<RouteInteraction>(
+        RouteInteraction(2, 1, "7/3/2024-10:14", "Acceptada"),
+        RouteInteraction(3, 3, "7/3/2024-10:14", "Acceptada"),
+        RouteInteraction(4, 2, "3/3/2024-20:45", "Acceptada"),
+        RouteInteraction(2, 1, "4/3/2024-20:45", "Valorada"),
+        RouteInteraction(4, 2, "4/3/2024-20:45", "Entregada"),
+        RouteInteraction(5, 2, "4/3/2024-20:45", "Pendent"),
+        RouteInteraction(3, 1, "7/3/2024-9:50", "Declinada"),
+        RouteInteraction(1, 1, "4/3/2024-20:45", "Entregada"),
+        )
 
 
 }

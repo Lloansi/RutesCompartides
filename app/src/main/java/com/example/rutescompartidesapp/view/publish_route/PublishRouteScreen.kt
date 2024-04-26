@@ -64,6 +64,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -86,6 +87,7 @@ import com.example.rutescompartidesapp.view.generic_components.popups.ConditionS
 import com.example.rutescompartidesapp.view.generic_components.popups.PopupScrolleable
 import com.example.rutescompartidesapp.view.login.LoginViewModel
 
+@SuppressLint("RestrictedApi", "StateFlowValueCalledInComposition")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PublishRouteScreen(command: String, routeID: Int, navHost: NavHostController, loginViewModel: LoginViewModel){
@@ -141,6 +143,8 @@ fun PublishRouteScreen(command: String, routeID: Int, navHost: NavHostController
     val routeToEdit by manageRouteViewModel.routeToEdit.collectAsStateWithLifecycle()
     val routeAdded by manageRouteViewModel.routeAdded.collectAsStateWithLifecycle()
     if (routeAdded) {
+        manageRouteViewModel.onRouteAdded(false)
+
         if (command == "create"){
             navHost.navigate("MapScreen"){
                 popUpTo("MapScreen") { inclusive = true }
@@ -152,14 +156,9 @@ fun PublishRouteScreen(command: String, routeID: Int, navHost: NavHostController
                     newValue = "$routeID")
             ) {
                 popUpTo(
-                    "RouteDetailDriverScreen/{routeId}".replace(
-                        oldValue = "{routeId}",
-                        newValue = "$routeID"
-                    )) { inclusive = true }
+                    "RouteDetailDriverScreen/{routeId}"){ inclusive = true }
             }
         }
-        // Resets the orderAdded state
-        manageRouteViewModel.onRouteAdded(false)
     }
 
     Scaffold( modifier = Modifier
@@ -644,13 +643,16 @@ private fun PublishRouteContent2(
     BasicTextField(value = maxDetourKm,
         onValueChange = manageRouteViewModel::setMaxDetourKm,
         placeholder = "Max desviament (km)",
-        isError = screen2Errors[0]
+        isError = screen2Errors[0],
+        keyboardType = KeyboardType.Decimal
     )
     // Available Seats
     BasicTextField(value = availableSeats,
         onValueChange = manageRouteViewModel::setSeats,
         placeholder = "Seients disponibles",
-        isError = screen2Errors[1]
+        isError = screen2Errors[1],
+        keyboardType = KeyboardType.Number
+
     )
     // Available Space
     MultilineTextField(value = availableSpace,
@@ -690,7 +692,8 @@ private fun PublishRouteContent2(
         value = costKm,
         onValueChange = manageRouteViewModel::setCostKM,
         placeholder = "0",
-        isError = screen2Errors[3]
+        isError = screen2Errors[3],
+        keyboardType = KeyboardType.Decimal
     )
     // Vehicle Model
     BasicTextField(

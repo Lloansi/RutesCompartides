@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -25,11 +24,9 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.ElevatedAssistChip
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ElevatedCard
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -57,7 +54,7 @@ import com.example.rutescompartidesapp.view.generic_components.TopAppBarWithBack
 import com.example.rutescompartidesapp.view.route_detail.route_detail_driver.components.RouteInteractionCard
 import com.example.rutescompartidesapp.view.routes_order_list.components.RouteCardHeader
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "RestrictedApi")
 @Composable
 fun RouteDetailDriverScreen(routeID: Int, navHost: NavHostController, routeDetailDriverViewModel : RouteDetailDriverViewModel,
                             cameraViewModel: CameraViewModel, drawViewModel: DrawViewModel){
@@ -85,6 +82,7 @@ fun RouteDetailDriverScreen(routeID: Int, navHost: NavHostController, routeDetai
             if (isCompleteScreenShowing) {
                 routeDetailDriverViewModel.showCompleteScreen(false)
             } else {
+                println("Current back stack:\n${navHost.currentBackStack.value}")
                 navHost.popBackStack()
             }
         },
@@ -278,15 +276,8 @@ fun RouteDetailDriverScreen(routeID: Int, navHost: NavHostController, routeDetai
                                         ).replace(
                                             oldValue = "{routeID}",
                                             newValue = "$routeID"
-                                        )){popUpTo(
-                                        "PublishRouteScreen/{command}/{routeID}".replace(
-                                            oldValue = "{command}",
-                                            newValue = "edit"
-                                        ).replace(
-                                            oldValue = "{routeID}",
-                                            newValue = "$routeID"
-                                        )) {inclusive = true}
-                                    }  } ,
+                                        ))
+                                    },
                                     colors = ButtonDefaults.elevatedButtonColors(
                                         containerColor = MateBlackRC
                                     )
@@ -368,7 +359,8 @@ fun RouteDetailDriverScreen(routeID: Int, navHost: NavHostController, routeDetai
                         RouteInteractionCard(
                             interaction = interactions[index],
                             index = index,
-                            routeDetailDriverViewModel = routeDetailDriverViewModel
+                            routeDetailDriverViewModel = routeDetailDriverViewModel,
+                            navHost = navHost
                         )
                     }
 

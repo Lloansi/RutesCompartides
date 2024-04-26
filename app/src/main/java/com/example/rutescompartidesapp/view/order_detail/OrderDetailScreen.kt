@@ -1,5 +1,6 @@
 package com.example.rutescompartidesapp.view.order_detail
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -54,6 +55,7 @@ import com.example.rutescompartidesapp.view.order_detail.components.DetailsConfi
 import com.example.rutescompartidesapp.view.order_detail.components.TopCardInfo
 import com.example.rutescompartidesapp.view.map.components.MeasuresText
 
+@SuppressLint("RestrictedApi")
 @Composable
 fun OrderDetailScreen(orderID: Int, navHost: NavHostController, loginViewModel: LoginViewModel ) {
     val orderDetailViewModel =  OrderDetailViewModel()
@@ -66,7 +68,9 @@ fun OrderDetailScreen(orderID: Int, navHost: NavHostController, loginViewModel: 
 
     TopAppBarWithBackNav(
         title = "Comanda #${order!!.orderID}",
-        onBack = { navHost.popBackStack() },
+        onBack = {
+            println("Current back stack:\n${navHost.currentBackStack.value}")
+            navHost.popBackStack() },
         content = {
             if (order != null){
                 Column (modifier = Modifier.verticalScroll(verticalScroll)) {

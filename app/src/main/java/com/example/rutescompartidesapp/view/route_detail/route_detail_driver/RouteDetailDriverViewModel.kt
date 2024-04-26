@@ -4,8 +4,9 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import com.example.rutescompartidesapp.data.domain.OrderForList
 import com.example.rutescompartidesapp.data.domain.RouteForList
-import com.example.rutescompartidesapp.view.route_detail.route_detail_driver.DetailUtils.RouteInteraction
+import com.example.rutescompartidesapp.data.domain.interactions.RouteInteraction
 import com.example.rutescompartidesapp.utils.LocalConstants
+import com.example.rutescompartidesapp.utils.LocalConstants.interactionList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
@@ -14,7 +15,7 @@ class RouteDetailDriverViewModel (routeID: Int): ViewModel(){
 
 
     private val _interactions = mutableStateListOf<RouteInteraction>().apply {
-        addAll(DetailUtils.interactionList.filter { it.routeID == routeID })
+        addAll(interactionList.filter { it.routeID == routeID })
     }
     val interactions = _interactions
 
@@ -23,6 +24,9 @@ class RouteDetailDriverViewModel (routeID: Int): ViewModel(){
 
     fun modifyInteractionStatus(routeInteraction: RouteInteraction, index: Int, status: String){
         _interactions[index] = routeInteraction.copy(status = status)
+
+        interactionList.first { it.routeID == routeInteraction.routeID &&
+        it.orderID == routeInteraction.orderID}.status = status
         // TODO POST a la API per modificar l'estat de la interacció
         //val newList = interactions.value
         //newList[interactions.value.indexOf(routeInteraction)].status = status
@@ -45,9 +49,9 @@ class RouteDetailDriverViewModel (routeID: Int): ViewModel(){
         _routeInteractionToConfirm.value = interaction
         getRoute(interaction.routeID)
         getOrder(interaction.orderID)
-        println(interaction)
         showCompleteScreen(true)
     }
+
 
     private val _userComment = MutableStateFlow("")
     val userComment = _userComment.asStateFlow()

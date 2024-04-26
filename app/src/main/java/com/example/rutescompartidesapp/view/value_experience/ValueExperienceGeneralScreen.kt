@@ -40,12 +40,14 @@ import com.example.rutescompartidesapp.utils.LocalConstants
 import com.example.rutescompartidesapp.view.generic_components.MultilineTextField
 import com.example.rutescompartidesapp.view.generic_components.RouteOrderHeader
 import com.example.rutescompartidesapp.view.generic_components.TopAppBarWithBackNav
+import com.example.rutescompartidesapp.view.route_detail.route_detail_driver.RouteDetailDriverViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 
 @Composable
-fun ValueExperienceGeneralScreen(routeID: Int, orderID: Int, navHost: NavHostController) {
+fun ValueExperienceGeneralScreen(routeID: Int, orderID: Int, navHost: NavHostController,
+                                 routeDetailDriverViewModel: RouteDetailDriverViewModel) {
 
     val valueExperienceViewModel = ValueExperienceViewModel()
     val route: RouteForList = LocalConstants.routeList.first { it.routeID == routeID }
@@ -93,9 +95,10 @@ fun ValueExperienceGeneralScreen(routeID: Int, orderID: Int, navHost: NavHostCon
                 Row(
                     modifier = Modifier
                         .fillMaxWidth(0.95f)
-                        .padding(bottom = 20.dp),
+                        .padding(bottom = 10.dp, start = 4.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
+
                     Text(text = "Puntuació: ",
                         style = MaterialTheme.typography.bodyLarge,
                         color = MaterialTheme.colorScheme.onBackground)
@@ -120,26 +123,21 @@ fun ValueExperienceGeneralScreen(routeID: Int, orderID: Int, navHost: NavHostCon
                             ),
                             modifier = Modifier
                                 .menuAnchor()
-                                .fillMaxWidth(0.30f)
-                                .height(48.dp)
+                                .fillMaxWidth(0.35f)
                         )
                         ExposedDropdownMenu(
                             expanded = isDropdownExpanded,
                             onDismissRequest = {valueExperienceViewModel.toggleDropdown() }
                         ) {
-                            LazyColumn{
-                                items(10){puntuació ->
-                                    DropdownMenuItem(
-                                        text = {
-                                            Text(text = puntuació.toString())
-                                        },
-                                        onClick = { valueExperienceViewModel.setExperienceScore(puntuació.toString()) }
-                                    )
-                                }
+                            (1..10).forEach { puntuació ->
+                                DropdownMenuItem(
+                                    text = {
+                                        Text(text = puntuació.toString())
+                                    },
+                                    onClick = { valueExperienceViewModel.setExperienceScore(puntuació.toString()) }
+                                )
                             }
-
                         }
-
                     }
                 }
 
@@ -148,7 +146,7 @@ fun ValueExperienceGeneralScreen(routeID: Int, orderID: Int, navHost: NavHostCon
                 Row(
                     modifier = Modifier
                         .fillMaxWidth(0.95f)
-                        .padding(start = 4.dp, bottom = 10.dp),
+                        .padding(start = 4.dp, top = 10.dp, bottom = 8.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
@@ -161,8 +159,8 @@ fun ValueExperienceGeneralScreen(routeID: Int, orderID: Int, navHost: NavHostCon
 
                     Row(
                     modifier = Modifier
-                        .fillMaxWidth(0.95f)
-                        .padding(start = 4.dp, bottom = 10.dp),
+                        .fillMaxWidth()
+                        .padding(start = 4.dp, bottom = 10.dp, end = 4.dp),
                     horizontalArrangement = Arrangement.Center
 
                 ){
@@ -186,7 +184,8 @@ fun ValueExperienceGeneralScreen(routeID: Int, orderID: Int, navHost: NavHostCon
                     ElevatedButton(
                         shape = RoundedCornerShape(16.dp),
                         onClick = {
-                             valueExperienceViewModel.sendReview()
+                             valueExperienceViewModel.sendReview(route, order, navHost)
+
                         },
                         colors = ButtonDefaults.elevatedButtonColors(
                             containerColor = OrangeRC
@@ -216,6 +215,7 @@ fun ValueExperienceGeneralScreen(routeID: Int, orderID: Int, navHost: NavHostCon
 @Preview(showBackground = true)
 fun ValueExperienceGeneralScreenPreview (){
     val navHost = rememberNavController()
+    val routeDetailDriverViewModel = RouteDetailDriverViewModel(1)
 
-    ValueExperienceGeneralScreen(1, 1, navHost)
+    ValueExperienceGeneralScreen(1, 1, navHost, routeDetailDriverViewModel)
 }

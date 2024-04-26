@@ -61,6 +61,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
@@ -136,23 +137,19 @@ fun PublishOrderScreen(command: String, orderID: Int, navHost: NavHostController
     val orderToEdit by manageOrderViewModel.orderToEdit.collectAsStateWithLifecycle()
     val orderAdded by manageOrderViewModel.orderAdded.collectAsStateWithLifecycle()
     if (orderAdded) {
+        // Resets the orderAdded state
+        manageOrderViewModel.onOrderAdded(false)
         if (command == "create"){
             navHost.navigate("MapScreen"){
                 popUpTo("MapScreen") { inclusive = true }
             }
         } else {
-            navHost.navigate("OrderDetailScreen/{packageId}".replace(
-                "{packageId}", orderID.toString())
+            navHost.navigate("OrderDetailScreen/{orderID}".replace(
+                "{orderID}", orderID.toString())
             ){
-                popUpTo("OrderDetailScreen/{packageId}".replace(
-                    "{packageId}", orderID.toString())
-                ){
-                    inclusive = true
-                }
+                popUpTo("OrderDetailScreen/{orderID}") { inclusive = true }
             }
         }
-        // Resets the orderAdded state
-        manageOrderViewModel.onOrderAdded(false)
     }
 
     Scaffold( modifier = Modifier
@@ -395,6 +392,7 @@ private fun PublishOrderContent2(
                 unfocusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
             ),
             keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Number,
                 imeAction = ImeAction.Next
             ),
             singleLine = true,
@@ -423,7 +421,7 @@ private fun PublishOrderContent2(
             modifier = Modifier.weight(0.30f),
             text = "Mides i pes dels paquets",
             style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.onBackground
+            color = MaterialTheme.colorScheme.onBackground,
         )
     }
     // Height, Width, Length, Weight
@@ -432,28 +430,33 @@ private fun PublishOrderContent2(
         onValueChange = manageOrderViewModel::setPackagesHeight,
         placeholder = "Alçària (cm)",
         suffix = "cm",
-        isError = screen2Errors[1]
+        isError = screen2Errors[1],
+        keyboardType = KeyboardType.Decimal
+
     )
     MeasurementsTextField(
         value = packageWidth,
         onValueChange = manageOrderViewModel::setPackagesWidth,
         placeholder = "Amplada (cm)",
         suffix = "cm",
-        isError = screen2Errors[2]
+        isError = screen2Errors[2],
+        keyboardType = KeyboardType.Decimal
     )
     MeasurementsTextField(
         value = packageLength,
         onValueChange = manageOrderViewModel::setPackagesLength,
         placeholder = "Llargada (cm)",
         suffix = "cm",
-        isError = screen2Errors[3]
+        isError = screen2Errors[3],
+        keyboardType = KeyboardType.Decimal
     )
     MeasurementsTextField(
         value = packageWeight,
         onValueChange = manageOrderViewModel::setPackagesWeight,
         placeholder = "Pes (kg)",
         suffix = "kg",
-        isError = screen2Errors[4]
+        isError = screen2Errors[4],
+        keyboardType = KeyboardType.Decimal
     )
 
     // Notification Checkbox
