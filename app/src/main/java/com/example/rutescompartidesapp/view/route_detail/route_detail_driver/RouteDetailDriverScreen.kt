@@ -1,6 +1,7 @@
 package com.example.rutescompartidesapp.view.route_detail.route_detail_driver
 
 import android.annotation.SuppressLint
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -28,11 +29,13 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -55,6 +58,7 @@ import com.example.rutescompartidesapp.view.confirm_delivery.viewmodel.DrawViewM
 import com.example.rutescompartidesapp.view.generic_components.TopAppBarWithBackNav
 import com.example.rutescompartidesapp.view.route_detail.route_detail_driver.components.RouteInteractionCard
 import com.example.rutescompartidesapp.view.routes_order_list.components.RouteCardHeader
+import kotlinx.coroutines.flow.collectLatest
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "RestrictedApi")
 @Composable
@@ -76,6 +80,18 @@ fun RouteDetailDriverScreen(
     val isCameraActive by cameraViewModel.isCameraActive.collectAsStateWithLifecycle()
     val isSignatureActive by drawViewModel.isSignatureActive.collectAsStateWithLifecycle()
 
+    val interactionToastText by routeDetailDriverViewModel.interactionToastText.collectAsStateWithLifecycle()
+
+    val context = LocalContext.current
+
+    // Toast per notificar a l'usuari l'event de la interacció
+    LaunchedEffect(key1 = routeDetailDriverViewModel.showInteractionToastChannel){
+        routeDetailDriverViewModel.showInteractionToastChannel.collectLatest { interactionToast ->
+            if (interactionToast){
+                Toast.makeText(context, interactionToastText, Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
 
     if (isCameraActive) {
         CameraScreen(cameraViewModel = cameraViewModel)

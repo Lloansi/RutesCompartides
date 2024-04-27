@@ -1,14 +1,18 @@
 package com.example.rutescompartidesapp.view.value_experience
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.example.rutescompartidesapp.data.domain.OrderForList
 import com.example.rutescompartidesapp.data.domain.RouteForList
 import com.example.rutescompartidesapp.data.domain.review.Review
 import com.example.rutescompartidesapp.utils.LocalConstants
 import com.example.rutescompartidesapp.utils.LocalConstants.reviewList
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.launch
 
 class ValueExperienceViewModel:ViewModel() {
 
@@ -62,7 +66,16 @@ class ValueExperienceViewModel:ViewModel() {
         // Modify the status of the interaction
         LocalConstants.interactionList.first { it.routeID == route.routeID &&
                 it.orderID == order.orderID}.status = "Valorada"
+
+        viewModelScope.launch {
+            _showInteractionToastChannel.send(true)
+        }
+
         navHost.popBackStack()
     }
+
+    // Toast d'interacció
+    private val _showInteractionToastChannel = Channel<Boolean>()
+    val showInteractionToastChannel = _showInteractionToastChannel.receiveAsFlow()
 
 }

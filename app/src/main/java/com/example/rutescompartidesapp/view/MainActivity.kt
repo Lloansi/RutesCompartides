@@ -223,8 +223,7 @@ fun ScreenNavigationConfiguration( mapViewModel: MapViewModel,mapViewModel2: Map
                 })) {
             val routeID = it.arguments?.getInt("routeId")
             val orderID = it.arguments?.getInt("orderId")
-            val routeDetailDriverViewModel = RouteDetailDriverViewModel(routeID!!)
-            ValueExperienceGeneralScreen(routeID, orderID!!, navController, routeDetailDriverViewModel)
+            ValueExperienceGeneralScreen(routeID!!, orderID!!, navController)
         }
 
         composable(Screens.RoutesOrderListScreen.route) {

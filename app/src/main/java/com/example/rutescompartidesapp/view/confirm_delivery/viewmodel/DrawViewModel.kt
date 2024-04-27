@@ -10,8 +10,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.rutescompartidesapp.data.domain.Line
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileOutputStream
@@ -27,6 +29,10 @@ class DrawViewModel: ViewModel() {
     fun onSignatureActive(isActive: Boolean){
         _isSignatureActive.value = isActive
     }
+
+    private val _showSuccessToastChannel = Channel<Boolean>()
+    val showSuccessToastChannel = _showSuccessToastChannel.receiveAsFlow()
+
 
     fun saveBitmapToGallery(bitmap: Bitmap) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -63,9 +69,11 @@ class DrawViewModel: ViewModel() {
         }
 
         _drawBitmap.value =  bitmap
+        viewModelScope.launch {
+            _showSuccessToastChannel.send(true)
+        }
         _isSignatureActive.value = false
     }
-
 
 
 }

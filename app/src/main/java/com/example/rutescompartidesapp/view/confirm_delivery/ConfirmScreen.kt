@@ -1,6 +1,7 @@
 package com.example.rutescompartidesapp.view.confirm_delivery
 
 import android.graphics.Bitmap
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -24,12 +25,14 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.rutescompartidesapp.ui.theme.GrayRC
@@ -38,6 +41,7 @@ import com.example.rutescompartidesapp.view.confirm_delivery.viewmodel.DrawViewM
 import com.example.rutescompartidesapp.view.generic_components.RouteOrderHeader
 import com.example.rutescompartidesapp.view.map.fredokaOneFamily
 import com.example.rutescompartidesapp.view.route_detail.route_detail_driver.RouteDetailDriverViewModel
+import kotlinx.coroutines.flow.collectLatest
 
 
 @Composable
@@ -49,6 +53,26 @@ fun ConfirmScreen(
 
     val route by routeDetailDriverViewModel.route.collectAsStateWithLifecycle()
     val order by routeDetailDriverViewModel.order.collectAsStateWithLifecycle()
+
+    val context = LocalContext.current
+
+    // Toasts per notificar a l'usuari que es guarda correctament la firma i la foto
+    // Firma
+    LaunchedEffect(key1 = drawViewModel.showSuccessToastChannel){
+        drawViewModel.showSuccessToastChannel.collectLatest { successToast ->
+            if (successToast){
+                Toast.makeText(context, "Firma guardada correctament", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+    // Foto
+    LaunchedEffect(key1 = cameraViewModel.showSuccessToastChannel){
+        cameraViewModel.showSuccessToastChannel.collectLatest { successToast ->
+            if (successToast){
+                Toast.makeText(context, "Foto guardada correctament", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
 
     ElevatedCard (
         modifier = Modifier
