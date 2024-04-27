@@ -32,7 +32,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavHostController
 import com.example.rutescompartidesapp.ui.theme.GrayRC
 import com.example.rutescompartidesapp.view.confirm_delivery.viewmodel.CameraViewModel
 import com.example.rutescompartidesapp.view.confirm_delivery.viewmodel.DrawViewModel
@@ -44,7 +43,6 @@ import com.example.rutescompartidesapp.view.route_detail.route_detail_driver.Rou
 @Composable
 fun ConfirmScreen(
     routeDetailDriverViewModel : RouteDetailDriverViewModel,
-    navController: NavHostController,
     cameraViewModel: CameraViewModel, drawViewModel: DrawViewModel) {
     val bitmapPhoto by cameraViewModel.bitmapPhoto.collectAsStateWithLifecycle()
     val bitmapDraw by drawViewModel.drawBitmap.collectAsStateWithLifecycle()
@@ -53,7 +51,8 @@ fun ConfirmScreen(
     val order by routeDetailDriverViewModel.order.collectAsStateWithLifecycle()
 
     ElevatedCard (
-        modifier = Modifier.fillMaxHeight()
+        modifier = Modifier
+            .fillMaxHeight()
             .padding(start = 8.dp, end = 8.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer,
@@ -71,19 +70,19 @@ fun ConfirmScreen(
         ){
             Text(text = "Foto de l'entrega (opcional)", fontFamily = fredokaOneFamily)
             Spacer(modifier = Modifier.padding(6.dp))
-            UploadImageOrSignature(icon = Icons.Filled.Upload, navController = navController, destination = "CameraScreen", bitmap = bitmapPhoto)
+            UploadImageOrSignature(icon = Icons.Filled.Upload, destination = "CameraScreen"
+                , bitmap = bitmapPhoto, cameraViewModel = cameraViewModel, drawViewModel = drawViewModel)
             Spacer(modifier = Modifier.padding(8.dp))
             Text(text = "Signatura del/de la receptor/a (opcional) ", fontFamily = fredokaOneFamily)
             Spacer(modifier = Modifier.padding(6.dp))
-            UploadImageOrSignature(icon = Icons.Filled.Upload, navController = navController, destination = "DrawScreen", bitmap = bitmapDraw)
+            UploadImageOrSignature(icon = Icons.Filled.Upload, destination = "DrawScreen"
+                , bitmap = bitmapDraw, cameraViewModel = cameraViewModel, drawViewModel = drawViewModel)
             Spacer(modifier = Modifier.padding(8.dp))
             Text(text = "Comentaris", fontFamily = fredokaOneFamily)
             Spacer(modifier = Modifier.padding(6.dp))
             UserCommentContainer(routeDetailDriverViewModel)
             Spacer(modifier = Modifier.padding(8.dp))
         }
-
-
     } // END CARD
     Row(
         modifier = Modifier
@@ -111,12 +110,21 @@ fun ConfirmScreen(
 @Composable
 fun UploadImageOrSignature(
     icon : ImageVector,
-    navController: NavHostController, destination: String , bitmap: Bitmap?){
+    destination: String , bitmap: Bitmap?,
+    cameraViewModel: CameraViewModel, drawViewModel: DrawViewModel){
+
     Row (
         verticalAlignment = Alignment.CenterVertically
-    ){
+    )
+    {
         FloatingActionButton(
-            onClick = { navController.navigate(route = destination) },
+            onClick = {
+                if (destination == "CameraScreen"){
+                    cameraViewModel.onCameraActive(isActive = true)
+                } else if (destination == "DrawScreen") {
+                    drawViewModel.onSignatureActive(isActive = true)
+                }
+                      },
             containerColor = MaterialTheme.colorScheme.primary,
             /*
             modifier = Modifier

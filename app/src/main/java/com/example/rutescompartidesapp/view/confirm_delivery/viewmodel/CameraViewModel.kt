@@ -17,11 +17,19 @@ class CameraViewModel: ViewModel() {
     private val _bitmapDraw = MutableStateFlow<Bitmap?>(null)
     val bitmapDraw = _bitmapDraw.asStateFlow()
 
+    private val _isCameraActive = MutableStateFlow(false)
+    val isCameraActive = _isCameraActive.asStateFlow()
+
+    fun onCameraActive(isActive: Boolean){
+        _isCameraActive.value = isActive
+    }
+
     fun onTakePhoto(bitmap : Bitmap){
         _bitmaps.value += bitmap
     }
 
     fun updatePhotoBitmap(bitmap: Bitmap){
         _bitmapPhoto.value = bitmap
+        _isCameraActive.value = false
     }
 }

@@ -18,15 +18,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
 import com.example.rutescompartidesapp.view.confirm_delivery.viewmodel.CameraViewModel
 
 @Composable
 fun PhotoBottomSheetContent(
     bitmaps : List<Bitmap>,
     modifier: Modifier = Modifier,
-    viewModel: CameraViewModel,
-    navController: NavHostController
+    viewModel: CameraViewModel
 ) {
     if (bitmaps.isEmpty()){
         Box (
@@ -52,8 +50,6 @@ fun PhotoBottomSheetContent(
                         .clip( RoundedCornerShape(10.dp) )
                         .clickable {
                             viewModel.updatePhotoBitmap(bitmap)
-                            println("FOTO ACTUALIZADA")
-                            navController.popBackStack()
                         }
                 )
             }

@@ -1,7 +1,6 @@
 package com.example.rutescompartidesapp.view.confirm_delivery.components.camera
 
 import android.content.Context
-import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Matrix
 import android.util.Log
@@ -40,15 +39,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
-import androidx.navigation.NavHostController
-import com.example.rutescompartidesapp.utils.Constants
 import com.example.rutescompartidesapp.view.confirm_delivery.viewmodel.CameraViewModel
 import kotlinx.coroutines.launch
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CameraScreen(navController: NavHostController, cameraViewModel: CameraViewModel){
+fun CameraScreen(cameraViewModel: CameraViewModel){
     val bitmaps by cameraViewModel.bitmaps.collectAsState()
 
     Surface(
@@ -72,7 +69,6 @@ fun CameraScreen(navController: NavHostController, cameraViewModel: CameraViewMo
             sheetContent = {
                 PhotoBottomSheetContent(
                     bitmaps = bitmaps,
-                    navController = navController,
                     viewModel = cameraViewModel,
                     modifier = Modifier
                         .fillMaxWidth()

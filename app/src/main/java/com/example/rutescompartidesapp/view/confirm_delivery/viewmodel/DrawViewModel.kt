@@ -22,6 +22,12 @@ class DrawViewModel: ViewModel() {
     private val _drawBitmap = MutableStateFlow<Bitmap?>(null)
     val drawBitmap = _drawBitmap.asStateFlow()
 
+    private val _isSignatureActive = MutableStateFlow(false)
+    val isSignatureActive = _isSignatureActive.asStateFlow()
+    fun onSignatureActive(isActive: Boolean){
+        _isSignatureActive.value = isActive
+    }
+
     fun saveBitmapToGallery(bitmap: Bitmap) {
         viewModelScope.launch(Dispatchers.IO) {
             val fileName = "drawing_${System.currentTimeMillis()}.png"
@@ -57,6 +63,9 @@ class DrawViewModel: ViewModel() {
         }
 
         _drawBitmap.value =  bitmap
+        _isSignatureActive.value = false
     }
+
+
 
 }

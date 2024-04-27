@@ -38,12 +38,9 @@ import com.example.rutescompartidesapp.ui.theme.MateBlackRC
 import com.example.rutescompartidesapp.ui.theme.RutesCompartidesAppTheme
 import com.example.rutescompartidesapp.view.com_funciona.ComFuncionaScreen
 import com.example.rutescompartidesapp.view.edit_profile.EditProfileScreen
-import com.example.rutescompartidesapp.view.edit_profile.EditProfileViewModel
 import com.example.rutescompartidesapp.view.faq.FaqScreen
 import com.example.rutescompartidesapp.view.faq.FaqViewModel
 import com.example.rutescompartidesapp.utils.Constants.ALL_PERMISSIONS
-import com.example.rutescompartidesapp.view.confirm_delivery.components.camera.CameraScreen
-import com.example.rutescompartidesapp.view.confirm_delivery.components.draw.DrawScreen
 import com.example.rutescompartidesapp.view.confirm_delivery.viewmodel.CameraViewModel
 import com.example.rutescompartidesapp.view.confirm_delivery.viewmodel.DrawViewModel
 import com.example.rutescompartidesapp.view.order_detail.OrderDetailScreen
@@ -117,9 +114,6 @@ class MainActivity : ComponentActivity() {
                 val filterPopupViewModel = FilterPopupViewModel()
                 val routeOrderListViewModel = RoutesOrderListViewModel()
                 val searchViewModel: SearchViewModel = hiltViewModel()
-                val cameraViewModel = CameraViewModel()
-                val drawViewModel = DrawViewModel()
-
                 val navController = rememberNavController()
 
                 val bottomNavigationItems = listOf(
@@ -184,8 +178,6 @@ class MainActivity : ComponentActivity() {
                         filterPopupViewModel,
                         searchViewModel,
                         navController,
-                        cameraViewModel,
-                        drawViewModel,
                         Modifier.padding(paddingValues),
                     )
                 }
@@ -197,11 +189,10 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun ScreenNavigationConfiguration( mapViewModel: MapViewModel,mapViewModel2: MapViewModel2,loginViewModel: LoginViewModel, profileViewModel: ProfileViewModel,
                                    routeOrderListViewModel: RoutesOrderListViewModel, filterPopupViewModel: FilterPopupViewModel, searchViewModel: SearchViewModel,
-                                   navController: NavHostController, cameraViewModel: CameraViewModel, drawViewModel: DrawViewModel,
+                                   navController: NavHostController,
+                                   modifier: Modifier) {
 
-                                   paddingModifier: Modifier) {
-
-    NavHost(navController = navController, startDestination = Screens.LoginScreen.route, modifier = paddingModifier) {
+    NavHost(navController = navController, startDestination = Screens.LoginScreen.route, modifier = modifier) {
 
         composable(Screens.MapScreen.route) {
             MapScreen(navController, mapViewModel, searchViewModel)
@@ -254,15 +245,11 @@ fun ScreenNavigationConfiguration( mapViewModel: MapViewModel,mapViewModel2: Map
         })) {
             val routeID = it.arguments?.getInt("routeId")
             val routeDetailDriverViewModel = RouteDetailDriverViewModel(routeID!!)
-            RouteDetailDriverScreen(routeID, navController, routeDetailDriverViewModel,
-                cameraViewModel, drawViewModel)
+            val cameraViewModel = CameraViewModel()
+            val drawViewModel = DrawViewModel()
+            RouteDetailDriverScreen(routeID, navController, routeDetailDriverViewModel, cameraViewModel, drawViewModel)
         }
-        composable(Screens.CameraScreen.route) {
-            CameraScreen(navController, cameraViewModel)
-        }
-        composable(Screens.DrawScreen.route) {
-            DrawScreen(navController, drawViewModel)
-        }
+
 
         /*
         composable(Screens.EditRouteScreen.route,

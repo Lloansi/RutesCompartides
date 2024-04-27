@@ -64,11 +64,15 @@ class RouteDetailDriverViewModel (routeID: Int): ViewModel(){
     // This function is called when the user confirms the delivery of the order
     fun completeOrder(){
         if (_routeInteractionToConfirm.value != null){
-            println("HOLA")
+            val routeID = _routeInteractionToConfirm.value!!.routeID
+            val orderID = _routeInteractionToConfirm.value!!.orderID
+            // Canviem l'estat de la interacció del state
             _interactions[_interactions
                 .indexOf(_routeInteractionToConfirm.value)] = _routeInteractionToConfirm.value!!
                 .copy(status = "Entregada")
-
+            // Canviem l'estat de la interacció de la llista local
+            interactionList.first { it.routeID == routeID &&
+                    it.orderID == orderID}.status = "Entregada"
             _userComment.value
             showCompleteScreen(false)
         }
@@ -110,16 +114,6 @@ class RouteDetailDriverViewModel (routeID: Int): ViewModel(){
         LocalConstants.routeList.remove(route)
         // TODO Fer un DELETE a la API per eliminar la ruta
     }
-
-    // CAMERA AND DRAW
-
-    private val _isUploaded = MutableStateFlow(false)
-    val isUploaded = _isUploaded.asStateFlow()
-
-    fun onUpload(isUploaded: Boolean){
-        _isUploaded.value = isUploaded
-    }
-
 
 
     //private val _interactions: SnapshotStateList<RouteInteraction> = mutableStateListOf<RouteInteraction>()
