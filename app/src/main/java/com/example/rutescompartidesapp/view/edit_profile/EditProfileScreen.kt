@@ -104,9 +104,6 @@ fun BuildTextFields(
     val userNameText by viewModel.userNameText.collectAsState()
     val userNameError by viewModel.userNameError.collectAsState()
 
-    val firstNameText by viewModel.firstNameText.collectAsState()
-    val lastNameText by viewModel.lastNameText.collectAsState()
-
     val emailText by viewModel.emailText.collectAsState()
     val emailError by viewModel.userEmailError.collectAsState()
 
@@ -120,19 +117,15 @@ fun BuildTextFields(
                 .padding(top = 10.dp, bottom = 10.dp),
             value = when (field) {
                 0 -> userNameText
-                1 -> firstNameText
-                2 -> lastNameText
-                3 -> emailText
-                4 -> phoneText
+                1 -> emailText
+                2 -> phoneText
                 else -> ""
             },
             onValueChange = { value ->
                 when (field) {
                     0 -> viewModel.userNameOnTextChange(value)
-                    1 -> viewModel.firstNameOnTextChange(value)
-                    2 -> viewModel.lastNameOnTextChange(value)
-                    3 -> viewModel.emailOnTextChange(value)
-                    4 -> viewModel.phoneNameOnTextChange(value)
+                    1 -> viewModel.emailOnTextChange(value)
+                    2 -> viewModel.phoneNameOnTextChange(value)
                     else -> "Error" + value
                 }
             },
@@ -211,16 +204,6 @@ fun textFieldList(): List<EditProfileTextFieldModel> {
         EditProfileTextFieldModel(
             Icons.Rounded.Person,
             "Nom d'usuari",
-            KeyboardType.Text
-        ),
-        EditProfileTextFieldModel(
-            Icons.Rounded.Person,
-            "Nom",
-            KeyboardType.Text
-        ),
-        EditProfileTextFieldModel(
-            Icons.Rounded.Person,
-            "Cognoms",
             KeyboardType.Text
         ),
         EditProfileTextFieldModel(

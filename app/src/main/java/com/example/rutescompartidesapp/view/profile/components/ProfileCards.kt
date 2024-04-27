@@ -37,7 +37,7 @@ import com.example.rutescompartidesapp.ui.theme.openSans
 import com.example.rutescompartidesapp.view.profile.ProfileViewModel
 
 @Composable
-fun CreateCardsWithItems(list: List<ProfileItems>, paddingBottom: Dp, paddingTop: Dp, viewModel: ProfileViewModel, navController: NavController) {
+fun CreateCardsWithItems(list: List<ProfileItems>, paddingBottom: Dp, paddingTop: Dp, viewModel: ProfileViewModel, navController: NavController, listNumber: Int) {
     Card(
         modifier = Modifier
             .width(LocalConfiguration.current.screenWidthDp.dp - 50.dp)
@@ -93,7 +93,7 @@ fun CreateCardsWithItems(list: List<ProfileItems>, paddingBottom: Dp, paddingTop
                             .padding(start = 5.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        if (list.size == 4) Image(painter = painterResource(id = routeItemsListIcons[i]), contentDescription = null, modifier = Modifier.width(25.dp))
+                        if (listNumber == 1) Image(painter = painterResource(id = routeItemsListIcons[i]), contentDescription = null, modifier = Modifier.width(25.dp))
                         else Image(painter = painterResource(id = userItemsListIcons[i]), contentDescription = null, modifier = Modifier.width(25.dp))
                         Column(
                             verticalArrangement = Arrangement.Center,

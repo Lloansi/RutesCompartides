@@ -205,10 +205,10 @@ fun ProfileScreen(profileViewModel: ProfileViewModel, loginViewModel: LoginViewM
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             // First card creation (Route Settings)
-            CreateCardsWithItems(routeProfileItemsList, 0.dp, 0.dp, profileViewModel, navController)
+            CreateCardsWithItems(routeProfileItemsList, 0.dp, 0.dp, profileViewModel, navController, 1)
 
             // Second card creation (User Settings)
-            CreateCardsWithItems(userProfileItemsList, 20.dp, 0.dp, profileViewModel, navController)
+            CreateCardsWithItems(userProfileItemsList, 20.dp, 0.dp, profileViewModel, navController, 2)
         }
     }
 }
