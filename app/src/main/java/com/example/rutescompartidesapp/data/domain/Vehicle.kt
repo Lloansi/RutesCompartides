@@ -1,5 +1,6 @@
 package com.example.rutescompartidesapp.data.domain
 
+import com.example.rutescompartidesapp.utils.round
 import com.example.rutescompartidesapp.utils.roundTo1Decimal
 
 data class Vehicle(
@@ -11,9 +12,10 @@ data class Vehicle(
     var vehicleMesures: String = "$vehicleHeight x $vehicleWidth x $vehicleLongitude"
 ){
     init {
-        vehicleHeight = vehicleHeight.roundTo1Decimal()
-        vehicleWidth = vehicleWidth.roundTo1Decimal()
-        vehicleLongitude = vehicleLongitude.roundTo1Decimal()
+        vehicleHeight = vehicleHeight.toDouble().round(1).toFloat()
+        vehicleWidth = vehicleWidth.toDouble().round(1).toFloat()
+        vehicleLongitude = vehicleLongitude.toDouble().round(1).toFloat()
+
     }
 }
 

@@ -1,6 +1,6 @@
 package com.example.rutescompartidesapp.data.domain
 
-import com.example.rutescompartidesapp.utils.roundTo1Decimal
+import com.example.rutescompartidesapp.utils.round
 
 data class Route(
     val routeId: Int,
@@ -15,8 +15,7 @@ data class Route(
     val endLon: Float,
 ){
     init {
-        routePrice = routePrice.roundTo1Decimal()
-
+        routePrice = routePrice.toDouble().round(1).toFloat()
     }
 
     fun doesMatchSearchQuery(query: String): Boolean {

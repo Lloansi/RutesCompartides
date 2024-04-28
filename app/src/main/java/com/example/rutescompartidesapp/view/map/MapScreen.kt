@@ -23,7 +23,6 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
@@ -90,7 +89,7 @@ fun MapScreen(navController: NavHostController, mapViewModel: MapViewModel, sear
             ) {
                 Column {
                     SearchViewContainer(searchViewModel)
-                   // FilteredListsBelowSearchBar(searchViewModel)
+                    FilteredListsBelowSearchBar(searchViewModel)
                 }
             }
 
