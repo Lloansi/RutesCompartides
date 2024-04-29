@@ -10,8 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -135,9 +133,7 @@ class MainActivity : ComponentActivity() {
                     )
                 )
 
-                val currentIndex = rememberSaveable {
-                    mutableIntStateOf(0)
-                }
+                val currentIndex = loginViewModel.currentIndex
 
                 Scaffold(
                     bottomBar = {
@@ -164,6 +160,7 @@ class MainActivity : ComponentActivity() {
                                 ),
                                 onSelectItem = {
                                     println("SELECTED_ITEM " + " onCreate: Selected Item ${it.name}")
+                                    println(it.route)
                                 }
                             )
                        }
@@ -233,7 +230,7 @@ fun ScreenNavigationConfiguration( mapViewModel: MapViewModel,mapViewModel2: Map
             RoutesOrderListScreen(navController, routeOrderListViewModel, filterPopupViewModel, loginViewModel)
         }
         composable(Screens.ProfileScreen.route) {
-            ProfileScreen(profileViewModel, loginViewModel, navController)
+            ProfileScreen(profileViewModel, loginViewModel, navController, routeOrderListViewModel)
         }
         composable(Screens.LoginScreen.route) {
             LoginScreen(loginViewModel, navController)

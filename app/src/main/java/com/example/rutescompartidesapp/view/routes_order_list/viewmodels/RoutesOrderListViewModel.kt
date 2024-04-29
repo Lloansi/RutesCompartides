@@ -24,6 +24,13 @@ class RoutesOrderListViewModel: ViewModel() {
     private val _isSearching = MutableStateFlow(false)
     val isSearching = _isSearching.asStateFlow()
 
+    private val _toOrders = MutableStateFlow(false)
+    val toOrders = _toOrders.asStateFlow()
+
+    fun onToOrders(goingToOrders: Boolean){
+        _toOrders.value = goingToOrders
+    }
+
     // Filter my list of routes and orders
     private val _isMyFilterActive = MutableStateFlow(false)
     val isMyFilterActive = _isMyFilterActive.asStateFlow()

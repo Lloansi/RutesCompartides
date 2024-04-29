@@ -25,7 +25,6 @@ import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -39,7 +38,6 @@ import androidx.compose.ui.zIndex
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.rutescompartidesapp.ui.theme.openSans
-import com.example.rutescompartidesapp.utils.Constants
 import com.example.rutescompartidesapp.view.generic_components.HeaderSphere
 import com.example.rutescompartidesapp.view.login.LoginViewModel
 import com.example.rutescompartidesapp.view.profile.components.CreateCardsWithItems
@@ -48,10 +46,11 @@ import com.example.rutescompartidesapp.view.profile.components.ProfileEditButton
 import com.example.rutescompartidesapp.view.profile.components.ReviewButtons
 import com.example.rutescompartidesapp.view.profile.components.routeProfileItemsList
 import com.example.rutescompartidesapp.view.profile.components.userProfileItemsList
+import com.example.rutescompartidesapp.view.routes_order_list.viewmodels.RoutesOrderListViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProfileScreen(profileViewModel: ProfileViewModel, loginViewModel: LoginViewModel, navController: NavController) {
+fun ProfileScreen(profileViewModel: ProfileViewModel, loginViewModel: LoginViewModel, navController: NavController, routesOrderListViewModel: RoutesOrderListViewModel) {
 
     val onClickPlaceholder by profileViewModel.onClickPlaceholder.collectAsStateWithLifecycle()
     val editProfileButtonSize by profileViewModel.editProfileButtonSize.collectAsStateWithLifecycle()
@@ -205,10 +204,12 @@ fun ProfileScreen(profileViewModel: ProfileViewModel, loginViewModel: LoginViewM
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             // First card creation (Route Settings)
-            CreateCardsWithItems(routeProfileItemsList, 0.dp, 0.dp, profileViewModel, navController, 1)
+            CreateCardsWithItems(routeProfileItemsList, 0.dp, 0.dp, profileViewModel, navController, 1,
+                routesOrderListViewModel, user!!.userId, loginViewModel)
 
             // Second card creation (User Settings)
-            CreateCardsWithItems(userProfileItemsList, 20.dp, 0.dp, profileViewModel, navController, 2)
+            CreateCardsWithItems(userProfileItemsList, 20.dp, 0.dp, profileViewModel, navController, 2,
+                routesOrderListViewModel, user!!.userId, loginViewModel)
         }
     }
 }

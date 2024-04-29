@@ -28,6 +28,7 @@ class RouteDetailDriverViewModel (routeID: Int): ViewModel(){
      * @param routeInteraction Interacció a modificar
      * @param index Índex de la interacció a modificar
      * @param status Nou estat de la interacció
+     *
      */
     fun modifyInteractionStatus(routeInteraction: RouteInteraction, index: Int, status: String){
         _interactions[index] = routeInteraction.copy(status = status)

@@ -56,6 +56,10 @@ fun TabRows(routesOrderListViewModel: RoutesOrderListViewModel, navController: N
     val orders by routesOrderListViewModel.orders.collectAsStateWithLifecycle()
     val isSearching by routesOrderListViewModel.isSearching.collectAsStateWithLifecycle()
     val isMyFilterActive by routesOrderListViewModel.isMyFilterActive.collectAsStateWithLifecycle()
+    val toOrders by routesOrderListViewModel.toOrders.collectAsStateWithLifecycle()
+    if (toOrders){
+        tabRowViewModel.onSelectTab(1)
+    }
 
     val pagerState = rememberPagerState {
         tabItems.size

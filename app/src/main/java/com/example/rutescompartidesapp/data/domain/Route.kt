@@ -13,6 +13,7 @@ data class Route(
     val startLon: Float,
     val endLat: Float,
     val endLon: Float,
+
 ){
     init {
         routePrice = routePrice.toDouble().round(1).toFloat()

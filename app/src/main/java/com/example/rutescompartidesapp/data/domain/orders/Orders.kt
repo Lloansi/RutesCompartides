@@ -1,8 +1,8 @@
-package com.example.rutescompartidesapp.data.domain
+package com.example.rutescompartidesapp.data.domain.orders
 
-import com.example.rutescompartidesapp.data.domain.map.Itinerary
+import org.osmdroid.util.GeoPoint
 
-data class OrderForList(
+data class Orders(
     val userID: Int,
     val orderID: Int,
     val orderName: String,
@@ -24,4 +24,6 @@ data class OrderForList(
     val distance: Float,
     val co2Saved: Float,
     val comment: String?,
+    val startPoint: GeoPoint,
+    val endPoint: GeoPoint
 )

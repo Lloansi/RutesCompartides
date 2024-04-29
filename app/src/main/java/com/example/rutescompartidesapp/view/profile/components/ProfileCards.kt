@@ -1,6 +1,5 @@
 package com.example.rutescompartidesapp.view.profile.components
 
-import android.util.Log
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.foundation.Image
@@ -22,22 +21,24 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.NavGraphNavigator
 import com.example.rutescompartidesapp.data.domain.ProfileItems
 import com.example.rutescompartidesapp.ui.theme.openSans
+import com.example.rutescompartidesapp.view.login.LoginViewModel
 import com.example.rutescompartidesapp.view.profile.ProfileViewModel
+import com.example.rutescompartidesapp.view.routes_order_list.viewmodels.RoutesOrderListViewModel
 
 @Composable
-fun CreateCardsWithItems(list: List<ProfileItems>, paddingBottom: Dp, paddingTop: Dp, viewModel: ProfileViewModel, navController: NavController, listNumber: Int) {
+fun CreateCardsWithItems(list: List<ProfileItems>, paddingBottom: Dp, paddingTop: Dp, viewModel: ProfileViewModel, navController: NavController, listNumber: Int,
+                         routesOrderListViewModel: RoutesOrderListViewModel,
+                         userID: Int,
+                         loginViewModel: LoginViewModel) {
     Card(
         modifier = Modifier
             .width(LocalConfiguration.current.screenWidthDp.dp - 50.dp)
@@ -56,10 +57,18 @@ fun CreateCardsWithItems(list: List<ProfileItems>, paddingBottom: Dp, paddingTop
                 onClick = {
                     when (list[i].title) {
                         "Les meves rutes" -> {
-                            viewModel.onClickItemPlaceholder(true)
+                            routesOrderListViewModel.onMyFilterActive(userID)
+                            routesOrderListViewModel.onToOrders(false)
+                            navController.navigate("RoutesOrderListScreen") {
+                            }
+                            loginViewModel.updateCurrentIndex(1)
                         }
                         "Les meves comandes" -> {
-                            viewModel.onClickItemPlaceholder(true)
+                            routesOrderListViewModel.onMyFilterActive(userID)
+                            routesOrderListViewModel.onToOrders(true)
+                            navController.navigate("RoutesOrderListScreen") {
+                            }
+                            loginViewModel.updateCurrentIndex(1)
                         }
                         "Notificacions" -> {
                             viewModel.onClickItemPlaceholder(true)

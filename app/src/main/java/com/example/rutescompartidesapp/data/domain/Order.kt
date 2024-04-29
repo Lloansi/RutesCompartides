@@ -14,6 +14,7 @@ data class Order (
     val packageEndDate: String,
     val packageStartPoint: String,
     val packageEndPoint: String,
+
     val lat: Float,
     val lon: Float
 ){

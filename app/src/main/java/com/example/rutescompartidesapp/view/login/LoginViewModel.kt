@@ -1,6 +1,7 @@
 package com.example.rutescompartidesapp.view.login
 
 import android.util.Patterns
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
@@ -25,7 +26,12 @@ class LoginViewModel @Inject constructor (
     private val sessionRepository: SessionRepository
 ): ViewModel(){
 
+    private val _currentIndex = mutableIntStateOf(0)
+    val currentIndex = _currentIndex
 
+    fun updateCurrentIndex(index: Int){
+        _currentIndex.intValue = index
+    }
 
 
     private val _authToken = MutableStateFlow("")

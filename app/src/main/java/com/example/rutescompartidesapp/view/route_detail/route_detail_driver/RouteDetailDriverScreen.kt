@@ -66,6 +66,7 @@ fun RouteDetailDriverScreen(
     routeID: Int, navHost: NavHostController,
     routeDetailDriverViewModel : RouteDetailDriverViewModel,
     cameraViewModel: CameraViewModel, drawViewModel: DrawViewModel) {
+
     // TODO Amb el ID hauría de fer una trucada a la API per obtenir la ruta
     // TODO i una altra per obtenir les interaccions de la ruta
 
