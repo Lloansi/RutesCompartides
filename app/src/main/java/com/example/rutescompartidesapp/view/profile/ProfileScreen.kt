@@ -25,7 +25,6 @@ import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -39,13 +38,12 @@ import androidx.compose.ui.zIndex
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.rutescompartidesapp.ui.theme.openSans
-import com.example.rutescompartidesapp.utils.Constants
 import com.example.rutescompartidesapp.view.generic_components.HeaderSphere
 import com.example.rutescompartidesapp.view.login.LoginViewModel
 import com.example.rutescompartidesapp.view.profile.components.CreateCardsWithItems
 import com.example.rutescompartidesapp.view.profile.components.LogOutPopup
 import com.example.rutescompartidesapp.view.profile.components.ProfileEditButton
-import com.example.rutescompartidesapp.view.profile.components.ReviewButtons
+import com.example.rutescompartidesapp.view.profile.components.ReviewButton
 import com.example.rutescompartidesapp.view.profile.components.routeProfileItemsList
 import com.example.rutescompartidesapp.view.profile.components.userProfileItemsList
 
@@ -95,16 +93,15 @@ fun ProfileScreen(profileViewModel: ProfileViewModel, loginViewModel: LoginViewM
                         Column(
                             modifier = Modifier
                                 .width(LocalConfiguration.current.screenWidthDp.dp)
+                                .fillMaxHeight()
                                 .padding(top = 20.dp)
                                 .zIndex(3f),
-                            verticalArrangement = Arrangement.spacedBy(5.dp),
+                            verticalArrangement = Arrangement.SpaceEvenly,
                             horizontalAlignment = Alignment.CenterHorizontally,
                         ) {
                             Column(
                                 horizontalAlignment = Alignment.CenterHorizontally,
-                                verticalArrangement = Arrangement.Center,
-                                modifier = Modifier
-                                    .padding(bottom = 15.dp)
+                                verticalArrangement = Arrangement.SpaceEvenly,
                             ) {
                                 Text(
                                     text = user!!.name,
@@ -130,13 +127,9 @@ fun ProfileScreen(profileViewModel: ProfileViewModel, loginViewModel: LoginViewM
                                     fontFamily = openSans
                                 )
                             }
-
-                            // Review buttons
-                            ReviewButtons(modifier = Modifier, buttonText = "Valoracions rebudes")
+                            ReviewButton(modifier = Modifier, buttonText = "Les meves valoracions", navController)
 
                             Spacer(modifier = Modifier.padding(2.5.dp))
-
-                            ReviewButtons(modifier = Modifier, buttonText = "Valoracions fetes")
                         }
 
                     }
@@ -155,8 +148,6 @@ fun ProfileScreen(profileViewModel: ProfileViewModel, loginViewModel: LoginViewM
                             navController = navController,
                             iconVisible = editProfileButtonVisible
                         )
-
-
 
                         LogOutPopup(viewModelProfile = profileViewModel, navController)
 

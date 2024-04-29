@@ -16,6 +16,7 @@ object LocalConstants {
         UserLocal(3, "gandalfthegray", "gandalf@middleearth.com", 666666666, "Fireworks"),
         UserLocal(4, "eduard_24", "edu_24@gmail.com", 666666666, "Eduard24"),
         UserLocal(5, "sOnia", "sonia@gmail.com", 666666666, "SoniaRutes"),
+        UserLocal(6, "Alejandro", "alejandroarcasleon@gmail.com", 666666666, "hola123")
     )
 
     val routeList = mutableListOf(

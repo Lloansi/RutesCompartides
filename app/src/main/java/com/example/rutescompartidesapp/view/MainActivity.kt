@@ -61,6 +61,8 @@ import com.example.rutescompartidesapp.view.routes_order_list.RoutesOrderListScr
 import com.example.rutescompartidesapp.view.routes_order_list.viewmodels.FilterPopupViewModel
 import com.example.rutescompartidesapp.view.routes_order_list.viewmodels.RoutesOrderListViewModel
 import com.example.rutescompartidesapp.view.signup.SignUpScreen
+import com.example.rutescompartidesapp.view.user_reviews.UserReviewScreen
+import com.example.rutescompartidesapp.view.user_reviews.UserReviewViewModel
 import com.example.rutescompartidesapp.view.value_experience.ValueExperienceGeneralScreen
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -140,34 +142,34 @@ class MainActivity : ComponentActivity() {
 
                 Scaffold(
                     bottomBar = {
-                    val navBackStackEntry by navController.currentBackStackEntryAsState()
-                    val currentDestination = navBackStackEntry?.destination
-                    Box {
-                        if (currentDestination?.hierarchy?.any { navDestination ->
-                            navDestination.route ==  Screens.MapScreen.route ||
-                            navDestination.route ==  Screens.RoutesOrderListScreen.route ||
-                            navDestination.route ==  Screens.ProfileScreen.route
-                        } == true ){
-                            SmoothAnimationBottomBar(navController,
-                                bottomNavigationItems,
-                                initialIndex = currentIndex,
-                                bottomBarProperties = BottomBarProperties(
-                                    backgroundColor = MateBlackRC,
-                                    indicatorColor = Color.White.copy(alpha = 0.2F),
-                                    iconTintColor = Color.White,
-                                    iconTintActiveColor = Color.White,
-                                    textActiveColor = Color.White,
-                                    cornerRadius = 18.dp,
-                                    fontWeight = FontWeight.Medium,
-                                    fontSize = 18.sp
-                                ),
-                                onSelectItem = {
-                                    println("SELECTED_ITEM " + " onCreate: Selected Item ${it.name}")
-                                }
-                            )
-                       }
+                        val navBackStackEntry by navController.currentBackStackEntryAsState()
+                        val currentDestination = navBackStackEntry?.destination
+                        Box {
+                            if (currentDestination?.hierarchy?.any { navDestination ->
+                                    navDestination.route == Screens.MapScreen.route ||
+                                            navDestination.route == Screens.RoutesOrderListScreen.route ||
+                                            navDestination.route == Screens.ProfileScreen.route
+                                } == true) {
+                                SmoothAnimationBottomBar(navController,
+                                    bottomNavigationItems,
+                                    initialIndex = currentIndex,
+                                    bottomBarProperties = BottomBarProperties(
+                                        backgroundColor = MateBlackRC,
+                                        indicatorColor = Color.White.copy(alpha = 0.2F),
+                                        iconTintColor = Color.White,
+                                        iconTintActiveColor = Color.White,
+                                        textActiveColor = Color.White,
+                                        cornerRadius = 18.dp,
+                                        fontWeight = FontWeight.Medium,
+                                        fontSize = 18.sp
+                                    ),
+                                    onSelectItem = {
+                                        println("SELECTED_ITEM " + " onCreate: Selected Item ${it.name}")
+                                    }
+                                )
+                            }
+                        }
                     }
-                }
                 ) { paddingValues ->
                     ScreenNavigationConfiguration(
                         mapViewModel,
@@ -187,18 +189,29 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun ScreenNavigationConfiguration( mapViewModel: MapViewModel,mapViewModel2: MapViewModel2,loginViewModel: LoginViewModel, profileViewModel: ProfileViewModel,
-                                   routeOrderListViewModel: RoutesOrderListViewModel, filterPopupViewModel: FilterPopupViewModel, searchViewModel: SearchViewModel,
-                                   navController: NavHostController,
-                                   modifier: Modifier) {
+fun ScreenNavigationConfiguration(
+    mapViewModel: MapViewModel,
+    mapViewModel2: MapViewModel2,
+    loginViewModel: LoginViewModel,
+    profileViewModel: ProfileViewModel,
+    routeOrderListViewModel: RoutesOrderListViewModel,
+    filterPopupViewModel: FilterPopupViewModel,
+    searchViewModel: SearchViewModel,
+    navController: NavHostController,
+    modifier: Modifier
+) {
 
-    NavHost(navController = navController, startDestination = Screens.LoginScreen.route, modifier = modifier) {
+    NavHost(
+        navController = navController,
+        startDestination = Screens.LoginScreen.route,
+        modifier = modifier
+    ) {
 
         composable(Screens.MapScreen.route) {
             MapScreen(navController, mapViewModel, searchViewModel)
         }
         composable(Screens.OrderDetailScreen.route,
-            arguments = listOf(navArgument("orderID"){
+            arguments = listOf(navArgument("orderID") {
                 type = NavType.IntType
             }
             )) {
@@ -207,27 +220,41 @@ fun ScreenNavigationConfiguration( mapViewModel: MapViewModel,mapViewModel2: Map
         }
 
         composable(Screens.RouteDetailGeneralScreen.route,
-            arguments = listOf(navArgument("routeId"){
-            type = NavType.IntType
-        })) {
+            arguments = listOf(navArgument("routeId") {
+                type = NavType.IntType
+            })
+        ) {
             val routeID = it.arguments?.getInt("routeId")
-            RouteDetailGeneralScreen(navController, routeID!!, mapViewModel,mapViewModel2, routeOrderListViewModel)
+            RouteDetailGeneralScreen(
+                navController,
+                routeID!!,
+                mapViewModel,
+                mapViewModel2,
+                routeOrderListViewModel
+            )
         }
 
-        composable(Screens.ValueExperienceGeneralScreen.route,
-            arguments = listOf(navArgument("routeId"){
+        composable(
+            Screens.ValueExperienceGeneralScreen.route,
+            arguments = listOf(navArgument("routeId") {
                 type = NavType.IntType
             },
-                navArgument("orderId"){
+                navArgument("orderId") {
                     type = NavType.IntType
-                })) {
+                })
+        ) {
             val routeID = it.arguments?.getInt("routeId")
             val orderID = it.arguments?.getInt("orderId")
             ValueExperienceGeneralScreen(routeID!!, orderID!!, navController)
         }
 
         composable(Screens.RoutesOrderListScreen.route) {
-            RoutesOrderListScreen(navController, routeOrderListViewModel, filterPopupViewModel, loginViewModel)
+            RoutesOrderListScreen(
+                navController,
+                routeOrderListViewModel,
+                filterPopupViewModel,
+                loginViewModel
+            )
         }
         composable(Screens.ProfileScreen.route) {
             ProfileScreen(profileViewModel, loginViewModel, navController)
@@ -239,14 +266,21 @@ fun ScreenNavigationConfiguration( mapViewModel: MapViewModel,mapViewModel2: Map
             SignUpScreen(navController)
         }
         composable(Screens.RouteDetailDriverScreen.route,
-            arguments = listOf(navArgument("routeId"){
-            type = NavType.IntType
-        })) {
+            arguments = listOf(navArgument("routeId") {
+                type = NavType.IntType
+            })
+        ) {
             val routeID = it.arguments?.getInt("routeId")
             val routeDetailDriverViewModel = RouteDetailDriverViewModel(routeID!!)
             val cameraViewModel = CameraViewModel()
             val drawViewModel = DrawViewModel()
-            RouteDetailDriverScreen(routeID, navController, routeDetailDriverViewModel, cameraViewModel, drawViewModel)
+            RouteDetailDriverScreen(
+                routeID,
+                navController,
+                routeDetailDriverViewModel,
+                cameraViewModel,
+                drawViewModel
+            )
         }
 
 
@@ -270,29 +304,35 @@ fun ScreenNavigationConfiguration( mapViewModel: MapViewModel,mapViewModel2: Map
         composable(Screens.ComFuncionaScreen.route) {
             ComFuncionaScreen(navController)
         }
-        composable(Screens.PublishRouteScreen.route,
-            arguments = listOf(navArgument("command"){
+        composable(
+            Screens.PublishRouteScreen.route,
+            arguments = listOf(navArgument("command") {
                 type = NavType.StringType
             },
-                navArgument("routeID"){
+                navArgument("routeID") {
                     type = NavType.IntType
-                })) {
+                })
+        ) {
             val command = it.arguments?.getString("command")
             val routeID = it.arguments?.getInt("routeID")
             PublishRouteScreen(command!!, routeID = routeID!!, navController, loginViewModel)
         }
-        composable(Screens.PublishOrderScreen.route,
-            arguments = listOf(navArgument("command"){
+        composable(
+            Screens.PublishOrderScreen.route,
+            arguments = listOf(navArgument("command") {
                 type = NavType.StringType
             },
-                navArgument("orderID"){
-                type = NavType.IntType
-            })) {
+                navArgument("orderID") {
+                    type = NavType.IntType
+                })
+        ) {
             val command = it.arguments?.getString("command")
             val orderID = it.arguments?.getInt("orderID")
             PublishOrderScreen(command!!, orderID = orderID!!, navController, loginViewModel)
         }
-
+        composable(Screens.UserReviewScreen.route) {
+            UserReviewScreen(UserReviewViewModel(), loginViewModel)
+        }
 
 
     }
