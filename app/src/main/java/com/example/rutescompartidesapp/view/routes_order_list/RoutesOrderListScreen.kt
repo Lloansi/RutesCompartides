@@ -38,10 +38,14 @@ import com.example.rutescompartidesapp.view.routes_order_list.components.FilterP
 import com.example.rutescompartidesapp.view.routes_order_list.components.TabRows
 import com.example.rutescompartidesapp.view.routes_order_list.viewmodels.FilterPopupViewModel
 import com.example.rutescompartidesapp.view.routes_order_list.viewmodels.RoutesOrderListViewModel
+import com.example.rutescompartidesapp.view.routes_order_list.viewmodels.TabRowViewModel
 
 
 @Composable
-fun RoutesOrderListScreen(navController: NavHostController, routeOrderListViewModel: RoutesOrderListViewModel, filterPopupViewModel: FilterPopupViewModel, loginViewModel: LoginViewModel) {
+fun RoutesOrderListScreen(navController: NavHostController, routeOrderListViewModel: RoutesOrderListViewModel,
+                          filterPopupViewModel: FilterPopupViewModel, loginViewModel: LoginViewModel,
+                          tabRowViewModel: TabRowViewModel
+) {
     val searchText by routeOrderListViewModel.searchText.collectAsStateWithLifecycle()
     val isSearching by routeOrderListViewModel.isSearching.collectAsStateWithLifecycle()
     val areFilterActive by routeOrderListViewModel.activeFilters.collectAsStateWithLifecycle()
@@ -128,7 +132,7 @@ fun RoutesOrderListScreen(navController: NavHostController, routeOrderListViewMo
         }
         // Tabs and lists
         Row (Modifier.fillMaxWidth()) {
-            TabRows(routeOrderListViewModel, navController, user!!)
+            TabRows(routeOrderListViewModel, navController, user!!, tabRowViewModel)
         }
     }
 }

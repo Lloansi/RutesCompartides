@@ -58,6 +58,7 @@ import com.example.rutescompartidesapp.view.route_detail.route_detail_driver.Rou
 import com.example.rutescompartidesapp.view.routes_order_list.RoutesOrderListScreen
 import com.example.rutescompartidesapp.view.routes_order_list.viewmodels.FilterPopupViewModel
 import com.example.rutescompartidesapp.view.routes_order_list.viewmodels.RoutesOrderListViewModel
+import com.example.rutescompartidesapp.view.routes_order_list.viewmodels.TabRowViewModel
 import com.example.rutescompartidesapp.view.signup.SignUpScreen
 import com.example.rutescompartidesapp.view.value_experience.ValueExperienceGeneralScreen
 import com.example.rutescompartidesapp.view.value_experience.ValueExperienceViewModel
@@ -112,6 +113,7 @@ class MainActivity : ComponentActivity() {
                 val profileViewModel: ProfileViewModel = hiltViewModel()
                 val filterPopupViewModel = FilterPopupViewModel()
                 val routeOrderListViewModel = RoutesOrderListViewModel()
+                val tabRowViewModel = TabRowViewModel()
                 val searchViewModel: SearchViewModel = hiltViewModel()
                 val navController = rememberNavController()
 
@@ -173,6 +175,7 @@ class MainActivity : ComponentActivity() {
                         loginViewModel,
                         profileViewModel,
                         routeOrderListViewModel,
+                        tabRowViewModel,
                         filterPopupViewModel,
                         searchViewModel,
                         navController,
@@ -186,7 +189,9 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun ScreenNavigationConfiguration( mapViewModel: MapViewModel,mapViewModel2: MapViewModel2,loginViewModel: LoginViewModel, profileViewModel: ProfileViewModel,
-                                   routeOrderListViewModel: RoutesOrderListViewModel, filterPopupViewModel: FilterPopupViewModel, searchViewModel: SearchViewModel,
+                                   routeOrderListViewModel: RoutesOrderListViewModel,
+                                   tabRowViewModel: TabRowViewModel,
+                                   filterPopupViewModel: FilterPopupViewModel, searchViewModel: SearchViewModel,
                                    navController: NavHostController,
                                    modifier: Modifier) {
 
@@ -227,10 +232,10 @@ fun ScreenNavigationConfiguration( mapViewModel: MapViewModel,mapViewModel2: Map
         }
 
         composable(Screens.RoutesOrderListScreen.route) {
-            RoutesOrderListScreen(navController, routeOrderListViewModel, filterPopupViewModel, loginViewModel)
+            RoutesOrderListScreen(navController, routeOrderListViewModel, filterPopupViewModel, loginViewModel, tabRowViewModel)
         }
         composable(Screens.ProfileScreen.route) {
-            ProfileScreen(profileViewModel, loginViewModel, navController, routeOrderListViewModel)
+            ProfileScreen(profileViewModel, loginViewModel, navController, routeOrderListViewModel, tabRowViewModel)
         }
         composable(Screens.LoginScreen.route) {
             LoginScreen(loginViewModel, navController)

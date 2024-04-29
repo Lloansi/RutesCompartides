@@ -33,10 +33,11 @@ import com.example.rutescompartidesapp.ui.theme.openSans
 import com.example.rutescompartidesapp.view.login.LoginViewModel
 import com.example.rutescompartidesapp.view.profile.ProfileViewModel
 import com.example.rutescompartidesapp.view.routes_order_list.viewmodels.RoutesOrderListViewModel
+import com.example.rutescompartidesapp.view.routes_order_list.viewmodels.TabRowViewModel
 
 @Composable
 fun CreateCardsWithItems(list: List<ProfileItems>, paddingBottom: Dp, paddingTop: Dp, viewModel: ProfileViewModel, navController: NavController, listNumber: Int,
-                         routesOrderListViewModel: RoutesOrderListViewModel,
+                         routesOrderListViewModel: RoutesOrderListViewModel, tabRowViewModel: TabRowViewModel,
                          userID: Int,
                          loginViewModel: LoginViewModel) {
     Card(
@@ -58,15 +59,17 @@ fun CreateCardsWithItems(list: List<ProfileItems>, paddingBottom: Dp, paddingTop
                     when (list[i].title) {
                         "Les meves rutes" -> {
                             routesOrderListViewModel.onMyFilterActive(userID)
-                            routesOrderListViewModel.onToOrders(false)
-                            navController.navigate("RoutesOrderListScreen") {
+                            tabRowViewModel.onSelectTab(0)
+                            navController.navigate("RoutesOrderListScreen"){
+                                popUpTo("ProfileScreen") { inclusive = true }
                             }
                             loginViewModel.updateCurrentIndex(1)
                         }
                         "Les meves comandes" -> {
                             routesOrderListViewModel.onMyFilterActive(userID)
-                            routesOrderListViewModel.onToOrders(true)
-                            navController.navigate("RoutesOrderListScreen") {
+                            tabRowViewModel.onSelectTab(1)
+                            navController.navigate("RoutesOrderListScreen"){
+                                popUpTo("ProfileScreen") { inclusive = true }
                             }
                             loginViewModel.updateCurrentIndex(1)
                         }

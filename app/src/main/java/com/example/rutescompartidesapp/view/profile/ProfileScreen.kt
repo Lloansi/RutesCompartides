@@ -47,10 +47,14 @@ import com.example.rutescompartidesapp.view.profile.components.ReviewButtons
 import com.example.rutescompartidesapp.view.profile.components.routeProfileItemsList
 import com.example.rutescompartidesapp.view.profile.components.userProfileItemsList
 import com.example.rutescompartidesapp.view.routes_order_list.viewmodels.RoutesOrderListViewModel
+import com.example.rutescompartidesapp.view.routes_order_list.viewmodels.TabRowViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProfileScreen(profileViewModel: ProfileViewModel, loginViewModel: LoginViewModel, navController: NavController, routesOrderListViewModel: RoutesOrderListViewModel) {
+fun ProfileScreen(profileViewModel: ProfileViewModel, loginViewModel: LoginViewModel,
+                  navController: NavController, routesOrderListViewModel: RoutesOrderListViewModel,
+                  tabRowViewModel: TabRowViewModel
+) {
 
     val onClickPlaceholder by profileViewModel.onClickPlaceholder.collectAsStateWithLifecycle()
     val editProfileButtonSize by profileViewModel.editProfileButtonSize.collectAsStateWithLifecycle()
@@ -205,11 +209,11 @@ fun ProfileScreen(profileViewModel: ProfileViewModel, loginViewModel: LoginViewM
         ) {
             // First card creation (Route Settings)
             CreateCardsWithItems(routeProfileItemsList, 0.dp, 0.dp, profileViewModel, navController, 1,
-                routesOrderListViewModel, user!!.userId, loginViewModel)
+                routesOrderListViewModel, tabRowViewModel, user!!.userId, loginViewModel)
 
             // Second card creation (User Settings)
             CreateCardsWithItems(userProfileItemsList, 20.dp, 0.dp, profileViewModel, navController, 2,
-                routesOrderListViewModel, user!!.userId, loginViewModel)
+                routesOrderListViewModel, tabRowViewModel, user!!.userId, loginViewModel)
         }
     }
 }

@@ -48,18 +48,15 @@ data class TabItems(
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun TabRows(routesOrderListViewModel: RoutesOrderListViewModel, navController: NavHostController, user: UserLocal){
-    val tabRowViewModel: TabRowViewModel = hiltViewModel()
+fun TabRows(routesOrderListViewModel: RoutesOrderListViewModel, navController: NavHostController, user: UserLocal,
+            tabRowViewModel: TabRowViewModel ){
     val selectedTabIndex by tabRowViewModel.selectedTabIndex.collectAsStateWithLifecycle()
     val tabItems = tabRowViewModel.tabItems
     val routes by routesOrderListViewModel.routes.collectAsStateWithLifecycle()
     val orders by routesOrderListViewModel.orders.collectAsStateWithLifecycle()
     val isSearching by routesOrderListViewModel.isSearching.collectAsStateWithLifecycle()
     val isMyFilterActive by routesOrderListViewModel.isMyFilterActive.collectAsStateWithLifecycle()
-    val toOrders by routesOrderListViewModel.toOrders.collectAsStateWithLifecycle()
-    if (toOrders){
-        tabRowViewModel.onSelectTab(1)
-    }
+
 
     val pagerState = rememberPagerState {
         tabItems.size
