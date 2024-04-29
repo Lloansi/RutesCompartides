@@ -1,4 +1,4 @@
-package com.example.rutescompartidesapp.view.route_detail
+package com.example.rutescompartidesapp.view.route_detail.viewModels
 
 import androidx.lifecycle.ViewModel
 

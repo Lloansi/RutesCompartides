@@ -47,7 +47,7 @@ import com.example.rutescompartidesapp.view.login.LoginScreen
 import com.example.rutescompartidesapp.view.login.LoginViewModel
 import com.example.rutescompartidesapp.view.map.MapScreen
 import com.example.rutescompartidesapp.view.map.viewModels.MapViewModel
-import com.example.rutescompartidesapp.view.map.viewModels.MapViewModel2
+import com.example.rutescompartidesapp.view.route_detail.viewModels.MapViewModel2
 import com.example.rutescompartidesapp.view.map.viewModels.SearchViewModel
 import com.example.rutescompartidesapp.view.profile.ProfileScreen
 import com.example.rutescompartidesapp.view.profile.ProfileViewModel
@@ -73,6 +73,9 @@ class MainActivity : ComponentActivity() {
 
         //mDetector = GestureDetectorCompat(this, MyGestureListener())
 
+        /*
+        NEW WAY TO HANDLE ALL PERMISIONS IN ACTIVITY
+
         fun hasRequiredPermissions(): Boolean {
             return ALL_PERMISSIONS.all {
                 ContextCompat.checkSelfPermission(
@@ -81,6 +84,15 @@ class MainActivity : ComponentActivity() {
                 ) == PackageManager.PERMISSION_GRANTED
             }
         }
+
+        if (!hasRequiredPermissions()) {
+            ActivityCompat.requestPermissions(
+                this, ALL_PERMISSIONS, 0
+            )
+        }
+
+         */
+
 
         /*
         OLD WAY TO HANLDE PERMISSIONS GRANTED
@@ -96,11 +108,6 @@ class MainActivity : ComponentActivity() {
         }
          */
 
-        if (!hasRequiredPermissions()) {
-            ActivityCompat.requestPermissions(
-                this, ALL_PERMISSIONS, 0
-            )
-        }
 
 
         setContent {
@@ -186,11 +193,11 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun ScreenNavigationConfiguration( mapViewModel: MapViewModel,mapViewModel2: MapViewModel2,loginViewModel: LoginViewModel, profileViewModel: ProfileViewModel,
-                                   routeOrderListViewModel: RoutesOrderListViewModel, filterPopupViewModel: FilterPopupViewModel, searchViewModel: SearchViewModel,
-                                   navController: NavHostController, paddingModifier: Modifier) {
+fun ScreenNavigationConfiguration(mapViewModel: MapViewModel, mapViewModel2: MapViewModel2, loginViewModel: LoginViewModel, profileViewModel: ProfileViewModel,
+                                  routeOrderListViewModel: RoutesOrderListViewModel, filterPopupViewModel: FilterPopupViewModel, searchViewModel: SearchViewModel,
+                                  navController: NavHostController, paddingModifier: Modifier) {
 
-    NavHost(navController = navController, startDestination = Screens.RoutesOrderListScreen.route, modifier = paddingModifier) {
+    NavHost(navController = navController, startDestination = Screens.MapScreen.route, modifier = paddingModifier) {
 
         composable(Screens.MapScreen.route) {
             MapScreen(navController, mapViewModel, searchViewModel)

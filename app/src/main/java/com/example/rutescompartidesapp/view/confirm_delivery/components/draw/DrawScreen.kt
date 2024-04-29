@@ -1,5 +1,10 @@
 package com.example.rutescompartidesapp.view.confirm_delivery.components.draw
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Arrangement
@@ -18,12 +23,48 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import androidx.navigation.NavHostController
 import com.example.rutescompartidesapp.data.domain.Line
 import com.example.rutescompartidesapp.view.confirm_delivery.viewmodel.DrawViewModel
 
 @Composable
 fun DrawScreen(navController: NavHostController, drawViewModel: DrawViewModel) {
+
+    val ctx = LocalContext.current
+
+    val requestPermissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        // Handle permission result
+        if (isGranted) {
+            Toast.makeText(ctx, "Permiso concedido", Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(ctx, "Permiso denegado", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    val hasCameraPermission = remember(ctx) {
+        ContextCompat.checkSelfPermission(
+            ctx,
+            Manifest.permission.CAMERA
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    val hasAudioPermission = remember(ctx) {
+        ContextCompat.checkSelfPermission(
+            ctx,
+            Manifest.permission.RECORD_AUDIO
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    if (!hasCameraPermission) {
+        requestPermissionLauncher.launch(Manifest.permission.ACCESS_NETWORK_STATE)
+    }
+
+    if (!hasAudioPermission) {
+        requestPermissionLauncher.launch(Manifest.permission.ACCESS_NETWORK_STATE)
+    }
 
     val context = LocalContext.current
 

@@ -1,10 +1,14 @@
 package com.example.rutescompartidesapp.view.confirm_delivery.components.camera
 
+import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Matrix
 import android.util.Log
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture.OnImageCapturedCallback
 import androidx.camera.core.ImageCaptureException
@@ -49,6 +53,42 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CameraScreen(navController: NavHostController, cameraViewModel: CameraViewModel){
+
+    val ctx = LocalContext.current
+
+    val requestPermissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        // Handle permission result
+        if (isGranted) {
+            Toast.makeText(ctx, "Permiso concedido", Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(ctx, "Permiso denegado", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    val hasCameraPermission = remember(ctx) {
+        ContextCompat.checkSelfPermission(
+            ctx,
+            Manifest.permission.CAMERA
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    val hasAudioPermission = remember(ctx) {
+        ContextCompat.checkSelfPermission(
+            ctx,
+            Manifest.permission.RECORD_AUDIO
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    if (!hasCameraPermission) {
+        requestPermissionLauncher.launch(Manifest.permission.ACCESS_NETWORK_STATE)
+    }
+
+    if (!hasAudioPermission) {
+        requestPermissionLauncher.launch(Manifest.permission.ACCESS_NETWORK_STATE)
+    }
+
     val bitmaps by cameraViewModel.bitmaps.collectAsState()
 
     Surface(

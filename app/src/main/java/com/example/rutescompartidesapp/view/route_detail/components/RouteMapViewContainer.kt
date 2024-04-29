@@ -1,30 +1,22 @@
 package com.example.rutescompartidesapp.view.route_detail.components
 
 import android.content.Context
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import com.example.rutescompartidesapp.R
 import com.example.rutescompartidesapp.utils.getResponsivePadding
 import com.example.rutescompartidesapp.view.map.viewModels.MapViewModel
-import com.example.rutescompartidesapp.view.map.viewModels.MapViewModel2
+import com.example.rutescompartidesapp.view.route_detail.viewModels.MapViewModel2
 import org.osmdroid.bonuspack.routing.OSRMRoadManager
 import org.osmdroid.bonuspack.routing.RoadManager
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
-import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
-import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 
 
 @Composable

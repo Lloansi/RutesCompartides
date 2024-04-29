@@ -1,7 +1,6 @@
 package com.example.rutescompartidesapp.view.route_detail
 
 import android.annotation.SuppressLint
-import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -28,10 +27,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -54,10 +49,11 @@ import com.example.rutescompartidesapp.ui.theme.OrangeRC
 import com.example.rutescompartidesapp.view.generic_components.TopAppBarWithBackNav
 import com.example.rutescompartidesapp.view.map.components.allRoute
 import com.example.rutescompartidesapp.view.map.viewModels.MapViewModel
-import com.example.rutescompartidesapp.view.map.viewModels.MapViewModel2
 import com.example.rutescompartidesapp.view.route_detail.route_detail_driver.RouteData
 import com.example.rutescompartidesapp.view.route_detail.route_detail_driver.TransportOptions
 import com.example.rutescompartidesapp.view.route_detail.components.RouteMapViewContainer
+import com.example.rutescompartidesapp.view.route_detail.viewModels.MapViewModel2
+import com.example.rutescompartidesapp.view.route_detail.viewModels.RouteDetailViewModel
 import com.example.rutescompartidesapp.view.routes_order_list.ListConstants
 import com.example.rutescompartidesapp.view.routes_order_list.components.RouteCardHeader
 import com.example.rutescompartidesapp.view.routes_order_list.viewmodels.RoutesOrderListViewModel
@@ -65,7 +61,7 @@ import org.osmdroid.util.GeoPoint
 
 @SuppressLint("UnusedBoxWithConstraintsScope")
 @Composable
-fun RouteDetailGeneralScreen(navHost: NavHostController, routeID: Int, mapViewModel: MapViewModel,mapViewModel2: MapViewModel2, routesOrderListViewModel: RoutesOrderListViewModel) {
+fun RouteDetailGeneralScreen(navHost: NavHostController, routeID: Int, mapViewModel: MapViewModel, mapViewModel2: MapViewModel2, routesOrderListViewModel: RoutesOrderListViewModel) {
 
     val routeGeo: Route = allRoute.first { it.routeId == routeID }
     val routeInfo: RouteForList = ListConstants.routeList.first { it.routeID == routeID }

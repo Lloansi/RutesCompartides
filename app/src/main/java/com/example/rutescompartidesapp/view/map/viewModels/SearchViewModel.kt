@@ -2,7 +2,7 @@ package com.example.rutescompartidesapp.view.map.viewModels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.rutescompartidesapp.data.domain.GeoName.GeoName
+import com.example.rutescompartidesapp.data.domain.Location.Location
 import com.example.rutescompartidesapp.data.domain.Order
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import com.example.rutescompartidesapp.data.domain.Route
-import com.example.rutescompartidesapp.data.network.GeoNames.repository.GeoNamesRepository
+import com.example.rutescompartidesapp.data.network.GoogleLocation.repository.GoogleLocationsRepository
 import com.example.rutescompartidesapp.view.map.components.allOrders
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.FlowPreview
@@ -22,7 +22,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
-    private val geoNamesRepository: GeoNamesRepository
+    private val googleLocationsRepository: GoogleLocationsRepository
 ) : ViewModel() {
 
     private val _searchText = MutableStateFlow("")
@@ -40,13 +40,13 @@ class SearchViewModel @Inject constructor(
     private val _ordersAndRoutes = MutableStateFlow(listOf<Pair<List<Route>, List<Order>>>())
     val ordersAndRoutes = _ordersAndRoutes.asStateFlow()
 
-    private val _locations = MutableStateFlow(listOf<GeoName>())
+    private val _locations = MutableStateFlow(listOf<Location>())
     val locations = _locations.asStateFlow()
 
     init {
         viewModelScope.launch {
             _orders.value = allOrders
-            _locations.value = geoNamesRepository.getAllCataloniaCities()
+            _locations.value = googleLocationsRepository.getAllCities(autonomousCommunity = "Catalonia")
         }
         /*
         Hasta que no se implemente los metodos para

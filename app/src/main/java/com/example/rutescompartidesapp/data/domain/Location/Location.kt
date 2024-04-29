@@ -1,9 +1,9 @@
-package com.example.rutescompartidesapp.data.domain.GeoName
+package com.example.rutescompartidesapp.data.domain.Location
 
 import kotlinx.serialization.Serializable
 
 @Serializable
-class GeoName(
+class Location(
     val name: String,
     val lat: Double,
     val lng: Double

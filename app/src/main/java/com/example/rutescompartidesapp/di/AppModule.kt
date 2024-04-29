@@ -8,7 +8,7 @@ import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.preferencesDataStoreFile
-import com.example.rutescompartidesapp.data.network.GeoNames.ApiGeoNames
+import com.example.rutescompartidesapp.data.network.GoogleLocation.GoogleLocationApi
 import com.example.rutescompartidesapp.data.network.rutes_compartides.repository.RutesCompartidesRepository
 import com.example.rutescompartidesapp.data.network.rutes_compartides.ApiRutesCompartides
 import com.example.rutescompartidesapp.data.network.rutes_compartides.RutesCompartidesService
@@ -35,7 +35,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideGeoNamesApi(): ApiGeoNames {
+    fun provideGoogleLocationApi(): GoogleLocationApi {
         val gson = GsonBuilder()
             .serializeNulls()
             .create()
@@ -45,7 +45,7 @@ object AppModule {
             .build()
 
         return Retrofit.Builder()
-            .baseUrl(Constants.GEO_NAMES_URL)
+            .baseUrl(Constants.GOOGLE_MAPS_URL)
             .addConverterFactory(GsonConverterFactory.create(gson))
             .client(client)
             .build()

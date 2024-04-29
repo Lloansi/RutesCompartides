@@ -11,6 +11,10 @@ import kotlinx.coroutines.launch
 
 class SearchViewModel2 : ViewModel() {
 
+    /*
+    NO SE UTILIZA ESTE VIEWMODEL, ES PARA PRUEBAS
+     */
+
     private val _searchText = MutableStateFlow("")
     val searchText = _searchText.asStateFlow()
 
