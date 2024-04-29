@@ -43,7 +43,7 @@ import androidx.navigation.NavHostController
 import com.example.rutescompartidesapp.R
 import com.example.rutescompartidesapp.data.domain.ListQuery
 import com.example.rutescompartidesapp.data.domain.Route
-import com.example.rutescompartidesapp.data.domain.RouteForList
+import com.example.rutescompartidesapp.data.domain.routes.Routes
 import com.example.rutescompartidesapp.ui.theme.BlueRC
 import com.example.rutescompartidesapp.ui.theme.OrangeRC
 import com.example.rutescompartidesapp.view.generic_components.TopAppBarWithBackNav
@@ -62,10 +62,7 @@ import org.osmdroid.util.GeoPoint
 @Composable
 fun RouteDetailGeneralScreen(navHost: NavHostController, routeID: Int, mapViewModel: MapViewModel,mapViewModel2: MapViewModel2, routesOrderListViewModel: RoutesOrderListViewModel) {
 
-    val routeGeo: Route = allRoute.first { it.routeId == routeID }
-    val routeInfo: RouteForList = LocalConstants.routeList.first { it.routeID == routeID }
-    val startGeoPoint = GeoPoint(routeGeo.startLat.toDouble(), routeGeo.startLon.toDouble())
-    val endGeoPoint = GeoPoint(routeGeo.endLat.toDouble(), routeGeo.endLon.toDouble())
+    val routeInfo: Routes = LocalConstants.routeList.first { it.routeID == routeID }
     val routeDetailViewModel = RouteDetailViewModel()
 
     val isMapExpanded by mapViewModel2.isBoxMapClicked.collectAsState()
@@ -88,8 +85,8 @@ fun RouteDetailGeneralScreen(navHost: NavHostController, routeID: Int, mapViewMo
                     viewModel = mapViewModel,
                     viewModel2 = mapViewModel2,
                     ctx,
-                    startGeoPoint,
-                    endGeoPoint,
+                    routeInfo.startPoint,
+                    routeInfo.endPoint,
                     13.5
                 )
             }

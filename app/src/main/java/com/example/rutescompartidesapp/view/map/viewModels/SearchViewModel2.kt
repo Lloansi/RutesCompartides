@@ -3,9 +3,7 @@ package com.example.rutescompartidesapp.view.map.viewModels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.rutescompartidesapp.data.domain.Order
-import com.example.rutescompartidesapp.data.domain.OrderForList
 import com.example.rutescompartidesapp.data.domain.Route
-import com.example.rutescompartidesapp.data.domain.RouteForList
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 

@@ -3,8 +3,8 @@ package com.example.rutescompartidesapp.view.routes_order_list.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.rutescompartidesapp.data.domain.ListQuery
-import com.example.rutescompartidesapp.data.domain.OrderForList
-import com.example.rutescompartidesapp.data.domain.RouteForList
+import com.example.rutescompartidesapp.data.domain.orders.Orders
+import com.example.rutescompartidesapp.data.domain.routes.Routes
 import com.example.rutescompartidesapp.utils.LocalConstants
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -171,7 +171,7 @@ class RoutesOrderListViewModel: ViewModel() {
      * @param listQuery: ListQuery
      * @return List<RouteForList>
      */
-    private fun getFilteredRoutes(activeFilters: List<Boolean>, listQuery: ListQuery): List<RouteForList> {
+    private fun getFilteredRoutes(activeFilters: List<Boolean>, listQuery: ListQuery): List<Routes> {
        return _routes.value.filter { route ->
             (activeFilters[0] && route.puntSortida.contains(
                 listQuery.puntSortida,
@@ -202,7 +202,7 @@ class RoutesOrderListViewModel: ViewModel() {
      * @param listQuery: ListQuery
      * @return List<OrderForList>
      */
-    private fun getFilteredOrders(activeFilters: List<Boolean>, listQuery: ListQuery): List<OrderForList> {
+    private fun getFilteredOrders(activeFilters: List<Boolean>, listQuery: ListQuery): List<Orders> {
         return _orders.value.filter { order ->
             (activeFilters[0] && order.puntSortida.contains(
                 listQuery.puntSortida,

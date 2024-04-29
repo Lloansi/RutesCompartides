@@ -45,7 +45,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.example.rutescompartidesapp.R
-import com.example.rutescompartidesapp.data.domain.RouteForList
+import com.example.rutescompartidesapp.data.domain.routes.Routes
 import com.example.rutescompartidesapp.ui.theme.BlueRC
 import com.example.rutescompartidesapp.ui.theme.MateBlackRC
 import com.example.rutescompartidesapp.ui.theme.OrangeRC
@@ -423,7 +423,7 @@ fun RouteData(icon: Int, dataHeader: String, data: String) {
 }
 
 @Composable
-fun TransportOptions(route: RouteForList) {
+fun TransportOptions(route: Routes) {
     var conditions = ""
     if (route.isIsoterm) {
         conditions+=" Isoterm | "

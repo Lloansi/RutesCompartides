@@ -3,9 +3,9 @@ package com.example.rutescompartidesapp.view.value_experience
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
-import com.example.rutescompartidesapp.data.domain.OrderForList
-import com.example.rutescompartidesapp.data.domain.RouteForList
+import com.example.rutescompartidesapp.data.domain.orders.Orders
 import com.example.rutescompartidesapp.data.domain.review.Review
+import com.example.rutescompartidesapp.data.domain.routes.Routes
 import com.example.rutescompartidesapp.utils.LocalConstants
 import com.example.rutescompartidesapp.utils.LocalConstants.reviewList
 import kotlinx.coroutines.channels.Channel
@@ -49,7 +49,7 @@ class ValueExperienceViewModel:ViewModel() {
         println(_isDropdownExpanded.value)
     }
 
-    fun sendReview(route: RouteForList, order: OrderForList, navHost: NavController){
+    fun sendReview(route: Routes, order: Orders, navHost: NavController){
 
         val driverID = route.userID
         val userToReviewID = order.userID

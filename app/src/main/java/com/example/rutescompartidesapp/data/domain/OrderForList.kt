@@ -1,7 +1,5 @@
 package com.example.rutescompartidesapp.data.domain
 
-import com.example.rutescompartidesapp.data.domain.map.Itinerary
-
 data class OrderForList(
     val userID: Int,
     val orderID: Int,

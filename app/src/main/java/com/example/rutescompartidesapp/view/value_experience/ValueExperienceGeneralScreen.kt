@@ -2,7 +2,6 @@ package com.example.rutescompartidesapp.view.value_experience
 
 import android.annotation.SuppressLint
 import android.widget.Toast
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -35,8 +34,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.example.rutescompartidesapp.data.domain.OrderForList
-import com.example.rutescompartidesapp.data.domain.RouteForList
+import com.example.rutescompartidesapp.data.domain.orders.Orders
+import com.example.rutescompartidesapp.data.domain.routes.Routes
 import com.example.rutescompartidesapp.ui.theme.OrangeRC
 import com.example.rutescompartidesapp.utils.LocalConstants
 import com.example.rutescompartidesapp.view.generic_components.MultilineTextField
@@ -51,8 +50,8 @@ import kotlinx.coroutines.flow.collectLatest
 fun ValueExperienceGeneralScreen(routeID: Int, orderID: Int, navHost: NavHostController, valueExperienceViewModel: ValueExperienceViewModel) {
 
     //val valueExperienceViewModel = ValueExperienceViewModel()
-    val route: RouteForList = LocalConstants.routeList.first { it.routeID == routeID }
-    val order: OrderForList = LocalConstants.orderList.first { it.orderID == orderID }
+    val route: Routes = LocalConstants.routeList.first { it.routeID == routeID }
+    val order: Orders = LocalConstants.orderList.first { it.orderID == orderID }
     val isPackageDelivered by valueExperienceViewModel.isPackageDelivered.collectAsStateWithLifecycle()
     val comment by valueExperienceViewModel.comment.collectAsStateWithLifecycle()
     val experienceScore by valueExperienceViewModel.experienceScore.collectAsStateWithLifecycle()

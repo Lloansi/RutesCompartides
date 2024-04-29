@@ -22,7 +22,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.example.rutescompartidesapp.data.domain.OrderForList
+import com.example.rutescompartidesapp.data.domain.orders.Orders
 import com.example.rutescompartidesapp.ui.theme.MateBlackRC
 import com.example.rutescompartidesapp.ui.theme.OrangeRC
 import com.example.rutescompartidesapp.utils.LocalConstants
@@ -30,7 +30,7 @@ import com.example.rutescompartidesapp.utils.roundTo1Decimal
 
 
 @Composable
-fun TopCardInfo(order : OrderForList) {
+fun TopCardInfo(order : Orders) {
     ElevatedCard (
         modifier = Modifier.fillMaxWidth(),colors = CardDefaults.elevatedCardColors(
         containerColor = MateBlackRC)

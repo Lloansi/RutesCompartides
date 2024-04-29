@@ -37,8 +37,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.example.rutescompartidesapp.data.domain.OrderForList
-import com.example.rutescompartidesapp.data.domain.RouteForList
+import com.example.rutescompartidesapp.data.domain.orders.Orders
+import com.example.rutescompartidesapp.data.domain.routes.Routes
 import com.example.rutescompartidesapp.ui.theme.BlueRC
 import com.example.rutescompartidesapp.ui.theme.MateBlackRC
 import com.example.rutescompartidesapp.ui.theme.OrangeRC
@@ -46,7 +46,7 @@ import com.example.rutescompartidesapp.utils.LocalConstants
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun RoutePoints(route: RouteForList){
+fun RoutePoints(route: Routes){
     FlowRow (modifier = Modifier.padding(bottom = 2.dp, top = 2.dp),
         verticalArrangement = Arrangement.Center) {
         Icon(
@@ -94,7 +94,7 @@ fun RoutePoints(route: RouteForList){
 }
 
 @Composable
-fun RouteCardHeader(route: RouteForList){
+fun RouteCardHeader(route: Routes){
     ElevatedCard (modifier = Modifier.fillMaxWidth(),colors = CardDefaults.elevatedCardColors(
         containerColor = MateBlackRC)
     ) {
@@ -114,7 +114,7 @@ fun RouteCardHeader(route: RouteForList){
 }
 
 @Composable
-fun RouteCard(route: RouteForList, navController: NavHostController, userID: Int) {
+fun RouteCard(route: Routes, navController: NavHostController, userID: Int) {
     Column{
         ElevatedCard (modifier = Modifier
             .fillMaxWidth(0.95f)
@@ -209,7 +209,7 @@ fun RouteCard(route: RouteForList, navController: NavHostController, userID: Int
 
 
 @Composable
-fun OrderCard(order: OrderForList, navController: NavHostController) {
+fun OrderCard(order: Orders, navController: NavHostController) {
     Column{
         ElevatedCard (modifier = Modifier
             .fillMaxWidth(0.95f)

@@ -43,7 +43,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.example.rutescompartidesapp.R
-import com.example.rutescompartidesapp.data.domain.OrderForList
+import com.example.rutescompartidesapp.data.domain.orders.Orders
 import com.example.rutescompartidesapp.ui.theme.BlueRC
 import com.example.rutescompartidesapp.ui.theme.MateBlackRC
 import com.example.rutescompartidesapp.ui.theme.RedRC
@@ -86,7 +86,7 @@ fun OrderDetailScreen(orderID: Int, navHost: NavHostController, loginViewModel: 
 
 @Composable
 fun CompleteCard(
-    order: OrderForList,
+    order: Orders,
     responsiveHeight: Dp,
     isVisible: Boolean,
     orderDetailViewModel: OrderDetailViewModel,

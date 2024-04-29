@@ -3,9 +3,9 @@ package com.example.rutescompartidesapp.view.route_detail.route_detail_driver
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.rutescompartidesapp.data.domain.OrderForList
-import com.example.rutescompartidesapp.data.domain.RouteForList
 import com.example.rutescompartidesapp.data.domain.interactions.RouteInteraction
+import com.example.rutescompartidesapp.data.domain.orders.Orders
+import com.example.rutescompartidesapp.data.domain.routes.Routes
 import com.example.rutescompartidesapp.utils.LocalConstants
 import com.example.rutescompartidesapp.utils.LocalConstants.interactionList
 import kotlinx.coroutines.channels.Channel
@@ -62,9 +62,9 @@ class RouteDetailDriverViewModel (routeID: Int): ViewModel(){
     private val _routeInteractionToConfirm = MutableStateFlow<RouteInteraction?>(null)
     val routeInteractionToConfirm = _routeInteractionToConfirm.asStateFlow()
 
-    private val _route = MutableStateFlow<RouteForList?>(null)
+    private val _route = MutableStateFlow<Routes?>(null)
     val route = _route.asStateFlow()
-    private val _order = MutableStateFlow<OrderForList?>(null)
+    private val _order = MutableStateFlow<Orders?>(null)
     val order = _order.asStateFlow()
 
     /**
@@ -137,7 +137,7 @@ class RouteDetailDriverViewModel (routeID: Int): ViewModel(){
      * Duplica la ruta i la guarda a la llista de rutes amb un nou ID
      * @param route Ruta a duplicar
      */
-    fun duplicateRoute(route: RouteForList){
+    fun duplicateRoute(route: Routes){
         val nextRouteID = LocalConstants.routeList.maxOf { lastRoute ->
             lastRoute.routeID
         } + 1
@@ -148,7 +148,7 @@ class RouteDetailDriverViewModel (routeID: Int): ViewModel(){
 
 
 
-    fun deleteRoute(route: RouteForList){
+    fun deleteRoute(route: Routes){
         LocalConstants.routeList.remove(route)
         // TODO Fer un DELETE a la API per eliminar la ruta
     }

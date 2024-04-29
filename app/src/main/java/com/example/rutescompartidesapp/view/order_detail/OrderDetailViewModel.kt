@@ -1,7 +1,7 @@
 package com.example.rutescompartidesapp.view.order_detail
 
 import androidx.lifecycle.ViewModel
-import com.example.rutescompartidesapp.data.domain.OrderForList
+import com.example.rutescompartidesapp.data.domain.orders.Orders
 import com.example.rutescompartidesapp.utils.LocalConstants
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -15,7 +15,7 @@ class OrderDetailViewModel: ViewModel() {
         _isVisible.value = !_isVisible.value
     }
 
-    private val _order = MutableStateFlow<OrderForList?>(null)
+    private val _order = MutableStateFlow<Orders?>(null)
     val order = _order.asStateFlow()
     fun getOrder(orderID: Int){
         val order = LocalConstants.orderList.first { it.orderID == orderID }

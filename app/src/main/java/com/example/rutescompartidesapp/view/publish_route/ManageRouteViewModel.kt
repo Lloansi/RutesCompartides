@@ -1,10 +1,11 @@
 package com.example.rutescompartidesapp.view.publish_route
 
 import androidx.lifecycle.ViewModel
-import com.example.rutescompartidesapp.data.domain.RouteForList
+import com.example.rutescompartidesapp.data.domain.routes.Routes
 import com.example.rutescompartidesapp.utils.LocalConstants
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import org.osmdroid.util.GeoPoint
 import java.time.Instant
 import java.time.ZoneId
 import java.util.Calendar
@@ -405,7 +406,7 @@ class ManageRouteViewModel: ViewModel(){
         val lastRouteID = LocalConstants.routeList.maxByOrNull { route -> route.routeID }!!.routeID
         // Elimina els punts intermitjos buits
         val cleanStepNameList = stepNameList.value.filter { step -> step.isNotEmpty() }
-        val newRoute = RouteForList(userID = userID,
+        val newRoute = Routes(userID = userID,
             routeID = lastRouteID+1,
             routeName = _internalRouteName.value,
             puntSortida = _originName.value,
@@ -425,7 +426,13 @@ class ManageRouteViewModel: ViewModel(){
             maxDetourKm = _maxDetourKm.value.toFloat(),
             availableSeats = _availableSeats.value.toInt(),
             availableSpace = _availableSpace.value,
-            comment = _comment.value
+            comment = _comment.value,
+            startPoint = _originLocation.value.let { coordinates ->
+                GeoPoint(coordinates[0], coordinates[1])
+            },
+            endPoint = _destinationLocation.value.let { coordinates ->
+                GeoPoint(coordinates[0], coordinates[1])
+            }
             )
         // TODO Fer un POST a la API per duplicar la ruta
 
@@ -440,7 +447,7 @@ class ManageRouteViewModel: ViewModel(){
 
 
     // Get the route
-    private val _routeToEdit = MutableStateFlow<RouteForList?>(null)
+    private val _routeToEdit = MutableStateFlow<Routes?>(null)
     val routeToEdit = _routeToEdit.asStateFlow()
     fun getRoute(routeID: Int) {
         _routeToEdit.value =  LocalConstants.routeList.find { route -> route.routeID == routeID }!!
@@ -492,7 +499,7 @@ class ManageRouteViewModel: ViewModel(){
     fun updateRoute(userID: Int){
         val cleanStepNameList = stepNameList.value.filter { step -> step.isNotEmpty() }
 
-        val updatedRoute = RouteForList(userID = userID,
+        val updatedRoute = Routes(userID = userID,
             routeID = _routeToEdit.value!!.routeID,
             routeName = _internalRouteName.value,
             puntSortida = _originName.value,
@@ -512,7 +519,13 @@ class ManageRouteViewModel: ViewModel(){
             maxDetourKm = _maxDetourKm.value.toFloat(),
             availableSeats = _availableSeats.value.toInt(),
             availableSpace = _availableSpace.value,
-            comment = _comment.value
+            comment = _comment.value,
+            startPoint = _originLocation.value.let { coordinates ->
+                GeoPoint(coordinates[0], coordinates[1])
+            },
+            endPoint = _destinationLocation.value.let { coordinates ->
+                GeoPoint(coordinates[0], coordinates[1])
+            }
 
         )
         println(updatedRoute)

@@ -26,14 +26,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.rutescompartidesapp.data.domain.OrderForList
-import com.example.rutescompartidesapp.data.domain.RouteForList
+import com.example.rutescompartidesapp.data.domain.orders.Orders
+import com.example.rutescompartidesapp.data.domain.routes.Routes
 import com.example.rutescompartidesapp.ui.theme.MateBlackRC
 import com.example.rutescompartidesapp.ui.theme.OrangeRC
 import com.example.rutescompartidesapp.utils.LocalConstants
 
 @Composable
-fun RouteOrderHeader(route: RouteForList, order: OrderForList) {
+fun RouteOrderHeader(route: Routes, order: Orders) {
         ElevatedCard (modifier = Modifier.fillMaxWidth(),colors = CardDefaults.elevatedCardColors(
             containerColor = MateBlackRC
         )
@@ -55,7 +55,7 @@ fun RouteOrderHeaderPreview(){
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun RoutePoints2(route: RouteForList){
+fun RoutePoints2(route: Routes){
     FlowRow (modifier = Modifier.padding(bottom = 3.dp, top = 2.dp),
         verticalArrangement = Arrangement.Center) {
         Text(text = buildAnnotatedString {
@@ -120,7 +120,7 @@ fun RoutePoints2(route: RouteForList){
 }
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun OrderPoints(order: OrderForList){
+fun OrderPoints(order: Orders){
     FlowRow (modifier = Modifier.padding(bottom = 2.dp, top = 3.dp),
         verticalArrangement = Arrangement.Center) {
             Text(text = buildAnnotatedString {

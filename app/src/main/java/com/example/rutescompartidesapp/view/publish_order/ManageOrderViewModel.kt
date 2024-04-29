@@ -1,10 +1,11 @@
 package com.example.rutescompartidesapp.view.publish_order
 
 import androidx.lifecycle.ViewModel
-import com.example.rutescompartidesapp.data.domain.OrderForList
+import com.example.rutescompartidesapp.data.domain.orders.Orders
 import com.example.rutescompartidesapp.utils.LocalConstants
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import org.osmdroid.util.GeoPoint
 import java.time.Instant
 import java.time.ZoneId
 
@@ -336,7 +337,7 @@ class ManageOrderViewModel: ViewModel(){
         // TODO Cambiar la classe de la order i fer servir la oficial
         val lastOrderID = LocalConstants.orderList.maxByOrNull { order -> order.orderID }!!.orderID
 
-        val newOrder = OrderForList(userID = userID,
+        val newOrder = Orders(userID = userID,
             orderID = lastOrderID+1,
             orderName = _internalOrderName.value,
             puntSortida = _originName.value,
@@ -356,7 +357,14 @@ class ManageOrderViewModel: ViewModel(){
             packagesFragile = _arePackagesFragile.value,
             co2Saved = 0.0f,
             distance = 0.0f,
-            comment = _comment.value
+            comment = _comment.value,
+            startPoint = _originLocation.value.let { coordinates ->
+                GeoPoint(coordinates[0], coordinates[1])
+            },
+            endPoint = _destinationLocation.value.let { coordinates ->
+                GeoPoint(coordinates[0], coordinates[1])
+            }
+
 
         )
         // TODO Fer un POST a la API per duplicar la ruta
@@ -372,7 +380,7 @@ class ManageOrderViewModel: ViewModel(){
 
     // Edit Order
     // Get the order
-    private val _orderToEdit = MutableStateFlow<OrderForList?>(null)
+    private val _orderToEdit = MutableStateFlow<Orders?>(null)
     val orderToEdit = _orderToEdit.asStateFlow()
     fun getOrder(orderID: Int) {
         _orderToEdit.value =  LocalConstants.orderList.find { order -> order.orderID == orderID }!!
@@ -397,6 +405,8 @@ class ManageOrderViewModel: ViewModel(){
         _packagesWeight.value = _orderToEdit.value!!.packagesWeight.toString()
         _arePackagesFragile.value = _orderToEdit.value!!.packagesFragile
         _comment.value = _orderToEdit.value!!.comment ?: ""
+        _originLocation.value = listOf(_orderToEdit.value!!.startPoint.latitude, _orderToEdit.value!!.startPoint.longitude)
+        _destinationLocation.value = listOf(_orderToEdit.value!!.endPoint.latitude, _orderToEdit.value!!.endPoint.longitude)
 
         // Etiquetes i freqüència
         _orderToEdit.value?.etiquetes.let { etiquetes ->
@@ -407,7 +417,7 @@ class ManageOrderViewModel: ViewModel(){
     }
 
     fun updateOrder(userID: Int){
-        val updatedOrder = OrderForList(userID = userID,
+        val updatedOrder = Orders(userID = userID,
             orderID = _orderToEdit.value!!.orderID,
             orderName = _internalOrderName.value,
             puntSortida = _originName.value,
@@ -427,7 +437,13 @@ class ManageOrderViewModel: ViewModel(){
             packagesFragile = _arePackagesFragile.value,
             co2Saved = 0.0f,
             distance = 0.0f,
-            comment = _comment.value
+            comment = _comment.value,
+            startPoint = _originLocation.value.let { coordinates ->
+                GeoPoint(coordinates[0], coordinates[1])
+            },
+            endPoint = _destinationLocation.value.let { coordinates ->
+                GeoPoint(coordinates[0], coordinates[1])
+            }
         )
         // TODO Fer un PUT a la API per actualitzar la ruta
         if (LocalConstants.orderList.removeIf { order -> order.orderID == updatedOrder.orderID }){
