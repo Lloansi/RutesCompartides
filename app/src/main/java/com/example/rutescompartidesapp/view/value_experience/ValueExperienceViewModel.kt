@@ -35,7 +35,7 @@ class ValueExperienceViewModel:ViewModel() {
 
     // Score
     private val _isDropdownExpanded = MutableStateFlow(false)
-    val isDropdownExpanded = _isPackageDelivered.asStateFlow()
+    val isDropdownExpanded = _isDropdownExpanded.asStateFlow()
     private val _experienceScore = MutableStateFlow("1")
     val experienceScore = _experienceScore
     fun setExperienceScore( num: String){
@@ -44,7 +44,9 @@ class ValueExperienceViewModel:ViewModel() {
     }
 
     fun toggleDropdown(){
+        println("HA ENTRADOOOOOOOOOOO")
         _isDropdownExpanded.value = !_isDropdownExpanded.value
+        println(_isDropdownExpanded.value)
     }
 
     fun sendReview(route: RouteForList, order: OrderForList, navHost: NavController){

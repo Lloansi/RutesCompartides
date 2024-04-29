@@ -2,6 +2,7 @@ package com.example.rutescompartidesapp.view.value_experience
 
 import android.annotation.SuppressLint
 import android.widget.Toast
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -47,9 +48,9 @@ import kotlinx.coroutines.flow.collectLatest
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 
 @Composable
-fun ValueExperienceGeneralScreen(routeID: Int, orderID: Int, navHost: NavHostController) {
+fun ValueExperienceGeneralScreen(routeID: Int, orderID: Int, navHost: NavHostController, valueExperienceViewModel: ValueExperienceViewModel) {
 
-    val valueExperienceViewModel = ValueExperienceViewModel()
+    //val valueExperienceViewModel = ValueExperienceViewModel()
     val route: RouteForList = LocalConstants.routeList.first { it.routeID == routeID }
     val order: OrderForList = LocalConstants.orderList.first { it.orderID == orderID }
     val isPackageDelivered by valueExperienceViewModel.isPackageDelivered.collectAsStateWithLifecycle()
@@ -77,6 +78,8 @@ fun ValueExperienceGeneralScreen(routeID: Int, orderID: Int, navHost: NavHostCon
                     containerColor = MaterialTheme.colorScheme.background
                 )
             ) {
+
+                println("ESTADO DE EL TOGGLE2 DEL DROPDOWN : $isDropdownExpanded")
 
                 Row {
                     RouteOrderHeader(route = route, order = order)
@@ -112,10 +115,14 @@ fun ValueExperienceGeneralScreen(routeID: Int, orderID: Int, navHost: NavHostCon
 
                     Text(text = "Puntuació: ",
                         style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onBackground)
+                        color = MaterialTheme.colorScheme.onBackground,)
                     ExposedDropdownMenuBox(
                         expanded = isDropdownExpanded,
-                        onExpandedChange = {valueExperienceViewModel.toggleDropdown() }) {
+                        onExpandedChange = {
+                            valueExperienceViewModel.toggleDropdown()
+                        println("ESTADO DE EL TOGGLE DEL DROPDOWN : $isDropdownExpanded")
+                        }
+                    ) {
                         OutlinedTextField(
                             value =  experienceScore,
                             onValueChange = {},
@@ -138,14 +145,18 @@ fun ValueExperienceGeneralScreen(routeID: Int, orderID: Int, navHost: NavHostCon
                         )
                         ExposedDropdownMenu(
                             expanded = isDropdownExpanded,
-                            onDismissRequest = {valueExperienceViewModel.toggleDropdown() }
+                            onDismissRequest = {valueExperienceViewModel.toggleDropdown()
+                                println("ESTADO DE EL TOGGLE3 DEL DROPDOWN : $isDropdownExpanded")
+                            }
                         ) {
                             (1..10).forEach { puntuació ->
                                 DropdownMenuItem(
                                     text = {
                                         Text(text = puntuació.toString())
                                     },
-                                    onClick = { valueExperienceViewModel.setExperienceScore(puntuació.toString()) }
+                                    onClick = {
+                                        valueExperienceViewModel.setExperienceScore(puntuació.toString())
+                                    }
                                 )
                             }
                         }
@@ -226,6 +237,8 @@ fun ValueExperienceGeneralScreen(routeID: Int, orderID: Int, navHost: NavHostCon
 @Preview(showBackground = true)
 fun ValueExperienceGeneralScreenPreview (){
     val navHost = rememberNavController()
+    val valueExperienceViewModel = ValueExperienceViewModel()
 
-    ValueExperienceGeneralScreen(1, 1, navHost)
+
+    ValueExperienceGeneralScreen(1, 1, navHost,valueExperienceViewModel)
 }

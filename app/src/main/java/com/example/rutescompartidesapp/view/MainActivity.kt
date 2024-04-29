@@ -62,6 +62,7 @@ import com.example.rutescompartidesapp.view.routes_order_list.viewmodels.FilterP
 import com.example.rutescompartidesapp.view.routes_order_list.viewmodels.RoutesOrderListViewModel
 import com.example.rutescompartidesapp.view.signup.SignUpScreen
 import com.example.rutescompartidesapp.view.value_experience.ValueExperienceGeneralScreen
+import com.example.rutescompartidesapp.view.value_experience.ValueExperienceViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -223,7 +224,9 @@ fun ScreenNavigationConfiguration( mapViewModel: MapViewModel,mapViewModel2: Map
                 })) {
             val routeID = it.arguments?.getInt("routeId")
             val orderID = it.arguments?.getInt("orderId")
-            ValueExperienceGeneralScreen(routeID!!, orderID!!, navController)
+            val valueExperienceViewModel = ValueExperienceViewModel()
+
+            ValueExperienceGeneralScreen(routeID!!, orderID!!, navController,valueExperienceViewModel)
         }
 
         composable(Screens.RoutesOrderListScreen.route) {
