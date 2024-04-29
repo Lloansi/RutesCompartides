@@ -43,7 +43,12 @@ import com.example.rutescompartidesapp.view.map.fredokaOneFamily
 import com.example.rutescompartidesapp.view.route_detail.route_detail_driver.RouteDetailDriverViewModel
 import kotlinx.coroutines.flow.collectLatest
 
-
+/**
+ * Composable function for the Confirm Screen, where delivery confirmation is managed.
+ * @param routeDetailDriverViewModel ViewModel for route details for the driver.
+ * @param cameraViewModel ViewModel for camera operations.
+ * @param drawViewModel ViewModel for drawing operations.
+ */
 @Composable
 fun ConfirmScreen(
     routeDetailDriverViewModel : RouteDetailDriverViewModel,
@@ -131,6 +136,14 @@ fun ConfirmScreen(
     }
 }
 
+/**
+ * Composable function for uploading an image or signature.
+ * @param icon The icon for the upload button.
+ * @param destination The destination to navigate to when the button is clicked.
+ * @param bitmap The bitmap image to display.
+ * @param cameraViewModel ViewModel for camera operations.
+ * @param drawViewModel ViewModel for drawing operations.
+ */
 @Composable
 fun UploadImageOrSignature(
     icon : ImageVector,
@@ -185,6 +198,10 @@ fun UploadImageOrSignature(
     }
 }
 
+/**
+ * Composable function for the user comment container.
+ * @param routeDetailDriverViewModel ViewModel for route details for the driver.
+ */
 @Composable
 fun UserCommentContainer(routeDetailDriverViewModel: RouteDetailDriverViewModel) {
     val userComment by routeDetailDriverViewModel.userComment.collectAsStateWithLifecycle()

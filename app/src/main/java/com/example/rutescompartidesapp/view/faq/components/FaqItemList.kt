@@ -1,5 +1,9 @@
 package com.example.rutescompartidesapp.view.faq.components
 
+/**
+ * List of frequently asked questions (FAQ) items.
+ * Each item includes a question, answer, and category.
+ */
 val faqItems = listOf(
     FaqItemModel("Isoterm", "Transport amb vehicle amb parets aïllants, manté la temperatura", "Cercant Rutes/Comandes"),
     FaqItemModel("Refrigerat", "Transport amb vehicle amb font de fred, temperatures de 4 a 12º (cal confirmar temperatura exacta amb qui ofereix el transport)", "Cercant Rutes/Comandes"),

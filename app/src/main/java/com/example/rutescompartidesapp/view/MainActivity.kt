@@ -36,7 +36,7 @@ import com.example.rutescompartidesapp.R
 import com.example.rutescompartidesapp.navigation.Screens
 import com.example.rutescompartidesapp.ui.theme.MateBlackRC
 import com.example.rutescompartidesapp.ui.theme.RutesCompartidesAppTheme
-import com.example.rutescompartidesapp.view.com_funciona.ComFuncionaScreen
+import com.example.rutescompartidesapp.view.how_it_works.ComFuncionaScreen
 import com.example.rutescompartidesapp.view.edit_profile.EditProfileScreen
 import com.example.rutescompartidesapp.view.faq.FaqScreen
 import com.example.rutescompartidesapp.view.faq.FaqViewModel

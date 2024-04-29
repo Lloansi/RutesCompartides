@@ -19,6 +19,9 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 
+/**
+ * ViewModel for handling drawing functionality.
+ */
 class DrawViewModel: ViewModel() {
 
     private val _drawBitmap = MutableStateFlow<Bitmap?>(null)
@@ -34,6 +37,10 @@ class DrawViewModel: ViewModel() {
     val showSuccessToastChannel = _showSuccessToastChannel.receiveAsFlow()
 
 
+    /**
+     * Saves the provided bitmap to the device's gallery.
+     * @param bitmap The bitmap to be saved.
+     */
     fun saveBitmapToGallery(bitmap: Bitmap) {
         viewModelScope.launch(Dispatchers.IO) {
             val fileName = "drawing_${System.currentTimeMillis()}.png"
@@ -52,6 +59,13 @@ class DrawViewModel: ViewModel() {
         }
     }
 
+    /**
+     * Draws the provided lines on a bitmap.
+     * @param lines List of lines to be drawn.
+     * @param strokeWidthInPx Stroke width for drawing lines.
+     * @param width Width of the bitmap.
+     * @param height Height of the bitmap.
+     */
     fun drawToBitmap(lines: List<Line>, strokeWidthInPx: Float, width: Int, height: Int) {
         val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)

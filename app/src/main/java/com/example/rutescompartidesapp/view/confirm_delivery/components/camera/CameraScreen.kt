@@ -42,7 +42,10 @@ import androidx.core.content.ContextCompat
 import com.example.rutescompartidesapp.view.confirm_delivery.viewmodel.CameraViewModel
 import kotlinx.coroutines.launch
 
-
+/**
+ * Composable function for the Camera Screen, allowing users to capture photos.
+ * @param cameraViewModel ViewModel for camera operations.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CameraScreen(cameraViewModel: CameraViewModel){
@@ -149,6 +152,12 @@ fun CameraScreen(cameraViewModel: CameraViewModel){
     }
 }
 
+/**
+ * Function to capture a photo using the camera controller.
+ * @param controller The lifecycle-aware camera controller.
+ * @param ctx The context.
+ * @param onPhotoTaken Callback function to handle the captured photo.
+ */
 private fun takePhoto(
     controller: LifecycleCameraController,
     ctx: Context,

@@ -24,6 +24,10 @@ import androidx.compose.ui.unit.dp
 import com.example.rutescompartidesapp.data.domain.Line
 import com.example.rutescompartidesapp.view.confirm_delivery.viewmodel.DrawViewModel
 
+/**
+ * Composable function for the screen where the user can draw.
+ * @param drawViewModel ViewModel for drawing operations.
+ */
 @SuppressLint("RestrictedApi")
 @Composable
 fun DrawScreen(drawViewModel: DrawViewModel) {

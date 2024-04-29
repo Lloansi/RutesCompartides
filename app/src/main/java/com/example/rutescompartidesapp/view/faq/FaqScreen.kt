@@ -44,6 +44,12 @@ import com.example.rutescompartidesapp.view.faq.components.ItemCategoryModel
 import com.example.rutescompartidesapp.view.generic_components.BackButtonArrow
 import com.example.rutescompartidesapp.view.generic_components.HeaderSphere
 
+/**
+ * Composable function to display the FAQ screen.
+ *
+ * @param navController The NavHostController for navigation.
+ * @param viewModel The view model for FAQ screen.
+ */
 @Composable
 fun FaqScreen(navController: NavHostController, viewModel: FaqViewModel) {
 
@@ -75,6 +81,11 @@ fun FaqScreen(navController: NavHostController, viewModel: FaqViewModel) {
     }
 }
 
+/**
+ * Composable function to display an item card in the FAQ screen.
+ *
+ * @param item The FAQ item model.
+ */
 @Composable
 private fun ItemCard(item: FaqItemModel) {
     ElevatedCard(
@@ -93,6 +104,11 @@ private fun ItemCard(item: FaqItemModel) {
     }
 }
 
+/**
+ * Composable function to display the content of an FAQ item.
+ *
+ * @param item The FAQ item model.
+ */
 @Composable
 private fun ItemCardContent(item: FaqItemModel) {
 
@@ -159,6 +175,11 @@ private fun ItemCardContent(item: FaqItemModel) {
 
 }
 
+/**
+ * Composable function to display the header of a category in the FAQ screen.
+ *
+ * @param text The text to display in the header.
+ */
 @Composable
 private fun CategoryHeader(text: String) {
     Text(
@@ -173,7 +194,11 @@ private fun CategoryHeader(text: String) {
     )
 }
 
-
+/**
+ * Composable function to display a lazy column of categorized items in the FAQ screen.
+ *
+ * @param categories The list of categories with their associated items.
+ */
 @Composable
 private fun CategorizedLazyColumn(categories: List<ItemCategoryModel>) {
     Column(

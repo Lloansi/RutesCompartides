@@ -9,7 +9,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
-
+/**
+ * ViewModel for handling camera-related functionality.
+ */
 class CameraViewModel: ViewModel() {
 
     private val _bitmaps = MutableStateFlow<List<Bitmap>>(emptyList())
@@ -27,15 +29,26 @@ class CameraViewModel: ViewModel() {
     private val _showSuccessToastChannel = Channel<Boolean>()
     val showSuccessToastChannel = _showSuccessToastChannel.receiveAsFlow()
 
-
+    /**
+     * Notifies the ViewModel about the activation status of the camera.
+     * @param isActive true if camera is active, false otherwise.
+     */
     fun onCameraActive(isActive: Boolean){
         _isCameraActive.value = isActive
     }
 
+    /**
+     * Adds a captured photo bitmap to the list of captured bitmaps.
+     * @param bitmap The bitmap of the captured photo.
+     */
     fun onTakePhoto(bitmap : Bitmap){
         _bitmaps.value += bitmap
     }
 
+    /**
+     * Updates the photo bitmap with the provided bitmap and notifies about the success.
+     * @param bitmap The bitmap representing the photo.
+     */
     fun updatePhotoBitmap(bitmap: Bitmap){
         _bitmapPhoto.value = bitmap
         viewModelScope.launch {

@@ -20,6 +20,12 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.unit.dp
 import com.example.rutescompartidesapp.view.confirm_delivery.viewmodel.CameraViewModel
 
+/**
+ * Composable function for displaying the content of the photo bottom sheet.
+ * @param bitmaps List of bitmaps representing captured photos.
+ * @param modifier Modifier for the layout.
+ * @param viewModel ViewModel for camera operations.
+ */
 @Composable
 fun PhotoBottomSheetContent(
     bitmaps : List<Bitmap>,

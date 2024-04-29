@@ -44,6 +44,11 @@ import com.example.rutescompartidesapp.view.generic_components.BackButtonArrow
 import com.example.rutescompartidesapp.view.generic_components.HeaderSphere
 import com.example.rutescompartidesapp.view.login.LoginViewModel
 
+/**
+ * Composable function for the edit profile screen.
+ * @param loginViewModel The ViewModel for login-related operations.
+ * @param navController The NavController for navigation.
+ */
 @Composable
 fun EditProfileScreen(loginViewModel: LoginViewModel, navController: NavController) {
     val editProfileViewModel : EditProfileViewModel = hiltViewModel()
@@ -96,6 +101,11 @@ fun EditProfileScreen(loginViewModel: LoginViewModel, navController: NavControll
 
 }
 
+/**
+ * Composable function to build text fields for editing profile information.
+ * @param viewModel The ViewModel for editing profile.
+ * @param textFieldList The list of text field models.
+ */
 @Composable
 fun BuildTextFields(
     viewModel: EditProfileViewModel,
@@ -175,6 +185,11 @@ fun BuildTextFields(
     }
 }
 
+/**
+ * Composable function for the save button.
+ * @param viewModel The ViewModel for editing profile.
+ * @param navController The NavController for navigation.
+ */
 @Composable
 fun SaveButton(viewModel: EditProfileViewModel, navController: NavController) {
 
@@ -199,6 +214,10 @@ fun SaveButton(viewModel: EditProfileViewModel, navController: NavController) {
     }
 }
 
+/**
+ * Function to provide a list of edit profile text field models.
+ * @return A list of [EditProfileTextFieldModel].
+ */
 fun textFieldList(): List<EditProfileTextFieldModel> {
     return listOf(
         EditProfileTextFieldModel(
