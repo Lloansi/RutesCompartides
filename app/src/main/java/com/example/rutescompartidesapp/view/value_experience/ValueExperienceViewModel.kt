@@ -35,7 +35,7 @@ class ValueExperienceViewModel:ViewModel() {
 
     // Score
     private val _isDropdownExpanded = MutableStateFlow(false)
-    val isDropdownExpanded = _isDropdownExpanded.asStateFlow()
+    val isDropdownExpanded = _isDropdownExpanded
     private val _experienceScore = MutableStateFlow("1")
     val experienceScore = _experienceScore
     fun setExperienceScore( num: String){

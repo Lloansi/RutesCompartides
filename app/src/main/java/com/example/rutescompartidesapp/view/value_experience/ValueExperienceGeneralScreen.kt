@@ -24,6 +24,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -55,8 +58,8 @@ fun ValueExperienceGeneralScreen(routeID: Int, orderID: Int, navHost: NavHostCon
     val isPackageDelivered by valueExperienceViewModel.isPackageDelivered.collectAsStateWithLifecycle()
     val comment by valueExperienceViewModel.comment.collectAsStateWithLifecycle()
     val experienceScore by valueExperienceViewModel.experienceScore.collectAsStateWithLifecycle()
-    val isDropdownExpanded by valueExperienceViewModel.isDropdownExpanded.collectAsStateWithLifecycle()
-
+    //val isDropdownExpanded by valueExperienceViewModel.isDropdownExpanded.collectAsStateWithLifecycle()
+    var isDropdownExpanded by remember { mutableStateOf(false) }
 
     val context = LocalContext.current
 
@@ -118,8 +121,9 @@ fun ValueExperienceGeneralScreen(routeID: Int, orderID: Int, navHost: NavHostCon
                     ExposedDropdownMenuBox(
                         expanded = isDropdownExpanded,
                         onExpandedChange = {
-                            valueExperienceViewModel.toggleDropdown()
-                        println("ESTADO DE EL TOGGLE DEL DROPDOWN : $isDropdownExpanded")
+                            isDropdownExpanded = !isDropdownExpanded
+                            //valueExperienceViewModel.toggleDropdown()
+                            println("ESTADO DE EL TOGGLE DEL DROPDOWN : $isDropdownExpanded")
                         }
                     ) {
                         OutlinedTextField(
@@ -144,7 +148,9 @@ fun ValueExperienceGeneralScreen(routeID: Int, orderID: Int, navHost: NavHostCon
                         )
                         ExposedDropdownMenu(
                             expanded = isDropdownExpanded,
-                            onDismissRequest = {valueExperienceViewModel.toggleDropdown()
+                            onDismissRequest = {
+                                isDropdownExpanded = !isDropdownExpanded
+                                //valueExperienceViewModel.toggleDropdown()
                                 println("ESTADO DE EL TOGGLE3 DEL DROPDOWN : $isDropdownExpanded")
                             }
                         ) {
@@ -154,6 +160,7 @@ fun ValueExperienceGeneralScreen(routeID: Int, orderID: Int, navHost: NavHostCon
                                         Text(text = puntuació.toString())
                                     },
                                     onClick = {
+                                        isDropdownExpanded = !isDropdownExpanded
                                         valueExperienceViewModel.setExperienceScore(puntuació.toString())
                                     }
                                 )
@@ -161,6 +168,7 @@ fun ValueExperienceGeneralScreen(routeID: Int, orderID: Int, navHost: NavHostCon
                         }
                     }
                 }
+
 
                 Divider(color= OrangeRC, thickness = 2.dp)
                 // Comment TextField
