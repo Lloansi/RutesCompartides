@@ -40,7 +40,6 @@ import kotlin.math.sin
 
 @HiltViewModel
 class MapViewModel @Inject constructor (
-    val rutesCompartidesRepository: RutesCompartidesRepository,
     val googleLocationsRepository: GoogleLocationsRepository,
     val searchViewModel: SearchViewModel
 ) :ViewModel() {

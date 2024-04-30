@@ -20,10 +20,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.rutescompartidesapp.data.domain.Location.idescat.Municipi
 import com.example.rutescompartidesapp.view.map.viewModels.MapViewModel
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.osmdroid.util.GeoPoint
 
+@OptIn(DelicateCoroutinesApi::class)
 @Composable
-fun LocationListItem(municipi: Municipi, ctx: Context, mapViewModel: MapViewModel) {
+fun LocationListItem(municipi: Municipi, ctx: Context, mapViewModel: MapViewModel, onCloseSearchBar: () -> Unit) {
 
     val mapView by mapViewModel.mapViewState.collectAsState()
     val roadManager by mapViewModel.roadManagerState.collectAsState()
@@ -42,15 +46,25 @@ fun LocationListItem(municipi: Municipi, ctx: Context, mapViewModel: MapViewMode
             .fillMaxWidth()
             .fillMaxHeight()
             .clickable {
-                mapView?.let { mapview -> 
+                mapView?.let { mapview ->
                     roadManager?.let { roadmanager ->
                         municipiGeoPoint?.let { geopoint ->
-                            mapViewModel.ordersAndRoutesFromLocation(
-                                mapView = mapview,
-                                roadManager = roadmanager,
-                                ctx = ctx,
-                                geoPoint = geopoint,
-                                maxKmDistance = 30)
+
+                            /*
+                            Encapsulamos las dos funciones en una corrutina para asegurarnos que el onCloseSearchBar()
+                            se ejecutará cuando se recuperen los datos de la llamada a la API ordersAndRoutesFromLocation() del MapViewModel
+                             */
+                            GlobalScope.launch {
+                                mapViewModel.ordersAndRoutesFromLocation(
+                                    mapView = mapview,
+                                    roadManager = roadmanager,
+                                    ctx = ctx,
+                                    geoPoint = geopoint,
+                                    maxKmDistance = 30)
+
+                                onCloseSearchBar()
+                            }
+
                         }
                     }
                 }

@@ -84,7 +84,13 @@ fun SearchView(searchViewModel : SearchViewModel, ctx: Context, mapViewModel: Ma
         ) {
             if (isNotNull){
                 items(locationsFilteredSearchBar.size) { index ->
-                    LocationListItem(municipi = locationsFilteredSearchBar[index], ctx, mapViewModel)
+                    LocationListItem(
+                        municipi = locationsFilteredSearchBar[index],
+                        ctx = ctx,
+                        mapViewModel = mapViewModel,
+                        onCloseSearchBar = {
+                                searchViewModel.onToogleSearch()
+                        })
                     Spacer(modifier = Modifier.height(12.dp))
                 }
             } else{
