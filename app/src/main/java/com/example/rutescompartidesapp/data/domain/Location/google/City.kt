@@ -1,4 +1,4 @@
-package com.example.rutescompartidesapp.data.domain.Location
+package com.example.rutescompartidesapp.data.domain.Location.google
 
 import kotlinx.serialization.Serializable
 

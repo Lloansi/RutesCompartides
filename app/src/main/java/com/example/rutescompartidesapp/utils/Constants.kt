@@ -16,6 +16,8 @@ object Constants {
 
     const val RUTES_COMPARTIDES_URL = "https://dev.rutescompartides.cat/"
 
+    const val IDESCAT_URL = "https://api.idescat.cat/emex/"
+
 
     val ALL_PERMISSIONS = arrayOf(
         Manifest.permission.CAMERA,

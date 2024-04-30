@@ -1,6 +1,6 @@
 package com.example.rutescompartidesapp.data.network.GoogleLocation
 
-import com.example.rutescompartidesapp.data.domain.Location.City
+import com.example.rutescompartidesapp.data.domain.Location.google.City
 
 interface GoogleLocationService {
 

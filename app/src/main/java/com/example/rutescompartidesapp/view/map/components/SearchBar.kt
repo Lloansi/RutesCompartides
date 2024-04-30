@@ -84,14 +84,12 @@ fun SearchView(searchViewModel : SearchViewModel, ctx: Context, mapViewModel: Ma
         ) {
             if (isNotNull){
                 items(locationsFilteredSearchBar.size) { index ->
-                    LocationListItem(city = locationsFilteredSearchBar[index], ctx, mapViewModel)
+                    LocationListItem(municipi = locationsFilteredSearchBar[index], ctx, mapViewModel)
                     Spacer(modifier = Modifier.height(12.dp))
                 }
             } else{
                 println("ERROR | Empty list of cities")
             }
         }
-
     }
-
 }

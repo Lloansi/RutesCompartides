@@ -2,7 +2,7 @@ package com.example.rutescompartidesapp.view.map.viewModels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.rutescompartidesapp.data.domain.Location.City
+import com.example.rutescompartidesapp.data.domain.Location.idescat.Municipi
 import com.example.rutescompartidesapp.data.domain.Order
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import com.example.rutescompartidesapp.data.domain.Route
 import com.example.rutescompartidesapp.data.network.GoogleLocation.repository.GoogleLocationsRepository
+import com.example.rutescompartidesapp.data.network.idescat.repository.idescatRepository
 import com.example.rutescompartidesapp.view.map.components.allOrders
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.FlowPreview
@@ -24,7 +25,8 @@ import kotlin.math.sqrt
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
-    private val googleLocationsRepository: GoogleLocationsRepository
+    private val googleLocationsRepository: GoogleLocationsRepository,
+    private val idescatRepository: idescatRepository
 ) : ViewModel() {
 
     private val _searchText = MutableStateFlow("")
@@ -42,7 +44,7 @@ class SearchViewModel @Inject constructor(
     private val _ordersAndRoutes = MutableStateFlow(listOf<Pair<List<Route>, List<Order>>>())
     val ordersAndRoutes = _ordersAndRoutes.asStateFlow()
 
-    private val _locations = MutableStateFlow(listOf<City>())
+    private val _locations = MutableStateFlow(listOf<Municipi>())
     val locations = _locations.asStateFlow()
 
     private fun getCataloniaRadius(): Double {
@@ -57,7 +59,8 @@ class SearchViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             _orders.value = allOrders
-           _locations.value = googleLocationsRepository.getAllCities(autonomousCommunityLat = CATALONIA_LAT, autonomousCommunityLng = CATALONIA_LNG, radius = 3200)
+            _locations.value = idescatRepository.getAllMunicipis()
+            //_locations.value = googleLocationsRepository.getAllCities(autonomousCommunityLat = CATALONIA_LAT, autonomousCommunityLng = CATALONIA_LNG, radius = 3200)
         }
         /*
         Hasta que no se implemente los metodos para
@@ -120,7 +123,7 @@ class SearchViewModel @Inject constructor(
     @OptIn(FlowPreview::class)
     val locationsFilteredPerSearchedText = searchText
         .debounce(500L)
-        .onEach{ _isSearching.update{ true } }
+        //.onEach{ _isSearching.update{ true } }
         .combine(_locations ) { text, locations ->
             if (text.isBlank()) {
                 locations
@@ -130,7 +133,7 @@ class SearchViewModel @Inject constructor(
                 }
             }
         }
-        .onEach{ _isSearching.update{ false } }
+        //.onEach{ _isSearching.update{ false } }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),

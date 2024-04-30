@@ -5,6 +5,7 @@ import android.content.Context
 import android.graphics.drawable.Drawable
 import android.view.MotionEvent
 import android.graphics.Color
+import androidx.compose.runtime.collectAsState
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -14,6 +15,7 @@ import com.example.rutescompartidesapp.R
 import com.example.rutescompartidesapp.data.domain.Order
 import com.example.rutescompartidesapp.data.domain.Route
 import com.example.rutescompartidesapp.data.domain.Route2
+import com.example.rutescompartidesapp.data.network.GoogleLocation.repository.GoogleLocationsRepository
 import com.example.rutescompartidesapp.view.map.MapScreen.maxKmFog
 import com.example.rutescompartidesapp.view.map.components.allOrders
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -38,7 +40,9 @@ import kotlin.math.sin
 
 @HiltViewModel
 class MapViewModel @Inject constructor (
-    val rutesCompartidesRepository: RutesCompartidesRepository
+    val rutesCompartidesRepository: RutesCompartidesRepository,
+    val googleLocationsRepository: GoogleLocationsRepository,
+    val searchViewModel: SearchViewModel
 ) :ViewModel() {
     private val _userClickedPointer = MutableStateFlow<MutableList<Marker>>(mutableListOf())
     private var userClickedPointer = _userClickedPointer.asStateFlow()
@@ -400,6 +404,19 @@ class MapViewModel @Inject constructor (
             isNearClickUser(ordersList = null, routesList = allRoute2, mapView, routeIconMarker, roadManager, maxKmDistance)
         }
 
+    }
+
+    suspend fun getMunicipiGeoPoint(cityName: String): GeoPoint? {
+        return withContext(Dispatchers.IO) {
+            try {
+                val cityInfo = googleLocationsRepository.getCityInfo(cityName)
+                val location = cityInfo?.geometry?.location
+                GeoPoint(location?.lng ?: 0.0, location?.lat ?: 0.0)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                null
+            }
+        }
     }
 
     fun path(mapView: MapView){

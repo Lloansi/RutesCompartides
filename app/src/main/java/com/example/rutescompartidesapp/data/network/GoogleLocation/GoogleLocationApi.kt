@@ -1,6 +1,6 @@
 package com.example.rutescompartidesapp.data.network.GoogleLocation
 
-import com.example.rutescompartidesapp.data.domain.Location.CitiesResponse
+import com.example.rutescompartidesapp.data.domain.Location.google.CitiesResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 

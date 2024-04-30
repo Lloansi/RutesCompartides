@@ -9,6 +9,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.preferencesDataStoreFile
 import com.example.rutescompartidesapp.data.network.GoogleLocation.GoogleLocationApi
+import com.example.rutescompartidesapp.data.network.idescat.idescatApi
 import com.example.rutescompartidesapp.data.network.rutes_compartides.repository.RutesCompartidesRepository
 import com.example.rutescompartidesapp.data.network.rutes_compartides.ApiRutesCompartides
 import com.example.rutescompartidesapp.data.network.rutes_compartides.RutesCompartidesService
@@ -50,6 +51,29 @@ object AppModule {
 
         return Retrofit.Builder()
             .baseUrl(Constants.GOOGLE_MAPS_URL)
+            .addConverterFactory(GsonConverterFactory.create(gson))
+            .client(client)
+            .build()
+            .create()
+    }
+
+    @Provides
+    @Singleton
+    fun provideIdescatApi(): idescatApi {
+        val interceptor = HttpLoggingInterceptor()
+        interceptor.level = HttpLoggingInterceptor.Level.BODY
+
+        val gson = GsonBuilder()
+            .serializeNulls()
+            .create()
+
+        val client = OkHttpClient
+            .Builder()
+            .addInterceptor(interceptor)
+            .build()
+
+        return Retrofit.Builder()
+            .baseUrl(Constants.IDESCAT_URL)
             .addConverterFactory(GsonConverterFactory.create(gson))
             .client(client)
             .build()

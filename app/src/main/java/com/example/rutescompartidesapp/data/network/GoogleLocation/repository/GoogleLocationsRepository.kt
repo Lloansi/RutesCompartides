@@ -1,6 +1,6 @@
 package com.example.rutescompartidesapp.data.network.GoogleLocation.repository
 
-import com.example.rutescompartidesapp.data.domain.Location.City
+import com.example.rutescompartidesapp.data.domain.Location.google.City
 import com.example.rutescompartidesapp.data.network.GoogleLocation.GoogleLocationApi
 import com.example.rutescompartidesapp.data.network.GoogleLocation.GoogleLocationService
 import com.example.rutescompartidesapp.utils.Constants

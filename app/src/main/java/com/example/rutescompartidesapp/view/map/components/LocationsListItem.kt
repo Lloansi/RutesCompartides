@@ -9,34 +9,49 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.example.rutescompartidesapp.data.domain.Location.City
+import com.example.rutescompartidesapp.data.domain.Location.idescat.Municipi
 import com.example.rutescompartidesapp.view.map.viewModels.MapViewModel
 import org.osmdroid.util.GeoPoint
 
 @Composable
-fun LocationListItem(city: City, ctx: Context, mapViewModel: MapViewModel) {
-    val geoPoint = GeoPoint(city.geometry.location.lat, city.geometry.location.lng)
+fun LocationListItem(municipi: Municipi, ctx: Context, mapViewModel: MapViewModel) {
 
     val mapView by mapViewModel.mapViewState.collectAsState()
     val roadManager by mapViewModel.roadManagerState.collectAsState()
+
+    var municipiGeoPoint by remember {
+        mutableStateOf<GeoPoint?>(null)
+    }
+
+    LaunchedEffect(municipi.content) {
+        val fetchedGeoPoint = mapViewModel.getMunicipiGeoPoint(municipi.content)
+        municipiGeoPoint = fetchedGeoPoint
+    }
 
     Row (
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight()
             .clickable {
-                mapView?.let { roadManager?.let { it1 ->
-                    mapViewModel.ordersAndRoutesFromLocation(
-                        it,
-                        it1,
-                        ctx,
-                        geoPoint,
-                        30)
+                mapView?.let { mapview -> 
+                    roadManager?.let { roadmanager ->
+                        municipiGeoPoint?.let { geopoint ->
+                            mapViewModel.ordersAndRoutesFromLocation(
+                                mapView = mapview,
+                                roadManager = roadmanager,
+                                ctx = ctx,
+                                geoPoint = geopoint,
+                                maxKmDistance = 30)
+                        }
                     }
                 }
             }
@@ -44,7 +59,7 @@ fun LocationListItem(city: City, ctx: Context, mapViewModel: MapViewModel) {
         Text(
             modifier = Modifier
                 .padding(8.dp),
-            text = city.name,
+            text = municipi.content,
             style = MaterialTheme.typography.bodyMedium,
             fontWeight = FontWeight.Bold,
             color = MaterialTheme.colorScheme.onBackground
