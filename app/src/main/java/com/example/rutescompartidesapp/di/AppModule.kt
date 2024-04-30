@@ -36,12 +36,16 @@ object AppModule {
     @Provides
     @Singleton
     fun provideGoogleLocationApi(): GoogleLocationApi {
+        val interceptor = HttpLoggingInterceptor()
+        interceptor.level = HttpLoggingInterceptor.Level.BODY
+
         val gson = GsonBuilder()
             .serializeNulls()
             .create()
 
         val client = OkHttpClient
             .Builder()
+            .addInterceptor(interceptor)
             .build()
 
         return Retrofit.Builder()

@@ -31,41 +31,6 @@ import com.example.rutescompartidesapp.view.confirm_delivery.viewmodel.DrawViewM
 @Composable
 fun DrawScreen(navController: NavHostController, drawViewModel: DrawViewModel) {
 
-    val ctx = LocalContext.current
-
-    val requestPermissionLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.RequestPermission()
-    ) { isGranted: Boolean ->
-        // Handle permission result
-        if (isGranted) {
-            Toast.makeText(ctx, "Permiso concedido", Toast.LENGTH_SHORT).show()
-        } else {
-            Toast.makeText(ctx, "Permiso denegado", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    val hasCameraPermission = remember(ctx) {
-        ContextCompat.checkSelfPermission(
-            ctx,
-            Manifest.permission.CAMERA
-        ) == PackageManager.PERMISSION_GRANTED
-    }
-
-    val hasAudioPermission = remember(ctx) {
-        ContextCompat.checkSelfPermission(
-            ctx,
-            Manifest.permission.RECORD_AUDIO
-        ) == PackageManager.PERMISSION_GRANTED
-    }
-
-    if (!hasCameraPermission) {
-        requestPermissionLauncher.launch(Manifest.permission.ACCESS_NETWORK_STATE)
-    }
-
-    if (!hasAudioPermission) {
-        requestPermissionLauncher.launch(Manifest.permission.ACCESS_NETWORK_STATE)
-    }
-
     val context = LocalContext.current
 
     val lines = remember {

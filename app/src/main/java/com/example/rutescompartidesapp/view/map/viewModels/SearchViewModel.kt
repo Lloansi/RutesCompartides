@@ -2,7 +2,7 @@ package com.example.rutescompartidesapp.view.map.viewModels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.rutescompartidesapp.data.domain.Location.Location
+import com.example.rutescompartidesapp.data.domain.Location.City
 import com.example.rutescompartidesapp.data.domain.Order
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -19,6 +19,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.math.PI
+import kotlin.math.sqrt
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
@@ -40,13 +42,22 @@ class SearchViewModel @Inject constructor(
     private val _ordersAndRoutes = MutableStateFlow(listOf<Pair<List<Route>, List<Order>>>())
     val ordersAndRoutes = _ordersAndRoutes.asStateFlow()
 
-    private val _locations = MutableStateFlow(listOf<Location>())
+    private val _locations = MutableStateFlow(listOf<City>())
     val locations = _locations.asStateFlow()
+
+    private fun getCataloniaRadius(): Double {
+        val areaOfCatalonia = 32000 // in square kilometers
+        return sqrt(areaOfCatalonia / PI)
+    }
+
+    private val CATALONIA_LAT = 41.5912
+    private val CATALONIA_LNG = 1.5209
+    private val RADIUS_CATALONIA =  getCataloniaRadius()
 
     init {
         viewModelScope.launch {
             _orders.value = allOrders
-            _locations.value = googleLocationsRepository.getAllCities(autonomousCommunity = "Catalonia")
+           _locations.value = googleLocationsRepository.getAllCities(autonomousCommunityLat = CATALONIA_LAT, autonomousCommunityLng = CATALONIA_LNG, radius = 3200)
         }
         /*
         Hasta que no se implemente los metodos para

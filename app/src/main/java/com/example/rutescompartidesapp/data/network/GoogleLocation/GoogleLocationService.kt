@@ -1,10 +1,16 @@
 package com.example.rutescompartidesapp.data.network.GoogleLocation
 
-import com.example.rutescompartidesapp.data.domain.Location.Location
+import com.example.rutescompartidesapp.data.domain.Location.City
 
 interface GoogleLocationService {
 
     // Cities
-    suspend fun getAllCities(autonomousCommunity: String): List<Location>
-    suspend fun getCityInfo(cityname: String): Location?
+    suspend fun getAllCities(
+        autonomousCommunityLat: Double,
+        autonomousCommunityLng: Double,
+        radius: Int
+    ): List<City>
+    suspend fun getCityInfo(
+        cityname: String
+    ): City?
 }

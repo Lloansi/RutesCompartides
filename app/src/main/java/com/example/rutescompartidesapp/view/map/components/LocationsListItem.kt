@@ -14,13 +14,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.example.rutescompartidesapp.data.domain.Location.Location
+import com.example.rutescompartidesapp.data.domain.Location.City
 import com.example.rutescompartidesapp.view.map.viewModels.MapViewModel
 import org.osmdroid.util.GeoPoint
 
 @Composable
-fun LocationListItem(location: Location, ctx: Context, mapViewModel: MapViewModel) {
-    val geoPoint = GeoPoint(location.lat,location.lng)
+fun LocationListItem(city: City, ctx: Context, mapViewModel: MapViewModel) {
+    val geoPoint = GeoPoint(city.geometry.location.lat, city.geometry.location.lng)
 
     val mapView by mapViewModel.mapViewState.collectAsState()
     val roadManager by mapViewModel.roadManagerState.collectAsState()
@@ -44,7 +44,7 @@ fun LocationListItem(location: Location, ctx: Context, mapViewModel: MapViewMode
         Text(
             modifier = Modifier
                 .padding(8.dp),
-            text = location.name,
+            text = city.name,
             style = MaterialTheme.typography.bodyMedium,
             fontWeight = FontWeight.Bold,
             color = MaterialTheme.colorScheme.onBackground

@@ -1,6 +1,6 @@
 package com.example.rutescompartidesapp.data.network.GoogleLocation.repository
 
-import com.example.rutescompartidesapp.data.domain.Location.Location
+import com.example.rutescompartidesapp.data.domain.Location.City
 import com.example.rutescompartidesapp.data.network.GoogleLocation.GoogleLocationApi
 import com.example.rutescompartidesapp.data.network.GoogleLocation.GoogleLocationService
 import com.example.rutescompartidesapp.utils.Constants
@@ -11,13 +11,20 @@ import javax.inject.Inject
 class GoogleLocationsRepository@Inject constructor(
     private val googleLocationsApi: GoogleLocationApi
 ): GoogleLocationService {
-    override suspend fun getAllCities(autonomousCommunity: String): List<Location> {
+    override suspend fun getAllCities(
+        autonomousCommunityLat: Double,
+        autonomousCommunityLng: Double,
+        radius: Int
+    ): List<City> {
         try {
-            val response = googleLocationsApi.searchPlaces(
-                query = autonomousCommunity,
+            val response = googleLocationsApi.citiesFromLocation(
+                location = "${autonomousCommunityLat},${autonomousCommunityLng}",
+                radius = radius,
+                type = "locality",
                 apiKey = Constants.API_KEY_GOOGLE_PLACES
             )
-            return response.locationsResponse
+            return response.results
+
         } catch (e: IOException) {
             e.printStackTrace()
         } catch (e: HttpException) {
@@ -28,7 +35,20 @@ class GoogleLocationsRepository@Inject constructor(
         return emptyList()
     }
 
-    override suspend fun getCityInfo(cityname: String): Location? {
-        TODO("Not yet implemented")
+    override suspend fun getCityInfo(cityname: String): City? {
+        try {
+            val response = googleLocationsApi.cityInfo(
+                query = cityname,
+                apiKey = Constants.API_KEY_GOOGLE_PLACES
+            )
+            return response.results.firstOrNull()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        } catch (e: HttpException) {
+            e.printStackTrace()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return null
     }
 }

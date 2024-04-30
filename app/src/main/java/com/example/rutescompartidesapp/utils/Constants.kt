@@ -3,6 +3,7 @@ package com.example.rutescompartidesapp.utils
 import android.Manifest
 import androidx.compose.runtime.Stable
 import com.example.rutescompartidesapp.data.domain.User2
+import org.osmdroid.util.GeoPoint
 
 object Constants {
 

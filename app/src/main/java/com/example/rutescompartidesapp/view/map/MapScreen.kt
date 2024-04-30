@@ -5,7 +5,6 @@ import android.content.pm.PackageManager
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.camera.core.impl.utils.ContextUtil.getApplicationContext
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -20,6 +19,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,18 +29,14 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavHostController
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.example.rutescompartidesapp.R
-import com.example.rutescompartidesapp.utils.Constants
-import com.example.rutescompartidesapp.utils.hasRequiredPermissions
 import com.example.rutescompartidesapp.view.map.components.CardBottomMap
 import com.example.rutescompartidesapp.view.map.components.ExpandableFloatingButton
-import com.example.rutescompartidesapp.view.map.components.FilteredListsBelowSearchBar
 import com.example.rutescompartidesapp.view.map.components.MapViewContainer
 import com.example.rutescompartidesapp.view.map.components.SearchViewContainer
 import com.example.rutescompartidesapp.view.map.viewModels.MapViewModel
@@ -135,8 +131,7 @@ fun MapScreen(navController: NavHostController, mapViewModel: MapViewModel, sear
                     .align(Alignment.TopStart)
             ) {
                 Column {
-                    SearchViewContainer(searchViewModel)
-                    FilteredListsBelowSearchBar(searchViewModel, ctx, mapViewModel)
+                    SearchViewContainer(searchViewModel, ctx, mapViewModel)
                 }
             }
 
