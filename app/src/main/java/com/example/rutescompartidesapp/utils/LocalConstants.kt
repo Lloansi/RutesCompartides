@@ -53,7 +53,8 @@ object LocalConstants {
 
     val orderList = mutableListOf(
         Orders(1,1, "Colinabos", "Barcelona", "Tarragona",
-            "2024-12-12", "12:00", listOf("hortalizes"),
+            "2024-12-12", "12:00",
+            "2024-12-13", "15:00", listOf("hortalizes"),
             true, false, false, true,
             3, 1.2f, 0.5f, 0.5f,
             2.5f, false, 100.0f, 10.0f,
@@ -61,7 +62,8 @@ object LocalConstants {
             GeoPoint(41.3828939, 2.1774323), GeoPoint(41.11888,1.2546057)),
 
         Orders(4,2, "Entrega de patates", "Girona", "Lleida",
-            "2024-05-08", "14:00", listOf("hortalizes"),
+            "2024-05-08", "14:00",
+            "2024-05-09", "18:00",  listOf("hortalizes"),
             true, true, false, true,
             2, 1.0f, 0.5f, 0.5f,
             2.0f, false, 50.0f, 5.0f,
@@ -69,7 +71,7 @@ object LocalConstants {
             GeoPoint(41.6147605,0.6267842)),
 
         Orders(5,4, "Pomes", "Manresa", "Terrasa",
-            "2024-04-17", "14:00",
+            "2024-04-17", "14:00", "2024-04-18", "15:00",
             listOf("fruita", "pomes", "verdes", "vermelles"),
             true, true, false, true,
             1, 0.2f, 0.2f, 0.2f,
@@ -78,7 +80,7 @@ object LocalConstants {
             GeoPoint(41.7288939,1.8286765), GeoPoint(41.5629623,2.0100492)),
 
         Orders(3,3, "El anillo único", "Hobitton", "Mordor",
-            "2024-10-10", "14:00", listOf("peligrosa"),
+            "2024-10-10", "14:00", "2024-11-11", "14:00", listOf("peligrosa"),
             false, false, false, false,
                 1, 0.1f, 0.1f, 0.1f,
                 0.1f, true, 1000.0f, 100.0f,
@@ -86,7 +88,7 @@ object LocalConstants {
                 GeoPoint(41.5629623,2.0100492), GeoPoint(41.3828939, 2.1774323)),
 
         Orders(5,5, "Taronjes", "Manresa", "Barcelona",
-            "2024-03-26", "20:00", listOf("fruita"),
+            "2024-03-26", "20:00", "2024-03-27", "20:00", listOf("fruita"),
             true, true, false, true,
             1, 0.2f, 0.2f, 0.2f,
             0.2f, false, 50.0f, 5.0f,
@@ -100,11 +102,11 @@ object LocalConstants {
         Review(4, 1, 5, 8,"M'ha entregat les taronjes en perfecte estat"),
     )
 
-    val interactionList = listOf<RouteInteraction>(
-        RouteInteraction(2, 1, "7/3/2024-10:14", "Acceptada"),
+    val interactionList = mutableListOf<RouteInteraction>(
+        //RouteInteraction(2, 1, "7/3/2024-10:14", "Acceptada"),
         RouteInteraction(3, 3, "7/3/2024-10:14", "Acceptada"),
         RouteInteraction(4, 2, "3/3/2024-20:45", "Acceptada"),
-        RouteInteraction(2, 1, "4/3/2024-20:45", "Valorada"),
+        //RouteInteraction(2, 1, "4/3/2024-20:45", "Valorada"),
         RouteInteraction(4, 2, "4/3/2024-20:45", "Entregada"),
         RouteInteraction(5, 2, "4/3/2024-20:45", "Pendent"),
         RouteInteraction(3, 1, "7/3/2024-9:50", "Declinada"),

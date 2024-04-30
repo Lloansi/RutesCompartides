@@ -1,5 +1,6 @@
 package com.example.rutescompartidesapp.view.route_detail.route_detail_driver.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -137,7 +138,7 @@ fun RouteInteractionCard(interaction: RouteInteraction, index: Int, routeDetailD
                 verticalArrangement = Arrangement.Center) {
                 Text(text = "${interaction.date.split("-")[0]} a les ${interaction.date.split("-")[1]} ",
                     color = MaterialTheme.colorScheme.onBackground)
-                InteractionText(firstText, secondText, interaction.orderID)
+                InteractionText(firstText, secondText, interaction.orderID, navHost)
             }
             Column {
                 InteractionChip(text = chipText, containerColor = chipColor, chipColorText = chipTextColor)
@@ -194,7 +195,7 @@ fun InteractionChip(text: String, containerColor: Color, chipColorText: Color){
 }
 
 @Composable
-fun InteractionText(firstText: String, secondText: String, comandaID: Int){
+fun InteractionText(firstText: String, secondText: String, comandaID: Int, navHost: NavController){
    Text(text = buildAnnotatedString {
         append("$firstText ")
         withStyle(
@@ -206,5 +207,8 @@ fun InteractionText(firstText: String, secondText: String, comandaID: Int){
             append("$secondText #$comandaID")
         }
     },
-       color = MaterialTheme.colorScheme.onBackground)
+       color = MaterialTheme.colorScheme.onBackground,
+       modifier = Modifier.clickable {
+           navHost.navigate("OrderDetailScreen/$comandaID")
+       })
 }

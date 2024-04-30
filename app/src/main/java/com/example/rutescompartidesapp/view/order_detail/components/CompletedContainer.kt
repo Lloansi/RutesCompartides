@@ -4,12 +4,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 
 @Composable
-fun CompletedContainer(isVisible: Boolean) {
-    if (!isVisible){
-        Column {
-            ConfirmedCard()
-            DetailsConfirmation()
-            FinalizedCard()
-        }
+fun CompletedContainer() {
+    Column {
+        ConfirmedCard()
+        DetailsConfirmation()
+        FinalizedCard()
     }
+
 }

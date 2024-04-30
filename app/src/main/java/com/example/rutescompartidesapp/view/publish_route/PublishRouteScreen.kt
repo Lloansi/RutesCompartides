@@ -90,8 +90,8 @@ import com.example.rutescompartidesapp.view.login.LoginViewModel
 @SuppressLint("RestrictedApi", "StateFlowValueCalledInComposition")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PublishRouteScreen(command: String, routeID: Int, navHost: NavHostController, loginViewModel: LoginViewModel){
-    val manageRouteViewModel = ManageRouteViewModel()
+fun PublishRouteScreen(command: String, routeID: Int, navHost: NavHostController, loginViewModel: LoginViewModel,
+                       manageRouteViewModel: ManageRouteViewModel){
     val user by loginViewModel.user.collectAsStateWithLifecycle()
     val currentStep by manageRouteViewModel.step.collectAsStateWithLifecycle()
     val routeName by manageRouteViewModel.internalRouteName.collectAsStateWithLifecycle()
@@ -142,9 +142,10 @@ fun PublishRouteScreen(command: String, routeID: Int, navHost: NavHostController
 
     val routeToEdit by manageRouteViewModel.routeToEdit.collectAsStateWithLifecycle()
     val routeAdded by manageRouteViewModel.routeAdded.collectAsStateWithLifecycle()
+
+    // When the route is added, navigates to the destination based on from where the route was added
     if (routeAdded) {
         manageRouteViewModel.onRouteAdded(false)
-
         if (command == "create"){
             navHost.navigate("MapScreen"){
                 popUpTo("MapScreen") { inclusive = true }

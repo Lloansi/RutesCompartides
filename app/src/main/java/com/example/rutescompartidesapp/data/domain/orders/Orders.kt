@@ -10,6 +10,8 @@ data class Orders(
     val puntArribada: String,
     val dataSortida: String,
     val horaSortida: String,
+    val dataArribada: String,
+    val horaArribada: String,
     val etiquetes: List<String>?,
     val isIsoterm: Boolean,
     val isRefrigerat: Boolean,

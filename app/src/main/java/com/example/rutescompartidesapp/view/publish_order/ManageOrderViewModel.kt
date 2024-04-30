@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import org.osmdroid.util.GeoPoint
 import java.time.Instant
 import java.time.ZoneId
+import java.util.Calendar
 
 class ManageOrderViewModel: ViewModel(){
 
@@ -131,48 +132,90 @@ class ManageOrderViewModel: ViewModel(){
     }
 
     // MinTimeArrival
-    private val _minTimeArrivalText = MutableStateFlow("")
-    val minTimeArrivalText = _minTimeArrivalText.asStateFlow()
+    private val _dataSortida = MutableStateFlow("")
+    val dataSortida = _dataSortida.asStateFlow()
 
-    fun onMinTimeArrivalChange(text: String){
-        _minTimeArrivalText.value = text
+    fun onDataSortidaChange(text: String){
+        _dataSortida.value = text
     }
 
     // MaxTimeArrival
-    private val _maxTimeArrivalText = MutableStateFlow("")
-    val maxTimeArrivalText = _maxTimeArrivalText.asStateFlow()
+    private val _dataArribada = MutableStateFlow("")
+    val dataArribada = _dataArribada.asStateFlow()
 
-    fun onMaxTimeArrivalTextChange(text: String){
-        _maxTimeArrivalText.value = text
+    fun onDataArribadaChange(text: String){
+        _dataArribada.value = text
     }
 
     // Date Picker Dialog
     private val _datePickerDialogIsShowing = MutableStateFlow(false)
     val datePickerDialogIsShowing = _datePickerDialogIsShowing
 
-    // Is Min time or Max time
-    private val _isMinTime = MutableStateFlow(true)
-    private val isMinTime = _isMinTime.asStateFlow()
+    // Is Depart date time or arrival date time
+    private val _isDateDepart = MutableStateFlow(true)
+    private val _isTimeDepart = MutableStateFlow(true)
+
     fun onDatePickerDialogShow(isMin: Boolean, isShowing: Boolean){
-        _isMinTime.value = isMin
+        _isDateDepart.value = isMin
         _datePickerDialogIsShowing.value = isShowing
     }
     /**
      * Converts the time picked from the DatePickerDialog to a string and updates the value of
-     * [_minTimeArrivalText] or [_maxTimeArrivalText] to the new value and dismisses the dialog
+     * [_dataSortida] or [_dataArribada] to the new value and dismisses the dialog
      * @param datePicked Long: The time picked from the TimePickerDialog
      */
     fun onDatePickerDialogConfirm(datePicked: Long ){
         datePicked.let {
             val date = Instant.ofEpochMilli(it).atZone(ZoneId.systemDefault()).toLocalDate()
-            if (isMinTime.value){
-                _minTimeArrivalText.value = "${date.dayOfMonth}/${date.monthValue}/${date.year}"
+            if (_isDateDepart.value){
+                _dataSortida.value = "${date.dayOfMonth}/${date.monthValue}/${date.year}"
             } else {
-                _maxTimeArrivalText.value = "${date.dayOfMonth}/${date.monthValue}/${date.year}"
+                _dataArribada.value = "${date.dayOfMonth}/${date.monthValue}/${date.year}"
             }
         }
         _datePickerDialogIsShowing.value = false
     }
+
+    // Time
+
+    private val _horaSortidaText = MutableStateFlow("")
+    val horaSortidaText = _horaSortidaText.asStateFlow()
+    fun onTimeDepartChange(text: String){
+        _horaSortidaText.value = text
+    }
+    private val _horaArribadaText = MutableStateFlow("")
+    val horaArribadaText = _horaArribadaText.asStateFlow()
+    fun onTimeArrivalChange(text: String){
+        _horaArribadaText.value = text
+    }
+
+    // Time Picker Dialog
+    private val _timePickerDialogIsShowing = MutableStateFlow(false)
+    val timePickerDialogIsShowing = _timePickerDialogIsShowing
+
+    fun onTimePickerDialogShow(isDepart: Boolean, isShowing: Boolean){
+        _isTimeDepart.value = isDepart
+        _timePickerDialogIsShowing.value = isShowing
+    }
+
+    /**
+     * Converts the time picked from the TimePickerDialog to a string and updates the value of
+     * [_horaSortidaText] or [_horaArribadaText] to the new value and dismisses the dialog
+     * @param timePicked: The time picked from the TimePickerDialog
+     */
+    fun onTimePickerDialogConfirm(timePicked: Calendar){
+
+        timePicked.timeInMillis.let {
+            val time = Instant.ofEpochMilli(it).atZone(ZoneId.systemDefault()).toLocalTime()
+            if (_isTimeDepart.value) {
+                _horaSortidaText.value = "${time.hour}:${String.format("%02d", time.minute)}"
+            } else {
+                _horaArribadaText.value = "${time.hour}:${String.format("%02d", time.minute)}"
+            }
+        }
+        _timePickerDialogIsShowing.value = false
+    }
+
 
     // FlexDateCheckbox
     private val _isFlexDate = MutableStateFlow(false)
@@ -181,7 +224,8 @@ class ManageOrderViewModel: ViewModel(){
     fun onFlexDateChange(){
         _isFlexDate.value = !_isFlexDate.value
         if (_isFlexDate.value){
-            _maxTimeArrivalText.value = ""
+            _dataArribada.value = ""
+            _horaArribadaText.value = ""
         }
     }
 
@@ -204,7 +248,10 @@ class ManageOrderViewModel: ViewModel(){
                 _isFirstFormCompleted.value = _internalOrderName.value.isNotEmpty() &&
                         _originName.value.isNotEmpty() &&
                         _destinationName.value.isNotEmpty() &&
-                        _minTimeArrivalText.value.isNotEmpty() && if (_isFlexDate.value) true else _maxTimeArrivalText.value.isNotEmpty()
+                        _dataSortida.value.isNotEmpty() &&
+                         _horaSortidaText.value.isNotEmpty() &&
+                        if (_isFlexDate.value) true else _dataArribada.value.isNotEmpty() &&
+                                if (_isFlexDate.value) true else _horaArribadaText.value.isNotEmpty()
                 checkIfEmpty(1)
                 if (_isFirstFormCompleted.value){
                     nextStep()
@@ -214,7 +261,7 @@ class ManageOrderViewModel: ViewModel(){
             _isSecondFormCompleted.value = _packagesNum.value.isNotEmpty() &&
                     _packagesLength.value.isNotEmpty() &&
                     _packagesWidth.value.isNotEmpty() &&
-                    packagesHeight.value.isNotEmpty() &&
+                    _packagesHeight.value.isNotEmpty() &&
                     _packagesWeight.value.isNotEmpty()
                 checkIfEmpty(2)
                 if (_isSecondFormCompleted.value){
@@ -342,8 +389,10 @@ class ManageOrderViewModel: ViewModel(){
             orderName = _internalOrderName.value,
             puntSortida = _originName.value,
             puntArribada = _destinationName.value,
-            dataSortida = _minTimeArrivalText.value,
-            horaSortida = _maxTimeArrivalText.value,
+            dataSortida = _dataSortida.value,
+            horaSortida = _horaSortidaText.value,
+            dataArribada = _dataArribada.value,
+            horaArribada = _horaArribadaText.value,
             isIsoterm = _isIsoterm.value,
             isRefrigerat = _isRefrigerat.value,
             isCongelat = _isCongelat.value,
@@ -391,9 +440,10 @@ class ManageOrderViewModel: ViewModel(){
         _internalOrderName.value = _orderToEdit.value!!.orderName
         _originName.value = _orderToEdit.value!!.puntSortida
         _destinationName.value = _orderToEdit.value!!.puntArribada
-        //TODO revisar esto
-        _minTimeArrivalText.value = _orderToEdit.value!!.dataSortida
-        _maxTimeArrivalText.value = _orderToEdit.value!!.horaSortida
+        _dataSortida.value = _orderToEdit.value!!.dataSortida
+        _dataArribada.value = _orderToEdit.value!!.horaSortida
+        _horaArribadaText.value = _orderToEdit.value!!.horaArribada
+        _horaSortidaText.value = _orderToEdit.value!!.horaSortida
         _isIsoterm.value = _orderToEdit.value!!.isIsoterm
         _isRefrigerat.value = _orderToEdit.value!!.isRefrigerat
         _isCongelat.value = _orderToEdit.value!!.isCongelat
@@ -422,8 +472,10 @@ class ManageOrderViewModel: ViewModel(){
             orderName = _internalOrderName.value,
             puntSortida = _originName.value,
             puntArribada = _destinationName.value,
-            dataSortida = _minTimeArrivalText.value,
-            horaSortida = _maxTimeArrivalText.value,
+            dataSortida = _dataSortida.value,
+            horaSortida = _horaSortidaText.value,
+            dataArribada = _dataArribada.value,
+            horaArribada = _horaArribadaText.value,
             isIsoterm = _isIsoterm.value,
             isRefrigerat = _isRefrigerat.value,
             isCongelat = _isCongelat.value,
@@ -453,7 +505,7 @@ class ManageOrderViewModel: ViewModel(){
     }
 
     // Control de errors
-    private val _screen1Errors = MutableStateFlow(List(5) { false })
+    private val _screen1Errors = MutableStateFlow(List(7) { false })
     val screen1Errors = _screen1Errors.asStateFlow()
 
     private val _screen2Errors = MutableStateFlow(List(5) { false })
@@ -469,7 +521,9 @@ class ManageOrderViewModel: ViewModel(){
                     _internalOrderName.value.isEmpty(),
                     _originName.value.isEmpty(),
                     _destinationName.value.isEmpty(),
-                    _minTimeArrivalText.value.isEmpty(),
+                    _dataSortida.value.isEmpty(),
+                    _horaSortidaText.value.isEmpty(),
+                    maxTimeisEmpty,
                     maxTimeisEmpty
                 )
 
@@ -480,7 +534,7 @@ class ManageOrderViewModel: ViewModel(){
                     _packagesNum.value.isEmpty(),
                     _packagesLength.value.isEmpty(),
                     _packagesWidth.value.isEmpty(),
-                    packagesHeight.value.isEmpty(),
+                    _packagesHeight.value.isEmpty(),
                     _packagesWeight.value.isEmpty(),
                     )
                 _screen2Errors.value = screen2Errors

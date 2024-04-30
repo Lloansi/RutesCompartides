@@ -51,6 +51,7 @@ import com.example.rutescompartidesapp.view.map.viewModels.SearchViewModel
 import com.example.rutescompartidesapp.view.profile.ProfileScreen
 import com.example.rutescompartidesapp.view.profile.ProfileViewModel
 import com.example.rutescompartidesapp.view.publish_order.PublishOrderScreen
+import com.example.rutescompartidesapp.view.publish_route.ManageRouteViewModel
 import com.example.rutescompartidesapp.view.publish_route.PublishRouteScreen
 import com.example.rutescompartidesapp.view.route_detail.route_detail_driver.RouteDetailDriverScreen
 import com.example.rutescompartidesapp.view.route_detail.RouteDetailGeneralScreen
@@ -116,6 +117,8 @@ class MainActivity : ComponentActivity() {
                 val tabRowViewModel = TabRowViewModel()
                 val searchViewModel: SearchViewModel = hiltViewModel()
                 val navController = rememberNavController()
+                val manageRouteViewModel = ManageRouteViewModel()
+
 
                 val bottomNavigationItems = listOf(
                     SmoothAnimationBottomBarScreens(
@@ -178,6 +181,7 @@ class MainActivity : ComponentActivity() {
                         tabRowViewModel,
                         filterPopupViewModel,
                         searchViewModel,
+                        manageRouteViewModel,
                         navController,
                         Modifier.padding(paddingValues),
                     )
@@ -188,12 +192,13 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun ScreenNavigationConfiguration( mapViewModel: MapViewModel,mapViewModel2: MapViewModel2,loginViewModel: LoginViewModel, profileViewModel: ProfileViewModel,
-                                   routeOrderListViewModel: RoutesOrderListViewModel,
-                                   tabRowViewModel: TabRowViewModel,
-                                   filterPopupViewModel: FilterPopupViewModel, searchViewModel: SearchViewModel,
-                                   navController: NavHostController,
-                                   modifier: Modifier) {
+fun ScreenNavigationConfiguration(
+    mapViewModel: MapViewModel, mapViewModel2: MapViewModel2, loginViewModel: LoginViewModel,
+    profileViewModel: ProfileViewModel, routeOrderListViewModel: RoutesOrderListViewModel,
+    tabRowViewModel: TabRowViewModel, filterPopupViewModel: FilterPopupViewModel,
+    searchViewModel: SearchViewModel, manageRouteViewModel: ManageRouteViewModel,
+    navController: NavHostController,
+    modifier: Modifier) {
 
     NavHost(navController = navController, startDestination = Screens.LoginScreen.route, modifier = modifier) {
 
@@ -206,7 +211,7 @@ fun ScreenNavigationConfiguration( mapViewModel: MapViewModel,mapViewModel2: Map
             }
             )) {
             val orderID = it.arguments?.getInt("orderID")
-            OrderDetailScreen(orderID!!, navController, loginViewModel)
+            OrderDetailScreen(orderID!!, navController, loginViewModel, manageRouteViewModel)
         }
 
         composable(Screens.RouteDetailGeneralScreen.route,
@@ -254,18 +259,6 @@ fun ScreenNavigationConfiguration( mapViewModel: MapViewModel,mapViewModel2: Map
             RouteDetailDriverScreen(routeID, navController, routeDetailDriverViewModel, cameraViewModel, drawViewModel)
         }
 
-
-        /*
-        composable(Screens.EditRouteScreen.route,
-            arguments = listOf(navArgument("routeId"){
-                type = NavType.IntType
-            },
-                )) {
-            val routeID = it.arguments?.getInt("routeId")
-            EditRouteScreen(routeID!!, navController)
-        }
-         */
-
         composable(Screens.FaqScreen.route) {
             FaqScreen(navController, FaqViewModel())
         }
@@ -284,7 +277,7 @@ fun ScreenNavigationConfiguration( mapViewModel: MapViewModel,mapViewModel2: Map
                 })) {
             val command = it.arguments?.getString("command")
             val routeID = it.arguments?.getInt("routeID")
-            PublishRouteScreen(command!!, routeID = routeID!!, navController, loginViewModel)
+            PublishRouteScreen(command!!, routeID = routeID!!, navController, loginViewModel, manageRouteViewModel)
         }
         composable(Screens.PublishOrderScreen.route,
             arguments = listOf(navArgument("command"){

@@ -1,4 +1,4 @@
-package com.example.rutescompartidesapp.data.domain
+package com.example.rutescompartidesapp.data.domain.external
 import com.example.rutescompartidesapp.data.domain.map.Point
 import java.util.Date
 data class LogisticNode(

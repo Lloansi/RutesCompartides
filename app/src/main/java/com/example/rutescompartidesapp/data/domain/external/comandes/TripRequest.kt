@@ -1,8 +1,8 @@
-package com.example.rutescompartidesapp.data.domain.comandes
-import com.example.rutescompartidesapp.data.domain.LogisticNode
+package com.example.rutescompartidesapp.data.domain.external.comandes
+import com.example.rutescompartidesapp.data.domain.external.LogisticNode
 import com.example.rutescompartidesapp.data.domain.map.Itinerary
 import com.example.rutescompartidesapp.data.domain.map.Point
-import com.example.rutescompartidesapp.data.domain.user.User
+import com.example.rutescompartidesapp.data.domain.external.user.User
 import java.util.Date
 data class TripRequest(
     val createdAt: Date,

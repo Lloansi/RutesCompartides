@@ -18,7 +18,7 @@ class RouteDetailDriverViewModel (routeID: Int): ViewModel(){
 
     // Interaccions
     private val _interactions = mutableStateListOf<RouteInteraction>().apply {
-        addAll(interactionList.filter { it.routeID == routeID })
+        addAll(interactionList.filter { it.routeID == routeID }.reversed())
     }
     val interactions = _interactions
 

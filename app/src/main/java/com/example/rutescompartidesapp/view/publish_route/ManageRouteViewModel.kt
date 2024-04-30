@@ -1,6 +1,7 @@
 package com.example.rutescompartidesapp.view.publish_route
 
 import androidx.lifecycle.ViewModel
+import com.example.rutescompartidesapp.data.domain.routes.RouteFromOrder
 import com.example.rutescompartidesapp.data.domain.routes.Routes
 import com.example.rutescompartidesapp.utils.LocalConstants
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -165,9 +166,7 @@ class ManageRouteViewModel: ViewModel(){
     Variables to check if the date or time that is being changed is the departure or arrival one
     */
     private val _isDateDepart = MutableStateFlow(true)
-    private val isDateDepart = _isDateDepart.asStateFlow()
     private val _isTimeDepart = MutableStateFlow(true)
-    private val isTimeDepart = _isDateDepart.asStateFlow()
     fun onDateDepartChange(text: String){
         _dateDepart.value = text
     }
@@ -225,12 +224,13 @@ class ManageRouteViewModel: ViewModel(){
      * @param timePicked: The time picked from the TimePickerDialog
      */
     fun onTimePickerDialogConfirm(timePicked: Calendar){
+
         timePicked.timeInMillis.let {
             val time = Instant.ofEpochMilli(it).atZone(ZoneId.systemDefault()).toLocalTime()
             if (_isTimeDepart.value) {
-                _timeDepartText.value = "${time.hour}:${time.minute}"
+                _timeDepartText.value = "${time.hour}:${String.format("%02d", time.minute)}"
             } else {
-                _timeArrivalText.value = "${time.hour}:${time.minute}"
+                _timeArrivalText.value = "${time.hour}:${String.format("%02d", time.minute)}"
             }
         }
         _timePickerDialogIsShowing.value = false
@@ -570,6 +570,18 @@ class ManageRouteViewModel: ViewModel(){
             }
         }
 
+    }
+
+
+    fun loadOrderInfo(routeFromOrder: RouteFromOrder){
+        _originName.value = routeFromOrder.puntSortida
+        _destinationName.value = routeFromOrder.puntArribada
+        _dateDepart.value = routeFromOrder.dataSortida
+        _dateArrival.value = routeFromOrder.dataArribada
+        _isRefrigerat.value = routeFromOrder.isRefrigerat
+        _isCongelat.value = routeFromOrder.isCongelat
+        _isIsoterm.value = routeFromOrder.isIsoterm
+        _isSenseHumitat.value = routeFromOrder.isSenseHumitat
     }
 
 }

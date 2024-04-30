@@ -150,9 +150,23 @@ fun RouteCard(route: Routes, navController: NavHostController, userID: Int) {
                             fontWeight = FontWeight.Bold
                         )
                     ) {
-                        append("Data sortida: ")
+                        append("Sortida: ")
                     }
-                    append(route.dataSortida)
+                    append("${route.dataSortida} ${route.horaSortida}")
+                },
+                    color =  MaterialTheme.colorScheme.onBackground)
+            }
+            Row {
+                Spacer(modifier = Modifier.padding(4.dp))
+                Text(text = buildAnnotatedString {
+                    withStyle(
+                        style = SpanStyle(
+                            fontWeight = FontWeight.Bold
+                        )
+                    ) {
+                        append("Arribada: ")
+                    }
+                    append("${route.dataArribada} ${route.horaArribada}")
                 },
                     color =  MaterialTheme.colorScheme.onBackground)
             }

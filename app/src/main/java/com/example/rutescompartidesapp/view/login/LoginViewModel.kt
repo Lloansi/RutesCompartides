@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import com.example.rutescompartidesapp.data.domain.UserLocal
-import com.example.rutescompartidesapp.data.domain.auth.AuthRequest
+import com.example.rutescompartidesapp.data.domain.external.auth.AuthRequest
 import com.example.rutescompartidesapp.data.domain.session.SessionRepository
 import com.example.rutescompartidesapp.data.network.rutes_compartides.repository.RutesCompartidesRepository
 import com.example.rutescompartidesapp.utils.LocalConstants
