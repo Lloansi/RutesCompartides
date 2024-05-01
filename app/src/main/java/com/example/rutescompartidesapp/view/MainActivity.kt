@@ -50,6 +50,7 @@ import com.example.rutescompartidesapp.view.map.viewModels.MapViewModel2
 import com.example.rutescompartidesapp.view.map.viewModels.SearchViewModel
 import com.example.rutescompartidesapp.view.profile.ProfileScreen
 import com.example.rutescompartidesapp.view.profile.ProfileViewModel
+import com.example.rutescompartidesapp.view.publish_order.ManageOrderViewModel
 import com.example.rutescompartidesapp.view.publish_order.PublishOrderScreen
 import com.example.rutescompartidesapp.view.publish_route.ManageRouteViewModel
 import com.example.rutescompartidesapp.view.publish_route.PublishRouteScreen
@@ -118,6 +119,7 @@ class MainActivity : ComponentActivity() {
                 val searchViewModel: SearchViewModel = hiltViewModel()
                 val navController = rememberNavController()
                 val manageRouteViewModel = ManageRouteViewModel()
+                val manageOrderViewModel = ManageOrderViewModel()
 
 
                 val bottomNavigationItems = listOf(
@@ -182,6 +184,7 @@ class MainActivity : ComponentActivity() {
                         filterPopupViewModel,
                         searchViewModel,
                         manageRouteViewModel,
+                        manageOrderViewModel,
                         navController,
                         Modifier.padding(paddingValues),
                     )
@@ -197,13 +200,14 @@ fun ScreenNavigationConfiguration(
     profileViewModel: ProfileViewModel, routeOrderListViewModel: RoutesOrderListViewModel,
     tabRowViewModel: TabRowViewModel, filterPopupViewModel: FilterPopupViewModel,
     searchViewModel: SearchViewModel, manageRouteViewModel: ManageRouteViewModel,
+    manageOrderViewModel: ManageOrderViewModel,
     navController: NavHostController,
     modifier: Modifier) {
 
     NavHost(navController = navController, startDestination = Screens.LoginScreen.route, modifier = modifier) {
 
         composable(Screens.MapScreen.route) {
-            MapScreen(navController, mapViewModel, searchViewModel)
+            MapScreen(navController, mapViewModel, searchViewModel, loginViewModel)
         }
         composable(Screens.OrderDetailScreen.route,
             arguments = listOf(navArgument("orderID"){
@@ -219,7 +223,8 @@ fun ScreenNavigationConfiguration(
             type = NavType.IntType
         })) {
             val routeID = it.arguments?.getInt("routeId")
-            RouteDetailGeneralScreen(navController, routeID!!, mapViewModel,mapViewModel2, routeOrderListViewModel)
+            RouteDetailGeneralScreen(navController, routeID!!, mapViewModel,
+                mapViewModel2, manageOrderViewModel, routeOrderListViewModel)
         }
 
         composable(Screens.ValueExperienceGeneralScreen.route,
@@ -288,7 +293,7 @@ fun ScreenNavigationConfiguration(
             })) {
             val command = it.arguments?.getString("command")
             val orderID = it.arguments?.getInt("orderID")
-            PublishOrderScreen(command!!, orderID = orderID!!, navController, loginViewModel)
+            PublishOrderScreen(command!!, orderID = orderID!!, navController, loginViewModel, manageOrderViewModel)
         }
 
 

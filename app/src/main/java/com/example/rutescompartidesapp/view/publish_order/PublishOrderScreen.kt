@@ -88,9 +88,8 @@ import com.example.rutescompartidesapp.view.login.LoginViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PublishOrderScreen(command: String, orderID: Int, navHost: NavHostController, loginViewModel: LoginViewModel) {
-    val manageOrderViewModel = ManageOrderViewModel()
-
+fun PublishOrderScreen(command: String, orderID: Int, navHost: NavHostController,
+                       loginViewModel: LoginViewModel, manageOrderViewModel: ManageOrderViewModel) {
     val user by loginViewModel.user.collectAsStateWithLifecycle()
     // Screen 1 variables
     val currentStep by manageOrderViewModel.step.collectAsStateWithLifecycle()
@@ -1004,9 +1003,10 @@ private fun PublishOrderContent1(
         colors = TextFieldDefaults.colors(
             focusedIndicatorColor = MaterialTheme.colorScheme.primary,
             unfocusedIndicatorColor = Color.Gray,
-            disabledIndicatorColor = Color.Transparent,
-            focusedContainerColor = Color.White,
-            unfocusedContainerColor = Color.White,
+            disabledContainerColor = MaterialTheme.colorScheme.background,
+            disabledIndicatorColor = Color.Gray,
+            focusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
+            unfocusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
             errorTextColor = MaterialTheme.colorScheme.primary,
             errorContainerColor = GrayRC
         ),

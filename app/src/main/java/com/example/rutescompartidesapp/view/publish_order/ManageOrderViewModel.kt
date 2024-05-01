@@ -2,6 +2,7 @@ package com.example.rutescompartidesapp.view.publish_order
 
 import androidx.lifecycle.ViewModel
 import com.example.rutescompartidesapp.data.domain.orders.Orders
+import com.example.rutescompartidesapp.data.domain.routes.SharedDataRouteOrder
 import com.example.rutescompartidesapp.utils.LocalConstants
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -543,6 +544,16 @@ class ManageOrderViewModel: ViewModel(){
 
     }
 
+    fun loadRouteInfo(sharedDataRouteOrder: SharedDataRouteOrder){
+        _originName.value = sharedDataRouteOrder.puntSortida
+        _destinationName.value = sharedDataRouteOrder.puntArribada
+        _dataSortida.value = sharedDataRouteOrder.dataSortida
+        _dataArribada.value = sharedDataRouteOrder.dataArribada
+        _isRefrigerat.value = sharedDataRouteOrder.isRefrigerat
+        _isCongelat.value = sharedDataRouteOrder.isCongelat
+        _isIsoterm.value = sharedDataRouteOrder.isIsoterm
+        _isSenseHumitat.value = sharedDataRouteOrder.isSenseHumitat
+    }
 
 
 }

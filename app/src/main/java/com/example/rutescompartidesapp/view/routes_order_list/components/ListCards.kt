@@ -154,7 +154,7 @@ fun RouteCard(route: Routes, navController: NavHostController, userID: Int) {
                     }
                     append("${route.dataSortida} ${route.horaSortida}")
                 },
-                    color =  MaterialTheme.colorScheme.onBackground)
+                    color =  Color.Black)
             }
             Row {
                 Spacer(modifier = Modifier.padding(4.dp))
@@ -168,7 +168,7 @@ fun RouteCard(route: Routes, navController: NavHostController, userID: Int) {
                     }
                     append("${route.dataArribada} ${route.horaArribada}")
                 },
-                    color =  MaterialTheme.colorScheme.onBackground)
+                    color =  Color.Black)
             }
             Spacer(modifier = Modifier.padding(4.dp))
             Row {
@@ -293,14 +293,28 @@ fun OrderCard(order: Orders, navController: NavHostController) {
                 Text(text = buildAnnotatedString {
                     withStyle(
                         style = SpanStyle(
-                            fontWeight = FontWeight.Bold,
+                            fontWeight = FontWeight.Bold
                         )
                     ) {
-                        append("Data sortida: ")
+                        append("Sortida: ")
                     }
-                    append(order.dataSortida)
+                    append("${order.dataSortida} ${order.horaSortida}")
                 },
-                  color =  MaterialTheme.colorScheme.onBackground)
+                    color =  Color.Black)
+            }
+            Row {
+                Spacer(modifier = Modifier.padding(4.dp))
+                Text(text = buildAnnotatedString {
+                    withStyle(
+                        style = SpanStyle(
+                            fontWeight = FontWeight.Bold
+                        )
+                    ) {
+                        append("Arribada: ")
+                    }
+                    append("${order.dataArribada} ${order.horaArribada}")
+                },
+                    color =  Color.Black)
             }
             Spacer(modifier = Modifier.padding(4.dp))
             Row {

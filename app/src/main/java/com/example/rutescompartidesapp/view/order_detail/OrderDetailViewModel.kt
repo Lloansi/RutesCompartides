@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.rutescompartidesapp.data.domain.interactions.RouteInteraction
 import com.example.rutescompartidesapp.data.domain.orders.Orders
-import com.example.rutescompartidesapp.data.domain.routes.RouteFromOrder
+import com.example.rutescompartidesapp.data.domain.routes.SharedDataRouteOrder
 import com.example.rutescompartidesapp.data.domain.routes.Routes
 import com.example.rutescompartidesapp.utils.LocalConstants
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -150,12 +150,12 @@ class OrderDetailViewModel: ViewModel() {
         _isOrderPendent.value = false
     }
 
-    private val _routeFromOrder = MutableStateFlow<RouteFromOrder?>(null)
-    val routeFromOrder = _routeFromOrder.asStateFlow()
+    private val _SharedData_routeOrder = MutableStateFlow<SharedDataRouteOrder?>(null)
+    val routeFromOrder = _SharedData_routeOrder.asStateFlow()
 
     /**
      * Obtains the info of the order to create a route with this info and
-     * updates [_routeFromOrder] with the info.
+     * updates [_SharedData_routeOrder] with the info.
      *
      * Obtains the following info from the order:
      * - Origin point (Punt de sortida)
@@ -166,7 +166,7 @@ class OrderDetailViewModel: ViewModel() {
      */
     fun createRouteFromOrder(){
         val order = order.value!!
-        val newRoute = RouteFromOrder(
+        val newRoute = SharedDataRouteOrder(
             puntSortida = order.puntSortida,
             puntArribada = order.puntArribada,
             dataSortida = order.dataSortida,
@@ -176,7 +176,7 @@ class OrderDetailViewModel: ViewModel() {
             isIsoterm = order.isIsoterm,
             isSenseHumitat = order.isSenseHumitat
         )
-        _routeFromOrder.value = newRoute
+        _SharedData_routeOrder.value = newRoute
     }
 
 

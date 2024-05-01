@@ -26,7 +26,7 @@ import com.example.rutescompartidesapp.data.domain.orders.Orders
 import com.example.rutescompartidesapp.ui.theme.MateBlackRC
 import com.example.rutescompartidesapp.ui.theme.OrangeRC
 import com.example.rutescompartidesapp.utils.LocalConstants
-import com.example.rutescompartidesapp.utils.roundTo1Decimal
+import com.example.rutescompartidesapp.utils.round
 
 
 @Composable
@@ -55,7 +55,7 @@ fun TopCardInfo(order : Orders) {
 
             TopCardDetails(Icons.Filled.Flag, heading = "Destinació", value = order.puntArribada, color = MaterialTheme.colorScheme.primary, padding = 4.dp)
 
-            TopCardDetails(Icons.Outlined.Route, heading = "Distància", value = "${order.distance.roundTo1Decimal()} km", color = MaterialTheme.colorScheme.primary, padding = 4.dp)
+            TopCardDetails(Icons.Outlined.Route, heading = "Distància", value = "${order.distance.toDouble().round(1)} km", color = MaterialTheme.colorScheme.primary, padding = 4.dp)
 
         }
 

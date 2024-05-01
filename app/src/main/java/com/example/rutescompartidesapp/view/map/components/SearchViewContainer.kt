@@ -10,10 +10,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import com.example.rutescompartidesapp.view.login.LoginViewModel
 import com.example.rutescompartidesapp.view.map.viewModels.SearchViewModel
 
 @Composable
-fun SearchViewContainer(searchViewModel: SearchViewModel) {
+fun SearchViewContainer(searchViewModel: SearchViewModel, loginViewModel: LoginViewModel, navHost: NavController) {
     Row (modifier = Modifier
         .offset(y = -(4).dp)
         .fillMaxWidth()
@@ -22,6 +24,6 @@ fun SearchViewContainer(searchViewModel: SearchViewModel) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         SearchView(searchViewModel)
-        NotificationButtonCard()
+        NotificationButtonCard(loginViewModel = loginViewModel, navHost = navHost)
     }
 }

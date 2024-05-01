@@ -1,7 +1,7 @@
 package com.example.rutescompartidesapp.view.publish_route
 
 import androidx.lifecycle.ViewModel
-import com.example.rutescompartidesapp.data.domain.routes.RouteFromOrder
+import com.example.rutescompartidesapp.data.domain.routes.SharedDataRouteOrder
 import com.example.rutescompartidesapp.data.domain.routes.Routes
 import com.example.rutescompartidesapp.utils.LocalConstants
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -573,15 +573,15 @@ class ManageRouteViewModel: ViewModel(){
     }
 
 
-    fun loadOrderInfo(routeFromOrder: RouteFromOrder){
-        _originName.value = routeFromOrder.puntSortida
-        _destinationName.value = routeFromOrder.puntArribada
-        _dateDepart.value = routeFromOrder.dataSortida
-        _dateArrival.value = routeFromOrder.dataArribada
-        _isRefrigerat.value = routeFromOrder.isRefrigerat
-        _isCongelat.value = routeFromOrder.isCongelat
-        _isIsoterm.value = routeFromOrder.isIsoterm
-        _isSenseHumitat.value = routeFromOrder.isSenseHumitat
+    fun loadOrderInfo(sharedDataRouteOrder: SharedDataRouteOrder){
+        _originName.value = sharedDataRouteOrder.puntSortida
+        _destinationName.value = sharedDataRouteOrder.puntArribada
+        _dateDepart.value = sharedDataRouteOrder.dataSortida
+        _dateArrival.value = sharedDataRouteOrder.dataArribada
+        _isRefrigerat.value = sharedDataRouteOrder.isRefrigerat
+        _isCongelat.value = sharedDataRouteOrder.isCongelat
+        _isIsoterm.value = sharedDataRouteOrder.isIsoterm
+        _isSenseHumitat.value = sharedDataRouteOrder.isSenseHumitat
     }
 
 }

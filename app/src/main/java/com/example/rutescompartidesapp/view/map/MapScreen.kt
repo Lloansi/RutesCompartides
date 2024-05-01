@@ -28,6 +28,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.example.rutescompartidesapp.R
+import com.example.rutescompartidesapp.view.login.LoginViewModel
 import com.example.rutescompartidesapp.view.map.components.CardBottomMap
 import com.example.rutescompartidesapp.view.map.components.ExpandableFloatingButton
 import com.example.rutescompartidesapp.view.map.components.FilteredListsBelowSearchBar
@@ -55,7 +56,8 @@ object MapScreen: Screen {
 }
 
 @Composable
-fun MapScreen(navController: NavHostController, mapViewModel: MapViewModel, searchViewModel: SearchViewModel) {
+fun MapScreen(navController: NavHostController, mapViewModel: MapViewModel, searchViewModel: SearchViewModel,
+              loginViewModel: LoginViewModel) {
     val ordersFiltered by mapViewModel.filteredOrders.collectAsState()
     val routesFiltered by mapViewModel.filteredRoutes.collectAsState()
 
@@ -88,7 +90,7 @@ fun MapScreen(navController: NavHostController, mapViewModel: MapViewModel, sear
                     .align(Alignment.TopStart)
             ) {
                 Column {
-                    SearchViewContainer(searchViewModel)
+                    SearchViewContainer(searchViewModel, loginViewModel = loginViewModel, navHost = navController)
                     FilteredListsBelowSearchBar(searchViewModel)
                 }
             }

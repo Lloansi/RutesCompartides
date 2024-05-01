@@ -125,7 +125,9 @@ fun RouteInteractionCard(interaction: RouteInteraction, index: Int, routeDetailD
         }
     }
 
-    ElevatedCard(modifier = Modifier.fillMaxWidth(),
+    ElevatedCard(modifier = Modifier.fillMaxWidth().clickable {
+        navHost.navigate("OrderDetailScreen/${interaction.orderID}")
+    },
         colors = CardDefaults.elevatedCardColors(
             containerColor = MaterialTheme.colorScheme.background)) {
         Row(modifier = Modifier
@@ -207,8 +209,5 @@ fun InteractionText(firstText: String, secondText: String, comandaID: Int, navHo
             append("$secondText #$comandaID")
         }
     },
-       color = MaterialTheme.colorScheme.onBackground,
-       modifier = Modifier.clickable {
-           navHost.navigate("OrderDetailScreen/$comandaID")
-       })
+       color = MaterialTheme.colorScheme.onBackground)
 }

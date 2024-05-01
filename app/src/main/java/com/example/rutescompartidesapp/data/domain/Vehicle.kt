@@ -1,7 +1,6 @@
 package com.example.rutescompartidesapp.data.domain
 
 import com.example.rutescompartidesapp.utils.round
-import com.example.rutescompartidesapp.utils.roundTo1Decimal
 
 data class Vehicle(
     val name: String,

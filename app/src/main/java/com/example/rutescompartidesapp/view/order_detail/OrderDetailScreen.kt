@@ -129,7 +129,9 @@ fun CompleteCard(
             ).replace(
                 oldValue = "{routeID}",
                 newValue = "0"
-            ))
+            )){
+            popUpTo("OrderDetailScreen/{orderID}")
+        }
     }
 
     if (acceptPopup){
@@ -402,13 +404,16 @@ fun CompleteCard(
             if (isOrderDelivered && !isDeliveryValuated){
                 Card (modifier = Modifier
                     .padding(12.dp)
-                    .fillMaxWidth().clickable{
-                        val routeInteraction = LocalConstants.interactionList.firstOrNull { it.orderID == order.orderID }
-                       if (routeInteraction != null)
-                           navHost.navigate("ValueExperienceGeneralScreen/{routeId}/{orderId}"
-                               .replace("{routeId}", routeInteraction.routeID.toString())
-                               .replace("{orderId}", routeInteraction.orderID.toString())
-                           )
+                    .fillMaxWidth()
+                    .clickable {
+                        val routeInteraction =
+                            LocalConstants.interactionList.firstOrNull { it.orderID == order.orderID }
+                        if (routeInteraction != null)
+                            navHost.navigate(
+                                "ValueExperienceGeneralScreen/{routeId}/{orderId}"
+                                    .replace("{routeId}", routeInteraction.routeID.toString())
+                                    .replace("{orderId}", routeInteraction.orderID.toString())
+                            )
                     },
                     colors = CardDefaults.cardColors(
                         containerColor = MaterialTheme.colorScheme.primary),
@@ -445,7 +450,9 @@ fun CompleteCard(
                             TwoTexts("Transportar aquesta comanda amb la teva", "ruta")
                         }
                         // Accept button
-                        Row(modifier = Modifier.fillMaxWidth().padding(8.dp),
+                        Row(modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp),
                             horizontalArrangement = Arrangement.Center) {
                             ExtendedFloatingActionButton(
                                 containerColor = MaterialTheme.colorScheme.tertiary,
@@ -483,7 +490,9 @@ fun CompleteCard(
             if (isOrderPendent){
                 val pendentRouteID by orderDetailViewModel.pendentRouteID.collectAsStateWithLifecycle()
                 // Decline button
-                Row(modifier = Modifier.fillMaxWidth().padding(8.dp),
+                Row(modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp),
                     horizontalArrangement = Arrangement.Center) {
                     ExtendedFloatingActionButton(
                         containerColor = MateBlackRC,
