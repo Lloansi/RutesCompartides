@@ -5,12 +5,10 @@ import android.content.Context
 import android.graphics.drawable.Drawable
 import android.view.MotionEvent
 import android.graphics.Color
-import androidx.compose.runtime.collectAsState
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.rutescompartidesapp.data.network.rutes_compartides.repository.RutesCompartidesRepository
 import com.example.rutescompartidesapp.R
 import com.example.rutescompartidesapp.data.domain.Order
 import com.example.rutescompartidesapp.data.domain.Route
@@ -41,7 +39,6 @@ import kotlin.math.sin
 @HiltViewModel
 class MapViewModel @Inject constructor (
     val googleLocationsRepository: GoogleLocationsRepository,
-    val searchViewModel: SearchViewModel
 ) :ViewModel() {
     private val _userClickedPointer = MutableStateFlow<MutableList<Marker>>(mutableListOf())
     private var userClickedPointer = _userClickedPointer.asStateFlow()
@@ -204,7 +201,8 @@ class MapViewModel @Inject constructor (
                         // Handle the click event, we update our mutable live data, with the click coordinates
                         // The clicked point becomes the center point
                         updateMarkerPosition(geoPoint)
-                        controller.setCenter(markerPosition.value)
+                        //controller.setCenter(markerPosition.value)
+                        controller.animateTo(markerPosition.value);
 
                         // With the position where user clicked, we check if near there is any marker, if there is, markers appear
                         // If user never clicked, we just show it as mentioned before, if not, we delete the old markers and create the new ones
@@ -383,6 +381,7 @@ class MapViewModel @Inject constructor (
     fun ordersAndRoutesFromLocation(mapView: MapView, roadManager: RoadManager, ctx: Context, geoPoint: GeoPoint, maxKmDistance: Int){
 
         mapView.controller.setCenter(geoPoint)
+        mapView.controller.setZoom(10)
 
         val orderIconMarker = ContextCompat.getDrawable(ctx, R.drawable.little_map_marker_orders_svg)
         val routeIconMarker = ContextCompat.getDrawable(ctx, R.drawable.little_map_marker_routes_svg)
