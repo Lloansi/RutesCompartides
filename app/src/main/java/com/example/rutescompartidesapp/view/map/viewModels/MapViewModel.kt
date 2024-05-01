@@ -405,12 +405,14 @@ class MapViewModel @Inject constructor (
     }
 
     suspend fun getMunicipiGeoPoint(cityName: String): GeoPoint? {
-        return withContext(Dispatchers.IO) {
-            try {
-                val cityInfo = googleLocationsRepository.getCityInfo(cityName)
-                val location = cityInfo?.geometry?.location
-                GeoPoint(location?.lng ?: 0.0, location?.lat ?: 0.0)
-            } catch (e: Exception) {
+         return withContext(Dispatchers.IO) {
+              try {
+                  val cityInfo = googleLocationsRepository.getCityInfo(cityName)
+                  val location = cityInfo?.geometry?.location
+                  println("GEOPOINT FROM LOCATION CLICKED IN SEARCHBAR")
+                  println(GeoPoint(location?.lng ?: 0.0, location?.lat ?: 0.0))
+                  GeoPoint(location?.lng ?: 0.0, location?.lat ?: 0.0)
+              } catch (e: Exception) {
                 e.printStackTrace()
                 null
             }

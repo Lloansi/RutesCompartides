@@ -20,10 +20,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.rutescompartidesapp.data.domain.Location.idescat.Municipi
 import com.example.rutescompartidesapp.view.map.viewModels.MapViewModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import org.osmdroid.bonuspack.routing.RoadManager
 import org.osmdroid.util.GeoPoint
+import org.osmdroid.views.MapView
 
 @OptIn(DelicateCoroutinesApi::class)
 @Composable
@@ -36,18 +40,23 @@ fun LocationListItem(municipi: Municipi, ctx: Context, mapViewModel: MapViewMode
         mutableStateOf<GeoPoint?>(null)
     }
 
-    LaunchedEffect(municipi.content) {
-        val fetchedGeoPoint = mapViewModel.getMunicipiGeoPoint(municipi.content)
-        municipiGeoPoint = fetchedGeoPoint
-    }
 
     Row (
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight()
             .clickable {
+
+                // Navigate to a point of map, when user click on item's list
                 mapView?.let { mapview ->
                     roadManager?.let { roadmanager ->
+
+                        val customScope = CoroutineScope(Dispatchers.IO)
+                        customScope.launch {
+                            val fetchedGeoPoint = mapViewModel.getMunicipiGeoPoint(municipi.content)
+                            municipiGeoPoint = fetchedGeoPoint
+                        }
+
                         municipiGeoPoint?.let { geopoint ->
 
                             /*
@@ -60,7 +69,8 @@ fun LocationListItem(municipi: Municipi, ctx: Context, mapViewModel: MapViewMode
                                     roadManager = roadmanager,
                                     ctx = ctx,
                                     geoPoint = geopoint,
-                                    maxKmDistance = 30)
+                                    maxKmDistance = 30
+                                )
 
                                 onCloseSearchBar()
                             }
@@ -68,6 +78,7 @@ fun LocationListItem(municipi: Municipi, ctx: Context, mapViewModel: MapViewMode
                         }
                     }
                 }
+
             }
     ){
         Text(
@@ -79,5 +90,4 @@ fun LocationListItem(municipi: Municipi, ctx: Context, mapViewModel: MapViewMode
             color = MaterialTheme.colorScheme.onBackground
         )
     }
-
 }
