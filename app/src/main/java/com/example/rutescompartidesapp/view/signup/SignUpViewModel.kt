@@ -17,6 +17,7 @@ class SignUpViewModel: ViewModel(){
 
     fun onUserNameTextChange (text: String){
         _userName.value = text
+        _userNameError.value = _userName.value.length > 12
     }
 
     //User name text error

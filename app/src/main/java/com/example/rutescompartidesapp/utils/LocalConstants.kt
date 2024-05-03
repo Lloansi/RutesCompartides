@@ -16,7 +16,8 @@ object LocalConstants {
         UserLocal(2, "frodobaggins", "ahobbit@middleearth.com", 666666666, "SamGamgee"),
         UserLocal(3, "gandalfthegray", "gandalf@middleearth.com", 666666666, "Fireworks"),
         UserLocal(4, "eduard_24", "edu_24@gmail.com", 666666666, "Eduard24"),
-        UserLocal(5, "sOnia", "sonia@gmail.com", 666666666, "SoniaRutes"),
+        UserLocal(5, "sOniasOnia12", "sonia@gmail.com", 666666666, "SoniaRutes"),
+        UserLocal(6, "Alejandro", "alejandroarcasleon@gmail.com", 666666666, "hola123")
     )
 
     val routeList = mutableListOf(
@@ -100,6 +101,8 @@ object LocalConstants {
         Review(2, 4, 1, 7,"Molt bon viatge"),
         Review(3, 3, 2, 10,"Molt valent"),
         Review(4, 1, 5, 8,"M'ha entregat les taronjes en perfecte estat"),
+        Review(5, 6, 4, 8,"La naranja estaba pocha"),
+        Review(6, 6, 5, 10,"El conductor estaba buenisimo"),
     )
 
     val interactionList = mutableListOf<RouteInteraction>(

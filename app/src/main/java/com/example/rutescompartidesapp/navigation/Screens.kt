@@ -18,8 +18,10 @@ sealed class Screens(
     object ComFuncionaScreen: Screens("ComFuncionaScreen")
     object DrawScreen: Screens("DrawScreen")
     object CameraScreen: Screens("CameraScreen")
+
     object RouteDetailGeneralScreen: Screens("RouteDetailGeneralScreen/{routeId}")
     object ValueExperienceGeneralScreen: Screens("ValueExperienceGeneralScreen/{routeId}/{orderId}")
+    object UserReviewScreen: Screens("UserReviewScreen")
 
 
 

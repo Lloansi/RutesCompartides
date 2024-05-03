@@ -61,6 +61,8 @@ import com.example.rutescompartidesapp.view.routes_order_list.viewmodels.FilterP
 import com.example.rutescompartidesapp.view.routes_order_list.viewmodels.RoutesOrderListViewModel
 import com.example.rutescompartidesapp.view.routes_order_list.viewmodels.TabRowViewModel
 import com.example.rutescompartidesapp.view.signup.SignUpScreen
+import com.example.rutescompartidesapp.view.user_reviews.UserReviewScreen
+import com.example.rutescompartidesapp.view.user_reviews.UserReviewViewModel
 import com.example.rutescompartidesapp.view.value_experience.ValueExperienceGeneralScreen
 import com.example.rutescompartidesapp.view.value_experience.ValueExperienceViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -289,7 +291,9 @@ fun ScreenNavigationConfiguration(
             val orderID = it.arguments?.getInt("orderID")
             PublishOrderScreen(command!!, orderID = orderID!!, navController, loginViewModel, manageOrderViewModel)
         }
-
+        composable(Screens.UserReviewScreen.route) {
+            UserReviewScreen(UserReviewViewModel(), loginViewModel)
+        }
 
 
     }
