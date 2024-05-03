@@ -16,16 +16,41 @@ class MapViewModel2 () :ViewModel() {
     private val _isBoxMapClicked = MutableStateFlow<Boolean>(false)
     var isBoxMapClicked = _isBoxMapClicked.asStateFlow()
 
+    /**
+     * Updates the click state LiveData with the provided boolean value.
+     * @param clicked Boolean value representing the click state.
+     **/
     fun updateClickState(clicked: Boolean) {
         _isBoxMapClicked.value = clicked
     }
 
+    /**
+     * Creates a path and route points between two GeoPoints on the map.
+
+     * @param viewModel MapViewModel instance for accessing necessary functions.
+
+     * @param startPoint Starting GeoPoint.
+
+     * @param endPoint Ending GeoPoint.
+
+     * @param mapView MapView instance.
+
+     * @param roadManager RoadManager instance for obtaining road data.
+
+     * @param routeIconMarker Drawable for the route markers.
+     **/
     fun createPathAndRoutePoints(viewModel: MapViewModel, startPoint: GeoPoint, endPoint: GeoPoint, mapView: MapView, roadManager: RoadManager, routeIconMarker: Drawable?){
         viewModel.showPathBetweenPoints(startPoint, endPoint, mapView, roadManager)
         viewModel.createMarker("route", startPoint, mapView, routeIconMarker)
         viewModel.createMarker("route", endPoint, mapView, routeIconMarker)
     }
 
+    /**
+     * Handles the click state of the map.
+     * This function toggles the click state when the map is clicked.
+
+     * @param mapView MapView instance.
+     **/
     @SuppressLint("ClickableViewAccessibility")
     fun clickStateMap(mapView: MapView) {
         var isDragging = false
