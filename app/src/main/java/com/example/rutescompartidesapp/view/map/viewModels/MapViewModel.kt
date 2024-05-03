@@ -39,8 +39,8 @@ import kotlin.math.sin
 
 @HiltViewModel
 class MapViewModel @Inject constructor (
-    val googleLocationsRepository: GoogleLocationsRepository,
-    val idescatRepository: idescatRepository
+    private val googleLocationsRepository: GoogleLocationsRepository,
+    private val idescatRepository: idescatRepository
 ) :ViewModel() {
     private val _userClickedPointer = MutableStateFlow<MutableList<Marker>>(mutableListOf())
     private var userClickedPointer = _userClickedPointer.asStateFlow()
@@ -199,12 +199,6 @@ class MapViewModel @Inject constructor (
     private fun updateMarkerPosition(point: GeoPoint){
         markerPosition.value = point
     }
-
-    /*
-    mapView.setOnTouchListener { _, event ->
-    gestureDetector.onTouchEvent(event)
-    }
-     */
 
     /**
      * Handles map clicks.
