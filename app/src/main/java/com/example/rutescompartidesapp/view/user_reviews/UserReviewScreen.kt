@@ -22,6 +22,7 @@ import com.example.rutescompartidesapp.utils.LocalConstants
 import com.example.rutescompartidesapp.utils.LocalConstants.reviewList
 import com.example.rutescompartidesapp.utils.LocalConstants.userList
 import com.example.rutescompartidesapp.view.login.LoginViewModel
+import com.example.rutescompartidesapp.view.user_reviews.components.FilterTabRow
 import com.example.rutescompartidesapp.view.user_reviews.components.UserReviewItem
 
 @Composable
@@ -30,23 +31,13 @@ fun UserReviewScreen(userReviewViewModel: UserReviewViewModel, loginViewModel: L
     val userID = loginViewModel.user.collectAsStateWithLifecycle().value?.userId
     loginViewModel.getUser(userID!!)
     val user by loginViewModel.user.collectAsStateWithLifecycle()
+    val selectedTabIndex by userReviewViewModel.selectedTabIndex.collectAsStateWithLifecycle()
     var filteredReviewList: List<Review>
 
-    var tabIndex by remember { mutableIntStateOf(0) }
-    val tabs = listOf("Valoracions fetes", "Valoracions rebudes")
-
     Column {
-        TabRow(selectedTabIndex = tabIndex) {
-            tabs.forEachIndexed { index, title ->
-                Tab(text = { Text(title) },
-                    selected = tabIndex == index,
-                    onClick = { tabIndex = index
-                        println(tabIndex)},
-                )
-            }
-        }
+        FilterTabRow(userReviewViewModel = userReviewViewModel)
 
-        filteredReviewList = if (tabIndex == 0){
+        filteredReviewList = if (selectedTabIndex == 0){
             reviewList.filter { it.userId == user!!.userId }
         } else {
             reviewList.filter { it.userId != user!!.userId }

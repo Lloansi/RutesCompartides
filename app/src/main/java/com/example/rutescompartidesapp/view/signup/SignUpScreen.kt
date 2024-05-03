@@ -176,7 +176,7 @@ fun SignUpScreen(navController: NavController) {
                             //User Name Text
                             supportingText = {
                                 if (userNameError){
-                                    Text(text = "Escriu un nom vàlid",
+                                    Text(text = "Escriu un nom vàlid, fins a 12 caràcters",
                                         color = MaterialTheme.colorScheme.primary)
                                 }
                             },
