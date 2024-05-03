@@ -14,6 +14,7 @@ import com.example.rutescompartidesapp.data.domain.Order
 import com.example.rutescompartidesapp.data.domain.Route
 import com.example.rutescompartidesapp.data.domain.Route2
 import com.example.rutescompartidesapp.data.network.GoogleLocation.repository.GoogleLocationsRepository
+import com.example.rutescompartidesapp.data.network.idescat.repository.idescatRepository
 import com.example.rutescompartidesapp.view.map.MapScreen.maxKmFog
 import com.example.rutescompartidesapp.view.map.components.allOrders
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -39,6 +40,7 @@ import kotlin.math.sin
 @HiltViewModel
 class MapViewModel @Inject constructor (
     val googleLocationsRepository: GoogleLocationsRepository,
+    val idescatRepository: idescatRepository
 ) :ViewModel() {
     private val _userClickedPointer = MutableStateFlow<MutableList<Marker>>(mutableListOf())
     private var userClickedPointer = _userClickedPointer.asStateFlow()
@@ -381,7 +383,7 @@ class MapViewModel @Inject constructor (
     fun ordersAndRoutesFromLocation(mapView: MapView, roadManager: RoadManager, ctx: Context, geoPoint: GeoPoint, maxKmDistance: Int){
 
         mapView.controller.setCenter(geoPoint)
-        mapView.controller.setZoom(10)
+        mapView.controller.setZoom(15)
 
         val orderIconMarker = ContextCompat.getDrawable(ctx, R.drawable.little_map_marker_orders_svg)
         val routeIconMarker = ContextCompat.getDrawable(ctx, R.drawable.little_map_marker_routes_svg)
@@ -404,21 +406,44 @@ class MapViewModel @Inject constructor (
 
     }
 
-    suspend fun getMunicipiGeoPoint(cityName: String): GeoPoint? {
+    suspend fun getMunicipiGeoPointIdescatAPI(cityName: String): GeoPoint? {
          return withContext(Dispatchers.IO) {
               try {
-                  val cityInfo = googleLocationsRepository.getCityInfo(cityName)
-                  val location = cityInfo?.geometry?.location
-                  println("GEOPOINT FROM LOCATION CLICKED IN SEARCHBAR")
-                  println(GeoPoint(location?.lng ?: 0.0, location?.lat ?: 0.0))
-                  GeoPoint(location?.lng ?: 0.0, location?.lat ?: 0.0)
+                  //val cityInfo = googleLocationsRepository.getCityInfo(cityName) GOOGLE GET
+                  // val location = cityInfo?.geometry?.location
+                  val cityInfo = idescatRepository.getLatLngMunicipi(cityName)
+                  val lat = cityInfo?.lat
+                  val lng = cityInfo?.lng
+                  println("Latitud: $lat, Longitud: $lng")
+
+                  //GeoPoint(location?.lng ?: 0.0, location?.lat ?: 0.0)
+                  println(GeoPoint(cityInfo?.lat ?: 0.0, cityInfo?.lng ?: 0.0))
+                  GeoPoint(cityInfo?.lat ?: 0.0, cityInfo?.lng ?: 0.0)
               } catch (e: Exception) {
+                e.printStackTrace()
+                  null
+              }
+         }
+    }
+
+    suspend fun getMunicipiGeoPointGoogleAPI(cityName: String): GeoPoint? {
+        return withContext(Dispatchers.IO) {
+            try {
+                val cityInfo = googleLocationsRepository.getCityInfo(cityName)
+                val location = cityInfo?.geometry?.location
+                val lat = location?.lat
+                val lng = location?.lng
+                println("Latitud: $lat, Longitud: $lng")
+
+                GeoPoint(lat ?: 0.0, lng ?: 0.0)
+            } catch (e: Exception) {
                 e.printStackTrace()
                 null
             }
         }
     }
 
+    // Function to print square (geometric form) in map
     fun path(mapView: MapView){
 
         // THIS FUNCTION CREATES A SQUARE IN NY
