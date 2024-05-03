@@ -312,7 +312,11 @@ fun OrderCard(order: Orders, navController: NavHostController) {
                     ) {
                         append("Arribada: ")
                     }
-                    append("${order.dataArribada} ${order.horaArribada}")
+                    if (order.dataArribada.isNotEmpty()){
+                        append(order.dataArribada+" ${order.horaArribada}")
+                    } else {
+                        append("Flexible")
+                    }
                 },
                     color =  Color.Black)
             }

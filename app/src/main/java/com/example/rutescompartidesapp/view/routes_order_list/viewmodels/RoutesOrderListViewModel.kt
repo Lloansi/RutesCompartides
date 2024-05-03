@@ -24,12 +24,6 @@ class RoutesOrderListViewModel: ViewModel() {
     private val _isSearching = MutableStateFlow(false)
     val isSearching = _isSearching.asStateFlow()
 
-    private val _toOrders = MutableStateFlow(false)
-    val toOrders = _toOrders.asStateFlow()
-
-    fun onToOrders(goingToOrders: Boolean){
-        _toOrders.value = goingToOrders
-    }
 
     // Filter my list of routes and orders
     private val _isMyFilterActive = MutableStateFlow(false)
@@ -62,7 +56,7 @@ class RoutesOrderListViewModel: ViewModel() {
 
 
     // List of routes from the backend
-    private val _routesOriginal = MutableStateFlow(LocalConstants.routeList)
+    private val _routesOriginal = MutableStateFlow(LocalConstants.routeList.asReversed())
 
     // List of routes, it's initial value it's the list of routes from the BackEnd
     private var _routes = _routesOriginal
@@ -84,7 +78,7 @@ class RoutesOrderListViewModel: ViewModel() {
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), _routes.value)
 
     // List of routes from the backend
-    private val _ordersOriginal = MutableStateFlow(LocalConstants.orderList)
+    private val _ordersOriginal = MutableStateFlow(LocalConstants.orderList.asReversed())
 
     // List of orders, it's initial value it's the list of routes from the BackEnd
     private var _orders = _ordersOriginal

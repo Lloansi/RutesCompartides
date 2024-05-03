@@ -95,7 +95,7 @@ fun RouteDetailDriverScreen(
     }
 
     if (isCameraActive) {
-        CameraScreen(navController = navHost,cameraViewModel = cameraViewModel)
+        CameraScreen(cameraViewModel = cameraViewModel)
     } else if (isSignatureActive) {
         DrawScreen(drawViewModel = drawViewModel)
     } else {

@@ -1,17 +1,47 @@
 package com.example.rutescompartidesapp.view.publish_route
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.rutescompartidesapp.data.domain.Location.idescat.Municipi
 import com.example.rutescompartidesapp.data.domain.routes.SharedDataRouteOrder
 import com.example.rutescompartidesapp.data.domain.routes.Routes
+import com.example.rutescompartidesapp.data.network.GoogleLocation.repository.GoogleLocationsRepository
+import com.example.rutescompartidesapp.data.network.idescat.repository.idescatRepository
 import com.example.rutescompartidesapp.utils.LocalConstants
+import com.example.rutescompartidesapp.view.map.components.allOrders
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.osmdroid.util.GeoPoint
 import java.time.Instant
 import java.time.ZoneId
 import java.util.Calendar
+import javax.inject.Inject
 
-class ManageRouteViewModel: ViewModel(){
+@HiltViewModel
+class ManageRouteViewModel @Inject constructor(
+    private val googleLocationsRepository: GoogleLocationsRepository,
+    private val idescatRepository: idescatRepository
+): ViewModel(){
+
+    private val _locations = MutableStateFlow(listOf<Municipi>())
+
+    init {
+        viewModelScope.launch {
+            _locations.value = idescatRepository.getAllMunicipis()
+            //_locations.value = googleLocationsRepository.getAllCities(autonomousCommunityLat = CATALONIA_LAT, autonomousCommunityLng = CATALONIA_LNG, radius = 3200)
+        }
+    }
+
+    private val _userID = MutableStateFlow(0)
+    val userID = _userID.asStateFlow()
+
+    fun setUserID(id: Int){
+        _userID.value = id
+    }
 
     private val _step = MutableStateFlow(1)
     val step = _step
@@ -39,14 +69,10 @@ class ManageRouteViewModel: ViewModel(){
         _originName.value = name
     }
 
+
+
     // Start location coordinates
-    private val _originLocation = MutableStateFlow(listOf<Double>())
-    val originLocation = _originLocation
-    fun getOriginLocation(name: String){
-        //TODO Usar algo para obtener las coordenadas de la dirección
-        val coordinates = listOf<Double>()
-        _originLocation.value = coordinates
-    }
+    private val _originLocation = MutableStateFlow(GeoPoint(0.0, 0.0))
 
     // Step location names
     private val _stepName1 = MutableStateFlow("")
@@ -113,8 +139,7 @@ class ManageRouteViewModel: ViewModel(){
     }
 
     // Step location 1 coordinates
-    private val _destinationLocation = MutableStateFlow(listOf<Double>())
-    val destinationLocation = _destinationLocation
+    private val _destinationLocation = MutableStateFlow(GeoPoint(0.0, 0.0))
 
     // Frequency dropdown
     private val _isDropdownExpanded = MutableStateFlow(false)
@@ -242,7 +267,6 @@ class ManageRouteViewModel: ViewModel(){
     private val _isSecondFormCompleted = MutableStateFlow(false)
 
     private val _isFormCompletedPopup = MutableStateFlow(false)
-    val isFormCompletedPopup = _isFormCompletedPopup
 
     fun checkAllValues(){
         when (step.value) {
@@ -251,6 +275,18 @@ class ManageRouteViewModel: ViewModel(){
                         _originName.value.isNotEmpty() && _destinationName.value.isNotEmpty() &&
                         _dateDepart.value.isNotEmpty() && _dateArrival.value.isNotEmpty() &&
                         _timeDepartText.value.isNotEmpty() && _timeArrivalText.value.isNotEmpty()
+
+                viewModelScope.launch {
+                    val originLoc = _locations.value.filter { municipi -> municipi.content == _originName.value }
+                    val destLoc = _locations.value.filter { municipi -> municipi.content == _destinationName.value }
+                    if (originLoc.isNotEmpty()){
+                        _originLocation.value = getMunicipiGeoPointIdescatAPI(originLoc.first().id)!!
+                    }
+                    if (destLoc.isNotEmpty()){
+                        _destinationLocation.value = getMunicipiGeoPointIdescatAPI(destLoc.first().id)!!
+                    }
+                }
+
                 checkIfEmpty(1)
 
                 if (_isFirstFormCompleted.value) {
@@ -427,12 +463,8 @@ class ManageRouteViewModel: ViewModel(){
             availableSeats = _availableSeats.value.toInt(),
             availableSpace = _availableSpace.value,
             comment = _comment.value,
-            startPoint = _originLocation.value.let { coordinates ->
-                GeoPoint(coordinates[0], coordinates[1])
-            },
-            endPoint = _destinationLocation.value.let { coordinates ->
-                GeoPoint(coordinates[0], coordinates[1])
-            }
+            startPoint = _originLocation.value,
+            endPoint = _destinationLocation.value
             )
         // TODO Fer un POST a la API per duplicar la ruta
 
@@ -443,6 +475,7 @@ class ManageRouteViewModel: ViewModel(){
 
     fun onRouteAdded(isRouteAdded: Boolean){
         _routeAdded.value = isRouteAdded
+        clearValues()
     }
 
 
@@ -520,13 +553,8 @@ class ManageRouteViewModel: ViewModel(){
             availableSeats = _availableSeats.value.toInt(),
             availableSpace = _availableSpace.value,
             comment = _comment.value,
-            startPoint = _originLocation.value.let { coordinates ->
-                GeoPoint(coordinates[0], coordinates[1])
-            },
-            endPoint = _destinationLocation.value.let { coordinates ->
-                GeoPoint(coordinates[0], coordinates[1])
-            }
-
+            startPoint = _originLocation.value,
+            endPoint = _destinationLocation.value
         )
         println(updatedRoute)
         // TODO Fer un PUT a la API per actualitzar la ruta
@@ -582,6 +610,65 @@ class ManageRouteViewModel: ViewModel(){
         _isCongelat.value = sharedDataRouteOrder.isCongelat
         _isIsoterm.value = sharedDataRouteOrder.isIsoterm
         _isSenseHumitat.value = sharedDataRouteOrder.isSenseHumitat
+    }
+
+    /**
+     * Clears all the values of the ViewModel
+     */
+    private fun clearValues(){
+        _internalRouteName.value = ""
+        _originName.value = ""
+        _destinationName.value = ""
+        _dateDepart.value = ""
+        _dateArrival.value = ""
+        _timeDepartText.value = ""
+        _timeArrivalText.value = ""
+        _isIsoterm.value = false
+        _isRefrigerat.value = false
+        _isCongelat.value = false
+        _isSenseHumitat.value = false
+        _vehicle.value = ""
+        _costKM.value = ""
+        _maxDetourKm.value = ""
+        _availableSeats.value = ""
+        _availableSpace.value = ""
+        _comment.value = ""
+        _tagsList.value = listOf()
+        _routeFrequency.value = ""
+        _stepLocationsNumber.value = 1
+        _stepName1.value = ""
+        _stepName2.value = ""
+        _stepName3.value = ""
+        _stepName4.value = ""
+        _stepName5.value = ""
+        _stepName6.value = ""
+        _stepNameList.value = listOf(_stepName1.value, _stepName2.value,
+            _stepName3.value, _stepName4.value, _stepName5.value, _stepName6.value)
+        _screen1Errors.value = List(7) { false }
+        _screen2Errors.value = List(5) { false }
+        _originLocation.value = GeoPoint(0.0, 0.0)
+        _destinationLocation.value = GeoPoint(0.0, 0.0)
+        _step.value = 1
+    }
+
+
+    /**
+     * Asynchronously retrieves the GeoPoint of a municipality from the Idescat API using its name.
+
+     * @param cityName Name of the municipality.
+
+     * @return GeoPoint representing the location of the municipality.
+     **/
+    private suspend fun getMunicipiGeoPointIdescatAPI(cityName: String): GeoPoint? {
+        return withContext(Dispatchers.IO) {
+            try {
+                val cityInfo = idescatRepository.getLatLngMunicipi(cityName)
+                GeoPoint(cityInfo?.lat ?: 0.0, cityInfo?.lng ?: 0.0)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                null
+            }
+        }
     }
 
 }

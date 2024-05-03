@@ -125,7 +125,7 @@ fun CompleteCard(
         navHost.navigate(
             "PublishRouteScreen/{command}/{routeID}".replace(
                 oldValue = "{command}",
-                newValue = "create"
+                newValue = "createFrom"
             ).replace(
                 oldValue = "{routeID}",
                 newValue = "0"
@@ -277,7 +277,11 @@ fun CompleteCard(
                         ) {
                             append("Arribada: ")
                         }
-                        append(order.dataSortida+" ${order.horaSortida}")
+                        if (order.dataArribada.isNotEmpty()){
+                            append(order.dataArribada+" ${order.horaArribada}")
+                        } else {
+                            append("Flexible")
+                        }
                     },
                         color = MaterialTheme.colorScheme.onBackground)
                 }

@@ -93,6 +93,7 @@ import com.example.rutescompartidesapp.view.login.LoginViewModel
 fun PublishRouteScreen(command: String, routeID: Int, navHost: NavHostController, loginViewModel: LoginViewModel,
                        manageRouteViewModel: ManageRouteViewModel){
     val user by loginViewModel.user.collectAsStateWithLifecycle()
+    manageRouteViewModel.setUserID(user!!.userId)
     val currentStep by manageRouteViewModel.step.collectAsStateWithLifecycle()
     val routeName by manageRouteViewModel.internalRouteName.collectAsStateWithLifecycle()
     val originName by manageRouteViewModel.originName.collectAsStateWithLifecycle()
@@ -146,18 +147,29 @@ fun PublishRouteScreen(command: String, routeID: Int, navHost: NavHostController
     // When the route is added, navigates to the destination based on from where the route was added
     if (routeAdded) {
         manageRouteViewModel.onRouteAdded(false)
-        if (command == "create"){
-            navHost.navigate("MapScreen"){
-                popUpTo("MapScreen") { inclusive = true }
+        when (command){
+            "create" -> {
+                navHost.navigate("MapScreen"){
+                    popUpTo("MapScreen") { inclusive = true }
+                }
             }
-        } else {
-            navHost.navigate(
-                "RouteDetailDriverScreen/{routeId}".replace(
-                    oldValue = "{routeId}",
-                    newValue = "$routeID")
-            ) {
-                popUpTo(
-                    "RouteDetailDriverScreen/{routeId}"){ inclusive = true }
+            "createFrom" -> {
+                navHost.navigate(
+                    "RoutesOrderListScreen")
+                {
+                    popUpTo(
+                        "RoutesOrderListScreen"){ inclusive = true }
+                }
+            }
+            "edit" -> {
+                navHost.navigate(
+                    "RouteDetailDriverScreen/{routeId}".replace(
+                        oldValue = "{routeId}",
+                        newValue = "$routeID")
+                ) {
+                    popUpTo(
+                        "RouteDetailDriverScreen/{routeId}"){ inclusive = true }
+                }
             }
         }
     }
@@ -194,7 +206,7 @@ fun PublishRouteScreen(command: String, routeID: Int, navHost: NavHostController
                 .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            if ((command == "edit" && routeID != 0 && routeToEdit != null) || command == "create") {
+            if ((command == "edit" && routeID != 0 && routeToEdit != null) || command == "create" || command == "createFrom"){
                 when (currentStep) {
                     1 -> PublishRouteContent1(
                         routeName,
@@ -520,11 +532,11 @@ private fun PublishRouteContent3(
         // Back button
         PublishBackButton(manageRouteViewModel::previousStep)
         // Publish route button
-        PublishButton( onClick = {  if(command == "create"){
+        PublishButton( onClick = {  if(command == "create" || command == "createFrom"){
             manageRouteViewModel.addRoute(userID)
         } else manageRouteViewModel.updateRoute(userID) },
 
-            text = if(command == "create") "Publicar ruta" else "Editar ruta")
+            text = if(command == "create" || command == "createFrom") "Publicar ruta" else "Editar ruta")
     }
 }
 

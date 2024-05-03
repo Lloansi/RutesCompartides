@@ -44,7 +44,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
-import androidx.navigation.NavHostController
 import com.example.rutescompartidesapp.view.confirm_delivery.viewmodel.CameraViewModel
 import kotlinx.coroutines.launch
 
@@ -54,7 +53,7 @@ import kotlinx.coroutines.launch
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CameraScreen(navController: NavHostController, cameraViewModel: CameraViewModel){
+fun CameraScreen(cameraViewModel: CameraViewModel){
 
     val ctx = LocalContext.current
 
@@ -63,9 +62,9 @@ fun CameraScreen(navController: NavHostController, cameraViewModel: CameraViewMo
     ) { isGranted: Boolean ->
         // Handle permission result
         if (isGranted) {
-            Toast.makeText(ctx, "Permiso concedido", Toast.LENGTH_SHORT).show()
+            Toast.makeText(ctx, "Permís concebut", Toast.LENGTH_SHORT).show()
         } else {
-            Toast.makeText(ctx, "Permiso denegado", Toast.LENGTH_SHORT).show()
+            Toast.makeText(ctx, "Permís denegat", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -98,7 +97,6 @@ fun CameraScreen(navController: NavHostController, cameraViewModel: CameraViewMo
         color = MaterialTheme.colorScheme.background
     ) {
         val bottomSheetScaffoldState = rememberBottomSheetScaffoldState()
-        val ctx = LocalContext.current
         val scope = rememberCoroutineScope()
         val controller = remember {
             LifecycleCameraController(ctx).apply {

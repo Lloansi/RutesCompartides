@@ -47,7 +47,6 @@ fun RoutesOrderListScreen(navController: NavHostController, routeOrderListViewMo
                           tabRowViewModel: TabRowViewModel
 ) {
     val searchText by routeOrderListViewModel.searchText.collectAsStateWithLifecycle()
-    val isSearching by routeOrderListViewModel.isSearching.collectAsStateWithLifecycle()
     val areFilterActive by routeOrderListViewModel.activeFilters.collectAsStateWithLifecycle()
     val focusManager = LocalFocusManager.current
     val user by loginViewModel.user.collectAsStateWithLifecycle()

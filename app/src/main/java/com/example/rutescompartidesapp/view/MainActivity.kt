@@ -114,8 +114,8 @@ class MainActivity : ComponentActivity() {
                 val tabRowViewModel = TabRowViewModel()
                 val searchViewModel: SearchViewModel = hiltViewModel()
                 val navController = rememberNavController()
-                val manageRouteViewModel = ManageRouteViewModel()
-                val manageOrderViewModel = ManageOrderViewModel()
+                val manageRouteViewModel : ManageRouteViewModel  = hiltViewModel()
+                val manageOrderViewModel : ManageOrderViewModel = hiltViewModel()
 
 
                 val bottomNavigationItems = listOf(

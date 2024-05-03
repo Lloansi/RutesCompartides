@@ -1,5 +1,6 @@
 package com.example.rutescompartidesapp.view.publish_order
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -86,11 +87,13 @@ import com.example.rutescompartidesapp.view.generic_components.popups.BasicPopup
 import com.example.rutescompartidesapp.view.generic_components.popups.ConditionScrollPopup
 import com.example.rutescompartidesapp.view.login.LoginViewModel
 
+@SuppressLint("RestrictedApi", "StateFlowValueCalledInComposition")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PublishOrderScreen(command: String, orderID: Int, navHost: NavHostController,
                        loginViewModel: LoginViewModel, manageOrderViewModel: ManageOrderViewModel) {
     val user by loginViewModel.user.collectAsStateWithLifecycle()
+    manageOrderViewModel.setUserID(user!!.userId)
     // Screen 1 variables
     val currentStep by manageOrderViewModel.step.collectAsStateWithLifecycle()
     val orderName by manageOrderViewModel.internalOrderName.collectAsStateWithLifecycle()
@@ -143,15 +146,26 @@ fun PublishOrderScreen(command: String, orderID: Int, navHost: NavHostController
     if (orderAdded) {
         // Resets the orderAdded state
         manageOrderViewModel.onOrderAdded(false)
-        if (command == "create"){
-            navHost.navigate("MapScreen"){
-                popUpTo("MapScreen") { inclusive = true }
+        when (command){
+            "create" -> {
+                navHost.navigate("MapScreen"){
+                    popUpTo("MapScreen") { inclusive = true }
+                }
             }
-        } else {
-            navHost.navigate("OrderDetailScreen/{orderID}".replace(
-                "{orderID}", orderID.toString())
-            ){
-                popUpTo("OrderDetailScreen/{orderID}") { inclusive = true }
+            "createFrom" -> {
+                navHost.navigate(
+                    "RoutesOrderListScreen")
+                {
+                    popUpTo(
+                        "RoutesOrderListScreen"){ inclusive = true }
+                }
+            }
+            "edit" -> {
+                navHost.navigate("OrderDetailScreen/{orderID}".replace(
+                    "{orderID}", orderID.toString())
+                ){
+                    popUpTo("OrderDetailScreen/{orderID}") { inclusive = true }
+                }
             }
         }
     }
@@ -188,7 +202,7 @@ fun PublishOrderScreen(command: String, orderID: Int, navHost: NavHostController
                 ),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            if ((command == "edit" && orderID != 0 && orderToEdit != null) || command == "create"){
+            if ((command == "edit" && orderID != 0 && orderToEdit != null) || command == "create" || command == "createFrom"){
             when (currentStep) {
                 1 -> {
                     PublishOrderContent1(
@@ -355,11 +369,11 @@ private fun PublishOrderContent3(
         PublishBackButton(manageOrderViewModel::previousStep)
         // Next Button
         PublishButton(
-            onClick = {  if(command == "create"){
+            onClick = {  if(command == "create" || command == "createFrom"){
                 manageOrderViewModel.addOrder(userID)
             } else manageOrderViewModel.updateOrder(userID) },
 
-            text = if(command == "create") "Publicar comanda" else "Editar comanda"
+            text = if(command == "create" || command == "createFrom") "Publicar comanda" else "Editar comanda"
         )
     }
 }

@@ -1,17 +1,47 @@
 package com.example.rutescompartidesapp.view.publish_order
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.rutescompartidesapp.data.domain.Location.idescat.Municipi
 import com.example.rutescompartidesapp.data.domain.orders.Orders
 import com.example.rutescompartidesapp.data.domain.routes.SharedDataRouteOrder
+import com.example.rutescompartidesapp.data.network.GoogleLocation.repository.GoogleLocationsRepository
+import com.example.rutescompartidesapp.data.network.idescat.repository.idescatRepository
 import com.example.rutescompartidesapp.utils.LocalConstants
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.osmdroid.util.GeoPoint
 import java.time.Instant
 import java.time.ZoneId
 import java.util.Calendar
+import javax.inject.Inject
 
-class ManageOrderViewModel: ViewModel(){
+@HiltViewModel
+    class ManageOrderViewModel @Inject constructor(
+    private val googleLocationsRepository: GoogleLocationsRepository,
+    private val idescatRepository: idescatRepository
+): ViewModel(){
+
+
+    private val _locations = MutableStateFlow(listOf<Municipi>())
+
+    init {
+        viewModelScope.launch {
+            _locations.value = idescatRepository.getAllMunicipis()
+            //_locations.value = googleLocationsRepository.getAllCities(autonomousCommunityLat = CATALONIA_LAT, autonomousCommunityLng = CATALONIA_LNG, radius = 3200)
+        }
+    }
+
+    private val _userID = MutableStateFlow(0)
+    val userID = _userID.asStateFlow()
+
+    fun setUserID(id: Int){
+        _userID.value = id
+    }
 
     private val _step = MutableStateFlow(1)
     val step = _step
@@ -40,13 +70,7 @@ class ManageOrderViewModel: ViewModel(){
     }
 
     // Start location coordinates
-    private val _originLocation = MutableStateFlow(listOf<Double>())
-    val originLocation = _originLocation
-    fun getOriginLocation(name: String){
-        //TODO Usar algo para obtener las coordenadas de la dirección
-        val coordinates = listOf<Double>()
-        _originLocation.value = coordinates
-    }
+    private val _originLocation = MutableStateFlow(GeoPoint(0.0, 0.0))
 
     // End location name
     private val _destinationName = MutableStateFlow("")
@@ -57,8 +81,7 @@ class ManageOrderViewModel: ViewModel(){
     }
 
     // Destination location coordinates
-    private val _destinationLocation = MutableStateFlow(listOf<Double>())
-    val destinationLocation = _destinationLocation
+    private val _destinationLocation = MutableStateFlow(GeoPoint(0.0, 0.0))
 
     // Condicions de transport chips
     private val _isIsoterm = MutableStateFlow(false)
@@ -253,6 +276,18 @@ class ManageOrderViewModel: ViewModel(){
                          _horaSortidaText.value.isNotEmpty() &&
                         if (_isFlexDate.value) true else _dataArribada.value.isNotEmpty() &&
                                 if (_isFlexDate.value) true else _horaArribadaText.value.isNotEmpty()
+
+                viewModelScope.launch {
+                    val originLoc = _locations.value.filter { municipi -> municipi.content == _originName.value }
+                    val destLoc = _locations.value.filter { municipi -> municipi.content == _destinationName.value }
+                    if (originLoc.isNotEmpty()){
+                        _originLocation.value = getMunicipiGeoPointIdescatAPI(originLoc.first().id)!!
+                    }
+                    if (destLoc.isNotEmpty()){
+                        _destinationLocation.value = getMunicipiGeoPointIdescatAPI(destLoc.first().id)!!
+                    }
+                }
+
                 checkIfEmpty(1)
                 if (_isFirstFormCompleted.value){
                     nextStep()
@@ -324,9 +359,8 @@ class ManageOrderViewModel: ViewModel(){
     // Screen 3
 
     // Delivery contact
-    // TODO Aquí hauria de ser un usuari, no un string
-    val deliveryContact = MutableStateFlow("Ivan Martínez")
-    val deliveryTelephoneNumber = MutableStateFlow("61234567")
+    val deliveryContact = MutableStateFlow(LocalConstants.userList.first{ user -> user.userId == userID.value }.name)
+    val deliveryTelephoneNumber = MutableStateFlow(LocalConstants.userList.first{ user -> user.userId == userID.value }.phone.toString())
     // TODO Aquí hauria de ser les dades reals del contacte del punt habitual
     val puntHabitualData = MutableStateFlow("\nCarrer de la Llibertat, 1, 08001 Barcelona\nTelèfon: 61234567")
 
@@ -408,16 +442,9 @@ class ManageOrderViewModel: ViewModel(){
             co2Saved = 0.0f,
             distance = 0.0f,
             comment = _comment.value,
-            startPoint = _originLocation.value.let { coordinates ->
-                GeoPoint(coordinates[0], coordinates[1])
-            },
-            endPoint = _destinationLocation.value.let { coordinates ->
-                GeoPoint(coordinates[0], coordinates[1])
-            }
-
-
+            startPoint = _originLocation.value,
+            endPoint = _destinationLocation.value
         )
-        // TODO Fer un POST a la API per duplicar la ruta
 
         if (LocalConstants.orderList.add(newOrder)){
             onOrderAdded(true)
@@ -426,6 +453,7 @@ class ManageOrderViewModel: ViewModel(){
 
     fun onOrderAdded(isOrderAdded: Boolean){
         _orderAdded.value = isOrderAdded
+        clearValues()
     }
 
     // Edit Order
@@ -456,8 +484,6 @@ class ManageOrderViewModel: ViewModel(){
         _packagesWeight.value = _orderToEdit.value!!.packagesWeight.toString()
         _arePackagesFragile.value = _orderToEdit.value!!.packagesFragile
         _comment.value = _orderToEdit.value!!.comment ?: ""
-        _originLocation.value = listOf(_orderToEdit.value!!.startPoint.latitude, _orderToEdit.value!!.startPoint.longitude)
-        _destinationLocation.value = listOf(_orderToEdit.value!!.endPoint.latitude, _orderToEdit.value!!.endPoint.longitude)
 
         // Etiquetes i freqüència
         _orderToEdit.value?.etiquetes.let { etiquetes ->
@@ -491,12 +517,8 @@ class ManageOrderViewModel: ViewModel(){
             co2Saved = 0.0f,
             distance = 0.0f,
             comment = _comment.value,
-            startPoint = _originLocation.value.let { coordinates ->
-                GeoPoint(coordinates[0], coordinates[1])
-            },
-            endPoint = _destinationLocation.value.let { coordinates ->
-                GeoPoint(coordinates[0], coordinates[1])
-            }
+            startPoint = _originLocation.value,
+            endPoint = _destinationLocation.value
         )
         // TODO Fer un PUT a la API per actualitzar la ruta
         if (LocalConstants.orderList.removeIf { order -> order.orderID == updatedOrder.orderID }){
@@ -556,4 +578,58 @@ class ManageOrderViewModel: ViewModel(){
     }
 
 
+
+    private fun clearValues(){
+        _internalOrderName.value = ""
+        _originName.value = ""
+        _destinationName.value = ""
+        _dataSortida.value = ""
+        _dataArribada.value = ""
+        _horaSortidaText.value = ""
+        _horaArribadaText.value = ""
+        _isIsoterm.value = false
+        _isRefrigerat.value = false
+        _isCongelat.value = false
+        _isSenseHumitat.value = false
+        _tagsList.value = listOf()
+        _packagesNum.value = ""
+        _packagesLength.value = ""
+        _packagesWidth.value = ""
+        _packagesHeight.value = ""
+        _packagesWeight.value = ""
+        _arePackagesFragile.value = false
+        _comment.value = ""
+        _isFirstFormCompleted.value = false
+        _isSecondFormCompleted.value = false
+        _screen1Errors.value = List(7) { false }
+        _screen2Errors.value = List(5) { false }
+        _destinationLocation.value = GeoPoint(0.0, 0.0)
+        _originLocation.value = GeoPoint(0.0, 0.0)
+        _step.value = 1
+        _isDeliveryContactDataChecked.value = false
+        _isPuntHabitualDataChecked.value = false
+        _deliveryNote.value = ""
+        _wantsDeliveryNotification.value = false
+        _wantsCarpool.value = false
+    }
+
+
+    /**
+     * Asynchronously retrieves the GeoPoint of a municipality from the Idescat API using its name.
+
+     * @param cityName Name of the municipality.
+
+     * @return GeoPoint representing the location of the municipality.
+     **/
+    private suspend fun getMunicipiGeoPointIdescatAPI(cityName: String): GeoPoint? {
+        return withContext(Dispatchers.IO) {
+            try {
+                val cityInfo = idescatRepository.getLatLngMunicipi(cityName)
+                GeoPoint(cityInfo?.lat ?: 0.0, cityInfo?.lng ?: 0.0)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                null
+            }
+        }
+    }
 }

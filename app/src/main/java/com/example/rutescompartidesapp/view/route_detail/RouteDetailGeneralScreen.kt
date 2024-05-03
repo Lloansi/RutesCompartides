@@ -93,7 +93,7 @@ fun RouteDetailGeneralScreen(
         navHost.navigate(
             "PublishOrderScreen/{command}/{orderID}".replace(
                 oldValue = "{command}",
-                newValue = "create"
+                newValue = "createFrom"
             ).replace(
                 oldValue = "{orderID}",
                 newValue = "0"
