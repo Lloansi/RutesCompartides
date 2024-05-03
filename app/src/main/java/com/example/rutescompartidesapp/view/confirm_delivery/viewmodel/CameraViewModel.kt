@@ -17,10 +17,20 @@ class CameraViewModel: ViewModel() {
     private val _bitmapDraw = MutableStateFlow<Bitmap?>(null)
     val bitmapDraw = _bitmapDraw.asStateFlow()
 
+    /**
+     * Updates the list of Bitmap images with the provided bitmap.
+
+     * @param bitmap The Bitmap image to be added to the list.
+     **/
     fun onTakePhoto(bitmap : Bitmap){
         _bitmaps.value += bitmap
     }
 
+    /**
+     * Updates the photo Bitmap with the provided bitmap.
+
+     * @param bitmap The Bitmap image to update the photo Bitmap.
+     **/
     fun updatePhotoBitmap(bitmap: Bitmap){
         _bitmapPhoto.value = bitmap
     }

@@ -22,6 +22,11 @@ class DrawViewModel: ViewModel() {
     private val _drawBitmap = MutableStateFlow<Bitmap?>(null)
     val drawBitmap = _drawBitmap.asStateFlow()
 
+    /**
+     * Saves a Bitmap image to the device's gallery.
+
+     * @param bitmap The Bitmap image to be saved.
+     **/
     fun saveBitmapToGallery(bitmap: Bitmap) {
         viewModelScope.launch(Dispatchers.IO) {
             val fileName = "drawing_${System.currentTimeMillis()}.png"
@@ -40,6 +45,17 @@ class DrawViewModel: ViewModel() {
         }
     }
 
+    /**
+     * Draws lines onto a Bitmap image.
+
+     * @param lines List of Line objects representing the lines to be drawn.
+
+     * @param strokeWidthInPx The stroke width of the lines in pixels.
+
+     * @param width The width of the Bitmap image.
+
+     * @param height The height of the Bitmap image.
+     **/
     fun drawToBitmap(lines: List<Line>, strokeWidthInPx: Float, width: Int, height: Int) {
         val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
