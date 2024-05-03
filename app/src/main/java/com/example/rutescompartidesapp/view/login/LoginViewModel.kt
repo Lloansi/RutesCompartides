@@ -33,7 +33,6 @@ class LoginViewModel @Inject constructor (
         _currentIndex.intValue = index
     }
 
-
     private val _authToken = MutableStateFlow("")
     val authToken = _authToken.asStateFlow()
     private val _showErrorToastChannel = Channel<Boolean>()
@@ -42,6 +41,11 @@ class LoginViewModel @Inject constructor (
     private val _errorText = MutableStateFlow("")
     val errorText = _errorText.asStateFlow()
 
+    /**
+     * Makes an api call to the Login endpoint with the email and password,
+     * if it's correct, gets the token and save the credentials into the dataStore
+     * @param authRequest the email and password of the user
+     */
     private suspend fun getToken(authRequest: AuthRequest){
         viewModelScope.launch{
             val result = rutesCompartidesRepository.getToken(authRequest)
@@ -145,6 +149,9 @@ class LoginViewModel @Inject constructor (
 
 
     //Sing Up Button
+    /**
+     * Check if the email and password aren't empty and if the mail has a correct format
+     */
     fun onLoginButtonClick() {
 
         // Variables to obtain the values of the input
@@ -168,6 +175,11 @@ class LoginViewModel @Inject constructor (
     private fun setUser(user: UserLocal){
         _user.value = user
     }
+
+    /**
+     * Get the user from the userList by the userID
+     * @param userID the id of the user
+     */
     fun getUser(userID: Int){
         val user = LocalConstants.userList.first { user -> user.userId == userID }
         setUser(user)
@@ -177,6 +189,12 @@ class LoginViewModel @Inject constructor (
     private val _userIsLogged = MutableStateFlow(false)
     val userIsLogged = _userIsLogged.asStateFlow()
 
+    /**
+     * Search on the userList if the user exists and checks if the password is correct,
+     * if it is, updates the dataStore with the user credentials and set the user as logged
+     * @param userEmail the email of the user
+     * @param userPassword the password of the user
+     */
      fun loginLocal(userEmail: String, userPassword: String) {
          val userExists = !LocalConstants.userList.none { user -> user.email == userEmail }
          if (userExists){
@@ -221,8 +239,6 @@ class LoginViewModel @Inject constructor (
                 _userPassword.value = session.password
                 _userIsLogged.value = session.isLogged
                 if (session.isLogged){
-                    println(session.email)
-                    println(session.password)
                     loginLocal(session.email, session.password)
                 }
             }

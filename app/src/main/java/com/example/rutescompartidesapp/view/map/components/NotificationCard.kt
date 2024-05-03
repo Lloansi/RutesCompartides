@@ -49,7 +49,9 @@ import com.example.rutescompartidesapp.view.route_detail.route_detail_driver.com
 fun NotificationButtonCard(loginViewModel: LoginViewModel, navHost: NavController){
     val user by loginViewModel.user.collectAsStateWithLifecycle()
     val notificationsViewModel = NotificationsViewModel()
-    notificationsViewModel.getUserInteractions(user!!.userId)
+    if (user != null){
+        notificationsViewModel.getUserInteractions(user!!.userId)
+    }
     val userInteractions = notificationsViewModel.userIteractions
     Box(modifier = Modifier
         .wrapContentWidth()
@@ -59,7 +61,6 @@ fun NotificationButtonCard(loginViewModel: LoginViewModel, navHost: NavControlle
         .background(color = MaterialTheme.colorScheme.primary)
         .clickable {
             notificationsViewModel.onPopupToggle()
-            println("Clicked")
         },
         contentAlignment = Alignment.Center
     ){

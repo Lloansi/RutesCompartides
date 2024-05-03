@@ -4,7 +4,6 @@ import android.util.Patterns
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import com.example.rutescompartidesapp.data.domain.UserLocal
-import com.example.rutescompartidesapp.utils.Constants
 import com.example.rutescompartidesapp.utils.LocalConstants
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -91,7 +90,7 @@ class SignUpViewModel: ViewModel(){
     val isRepeatPasswordVisible = _isPasswordVisible.asStateFlow()
 
     fun toggleRepeatPasswordVisibility() {
-        _isPasswordVisible.value = !_isPasswordVisible.value
+        _isRepeatPasswordVisible.value = !_isRepeatPasswordVisible.value
     }
 
     //User password error

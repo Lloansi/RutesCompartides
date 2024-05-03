@@ -1,8 +1,6 @@
 package com.example.rutescompartidesapp.view
 
-import android.content.pm.PackageManager
 import android.os.Bundle
-
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
@@ -11,7 +9,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.core.content.ContextCompat
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -37,7 +34,6 @@ import com.example.rutescompartidesapp.view.how_it_works.ComFuncionaScreen
 import com.example.rutescompartidesapp.view.edit_profile.EditProfileScreen
 import com.example.rutescompartidesapp.view.faq.FaqScreen
 import com.example.rutescompartidesapp.view.faq.FaqViewModel
-import com.example.rutescompartidesapp.utils.Constants.ALL_PERMISSIONS
 import com.example.rutescompartidesapp.view.confirm_delivery.viewmodel.CameraViewModel
 import com.example.rutescompartidesapp.view.confirm_delivery.viewmodel.DrawViewModel
 import com.example.rutescompartidesapp.view.order_detail.OrderDetailScreen
@@ -71,37 +67,8 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    //private lateinit var mDetector: GestureDetectorCompat
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        //mDetector = GestureDetectorCompat(this, MyGestureListener())
-
-        fun hasRequiredPermissions(): Boolean {
-            return ALL_PERMISSIONS.all {
-                ContextCompat.checkSelfPermission(
-                    applicationContext,
-                    it
-                ) == PackageManager.PERMISSION_GRANTED
-            }
-        }
-
-        /*
-        OLD WAY TO HANLDE PERMISSIONS GRANTED
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.INTERNET), 0)
-        }
-
-       // WindowCompat.setDecorFitsSystemWindows(window, false)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(android.R.id.content)) { view, insets ->
-            val bottom = insets.getInsets(WindowInsetsCompat.Type.ime()).bottom
-            view.updatePadding(bottom = bottom)
-            insets
-        }
-         */
-
-
 
         setContent {
             RutesCompartidesAppTheme {
@@ -116,7 +83,7 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 val manageRouteViewModel : ManageRouteViewModel  = hiltViewModel()
                 val manageOrderViewModel : ManageOrderViewModel = hiltViewModel()
-
+                val userIsLogged = intent.getBooleanExtra("userIsLogged", false)
 
                 val bottomNavigationItems = listOf(
                     SmoothAnimationBottomBarScreens(
@@ -182,6 +149,7 @@ class MainActivity : ComponentActivity() {
                         manageRouteViewModel,
                         manageOrderViewModel,
                         navController,
+                        userIsLogged,
                         Modifier.padding(paddingValues),
                     )
                 }
@@ -197,13 +165,17 @@ fun ScreenNavigationConfiguration(
     tabRowViewModel: TabRowViewModel, filterPopupViewModel: FilterPopupViewModel,
     searchViewModel: SearchViewModel, manageRouteViewModel: ManageRouteViewModel,
     manageOrderViewModel: ManageOrderViewModel,
-    navController: NavHostController,
+    navHostController: NavHostController,
+    userIsLogged: Boolean,
     modifier: Modifier) {
 
-    NavHost(navController = navController, startDestination = Screens.LoginScreen.route, modifier = modifier) {
+    println("USER IS LOGGED AFTER NAV: $userIsLogged")
+    NavHost(navController = navHostController,
+        startDestination = if (userIsLogged) Screens.MapScreen.route else Screens.LoginScreen.route,
+        modifier = modifier) {
 
         composable(Screens.MapScreen.route) {
-            MapScreen(navController, mapViewModel, searchViewModel, loginViewModel)
+            MapScreen(navHostController, mapViewModel, searchViewModel, loginViewModel)
         }
         composable(Screens.OrderDetailScreen.route,
             arguments = listOf(navArgument("orderID"){
@@ -211,7 +183,7 @@ fun ScreenNavigationConfiguration(
             }
             )) {
             val orderID = it.arguments?.getInt("orderID")
-            OrderDetailScreen(orderID!!, navController, loginViewModel, manageRouteViewModel)
+            OrderDetailScreen(orderID!!, navHostController, loginViewModel, manageRouteViewModel)
         }
 
         composable(Screens.RouteDetailGeneralScreen.route,
@@ -219,7 +191,7 @@ fun ScreenNavigationConfiguration(
             type = NavType.IntType
         })) {
             val routeID = it.arguments?.getInt("routeId")
-            RouteDetailGeneralScreen(navController, routeID!!, mapViewModel,
+            RouteDetailGeneralScreen(navHostController, routeID!!, mapViewModel,
                 mapViewModel2, manageOrderViewModel, routeOrderListViewModel)
         }
 
@@ -234,20 +206,20 @@ fun ScreenNavigationConfiguration(
             val orderID = it.arguments?.getInt("orderId")
             val valueExperienceViewModel = ValueExperienceViewModel()
 
-            ValueExperienceGeneralScreen(routeID!!, orderID!!, navController,valueExperienceViewModel)
+            ValueExperienceGeneralScreen(routeID!!, orderID!!, navHostController,valueExperienceViewModel)
         }
 
         composable(Screens.RoutesOrderListScreen.route) {
-            RoutesOrderListScreen(navController, routeOrderListViewModel, filterPopupViewModel, loginViewModel, tabRowViewModel)
+            RoutesOrderListScreen(navHostController, routeOrderListViewModel, filterPopupViewModel, loginViewModel, tabRowViewModel)
         }
         composable(Screens.ProfileScreen.route) {
-            ProfileScreen(profileViewModel, loginViewModel, navController, routeOrderListViewModel, tabRowViewModel)
+            ProfileScreen(profileViewModel, loginViewModel, navHostController, routeOrderListViewModel, tabRowViewModel)
         }
         composable(Screens.LoginScreen.route) {
-            LoginScreen(loginViewModel, navController)
+            LoginScreen(loginViewModel, navHostController)
         }
         composable(Screens.SignUpScreen.route) {
-            SignUpScreen(navController)
+            SignUpScreen(navHostController)
         }
         composable(Screens.RouteDetailDriverScreen.route,
             arguments = listOf(navArgument("routeId"){
@@ -257,17 +229,17 @@ fun ScreenNavigationConfiguration(
             val routeDetailDriverViewModel = RouteDetailDriverViewModel(routeID!!)
             val cameraViewModel = CameraViewModel()
             val drawViewModel = DrawViewModel()
-            RouteDetailDriverScreen(routeID, navController, routeDetailDriverViewModel, cameraViewModel, drawViewModel)
+            RouteDetailDriverScreen(routeID, navHostController, routeDetailDriverViewModel, cameraViewModel, drawViewModel)
         }
 
         composable(Screens.FaqScreen.route) {
-            FaqScreen(navController, FaqViewModel())
+            FaqScreen(navHostController, FaqViewModel())
         }
         composable(Screens.EditProfileScreen.route) {
-            EditProfileScreen(loginViewModel, navController)
+            EditProfileScreen(loginViewModel, navHostController)
         }
         composable(Screens.ComFuncionaScreen.route) {
-            ComFuncionaScreen(navController)
+            ComFuncionaScreen(navHostController)
         }
         composable(Screens.PublishRouteScreen.route,
             arguments = listOf(navArgument("command"){
@@ -278,7 +250,7 @@ fun ScreenNavigationConfiguration(
                 })) {
             val command = it.arguments?.getString("command")
             val routeID = it.arguments?.getInt("routeID")
-            PublishRouteScreen(command!!, routeID = routeID!!, navController, loginViewModel, manageRouteViewModel)
+            PublishRouteScreen(command!!, routeID = routeID!!, navHostController, loginViewModel, manageRouteViewModel)
         }
         composable(Screens.PublishOrderScreen.route,
             arguments = listOf(navArgument("command"){
@@ -289,10 +261,10 @@ fun ScreenNavigationConfiguration(
             })) {
             val command = it.arguments?.getString("command")
             val orderID = it.arguments?.getInt("orderID")
-            PublishOrderScreen(command!!, orderID = orderID!!, navController, loginViewModel, manageOrderViewModel)
+            PublishOrderScreen(command!!, orderID = orderID!!, navHostController, loginViewModel, manageOrderViewModel)
         }
         composable(Screens.UserReviewScreen.route) {
-            UserReviewScreen(UserReviewViewModel(), loginViewModel)
+            UserReviewScreen(UserReviewViewModel(), loginViewModel, navHostController)
         }
 
 
