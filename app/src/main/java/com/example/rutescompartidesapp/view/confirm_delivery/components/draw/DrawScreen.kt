@@ -1,10 +1,6 @@
 package com.example.rutescompartidesapp.view.confirm_delivery.components.draw
 
-import android.Manifest
-import android.content.pm.PackageManager
-import android.widget.Toast
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
+import android.annotation.SuppressLint
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Arrangement
@@ -23,13 +19,16 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat
-import androidx.navigation.NavHostController
 import com.example.rutescompartidesapp.data.domain.Line
 import com.example.rutescompartidesapp.view.confirm_delivery.viewmodel.DrawViewModel
 
+/**
+ * Composable function for the screen where the user can draw.
+ * @param drawViewModel ViewModel for drawing operations.
+ */
+@SuppressLint("RestrictedApi")
 @Composable
-fun DrawScreen(navController: NavHostController, drawViewModel: DrawViewModel) {
+fun DrawScreen(drawViewModel: DrawViewModel) {
 
     val context = LocalContext.current
 
@@ -40,9 +39,6 @@ fun DrawScreen(navController: NavHostController, drawViewModel: DrawViewModel) {
     val strokeWidthInPx = with(LocalDensity.current) { 3.dp.toPx() }
     val screenWidth = context.resources.displayMetrics.widthPixels
     val screenHeight = context.resources.displayMetrics.heightPixels
-
-    val bitmapWidth = screenWidth
-    val bitmapHeight = screenHeight
 
     Canvas(
         modifier = Modifier
@@ -79,8 +75,7 @@ fun DrawScreen(navController: NavHostController, drawViewModel: DrawViewModel) {
 
         Button(
             onClick = {
-                drawViewModel.drawToBitmap(lines, strokeWidthInPx, bitmapWidth, bitmapHeight)
-                navController.popBackStack()
+                drawViewModel.drawToBitmap(lines, strokeWidthInPx, screenWidth, screenHeight)
             },
             modifier = Modifier
                 .padding(4.dp)

@@ -64,6 +64,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -84,12 +85,14 @@ import com.example.rutescompartidesapp.view.generic_components.StepTextField
 import com.example.rutescompartidesapp.view.generic_components.TimePickerDialog
 import com.example.rutescompartidesapp.view.generic_components.popups.ConditionScrollPopup
 import com.example.rutescompartidesapp.view.generic_components.popups.PopupScrolleable
+import com.example.rutescompartidesapp.view.login.LoginViewModel
 
+@SuppressLint("RestrictedApi", "StateFlowValueCalledInComposition")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PublishRouteScreen(command: String, routeID: Int, navHost: NavHostController){
-    val manageRouteViewModel = ManageRouteViewModel()
-
+fun PublishRouteScreen(command: String, routeID: Int, navHost: NavHostController, loginViewModel: LoginViewModel,
+                       manageRouteViewModel: ManageRouteViewModel){
+    val user by loginViewModel.user.collectAsStateWithLifecycle()
     val currentStep by manageRouteViewModel.step.collectAsStateWithLifecycle()
     val routeName by manageRouteViewModel.internalRouteName.collectAsStateWithLifecycle()
     val originName by manageRouteViewModel.originName.collectAsStateWithLifecycle()
@@ -139,7 +142,10 @@ fun PublishRouteScreen(command: String, routeID: Int, navHost: NavHostController
 
     val routeToEdit by manageRouteViewModel.routeToEdit.collectAsStateWithLifecycle()
     val routeAdded by manageRouteViewModel.routeAdded.collectAsStateWithLifecycle()
+
+    // When the route is added, navigates to the destination based on from where the route was added
     if (routeAdded) {
+        manageRouteViewModel.onRouteAdded(false)
         if (command == "create"){
             navHost.navigate("MapScreen"){
                 popUpTo("MapScreen") { inclusive = true }
@@ -151,14 +157,9 @@ fun PublishRouteScreen(command: String, routeID: Int, navHost: NavHostController
                     newValue = "$routeID")
             ) {
                 popUpTo(
-                    "RouteDetailDriverScreen/{routeId}".replace(
-                        oldValue = "{routeId}",
-                        newValue = "$routeID"
-                    )) { inclusive = true }
+                    "RouteDetailDriverScreen/{routeId}"){ inclusive = true }
             }
         }
-        // Resets the orderAdded state
-        manageRouteViewModel.onRouteAdded(false)
     }
 
     Scaffold( modifier = Modifier
@@ -239,7 +240,8 @@ fun PublishRouteScreen(command: String, routeID: Int, navHost: NavHostController
                             tagsError,
                             tagsList,
                             comment,
-                            command
+                            command,
+                            user!!.userId
                         )
                     }
                 }
@@ -263,7 +265,8 @@ private fun PublishRouteContent3(
     tagsError: Boolean,
     tagsList: List<String>,
     comment: String,
-    command: String
+    command: String,
+    userID: Int
 ) {
 
     Row(
@@ -465,9 +468,10 @@ private fun PublishRouteContent3(
         colors = TextFieldDefaults.colors(
             focusedIndicatorColor = MaterialTheme.colorScheme.primary,
             unfocusedIndicatorColor = Color.Gray,
-            disabledIndicatorColor = Color.Transparent,
-            focusedContainerColor = Color.White,
-            unfocusedContainerColor = Color.White,
+            disabledContainerColor = MaterialTheme.colorScheme.background,
+            disabledIndicatorColor = Color.Gray,
+            focusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
+            unfocusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
             errorTextColor = MaterialTheme.colorScheme.primary,
             errorContainerColor = GrayRC
         ),
@@ -516,8 +520,8 @@ private fun PublishRouteContent3(
         PublishBackButton(manageRouteViewModel::previousStep)
         // Publish route button
         PublishButton( onClick = {  if(command == "create"){
-            manageRouteViewModel.addRoute()
-        } else manageRouteViewModel.updateRoute() },
+            manageRouteViewModel.addRoute(userID)
+        } else manageRouteViewModel.updateRoute(userID) },
 
             text = if(command == "create") "Publicar ruta" else "Editar ruta")
     }
@@ -641,13 +645,16 @@ private fun PublishRouteContent2(
     BasicTextField(value = maxDetourKm,
         onValueChange = manageRouteViewModel::setMaxDetourKm,
         placeholder = "Max desviament (km)",
-        isError = screen2Errors[0]
+        isError = screen2Errors[0],
+        keyboardType = KeyboardType.Decimal
     )
     // Available Seats
     BasicTextField(value = availableSeats,
         onValueChange = manageRouteViewModel::setSeats,
         placeholder = "Seients disponibles",
-        isError = screen2Errors[1]
+        isError = screen2Errors[1],
+        keyboardType = KeyboardType.Number
+
     )
     // Available Space
     MultilineTextField(value = availableSpace,
@@ -687,7 +694,8 @@ private fun PublishRouteContent2(
         value = costKm,
         onValueChange = manageRouteViewModel::setCostKM,
         placeholder = "0",
-        isError = screen2Errors[3]
+        isError = screen2Errors[3],
+        keyboardType = KeyboardType.Decimal
     )
     // Vehicle Model
     BasicTextField(

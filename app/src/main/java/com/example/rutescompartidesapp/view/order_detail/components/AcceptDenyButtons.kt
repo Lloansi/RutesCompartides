@@ -32,7 +32,9 @@ fun AcceptDenyButtons(colorDenyButton: Color, orderDetailViewModel: OrderDetailV
     ){
         ExtendedFloatingActionButton(
             containerColor = MaterialTheme.colorScheme.tertiary,
-            onClick = { orderDetailViewModel.toggleVisibility() }
+            onClick = {
+                println()
+            }
         ) {
             Icon(imageVector = Icons.Filled.ThumbUp, contentDescription = "Accept order",
                 tint = Color.White)
@@ -45,7 +47,8 @@ fun AcceptDenyButtons(colorDenyButton: Color, orderDetailViewModel: OrderDetailV
         ExtendedFloatingActionButton(
             containerColor = colorDenyButton,
             contentColor = Color.White,
-            onClick = { orderDetailViewModel.toggleVisibility() }
+            onClick = {                 println()
+            }
         ) {
             Icon(imageVector = Icons.Filled.ThumbDown, contentDescription = "Accept order")
             Spacer(modifier = Modifier.width(5.dp))

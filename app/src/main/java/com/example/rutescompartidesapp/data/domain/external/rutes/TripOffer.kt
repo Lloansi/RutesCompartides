@@ -1,9 +1,9 @@
-package com.example.rutescompartidesapp.data.domain.rutes
+package com.example.rutescompartidesapp.data.domain.external.rutes
 
-import com.example.rutescompartidesapp.data.domain.LogisticNode
+import com.example.rutescompartidesapp.data.domain.external.LogisticNode
 import com.example.rutescompartidesapp.data.domain.map.Itinerary
 import com.example.rutescompartidesapp.data.domain.map.Point
-import com.example.rutescompartidesapp.data.domain.user.User
+import com.example.rutescompartidesapp.data.domain.external.user.User
 import java.util.*
 
 data class TripOffer(

@@ -19,6 +19,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccessTime
 import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Cancel
@@ -61,6 +62,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
@@ -79,22 +81,27 @@ import com.example.rutescompartidesapp.view.generic_components.MultilineTextFiel
 import com.example.rutescompartidesapp.view.generic_components.PublishBackButton
 import com.example.rutescompartidesapp.view.generic_components.PublishButton
 import com.example.rutescompartidesapp.view.generic_components.PublishNextButton
+import com.example.rutescompartidesapp.view.generic_components.TimePickerDialog
 import com.example.rutescompartidesapp.view.generic_components.popups.BasicPopup
 import com.example.rutescompartidesapp.view.generic_components.popups.ConditionScrollPopup
+import com.example.rutescompartidesapp.view.login.LoginViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PublishOrderScreen(command: String, orderID: Int, navHost: NavHostController) {
-    val manageOrderViewModel = ManageOrderViewModel()
-
+fun PublishOrderScreen(command: String, orderID: Int, navHost: NavHostController,
+                       loginViewModel: LoginViewModel, manageOrderViewModel: ManageOrderViewModel) {
+    val user by loginViewModel.user.collectAsStateWithLifecycle()
     // Screen 1 variables
     val currentStep by manageOrderViewModel.step.collectAsStateWithLifecycle()
     val orderName by manageOrderViewModel.internalOrderName.collectAsStateWithLifecycle()
     val originName by manageOrderViewModel.originName.collectAsStateWithLifecycle()
     val destinationName by manageOrderViewModel.destinationName.collectAsStateWithLifecycle()
-    val minTimeArrival by manageOrderViewModel.minTimeArrivalText.collectAsStateWithLifecycle()
-    val maxTimeArrival by manageOrderViewModel.maxTimeArrivalText.collectAsStateWithLifecycle()
+    val dataSortida by manageOrderViewModel.dataSortida.collectAsStateWithLifecycle()
+    val tempsSortida by manageOrderViewModel.horaSortidaText.collectAsStateWithLifecycle()
+    val dataArribada by manageOrderViewModel.dataArribada.collectAsStateWithLifecycle()
+    val tempsArribada by manageOrderViewModel.horaArribadaText.collectAsStateWithLifecycle()
     val isDatePickerShowing by manageOrderViewModel.datePickerDialogIsShowing.collectAsStateWithLifecycle()
+    val isTimePickerShowing by manageOrderViewModel.timePickerDialogIsShowing.collectAsStateWithLifecycle()
     val isCondicionsPopupShowing by manageOrderViewModel.isCondicionsPopupShowing.collectAsStateWithLifecycle()
     val isIsoterm by manageOrderViewModel.isIsoterm.collectAsStateWithLifecycle()
     val isRefrigerat by manageOrderViewModel.isRefrigerat.collectAsStateWithLifecycle()
@@ -134,23 +141,19 @@ fun PublishOrderScreen(command: String, orderID: Int, navHost: NavHostController
     val orderToEdit by manageOrderViewModel.orderToEdit.collectAsStateWithLifecycle()
     val orderAdded by manageOrderViewModel.orderAdded.collectAsStateWithLifecycle()
     if (orderAdded) {
+        // Resets the orderAdded state
+        manageOrderViewModel.onOrderAdded(false)
         if (command == "create"){
             navHost.navigate("MapScreen"){
                 popUpTo("MapScreen") { inclusive = true }
             }
         } else {
-            navHost.navigate("OrderDetailScreen/{packageId}".replace(
-                "{packageId}", orderID.toString())
+            navHost.navigate("OrderDetailScreen/{orderID}".replace(
+                "{orderID}", orderID.toString())
             ){
-                popUpTo("OrderDetailScreen/{packageId}".replace(
-                    "{packageId}", orderID.toString())
-                ){
-                    inclusive = true
-                }
+                popUpTo("OrderDetailScreen/{orderID}") { inclusive = true }
             }
         }
-        // Resets the orderAdded state
-        manageOrderViewModel.onOrderAdded(false)
     }
 
     Scaffold( modifier = Modifier
@@ -193,18 +196,16 @@ fun PublishOrderScreen(command: String, orderID: Int, navHost: NavHostController
                         originName,
                         destinationName,
                         isDataMinPopupShowing,
-                        minTimeArrival,
                         isDataMaxPopupShowing,
-                        maxTimeArrival,
                         isDatePickerShowing,
+                        isTimePickerShowing,
                         datePickerState,
+                        dataSortida,
+                        tempsSortida,
+                        dataArribada,
+                        tempsArribada,
                         isFlexDate,
                         wantsCarpool,
-                        isCondicionsPopupShowing,
-                        isIsoterm,
-                        isRefrigerat,
-                        isCongelat,
-                        isSenseHumitat,
                         tagsText,
                         tagsError,
                         tagsList.toList(),
@@ -213,6 +214,11 @@ fun PublishOrderScreen(command: String, orderID: Int, navHost: NavHostController
                 }
                 2 -> {
                     PublishOrderContent2(
+                        isCondicionsPopupShowing,
+                        isIsoterm,
+                        isRefrigerat,
+                        isCongelat,
+                        isSenseHumitat,
                         packageNumber,
                         manageOrderViewModel,
                         arePackagesFragile,
@@ -233,7 +239,8 @@ fun PublishOrderScreen(command: String, orderID: Int, navHost: NavHostController
                         clientPhone,
                         isPuntHabitualDataChecked,
                         comment,
-                        command
+                        command,
+                        user!!.userId
                     )
                 }
             }
@@ -253,7 +260,8 @@ private fun PublishOrderContent3(
     clientPhone: String,
     isPuntHabitualDataChecked: Boolean,
     comment: String,
-    command: String
+    command: String,
+    userID: Int
 ) {
     // Delivery Note TextField
     Row(
@@ -347,16 +355,22 @@ private fun PublishOrderContent3(
         // Next Button
         PublishButton(
             onClick = {  if(command == "create"){
-                manageOrderViewModel.addOrder()
-            } else manageOrderViewModel.updateOrder() },
+                manageOrderViewModel.addOrder(userID)
+            } else manageOrderViewModel.updateOrder(userID) },
 
             text = if(command == "create") "Publicar comanda" else "Editar comanda"
         )
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun PublishOrderContent2(
+    isCondicionsPopupShowing: Boolean,
+    isIsoterm: Boolean,
+    isRefrigerat: Boolean,
+    isCongelat: Boolean,
+    isSenseHumitat: Boolean,
     packageNumber: String,
     manageOrderViewModel: ManageOrderViewModel,
     arePackagesFragile: Boolean,
@@ -367,327 +381,6 @@ private fun PublishOrderContent2(
     wantsDeliveryNotification: Boolean,
     screen2Errors: List<Boolean>
 ) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth(0.95f)
-            .padding(bottom = 20.dp),
-        horizontalArrangement = Arrangement.SpaceEvenly,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        OutlinedTextField(
-            modifier = Modifier.weight(0.65f),
-            value = packageNumber,
-            onValueChange = manageOrderViewModel::setPackagesNum,
-            placeholder = {
-                Text(text = "Nombre de paquets", color = Color.Gray)
-            },
-            shape = RoundedCornerShape(16.dp),
-            colors = TextFieldDefaults.colors(
-                focusedIndicatorColor = MaterialTheme.colorScheme.primary,
-                unfocusedIndicatorColor = Color.Gray,
-                disabledContainerColor = MaterialTheme.colorScheme.background,
-                disabledIndicatorColor = Color.Gray,
-                focusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
-                unfocusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
-            ),
-            keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Next
-            ),
-            singleLine = true,
-            isError = screen2Errors[0]
-        )
-        // Fragile Checkbox
-        Checkbox(
-            checked = arePackagesFragile,
-            onCheckedChange = { manageOrderViewModel.onPackagesFragileChange() }
-        )
-        Text(
-            modifier = Modifier.weight(0.30f),
-            text = "Són fràgils",
-            style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.onBackground
-        )
-    }
-    Row(
-        modifier = Modifier
-            .fillMaxWidth(0.95f)
-            .padding(bottom = 10.dp),
-        horizontalArrangement = Arrangement.SpaceEvenly,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(
-            modifier = Modifier.weight(0.30f),
-            text = "Mides i pes dels paquets",
-            style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.onBackground
-        )
-    }
-    // Height, Width, Length, Weight
-    MeasurementsTextField(
-        value = packageHeight,
-        onValueChange = manageOrderViewModel::setPackagesHeight,
-        placeholder = "Alçària (cm)",
-        suffix = "cm",
-        isError = screen2Errors[1]
-    )
-    MeasurementsTextField(
-        value = packageWidth,
-        onValueChange = manageOrderViewModel::setPackagesWidth,
-        placeholder = "Amplada (cm)",
-        suffix = "cm",
-        isError = screen2Errors[2]
-    )
-    MeasurementsTextField(
-        value = packageLength,
-        onValueChange = manageOrderViewModel::setPackagesLength,
-        placeholder = "Llargada (cm)",
-        suffix = "cm",
-        isError = screen2Errors[3]
-    )
-    MeasurementsTextField(
-        value = packageWeight,
-        onValueChange = manageOrderViewModel::setPackagesWeight,
-        placeholder = "Pes (kg)",
-        suffix = "kg",
-        isError = screen2Errors[4]
-    )
-
-    // Notification Checkbox
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Checkbox(
-            checked = wantsDeliveryNotification,
-            onCheckedChange = { manageOrderViewModel.onWantsDeliveryNotificationChange() }
-        )
-        Text(
-            text = "Vull rebre una notificació quan s’hagi entregat la comanda.",
-            style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.onBackground
-        )
-    }
-    // Buttons
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 24.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceEvenly
-    ) {
-        // Back button
-        PublishBackButton(manageOrderViewModel::previousStep)
-        // Next Button
-        PublishNextButton(
-            onClickCheck = manageOrderViewModel::checkAllValues,
-        )
-    }
-}
-
-@Composable
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
-private fun PublishOrderContent1(
-    orderName: String,
-    manageOrderViewModel: ManageOrderViewModel,
-    originName: String,
-    destinationName: String,
-    isDataMinPopupShowing: Boolean,
-    minTimeArrival: String,
-    isDataMaxPopupShowing: Boolean,
-    maxTimeArrival: String,
-    isDatePickerShowing: Boolean,
-    datePickerState: DatePickerState,
-    isFlexDate: Boolean,
-    wantsCarpool: Boolean,
-    isCondicionsPopupShowing: Boolean,
-    isIsoterm: Boolean,
-    isRefrigerat: Boolean,
-    isCongelat: Boolean,
-    isSenseHumitat: Boolean,
-    tagsText: String,
-    tagsError: Boolean,
-    tagsList: List<String>,
-    screen1Errors: List<Boolean>
-) {
-    BasicTextField(
-        value = orderName,
-        onValueChange = manageOrderViewModel::setInternalOrderName,
-        placeholder = "Nom intern de la comanda",
-        isError = screen1Errors[0]
-    )
-    IconTextField(value = originName,
-        onValueChange = manageOrderViewModel::setOriginName,
-        placeholder = "Punt de sortida",
-        leadingIcon = {
-            Icon(imageVector = Icons.Filled.House, contentDescription = "Origin Location Icon")
-        },
-        isError = screen1Errors[1])
-    IconTextField(value = destinationName,
-        onValueChange = manageOrderViewModel::setDestinationName,
-        placeholder = "Punt d'arribada",
-        leadingIcon = {
-            Icon(
-                modifier = Modifier.size(24.dp),
-                painter = painterResource(id = R.drawable.map_icon),
-                contentDescription = "Destination Location Icon"
-            )
-        },
-        isError = screen1Errors[2])
-    // MinTimeArrival
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(bottom = 10.dp),
-        horizontalArrangement = Arrangement.SpaceEvenly,
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        IconButton(
-            onClick = { manageOrderViewModel.onDataMinPopupShow(true) },
-            colors = IconButtonDefaults.iconButtonColors(
-                containerColor = MaterialTheme.colorScheme.secondaryContainer
-            )
-        ) {
-            Icon(
-                imageVector = Icons.Filled.QuestionMark,
-                contentDescription = "Frequency Icon",
-                tint = MaterialTheme.colorScheme.onSecondaryContainer
-            )
-        }
-        // MinTimeArrival Text field
-        DateTimePickerTextField(
-            invocation = {
-                manageOrderViewModel.onDatePickerDialogShow(
-                    isMin = true,
-                    isShowing = true
-                )
-            },
-            time = minTimeArrival,
-            onValueChange = manageOrderViewModel::onMinTimeArrivalChange,
-            placeholder = "Data mínima d'arribada",
-            icon = Icons.Filled.CalendarMonth,
-            isError = screen1Errors[3]
-        )
-    }
-    if (isDataMinPopupShowing){
-        BasicPopup(offset = IntOffset((LocalConfiguration.current.screenWidthDp / 2), (LocalConfiguration.current.screenHeightDp)),
-            onDismisRequest = { manageOrderViewModel.onDataMaxPopupShow(
-                false ) },
-            content = { Text(text = "Indicar a partir de quin moment podries tenir llesta la teva comanda per iniciar el transport.",
-                color = MaterialTheme.colorScheme.onBackground) })
-    }
-    // MaxTimeArrival
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(bottom = 4.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        IconButton(
-            onClick = { manageOrderViewModel.onDataMaxPopupShow(true)  },
-            colors = IconButtonDefaults.iconButtonColors(
-                containerColor = MaterialTheme.colorScheme.secondaryContainer
-            )
-        ) {
-            Icon(
-                imageVector = Icons.Filled.QuestionMark,
-                contentDescription = "Frequency Icon",
-                tint = MaterialTheme.colorScheme.onSecondaryContainer
-            )
-        }
-        if (isDataMaxPopupShowing){
-            BasicPopup(offset = IntOffset((LocalConfiguration.current.screenWidthDp / 2), (LocalConfiguration.current.screenHeightDp)),
-                onDismisRequest = { manageOrderViewModel.onDataMaxPopupShow(
-                    false ) },
-                content = { Text(text = "Indicar la data màxima en què ha d'arribar la teva comanda.",
-                    color = MaterialTheme.colorScheme.onBackground) })
-        }
-        // MaxTimeArrival Text field
-        DateTimePickerTextField(
-            invocation = {
-                manageOrderViewModel.onDatePickerDialogShow(
-                    isMin = false,
-                    isShowing = true
-                )
-            },
-            time = maxTimeArrival,
-            onValueChange = manageOrderViewModel::onMaxTimeArrivalTextChange,
-            placeholder = "Data màxima d'arribada",
-            icon = Icons.Filled.CalendarMonth,
-            isError = screen1Errors[4]
-        )
-    }
-    // Date Picker Dialog
-    if (isDatePickerShowing) {
-        DatePickerDialog(
-            colors = DatePickerDefaults.colors(
-                //containerColor = Color.White
-            ),
-            onDismissRequest = {
-                manageOrderViewModel.onDatePickerDialogShow(
-                    isMin = true,
-                    isShowing = false
-                )
-            },
-            confirmButton = {
-                ElevatedButton(
-                    onClick = {
-                        datePickerState.selectedDateMillis?.let { dateInMillis ->
-                            manageOrderViewModel.onDatePickerDialogConfirm(dateInMillis)
-                        }
-                    },
-                    colors = ButtonDefaults.elevatedButtonColors(
-                        contentColor = MaterialTheme.colorScheme.secondary,
-                        containerColor = MaterialTheme.colorScheme.primary
-                    )
-                ) {
-                    Text(text = "Confirmar")
-                }
-            },
-            dismissButton = {
-                ElevatedButton(onClick = {
-                    manageOrderViewModel.onDatePickerDialogShow(
-                        isMin = false,
-                        isShowing = true
-                    )
-                }) {
-                    Text(text = "Salir")
-                }
-            }
-        ) {
-            DatePicker(state = datePickerState)
-        }
-    }
-    // Arrival Time Flexibility Checkbox
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Checkbox(
-            checked = isFlexDate,
-            onCheckedChange = { manageOrderViewModel.onFlexDateChange() }
-        )
-        Text(
-            text = "Data d'arribada flexible",
-            style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.onBackground
-        )
-    }
-    // Arrival Time Flexibility Checkbox
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Checkbox(
-            checked = wantsCarpool,
-            onCheckedChange = { manageOrderViewModel.onWantsCarpoolChange() }
-        )
-        Text(
-            text = "Vull ocupar un seient buit al vehicle",
-            style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.onBackground
-        )
-    }
     // Conditions Chips & Popup
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -911,6 +604,372 @@ private fun PublishOrderContent1(
             }
         }
     }
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth(0.95f)
+            .padding(bottom = 20.dp),
+        horizontalArrangement = Arrangement.SpaceEvenly,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        OutlinedTextField(
+            modifier = Modifier.weight(0.65f),
+            value = packageNumber,
+            onValueChange = manageOrderViewModel::setPackagesNum,
+            placeholder = {
+                Text(text = "Nombre de paquets", color = Color.Gray)
+            },
+            shape = RoundedCornerShape(16.dp),
+            colors = TextFieldDefaults.colors(
+                focusedIndicatorColor = MaterialTheme.colorScheme.primary,
+                unfocusedIndicatorColor = Color.Gray,
+                disabledContainerColor = MaterialTheme.colorScheme.background,
+                disabledIndicatorColor = Color.Gray,
+                focusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
+                unfocusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
+            ),
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Number,
+                imeAction = ImeAction.Next
+            ),
+            singleLine = true,
+            isError = screen2Errors[0]
+        )
+        // Fragile Checkbox
+        Checkbox(
+            checked = arePackagesFragile,
+            onCheckedChange = { manageOrderViewModel.onPackagesFragileChange() }
+        )
+        Text(
+            modifier = Modifier.weight(0.30f),
+            text = "Són fràgils",
+            style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.onBackground
+        )
+    }
+    Row(
+        modifier = Modifier
+            .fillMaxWidth(0.95f)
+            .padding(bottom = 10.dp),
+        horizontalArrangement = Arrangement.SpaceEvenly,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            modifier = Modifier.weight(0.30f),
+            text = "Mides i pes dels paquets",
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.onBackground,
+        )
+    }
+    // Height, Width, Length, Weight
+    MeasurementsTextField(
+        value = packageHeight,
+        onValueChange = manageOrderViewModel::setPackagesHeight,
+        placeholder = "Alçària (cm)",
+        suffix = "cm",
+        isError = screen2Errors[1],
+        keyboardType = KeyboardType.Decimal
+
+    )
+    MeasurementsTextField(
+        value = packageWidth,
+        onValueChange = manageOrderViewModel::setPackagesWidth,
+        placeholder = "Amplada (cm)",
+        suffix = "cm",
+        isError = screen2Errors[2],
+        keyboardType = KeyboardType.Decimal
+    )
+    MeasurementsTextField(
+        value = packageLength,
+        onValueChange = manageOrderViewModel::setPackagesLength,
+        placeholder = "Llargada (cm)",
+        suffix = "cm",
+        isError = screen2Errors[3],
+        keyboardType = KeyboardType.Decimal
+    )
+    MeasurementsTextField(
+        value = packageWeight,
+        onValueChange = manageOrderViewModel::setPackagesWeight,
+        placeholder = "Pes (kg)",
+        suffix = "kg",
+        isError = screen2Errors[4],
+        keyboardType = KeyboardType.Decimal
+    )
+
+    // Notification Checkbox
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Checkbox(
+            checked = wantsDeliveryNotification,
+            onCheckedChange = { manageOrderViewModel.onWantsDeliveryNotificationChange() }
+        )
+        Text(
+            text = "Vull rebre una notificació quan s’hagi entregat la comanda.",
+            style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.onBackground
+        )
+    }
+    // Buttons
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 24.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceEvenly
+    ) {
+        // Back button
+        PublishBackButton(manageOrderViewModel::previousStep)
+        // Next Button
+        PublishNextButton(
+            onClickCheck = manageOrderViewModel::checkAllValues,
+        )
+    }
+}
+
+@Composable
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
+private fun PublishOrderContent1(
+    orderName: String,
+    manageOrderViewModel: ManageOrderViewModel,
+    originName: String,
+    destinationName: String,
+    isDataMinPopupShowing: Boolean,
+    isDataMaxPopupShowing: Boolean,
+    isDatePickerShowing: Boolean,
+    isTimePickerShowing: Boolean,
+    datePickerState: DatePickerState,
+    dateDepart: String,
+    timeDepart: String,
+    dateArrival: String,
+    timeArrival: String,
+    isFlexDate: Boolean,
+    wantsCarpool: Boolean,
+    tagsText: String,
+    tagsError: Boolean,
+    tagsList: List<String>,
+    screen1Errors: List<Boolean>
+) {
+    BasicTextField(
+        value = orderName,
+        onValueChange = manageOrderViewModel::setInternalOrderName,
+        placeholder = "Nom intern de la comanda",
+        isError = screen1Errors[0]
+    )
+    IconTextField(value = originName,
+        onValueChange = manageOrderViewModel::setOriginName,
+        placeholder = "Punt de sortida",
+        leadingIcon = {
+            Icon(imageVector = Icons.Filled.House, contentDescription = "Origin Location Icon")
+        },
+        isError = screen1Errors[1])
+    IconTextField(value = destinationName,
+        onValueChange = manageOrderViewModel::setDestinationName,
+        placeholder = "Punt d'arribada",
+        leadingIcon = {
+            Icon(
+                modifier = Modifier.size(24.dp),
+                painter = painterResource(id = R.drawable.map_icon),
+                contentDescription = "Destination Location Icon"
+            )
+        },
+        isError = screen1Errors[2])
+    // MinTimeArrival
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 4.dp),
+        horizontalArrangement = Arrangement.SpaceEvenly,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        IconButton(
+            onClick = { manageOrderViewModel.onDataMinPopupShow(true) },
+            colors = IconButtonDefaults.iconButtonColors(
+                containerColor = MaterialTheme.colorScheme.secondaryContainer
+            )
+        ) {
+            Icon(
+                imageVector = Icons.Filled.QuestionMark,
+                contentDescription = "Frequency Icon",
+                tint = MaterialTheme.colorScheme.onSecondaryContainer
+            )
+        }
+        // Data Sortida Text field
+        DateTimePickerTextField(
+            invocation = {
+                manageOrderViewModel.onDatePickerDialogShow(
+                    isMin = true,
+                    isShowing = true
+                )
+            },
+            time = dateDepart,
+            onValueChange = manageOrderViewModel::onDataSortidaChange,
+            placeholder = "Data mínima d'arribada",
+            icon = Icons.Filled.CalendarMonth,
+            isError = screen1Errors[3]
+        )
+    }
+    if (isDataMinPopupShowing){
+        BasicPopup(offset = IntOffset((LocalConfiguration.current.screenWidthDp / 2), (LocalConfiguration.current.screenHeightDp)),
+            onDismisRequest = { manageOrderViewModel.onDataMaxPopupShow(
+                false ) },
+            content = { Text(text = "Indicar a partir de quin moment podries tenir llesta la teva comanda per iniciar el transport.",
+                color = MaterialTheme.colorScheme.onBackground) })
+    }
+    DateTimePickerTextField(
+        invocation = {
+            manageOrderViewModel.onTimePickerDialogShow(
+                isDepart = true,
+                isShowing = true
+            )
+        },
+        time = timeDepart,
+        onValueChange = manageOrderViewModel::onTimeDepartChange,
+        placeholder = "Hora d'arribada",
+        icon = Icons.Filled.AccessTime,
+        isError = screen1Errors[4]
+    )
+
+    // Data Arribada
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 4.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        IconButton(
+            onClick = { manageOrderViewModel.onDataMaxPopupShow(true)  },
+            colors = IconButtonDefaults.iconButtonColors(
+                containerColor = MaterialTheme.colorScheme.secondaryContainer
+            )
+        ) {
+            Icon(
+                imageVector = Icons.Filled.QuestionMark,
+                contentDescription = "Frequency Icon",
+                tint = MaterialTheme.colorScheme.onSecondaryContainer
+            )
+        }
+        if (isDataMaxPopupShowing){
+            BasicPopup(offset = IntOffset((LocalConfiguration.current.screenWidthDp / 2), (LocalConfiguration.current.screenHeightDp)),
+                onDismisRequest = { manageOrderViewModel.onDataMaxPopupShow(
+                    false ) },
+                content = { Text(text = "Indicar la data màxima en què ha d'arribar la teva comanda.",
+                    color = MaterialTheme.colorScheme.onBackground) })
+        }
+        // Data Arribada Text field
+        DateTimePickerTextField(
+            invocation = {
+                manageOrderViewModel.onDatePickerDialogShow(
+                    isMin = false,
+                    isShowing = true
+                )
+            },
+            time = dateArrival,
+            onValueChange = manageOrderViewModel::onDataArribadaChange,
+            placeholder = "Data màxima d'arribada",
+            icon = Icons.Filled.CalendarMonth,
+            isError = screen1Errors[5]
+        )
+    }
+
+    // Temps Arribada Text field
+    DateTimePickerTextField(
+        invocation = {
+            manageOrderViewModel.onTimePickerDialogShow(
+                isDepart = false,
+                isShowing = true
+            )
+        },
+        time = timeArrival,
+        onValueChange = manageOrderViewModel::onTimeArrivalChange,
+        placeholder = "Hora d'arribada",
+        icon = Icons.Filled.AccessTime,
+        isError = screen1Errors[6]
+    )
+
+    // Time Picker Dialog
+    if (isTimePickerShowing){
+        TimePickerDialog(
+            onCancel = { manageOrderViewModel.onTimePickerDialogShow(
+                isDepart = true,
+                isShowing =false)
+            },
+            onConfirm = manageOrderViewModel::onTimePickerDialogConfirm )
+    }
+
+    // Date Picker Dialog
+    if (isDatePickerShowing) {
+        DatePickerDialog(
+            colors = DatePickerDefaults.colors(
+                //containerColor = Color.White
+            ),
+            onDismissRequest = {
+                manageOrderViewModel.onDatePickerDialogShow(
+                    isMin = true,
+                    isShowing = false
+                )
+            },
+            confirmButton = {
+                ElevatedButton(
+                    onClick = {
+                        datePickerState.selectedDateMillis?.let { dateInMillis ->
+                            manageOrderViewModel.onDatePickerDialogConfirm(dateInMillis)
+                        }
+                    },
+                    colors = ButtonDefaults.elevatedButtonColors(
+                        contentColor = MaterialTheme.colorScheme.secondary,
+                        containerColor = MaterialTheme.colorScheme.primary
+                    )
+                ) {
+                    Text(text = "Confirmar")
+                }
+            },
+            dismissButton = {
+                ElevatedButton(onClick = {
+                    manageOrderViewModel.onDatePickerDialogShow(
+                        isMin = false,
+                        isShowing = true
+                    )
+                }) {
+                    Text(text = "Salir")
+                }
+            }
+        ) {
+            DatePicker(state = datePickerState)
+        }
+    }
+    // Arrival Time Flexibility Checkbox
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Checkbox(
+            checked = isFlexDate,
+            onCheckedChange = { manageOrderViewModel.onFlexDateChange() }
+        )
+        Text(
+            text = "Data d'arribada flexible",
+            style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.onBackground
+        )
+    }
+    // Arrival Time Flexibility Checkbox
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Checkbox(
+            checked = wantsCarpool,
+            onCheckedChange = { manageOrderViewModel.onWantsCarpoolChange() }
+        )
+        Text(
+            text = "Vull ocupar un seient buit al vehicle",
+            style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.onBackground
+        )
+    }
     // Tags
     // Tag TextField
     OutlinedTextField(
@@ -944,9 +1003,10 @@ private fun PublishOrderContent1(
         colors = TextFieldDefaults.colors(
             focusedIndicatorColor = MaterialTheme.colorScheme.primary,
             unfocusedIndicatorColor = Color.Gray,
-            disabledIndicatorColor = Color.Transparent,
-            focusedContainerColor = Color.White,
-            unfocusedContainerColor = Color.White,
+            disabledContainerColor = MaterialTheme.colorScheme.background,
+            disabledIndicatorColor = Color.Gray,
+            focusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
+            unfocusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
             errorTextColor = MaterialTheme.colorScheme.primary,
             errorContainerColor = GrayRC
         ),

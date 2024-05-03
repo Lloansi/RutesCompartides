@@ -1,4 +1,4 @@
-package com.example.rutescompartidesapp.data.domain.user
+package com.example.rutescompartidesapp.data.domain.external.user
 
 data class UserProfile(
     val user: User,

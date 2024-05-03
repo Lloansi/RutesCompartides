@@ -1,6 +1,8 @@
 package com.example.rutescompartidesapp.view.order_detail.components
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,15 +23,14 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun TwoTexts(value1: String, value2: String) {
-    Row (
+    FlowRow (
         modifier = Modifier
             .padding(top = 8.dp, bottom = 8.dp)
             .fillMaxWidth(),
-        horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically
-    ){
+        horizontalArrangement = Arrangement.Center){
         Text( value1,
             style = MaterialTheme.typography.bodyMedium.copy(
                 fontWeight = FontWeight.Normal,

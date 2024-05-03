@@ -1,10 +1,9 @@
-package com.example.rutescompartidesapp.view.route_detail.viewModels
+package com.example.rutescompartidesapp.view.map.viewModels
 
 import android.annotation.SuppressLint
 import android.graphics.drawable.Drawable
 import android.view.MotionEvent
 import androidx.lifecycle.ViewModel
-import com.example.rutescompartidesapp.view.map.viewModels.MapViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import org.osmdroid.bonuspack.routing.RoadManager

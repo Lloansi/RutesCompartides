@@ -1,10 +1,12 @@
 package com.example.rutescompartidesapp.view.publish_route
 
 import androidx.lifecycle.ViewModel
-import com.example.rutescompartidesapp.data.domain.RouteForList
-import com.example.rutescompartidesapp.view.routes_order_list.ListConstants
+import com.example.rutescompartidesapp.data.domain.routes.SharedDataRouteOrder
+import com.example.rutescompartidesapp.data.domain.routes.Routes
+import com.example.rutescompartidesapp.utils.LocalConstants
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import org.osmdroid.util.GeoPoint
 import java.time.Instant
 import java.time.ZoneId
 import java.util.Calendar
@@ -164,9 +166,7 @@ class ManageRouteViewModel: ViewModel(){
     Variables to check if the date or time that is being changed is the departure or arrival one
     */
     private val _isDateDepart = MutableStateFlow(true)
-    private val isDateDepart = _isDateDepart.asStateFlow()
     private val _isTimeDepart = MutableStateFlow(true)
-    private val isTimeDepart = _isDateDepart.asStateFlow()
     fun onDateDepartChange(text: String){
         _dateDepart.value = text
     }
@@ -224,12 +224,13 @@ class ManageRouteViewModel: ViewModel(){
      * @param timePicked: The time picked from the TimePickerDialog
      */
     fun onTimePickerDialogConfirm(timePicked: Calendar){
+
         timePicked.timeInMillis.let {
             val time = Instant.ofEpochMilli(it).atZone(ZoneId.systemDefault()).toLocalTime()
             if (_isTimeDepart.value) {
-                _timeDepartText.value = "${time.hour}:${time.minute}"
+                _timeDepartText.value = "${time.hour}:${String.format("%02d", time.minute)}"
             } else {
-                _timeArrivalText.value = "${time.hour}:${time.minute}"
+                _timeArrivalText.value = "${time.hour}:${String.format("%02d", time.minute)}"
             }
         }
         _timePickerDialogIsShowing.value = false
@@ -400,12 +401,12 @@ class ManageRouteViewModel: ViewModel(){
 
     private val _routeAdded = MutableStateFlow(false)
     val routeAdded = _routeAdded.asStateFlow()
-    fun addRoute(){
+    fun addRoute(userID: Int){
         // TODO Cambiar la classe de la ruta i fer servir la oficial
-        val lastRouteID = ListConstants.routeList.maxByOrNull { route -> route.routeID }!!.routeID
+        val lastRouteID = LocalConstants.routeList.maxByOrNull { route -> route.routeID }!!.routeID
         // Elimina els punts intermitjos buits
         val cleanStepNameList = stepNameList.value.filter { step -> step.isNotEmpty() }
-        val newRoute = RouteForList(user = "Admin",
+        val newRoute = Routes(userID = userID,
             routeID = lastRouteID+1,
             routeName = _internalRouteName.value,
             puntSortida = _originName.value,
@@ -425,11 +426,17 @@ class ManageRouteViewModel: ViewModel(){
             maxDetourKm = _maxDetourKm.value.toFloat(),
             availableSeats = _availableSeats.value.toInt(),
             availableSpace = _availableSpace.value,
-            comment = _comment.value
+            comment = _comment.value,
+            startPoint = _originLocation.value.let { coordinates ->
+                GeoPoint(coordinates[0], coordinates[1])
+            },
+            endPoint = _destinationLocation.value.let { coordinates ->
+                GeoPoint(coordinates[0], coordinates[1])
+            }
             )
         // TODO Fer un POST a la API per duplicar la ruta
 
-        if (ListConstants.routeList.add(newRoute)){
+        if (LocalConstants.routeList.add(newRoute)){
             onRouteAdded(true)
         }
     }
@@ -440,10 +447,10 @@ class ManageRouteViewModel: ViewModel(){
 
 
     // Get the route
-    private val _routeToEdit = MutableStateFlow<RouteForList?>(null)
+    private val _routeToEdit = MutableStateFlow<Routes?>(null)
     val routeToEdit = _routeToEdit.asStateFlow()
     fun getRoute(routeID: Int) {
-        _routeToEdit.value =  ListConstants.routeList.find { route -> route.routeID == routeID }!!
+        _routeToEdit.value =  LocalConstants.routeList.find { route -> route.routeID == routeID }!!
         updateRouteInfo()
     }
 
@@ -489,10 +496,10 @@ class ManageRouteViewModel: ViewModel(){
         }
     }
 
-    fun updateRoute(){
+    fun updateRoute(userID: Int){
         val cleanStepNameList = stepNameList.value.filter { step -> step.isNotEmpty() }
 
-        val updatedRoute = RouteForList(user = "Admin",
+        val updatedRoute = Routes(userID = userID,
             routeID = _routeToEdit.value!!.routeID,
             routeName = _internalRouteName.value,
             puntSortida = _originName.value,
@@ -512,13 +519,19 @@ class ManageRouteViewModel: ViewModel(){
             maxDetourKm = _maxDetourKm.value.toFloat(),
             availableSeats = _availableSeats.value.toInt(),
             availableSpace = _availableSpace.value,
-            comment = _comment.value
+            comment = _comment.value,
+            startPoint = _originLocation.value.let { coordinates ->
+                GeoPoint(coordinates[0], coordinates[1])
+            },
+            endPoint = _destinationLocation.value.let { coordinates ->
+                GeoPoint(coordinates[0], coordinates[1])
+            }
 
         )
         println(updatedRoute)
         // TODO Fer un PUT a la API per actualitzar la ruta
-        if (ListConstants.routeList.removeIf { route -> route.routeID == updatedRoute.routeID }){
-            ListConstants.routeList.add(updatedRoute)
+        if (LocalConstants.routeList.removeIf { route -> route.routeID == updatedRoute.routeID }){
+            LocalConstants.routeList.add(updatedRoute)
             onRouteAdded(true)
         }
     }
@@ -557,6 +570,18 @@ class ManageRouteViewModel: ViewModel(){
             }
         }
 
+    }
+
+
+    fun loadOrderInfo(sharedDataRouteOrder: SharedDataRouteOrder){
+        _originName.value = sharedDataRouteOrder.puntSortida
+        _destinationName.value = sharedDataRouteOrder.puntArribada
+        _dateDepart.value = sharedDataRouteOrder.dataSortida
+        _dateArrival.value = sharedDataRouteOrder.dataArribada
+        _isRefrigerat.value = sharedDataRouteOrder.isRefrigerat
+        _isCongelat.value = sharedDataRouteOrder.isCongelat
+        _isIsoterm.value = sharedDataRouteOrder.isIsoterm
+        _isSenseHumitat.value = sharedDataRouteOrder.isSenseHumitat
     }
 
 }

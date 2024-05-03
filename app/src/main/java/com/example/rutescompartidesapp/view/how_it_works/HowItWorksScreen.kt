@@ -1,4 +1,4 @@
-package com.example.rutescompartidesapp.view.com_funciona
+package com.example.rutescompartidesapp.view.how_it_works
 
 
 import androidx.compose.foundation.Image
@@ -37,7 +37,7 @@ import com.example.rutescompartidesapp.R
 import com.example.rutescompartidesapp.ui.theme.MateBlackRC
 import com.example.rutescompartidesapp.ui.theme.fredokaOne
 import com.example.rutescompartidesapp.ui.theme.openSans
-import com.example.rutescompartidesapp.view.com_funciona.components.TextLink
+import com.example.rutescompartidesapp.view.how_it_works.components.TextLink
 import com.example.rutescompartidesapp.view.generic_components.BackButtonArrow
 import com.example.rutescompartidesapp.view.generic_components.HeaderSphere
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer

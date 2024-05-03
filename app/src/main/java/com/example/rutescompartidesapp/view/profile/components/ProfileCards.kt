@@ -1,6 +1,5 @@
 package com.example.rutescompartidesapp.view.profile.components
 
-import android.util.Log
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.foundation.Image
@@ -22,22 +21,25 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.NavGraphNavigator
 import com.example.rutescompartidesapp.data.domain.ProfileItems
 import com.example.rutescompartidesapp.ui.theme.openSans
+import com.example.rutescompartidesapp.view.login.LoginViewModel
 import com.example.rutescompartidesapp.view.profile.ProfileViewModel
+import com.example.rutescompartidesapp.view.routes_order_list.viewmodels.RoutesOrderListViewModel
+import com.example.rutescompartidesapp.view.routes_order_list.viewmodels.TabRowViewModel
 
 @Composable
-fun CreateCardsWithItems(list: List<ProfileItems>, paddingBottom: Dp, paddingTop: Dp, viewModel: ProfileViewModel, navController: NavController) {
+fun CreateCardsWithItems(list: List<ProfileItems>, paddingBottom: Dp, paddingTop: Dp, viewModel: ProfileViewModel, navController: NavController, listNumber: Int,
+                         routesOrderListViewModel: RoutesOrderListViewModel, tabRowViewModel: TabRowViewModel,
+                         userID: Int,
+                         loginViewModel: LoginViewModel) {
     Card(
         modifier = Modifier
             .width(LocalConfiguration.current.screenWidthDp.dp - 50.dp)
@@ -56,10 +58,20 @@ fun CreateCardsWithItems(list: List<ProfileItems>, paddingBottom: Dp, paddingTop
                 onClick = {
                     when (list[i].title) {
                         "Les meves rutes" -> {
-                            viewModel.onClickItemPlaceholder(true)
+                            routesOrderListViewModel.onMyFilterActive(userID)
+                            tabRowViewModel.onSelectTab(0)
+                            navController.navigate("RoutesOrderListScreen"){
+                                popUpTo("ProfileScreen") { inclusive = true }
+                            }
+                            loginViewModel.updateCurrentIndex(1)
                         }
                         "Les meves comandes" -> {
-                            viewModel.onClickItemPlaceholder(true)
+                            routesOrderListViewModel.onMyFilterActive(userID)
+                            tabRowViewModel.onSelectTab(1)
+                            navController.navigate("RoutesOrderListScreen"){
+                                popUpTo("ProfileScreen") { inclusive = true }
+                            }
+                            loginViewModel.updateCurrentIndex(1)
                         }
                         "Notificacions" -> {
                             viewModel.onClickItemPlaceholder(true)
@@ -93,7 +105,7 @@ fun CreateCardsWithItems(list: List<ProfileItems>, paddingBottom: Dp, paddingTop
                             .padding(start = 5.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        if (list.size == 4) Image(painter = painterResource(id = routeItemsListIcons[i]), contentDescription = null, modifier = Modifier.width(25.dp))
+                        if (listNumber == 1) Image(painter = painterResource(id = routeItemsListIcons[i]), contentDescription = null, modifier = Modifier.width(25.dp))
                         else Image(painter = painterResource(id = userItemsListIcons[i]), contentDescription = null, modifier = Modifier.width(25.dp))
                         Column(
                             verticalArrangement = Arrangement.Center,

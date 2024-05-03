@@ -1,7 +1,7 @@
 package com.example.rutescompartidesapp.data.domain
 
 data class RouteForList(
-    val user: String,
+    val userID: Int,
     val routeID: Int,
     val routeName: String,
     val puntSortida: String,

@@ -22,15 +22,15 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.example.rutescompartidesapp.data.domain.OrderForList
+import com.example.rutescompartidesapp.data.domain.orders.Orders
 import com.example.rutescompartidesapp.ui.theme.MateBlackRC
 import com.example.rutescompartidesapp.ui.theme.OrangeRC
-import com.example.rutescompartidesapp.utils.roundTo1Decimal
+import com.example.rutescompartidesapp.utils.LocalConstants
+import com.example.rutescompartidesapp.utils.round
 
 
 @Composable
-fun TopCardInfo(order : OrderForList) {
+fun TopCardInfo(order : Orders) {
     ElevatedCard (
         modifier = Modifier.fillMaxWidth(),colors = CardDefaults.elevatedCardColors(
         containerColor = MateBlackRC)
@@ -47,14 +47,15 @@ fun TopCardInfo(order : OrderForList) {
                     Text(text = order.orderName, color = Color.White)
                 }
                 Row(modifier = Modifier.weight(2f), horizontalArrangement = Arrangement.End) {
-                    Text(text = order.user, color = OrangeRC, fontWeight = FontWeight.Bold)
+                    Text(text = LocalConstants.userList.first { it.userId == order.userID }.name
+                        , color = OrangeRC, fontWeight = FontWeight.Bold)
                 }
             }
             TopCardDetails(Icons.Outlined.Flag, heading = "Origen", value = order.puntSortida, color = MaterialTheme.colorScheme.primary, padding = 4.dp)
 
             TopCardDetails(Icons.Filled.Flag, heading = "Destinació", value = order.puntArribada, color = MaterialTheme.colorScheme.primary, padding = 4.dp)
 
-            TopCardDetails(Icons.Outlined.Route, heading = "Distància", value = "${order.distance.roundTo1Decimal()} km", color = MaterialTheme.colorScheme.primary, padding = 4.dp)
+            TopCardDetails(Icons.Outlined.Route, heading = "Distància", value = "${order.distance.toDouble().round(1)} km", color = MaterialTheme.colorScheme.primary, padding = 4.dp)
 
         }
 

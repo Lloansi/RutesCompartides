@@ -1,9 +1,7 @@
 package com.example.rutescompartidesapp.data.domain
 
-import com.example.rutescompartidesapp.data.domain.map.Itinerary
-
 data class OrderForList(
-    val user: String,
+    val userID: Int,
     val orderID: Int,
     val orderName: String,
     val puntSortida: String,
@@ -23,5 +21,5 @@ data class OrderForList(
     val packagesFragile: Boolean,
     val distance: Float,
     val co2Saved: Float,
-    val comment: String?
+    val comment: String?,
 )

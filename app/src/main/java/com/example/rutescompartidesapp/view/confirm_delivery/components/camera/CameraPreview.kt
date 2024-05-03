@@ -7,6 +7,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.viewinterop.AndroidView
 
+/**
+ * Composable function for displaying a camera preview.
+ * @param controller The lifecycle-aware camera controller.
+ * @param modifier The modifier for the layout.
+ */
 @Composable
 fun CameraPreview(
     controller: LifecycleCameraController,

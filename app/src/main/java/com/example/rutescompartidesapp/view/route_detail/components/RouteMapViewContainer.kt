@@ -10,7 +10,7 @@ import androidx.core.content.ContextCompat
 import com.example.rutescompartidesapp.R
 import com.example.rutescompartidesapp.utils.getResponsivePadding
 import com.example.rutescompartidesapp.view.map.viewModels.MapViewModel
-import com.example.rutescompartidesapp.view.route_detail.viewModels.MapViewModel2
+import com.example.rutescompartidesapp.view.map.viewModels.MapViewModel2
 import org.osmdroid.bonuspack.routing.OSRMRoadManager
 import org.osmdroid.bonuspack.routing.RoadManager
 import org.osmdroid.config.Configuration

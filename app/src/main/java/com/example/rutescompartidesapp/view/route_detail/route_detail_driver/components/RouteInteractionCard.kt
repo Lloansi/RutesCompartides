@@ -1,5 +1,6 @@
 package com.example.rutescompartidesapp.view.route_detail.route_detail_driver.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,6 +12,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Cancel
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CardDefaults
@@ -29,15 +31,16 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import com.example.rutescompartidesapp.data.domain.interactions.RouteInteraction
 import com.example.rutescompartidesapp.ui.theme.BlueRC
 import com.example.rutescompartidesapp.ui.theme.MateBlackRC
 import com.example.rutescompartidesapp.ui.theme.RedRC
 import com.example.rutescompartidesapp.ui.theme.YellowRC
-import com.example.rutescompartidesapp.view.route_detail.route_detail_driver.DetailUtils.RouteInteraction
 import com.example.rutescompartidesapp.view.route_detail.route_detail_driver.RouteDetailDriverViewModel
 
 @Composable
-fun RouteInteractionCard(interaction: RouteInteraction, index: Int, routeDetailDriverViewModel: RouteDetailDriverViewModel){
+fun RouteInteractionCard(interaction: RouteInteraction, index: Int, routeDetailDriverViewModel: RouteDetailDriverViewModel, navHost: NavController){
     var firstText = ""
     var secondText = ""
     var chipText = ""
@@ -65,8 +68,7 @@ fun RouteInteractionCard(interaction: RouteInteraction, index: Int, routeDetailD
             button1Color = MateBlackRC
             button1Icon = Icons.Filled.Check
             button1IconTint = Color.White
-            button1OnClick = { routeDetailDriverViewModel.setRouteToConfirm(interaction)
-            }
+            button1OnClick = { routeDetailDriverViewModel.setRouteToConfirm(interaction) }
             button2IconTint = Color.Black
             button2Text = "Declinar"
             button2Color = RedRC
@@ -79,6 +81,16 @@ fun RouteInteractionCard(interaction: RouteInteraction, index: Int, routeDetailD
             secondText = "la comanda"
             chipText = "Entregada"
             chipColor = BlueRC
+            button1Text = "Valorar experiència"
+            button1Color = MaterialTheme.colorScheme.primary
+            button1Icon = Icons.Filled.ThumbUp
+            button1IconTint = Color.White
+            button1OnClick = {
+                navHost.navigate("ValueExperienceGeneralScreen/{routeId}/{orderId}"
+                .replace("{routeId}", interaction.routeID.toString())
+                    .replace("{orderId}", interaction.orderID.toString())
+            )
+            }
         }
         "Pendent" -> {
             firstText = "Encara no has respost a la"
@@ -104,9 +116,18 @@ fun RouteInteractionCard(interaction: RouteInteraction, index: Int, routeDetailD
             chipColor = MaterialTheme.colorScheme.onBackground
             chipTextColor = MaterialTheme.colorScheme.background
         }
+        "Valorada" -> {
+            firstText = "Has valorat"
+            secondText = "la experiència de la comanda"
+            chipText = "Valorada"
+            chipColor = MaterialTheme.colorScheme.primary
+            chipTextColor = Color.White
+        }
     }
 
-    ElevatedCard(modifier = Modifier.fillMaxWidth(),
+    ElevatedCard(modifier = Modifier.fillMaxWidth().clickable {
+        navHost.navigate("OrderDetailScreen/${interaction.orderID}")
+    },
         colors = CardDefaults.elevatedCardColors(
             containerColor = MaterialTheme.colorScheme.background)) {
         Row(modifier = Modifier
@@ -119,7 +140,7 @@ fun RouteInteractionCard(interaction: RouteInteraction, index: Int, routeDetailD
                 verticalArrangement = Arrangement.Center) {
                 Text(text = "${interaction.date.split("-")[0]} a les ${interaction.date.split("-")[1]} ",
                     color = MaterialTheme.colorScheme.onBackground)
-                InteractionText(firstText, secondText, interaction.orderID)
+                InteractionText(firstText, secondText, interaction.orderID, navHost)
             }
             Column {
                 InteractionChip(text = chipText, containerColor = chipColor, chipColorText = chipTextColor)
@@ -127,13 +148,15 @@ fun RouteInteractionCard(interaction: RouteInteraction, index: Int, routeDetailD
 
         }
         // Buttons
-        if (interaction.status == "Acceptada" || interaction.status == "Pendent" ){
+        if (interaction.status == "Acceptada" || interaction.status == "Pendent" || interaction.status == "Entregada"){
             Row(modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 8.dp, bottom = 8.dp, end = 8.dp),
             horizontalArrangement = Arrangement.SpaceAround) {
                 InteractionButton(onClick = button1OnClick, text = button1Text , color = button1Color, icon = button1Icon, iconTint = button1IconTint )
-                InteractionButton(onClick = button2OnClick, text = button2Text , color = button2Color, icon = button2Icon, iconTint = button2IconTint )
+                if (button2Text != ""){
+                    InteractionButton(onClick = button2OnClick, text = button2Text , color = button2Color, icon = button2Icon, iconTint = button2IconTint )
+                }
             }
         }
 
@@ -174,7 +197,7 @@ fun InteractionChip(text: String, containerColor: Color, chipColorText: Color){
 }
 
 @Composable
-fun InteractionText(firstText: String, secondText: String, comandaID: Int){
+fun InteractionText(firstText: String, secondText: String, comandaID: Int, navHost: NavController){
    Text(text = buildAnnotatedString {
         append("$firstText ")
         withStyle(

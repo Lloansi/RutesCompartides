@@ -6,7 +6,6 @@ sealed class Screens(
     object MapScreen: Screens("MapScreen")
     object RoutesOrderListScreen: Screens("RoutesOrderListScreen")
     object ProfileScreen: Screens("ProfileScreen")
-
     object LoginScreen: Screens("LoginScreen")
     object SignUpScreen: Screens("SignUpScreen")
     object RouteDetailDriverScreen: Screens("RouteDetailDriverScreen/{routeId}")
@@ -20,6 +19,14 @@ sealed class Screens(
     object DrawScreen: Screens("DrawScreen")
     object CameraScreen: Screens("CameraScreen")
     object RouteDetailGeneralScreen: Screens("RouteDetailGeneralScreen/{routeId}")
+    object ValueExperienceGeneralScreen: Screens("ValueExperienceGeneralScreen/{routeId}/{orderId}")
 
+
+
+    /**
+     * Lista -> Detalle -> Editar ruta -> Detalle -> Detalle -> Editar ruta
+     * Deberia ser
+     * Lista -> Detalle -> Editar ruta -> Detalle -> Lista
+     */
 
 }

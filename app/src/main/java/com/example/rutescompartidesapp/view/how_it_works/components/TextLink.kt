@@ -1,4 +1,4 @@
-package com.example.rutescompartidesapp.view.com_funciona.components
+package com.example.rutescompartidesapp.view.how_it_works.components
 
 import android.content.ActivityNotFoundException
 import android.content.Context

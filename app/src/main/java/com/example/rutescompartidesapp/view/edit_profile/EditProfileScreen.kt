@@ -17,6 +17,7 @@ import androidx.compose.material.icons.rounded.Email
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material.icons.rounded.Phone
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -34,54 +35,77 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.rutescompartidesapp.ui.theme.fredokaOne
 import com.example.rutescompartidesapp.view.edit_profile.components.EditProfileTextFieldModel
 import com.example.rutescompartidesapp.view.generic_components.BackButtonArrow
 import com.example.rutescompartidesapp.view.generic_components.HeaderSphere
+import com.example.rutescompartidesapp.view.login.LoginViewModel
 
+/**
+ * Composable function for the edit profile screen.
+ * @param loginViewModel The ViewModel for login-related operations.
+ * @param navController The NavController for navigation.
+ */
 @Composable
-fun EditProfileScreen(viewModel: EditProfileViewModel, navController: NavController) {
+fun EditProfileScreen(loginViewModel: LoginViewModel, navController: NavController) {
+    val editProfileViewModel : EditProfileViewModel = hiltViewModel()
+    val user by loginViewModel.user.collectAsStateWithLifecycle()
 
-    Column(
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        Box(
-            modifier = Modifier
-                .height(200.dp)
-        ) {
-            HeaderSphere(200.dp)
-
-            BackButtonArrow(navController = navController, alignment = Alignment.TopStart, "ProfileScreen")
-
-            Text(
-                modifier = Modifier
-                    .align(Alignment.Center),
-                text = "Editar perfil",
-                color = Color.White,
-                fontSize = 30.sp,
-                fontWeight = FontWeight.Normal,
-                fontFamily = fredokaOne
-            )
-        }
-        Spacer(Modifier.size(height = 30.dp, width = 0.dp))
-
+    if (user == null){
+        CircularProgressIndicator()
+    } else{
+        editProfileViewModel.setUser(user!!)
+        editProfileViewModel.updateTextFieldsWithUserInfo()
         Column(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier
-                .verticalScroll(rememberScrollState())
         ) {
-            BuildTextFields(viewModel, textFieldList())
+            Box(
+                modifier = Modifier
+                    .height(200.dp)
+            ) {
+                HeaderSphere(200.dp)
 
-            Spacer(Modifier.size(height = 25.dp, width = 0.dp))
+                BackButtonArrow(navController = navController, alignment = Alignment.TopStart, "ProfileScreen")
 
-            SaveButton(viewModel, navController)
+                Text(
+                    modifier = Modifier
+                        .align(Alignment.Center),
+                    text = "Editar perfil",
+                    color = Color.White,
+                    fontSize = 30.sp,
+                    fontWeight = FontWeight.Normal,
+                    fontFamily = fredokaOne
+                )
+            }
+            Spacer(Modifier.size(height = 30.dp, width = 0.dp))
+
+            Column(
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .verticalScroll(rememberScrollState())
+            ) {
+                BuildTextFields(editProfileViewModel, textFieldList())
+
+                Spacer(Modifier.size(height = 25.dp, width = 0.dp))
+
+                SaveButton(editProfileViewModel, navController)
+            }
         }
     }
+
+
 }
 
+/**
+ * Composable function to build text fields for editing profile information.
+ * @param viewModel The ViewModel for editing profile.
+ * @param textFieldList The list of text field models.
+ */
 @Composable
 fun BuildTextFields(
     viewModel: EditProfileViewModel,
@@ -89,9 +113,6 @@ fun BuildTextFields(
 ) {
     val userNameText by viewModel.userNameText.collectAsState()
     val userNameError by viewModel.userNameError.collectAsState()
-
-    val firstNameText by viewModel.firstNameText.collectAsState()
-    val lastNameText by viewModel.lastNameText.collectAsState()
 
     val emailText by viewModel.emailText.collectAsState()
     val emailError by viewModel.userEmailError.collectAsState()
@@ -106,19 +127,15 @@ fun BuildTextFields(
                 .padding(top = 10.dp, bottom = 10.dp),
             value = when (field) {
                 0 -> userNameText
-                1 -> firstNameText
-                2 -> lastNameText
-                3 -> emailText
-                4 -> phoneText
+                1 -> emailText
+                2 -> phoneText
                 else -> ""
             },
             onValueChange = { value ->
                 when (field) {
                     0 -> viewModel.userNameOnTextChange(value)
-                    1 -> viewModel.firstNameOnTextChange(value)
-                    2 -> viewModel.lastNameOnTextChange(value)
-                    3 -> viewModel.emailOnTextChange(value)
-                    4 -> viewModel.phoneNameOnTextChange(value)
+                    1 -> viewModel.emailOnTextChange(value)
+                    2 -> viewModel.phoneNameOnTextChange(value)
                     else -> "Error" + value
                 }
             },
@@ -168,6 +185,11 @@ fun BuildTextFields(
     }
 }
 
+/**
+ * Composable function for the save button.
+ * @param viewModel The ViewModel for editing profile.
+ * @param navController The NavController for navigation.
+ */
 @Composable
 fun SaveButton(viewModel: EditProfileViewModel, navController: NavController) {
 
@@ -192,21 +214,15 @@ fun SaveButton(viewModel: EditProfileViewModel, navController: NavController) {
     }
 }
 
+/**
+ * Function to provide a list of edit profile text field models.
+ * @return A list of [EditProfileTextFieldModel].
+ */
 fun textFieldList(): List<EditProfileTextFieldModel> {
     return listOf(
         EditProfileTextFieldModel(
             Icons.Rounded.Person,
             "Nom d'usuari",
-            KeyboardType.Text
-        ),
-        EditProfileTextFieldModel(
-            Icons.Rounded.Person,
-            "Nom",
-            KeyboardType.Text
-        ),
-        EditProfileTextFieldModel(
-            Icons.Rounded.Person,
-            "Cognoms",
             KeyboardType.Text
         ),
         EditProfileTextFieldModel(

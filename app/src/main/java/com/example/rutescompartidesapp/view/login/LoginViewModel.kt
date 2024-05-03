@@ -1,13 +1,15 @@
 package com.example.rutescompartidesapp.view.login
 
 import android.util.Patterns
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
-import com.example.rutescompartidesapp.data.domain.auth.AuthRequest
+import com.example.rutescompartidesapp.data.domain.UserLocal
+import com.example.rutescompartidesapp.data.domain.external.auth.AuthRequest
 import com.example.rutescompartidesapp.data.domain.session.SessionRepository
 import com.example.rutescompartidesapp.data.network.rutes_compartides.repository.RutesCompartidesRepository
-import com.example.rutescompartidesapp.utils.Constants
+import com.example.rutescompartidesapp.utils.LocalConstants
 import com.example.rutescompartidesapp.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -24,7 +26,12 @@ class LoginViewModel @Inject constructor (
     private val sessionRepository: SessionRepository
 ): ViewModel(){
 
+    private val _currentIndex = mutableIntStateOf(0)
+    val currentIndex = _currentIndex
 
+    fun updateCurrentIndex(index: Int){
+        _currentIndex.intValue = index
+    }
 
 
     private val _authToken = MutableStateFlow("")
@@ -155,17 +162,42 @@ class LoginViewModel @Inject constructor (
         }
     }
 
+    private val _user = MutableStateFlow<UserLocal?>(null)
+    val user = _user.asStateFlow()
+
+    private fun setUser(user: UserLocal){
+        _user.value = user
+    }
+    fun getUser(userID: Int){
+        val user = LocalConstants.userList.first { user -> user.userId == userID }
+        setUser(user)
+    }
+
     //User exists
     private val _userIsLogged = MutableStateFlow(false)
     val userIsLogged = _userIsLogged.asStateFlow()
-     fun loginLocal(userEmail: String): Boolean {
-         return if (!Constants.userList.filter { user -> user.email == userEmail }.isEmpty()){
-             _userIsLogged.value = true
-             println("Login okey")
-             true
+
+     fun loginLocal(userEmail: String, userPassword: String) {
+         val userExists = !LocalConstants.userList.none { user -> user.email == userEmail }
+         if (userExists){
+             val user = LocalConstants.userList.first { user -> user.email == userEmail }
+             if (user.password != userPassword){
+                 println("Contrasenya incorrecta")
+             } else {
+                 // Save the credentials in the session
+                 viewModelScope.launch {
+                     _userIsLogged.value = true
+                     setUser(LocalConstants.userList.first { user -> user.email == userEmail })
+                     _isLoading.value = false
+                     sessionRepository.updateIsLogged(true)
+                     sessionRepository.updateEmail(userEmail)
+                     sessionRepository.updatePassword(userPassword)
+                     _userWantsToLogin.value = false
+                 }
+             }
          } else {
-             println("Login not okey")
-             false
+             println("Aquest usuari no existeix")
+
          }
      }
 
@@ -188,6 +220,11 @@ class LoginViewModel @Inject constructor (
                 _userEmail.value = session.email
                 _userPassword.value = session.password
                 _userIsLogged.value = session.isLogged
+                if (session.isLogged){
+                    println(session.email)
+                    println(session.password)
+                    loginLocal(session.email, session.password)
+                }
             }
         }
     }

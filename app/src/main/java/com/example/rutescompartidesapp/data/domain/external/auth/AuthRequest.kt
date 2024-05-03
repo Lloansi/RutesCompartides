@@ -1,4 +1,4 @@
-package com.example.rutescompartidesapp.data.domain.auth
+package com.example.rutescompartidesapp.data.domain.external.auth
 
 import kotlinx.serialization.Serializable
 

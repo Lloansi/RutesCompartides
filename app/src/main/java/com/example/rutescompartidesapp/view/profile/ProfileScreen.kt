@@ -25,7 +25,6 @@ import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,24 +35,33 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
 import androidx.compose.ui.zIndex
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.rutescompartidesapp.ui.theme.openSans
-import com.example.rutescompartidesapp.utils.Constants
 import com.example.rutescompartidesapp.view.generic_components.HeaderSphere
+import com.example.rutescompartidesapp.view.login.LoginViewModel
 import com.example.rutescompartidesapp.view.profile.components.CreateCardsWithItems
 import com.example.rutescompartidesapp.view.profile.components.LogOutPopup
 import com.example.rutescompartidesapp.view.profile.components.ProfileEditButton
 import com.example.rutescompartidesapp.view.profile.components.ReviewButtons
 import com.example.rutescompartidesapp.view.profile.components.routeProfileItemsList
 import com.example.rutescompartidesapp.view.profile.components.userProfileItemsList
+import com.example.rutescompartidesapp.view.routes_order_list.viewmodels.RoutesOrderListViewModel
+import com.example.rutescompartidesapp.view.routes_order_list.viewmodels.TabRowViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProfileScreen(viewModel: ProfileViewModel, navController: NavController) {
+fun ProfileScreen(profileViewModel: ProfileViewModel, loginViewModel: LoginViewModel,
+                  navController: NavController, routesOrderListViewModel: RoutesOrderListViewModel,
+                  tabRowViewModel: TabRowViewModel
+) {
 
-    val onClickPlaceholder by viewModel.onClickPlaceholder.collectAsState()
-    val editProfileButtonSize by viewModel.editProfileButtonSize.collectAsState()
-    val editProfileButtonVisible by viewModel.editProfileButtonVisible.collectAsState()
+    val onClickPlaceholder by profileViewModel.onClickPlaceholder.collectAsStateWithLifecycle()
+    val editProfileButtonSize by profileViewModel.editProfileButtonSize.collectAsStateWithLifecycle()
+    val editProfileButtonVisible by profileViewModel.editProfileButtonVisible.collectAsStateWithLifecycle()
+    val userID = loginViewModel.user.collectAsStateWithLifecycle().value?.userId
+    loginViewModel.getUser(userID!!)
+    val user by loginViewModel.user.collectAsStateWithLifecycle()
 
     val animateSize by animateFloatAsState(
         targetValue = editProfileButtonSize,
@@ -102,7 +110,7 @@ fun ProfileScreen(viewModel: ProfileViewModel, navController: NavController) {
                                     .padding(bottom = 15.dp)
                             ) {
                                 Text(
-                                    text = Constants.userList[0].name,
+                                    text = user!!.name,
                                     fontSize = 36.sp,
                                     fontWeight = FontWeight.ExtraBold,
                                     color = Color.White,
@@ -110,7 +118,7 @@ fun ProfileScreen(viewModel: ProfileViewModel, navController: NavController) {
                                 )
                                 Spacer(modifier = Modifier.height(10.dp))
                                 Text(
-                                    text = Constants.userList[0].email,
+                                    text = user!!.email,
                                     fontSize = 16.sp,
                                     fontWeight = FontWeight.Normal,
                                     color = Color.White,
@@ -118,7 +126,7 @@ fun ProfileScreen(viewModel: ProfileViewModel, navController: NavController) {
                                 )
                                 Spacer(modifier = Modifier.height(5.dp))
                                 Text(
-                                    text = Constants.userList[0].phone.toString(),
+                                    text = user!!.phone.toString(),
                                     fontSize = 16.sp,
                                     fontWeight = FontWeight.Normal,
                                     color = Color.White,
@@ -153,7 +161,7 @@ fun ProfileScreen(viewModel: ProfileViewModel, navController: NavController) {
 
 
 
-                        LogOutPopup(viewModelProfile = viewModel, navController)
+                        LogOutPopup(viewModelProfile = profileViewModel, navController)
 
                         // This will be delete
                         if (onClickPlaceholder) {
@@ -161,7 +169,7 @@ fun ProfileScreen(viewModel: ProfileViewModel, navController: NavController) {
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .wrapContentHeight(),
-                                onDismissRequest = { viewModel.onClickItemPlaceholder(false) },
+                                onDismissRequest = { profileViewModel.onClickItemPlaceholder(false) },
                                 properties = DialogProperties(
                                     dismissOnBackPress = true,
                                     dismissOnClickOutside = true
@@ -200,10 +208,12 @@ fun ProfileScreen(viewModel: ProfileViewModel, navController: NavController) {
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             // First card creation (Route Settings)
-            CreateCardsWithItems(routeProfileItemsList, 0.dp, 0.dp, viewModel, navController)
+            CreateCardsWithItems(routeProfileItemsList, 0.dp, 0.dp, profileViewModel, navController, 1,
+                routesOrderListViewModel, tabRowViewModel, user!!.userId, loginViewModel)
 
             // Second card creation (User Settings)
-            CreateCardsWithItems(userProfileItemsList, 20.dp, 0.dp, viewModel, navController)
+            CreateCardsWithItems(userProfileItemsList, 20.dp, 0.dp, profileViewModel, navController, 2,
+                routesOrderListViewModel, tabRowViewModel, user!!.userId, loginViewModel)
         }
     }
 }
