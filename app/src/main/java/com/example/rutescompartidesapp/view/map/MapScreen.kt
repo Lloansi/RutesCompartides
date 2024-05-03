@@ -115,8 +115,6 @@ fun MapScreen(navController: NavHostController, mapViewModel: MapViewModel, sear
             val percentagePaddingDesviament = 100
             val padding = (LocalDensity.current.density * percentagePaddingDesviament).dp
 
-            // We get the context
-            val ctx = LocalContext.current
 
             val iconMarkerClickPointer = ContextCompat.getDrawable(ctx, R.drawable.marker_svgrepo_com)
 

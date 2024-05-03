@@ -62,7 +62,8 @@ fun ExpandableFloatingButton(navController: NavHostController) {
         ) {
             Icon(
                 imageVector = if (isExpanded) Icons.Default.Close else Icons.Default.Add,
-                contentDescription = null
+                contentDescription = null,
+                tint = Color.White
             )
         }
     }

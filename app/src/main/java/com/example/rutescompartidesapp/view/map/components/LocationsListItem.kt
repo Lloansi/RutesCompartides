@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.rutescompartidesapp.data.domain.Location.idescat.Municipi
@@ -67,7 +68,7 @@ fun LocationListItem(municipi: Municipi, ctx: Context, mapViewModel: MapViewMode
             text = municipi.content,
             style = MaterialTheme.typography.bodyMedium,
             fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onBackground
+            color = Color.Black
         )
     }
 }
