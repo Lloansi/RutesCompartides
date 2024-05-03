@@ -45,7 +45,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavHostController
-import com.example.rutescompartidesapp.utils.Constants
 import com.example.rutescompartidesapp.view.confirm_delivery.viewmodel.CameraViewModel
 import kotlinx.coroutines.launch
 

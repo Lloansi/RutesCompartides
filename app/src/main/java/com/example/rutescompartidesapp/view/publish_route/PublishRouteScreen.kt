@@ -172,12 +172,13 @@ fun PublishRouteScreen(command: String, routeID: Int, navHost: NavHostController
                         if (currentStep == 1) navHost.popBackStack()
                         else manageRouteViewModel.previousStep() }
                     ) {
-                        Icon(imageVector = Icons.Filled.ArrowBackIosNew, contentDescription = "Go Back")
+                        Icon(imageVector = Icons.Filled.ArrowBackIosNew, contentDescription = "Go Back",
+                            tint = Color.White)
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.background,
-                    titleContentColor = MaterialTheme.colorScheme.onBackground
+                    containerColor = MateBlackRC,
+                    titleContentColor = Color.White
                 ),
             )
         }) { paddingValues ->

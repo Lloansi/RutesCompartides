@@ -166,12 +166,13 @@ fun PublishOrderScreen(command: String, orderID: Int, navHost: NavHostController
                         if (currentStep == 1) navHost.popBackStack()
                         else manageOrderViewModel.previousStep() }
                     ) {
-                        Icon(imageVector = Icons.Filled.ArrowBackIosNew, contentDescription = "Go Back")
+                        Icon(imageVector = Icons.Filled.ArrowBackIosNew, contentDescription = "Go Back",
+                            tint = Color.White)
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.background,
-                    titleContentColor = MaterialTheme.colorScheme.onBackground
+                    containerColor = MateBlackRC,
+                    titleContentColor = Color.White
                 ),
             )
         }) { paddingValues ->
@@ -812,10 +813,10 @@ private fun PublishOrderContent1(
     }
     if (isDataMinPopupShowing){
         BasicPopup(offset = IntOffset((LocalConfiguration.current.screenWidthDp / 2), (LocalConfiguration.current.screenHeightDp)),
-            onDismisRequest = { manageOrderViewModel.onDataMaxPopupShow(
+            onDismisRequest = { manageOrderViewModel.onDataMinPopupShow(
                 false ) },
             content = { Text(text = "Indicar a partir de quin moment podries tenir llesta la teva comanda per iniciar el transport.",
-                color = MaterialTheme.colorScheme.onBackground) })
+                color = Color.Black) })
     }
     DateTimePickerTextField(
         invocation = {
@@ -852,11 +853,11 @@ private fun PublishOrderContent1(
             )
         }
         if (isDataMaxPopupShowing){
-            BasicPopup(offset = IntOffset((LocalConfiguration.current.screenWidthDp / 2), (LocalConfiguration.current.screenHeightDp)),
+            BasicPopup(offset = IntOffset((LocalConfiguration.current.screenWidthDp / 2), (LocalConfiguration.current.screenHeightDp / 5)),
                 onDismisRequest = { manageOrderViewModel.onDataMaxPopupShow(
                     false ) },
                 content = { Text(text = "Indicar la data màxima en què ha d'arribar la teva comanda.",
-                    color = MaterialTheme.colorScheme.onBackground) })
+                    color = Color.Black) })
         }
         // Data Arribada Text field
         DateTimePickerTextField(
