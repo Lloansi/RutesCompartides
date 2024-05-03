@@ -83,6 +83,17 @@ class MapViewModel @Inject constructor (
         //markerPosition.value = GeoPoint(40.796788, -73.949232)
     }
 
+    /**
+     * Creates a marker on the map.
+
+     * @param type Type of marker ("ORDER" or "ROUTE").
+
+     * @param point GeoPoint representing the position of the marker.
+
+     * @param mapView MapView instance.
+
+     * @param iconMarker Drawable for the marker icon.
+     **/
     fun createMarker(type: String, point: GeoPoint, mapView: MapView, iconMarker: Drawable? = null){
         val marker = Marker(mapView)
         marker.position =  point
@@ -102,6 +113,15 @@ class MapViewModel @Inject constructor (
         mapView.overlays.add(marker)
     }
 
+    /**
+     * Creates a click pointer marker on the map.
+
+     * @param point GeoPoint representing the position of the marker.
+
+     * @param mapView MapView instance.
+
+     * @param iconMarker Drawable for the marker icon.
+     **/
     private fun createClickPointerMarker(point: GeoPoint, mapView: MapView, iconMarker: Drawable? = null){
         val marker = Marker(mapView)
         marker.position =  point
@@ -116,6 +136,13 @@ class MapViewModel @Inject constructor (
         mapView.overlays.add(marker)
     }
 
+    /**
+     * Deletes order markers from the map.
+
+     * @param markers Set of order markers to be deleted.
+
+     * @param mapView MapView instance.
+     **/
     private fun deleteOrdersMarkers(markers: MutableSet<Marker>, mapView: MapView){
         for (marker in markers){
             mapView.overlays.remove(marker)
@@ -123,6 +150,13 @@ class MapViewModel @Inject constructor (
         markers.clear()
     }
 
+    /**
+     * Deletes route markers from the map.
+
+     * @param markers Set of route markers to be deleted.
+
+     * @param mapView MapView instance.
+     **/
     private fun deleteRoutesMarkers(markers: MutableSet<Marker>, mapView: MapView){
         for (marker in markers){
             mapView.overlays.remove(marker)
@@ -131,6 +165,13 @@ class MapViewModel @Inject constructor (
         markers.clear()
     }
 
+    /**
+     * Deletes route paths from the map.
+
+     * @param paths Set of route paths to be deleted.
+
+     * @param mapView MapView instance.
+     **/
     private fun deleteRoutesPaths(paths: MutableSet<Polyline>, mapView: MapView){
         for (path in paths){
             mapView.overlays.remove(path)
@@ -138,11 +179,23 @@ class MapViewModel @Inject constructor (
         paths.clear()
     }
 
+    /**
+     * Deletes the user click pointer marker from the map.
+
+     * @param marker Marker representing the user click pointer.
+
+     * @param mapView MapView instance.
+     **/
     private fun deleteUserClickPointer(marker: Marker, mapView: MapView){
         _userClickedPointer.value.removeAt(0)
         mapView.overlays.remove(marker)
     }
 
+    /**
+     * Updates the position of the marker.
+
+     * @param point New GeoPoint position for the marker.
+     **/
     private fun updateMarkerPosition(point: GeoPoint){
         markerPosition.value = point
     }
@@ -153,6 +206,17 @@ class MapViewModel @Inject constructor (
     }
      */
 
+    /**
+     * Handles map clicks.
+
+     * @param mapView The MapView object.
+
+     * @param iconMarkerClickPointer Drawable for click pointer marker.
+
+     * @param ctx Context object.
+
+     * @param roadManager RoadManager object.
+    **/
     @SuppressLint("ClickableViewAccessibility")
     fun handleClicksMap(mapView: MapView, iconMarkerClickPointer: Drawable? = null, ctx : Context, roadManager: RoadManager){
         // We instance the markers drawable type
@@ -238,6 +302,21 @@ class MapViewModel @Inject constructor (
         }
     }
 
+    /**
+     *Checks if orders or routes are near the click user.
+
+     *@param ordersList List of orders.
+
+     *@param routesList List of routes.
+
+     *@param mapView The MapView object.
+
+     *@param iconMarkerType Drawable for marker type.
+
+     *@param roadManager RoadManager object.
+
+     *@param maxKmDistance Maximum distance in kilometers.
+     **/
     private fun isNearClickUser(ordersList : List<Order>? = null, routesList: List<Route2>? = null, mapView: MapView, iconMarkerType: Drawable? = null, roadManager: RoadManager, maxKmDistance: Int){
         // We get the pixels from the center screen
         val centerPoint = mapView.projection.fromPixels(mapView.width / 2, mapView.height / 2) as GeoPoint
@@ -289,6 +368,17 @@ class MapViewModel @Inject constructor (
         filterPerVisibilityRoute(_visibleRoutes.value)
     }
 
+    /**
+     * Checks if two GeoPoints are within a specified distance from each other.
+
+     * @param point1 First GeoPoint.
+
+     * @param point2 Second GeoPoint.
+
+     * @param maxKmDistance Maximum distance in kilometers.
+
+     * @return True if the distance between the points is within the maximum distance, otherwise false.
+     **/
     private fun isInArea(point1: GeoPoint, point2: GeoPoint, maxKmDistance: Int):Boolean{
         val distanceBetweenPoints = distanceBetweenPoints(point1.longitude,point1.latitude,point2.longitude,point2.latitude)
 
@@ -296,6 +386,19 @@ class MapViewModel @Inject constructor (
         return (distanceBetweenPoints <= maxKmDistance)
     }
 
+    /**
+     * Calculates the distance between two points using their latitude and longitude.
+
+     * @param lat1 Latitude of the first point.
+
+     * @param lon1 Longitude of the first point.
+
+     * @param lat2 Latitude of the second point.
+
+     * @param lon2 Longitude of the second point.
+
+     * @return The distance between the points in kilometers.
+     **/
     private fun distanceBetweenPoints(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Double{
         val earthRadius = 6371 // 6371 is Earth radius in km.
 
@@ -304,6 +407,13 @@ class MapViewModel @Inject constructor (
         return distance
     }
 
+    /**
+     * Converts degrees to radians.
+
+     * @param deg Degree value.
+
+     * @return The equivalent value in radians.
+     **/
     // Function to convert in radians
     private fun deg2rad(deg: Double): Double {
         return deg * Math.PI / 180.0
@@ -323,6 +433,11 @@ class MapViewModel @Inject constructor (
         }
     }
 
+    /**
+     * Filters orders based on their visibility on the map and updates the filtered orders LiveData.
+
+     * @param visibleOrders List of GeoPoints representing visible orders on the map.
+     **/
      private fun filterPerVisibilityOrders(visibleOrders: MutableList<GeoPoint>){
         val ordersFiltered = allOrders.filter { order ->
             visibleOrders.any { geoPoint ->
@@ -332,6 +447,11 @@ class MapViewModel @Inject constructor (
         _filteredOrders.value = ordersFiltered
     }
 
+    /**
+     * Filters routes based on their visibility on the map and updates the filtered routes LiveData.
+
+     * @param visibleRoutes List of GeoPoints representing visible routes on the map.
+     **/
     private fun filterPerVisibilityRoute(visibleRoutes: MutableList<GeoPoint>){
         val routesFiltered = allRoute.filter { route ->
             visibleRoutes.any{ geoPoint ->
@@ -341,6 +461,17 @@ class MapViewModel @Inject constructor (
         _filteredRoutes.value = routesFiltered
     }
 
+    /**
+     * Asynchronously retrieves a road between two GeoPoints using a RoadManager.
+
+     * @param roadManager RoadManager instance for obtaining road data.
+
+     * @param startPoint Starting GeoPoint.
+
+     * @param endPoint Ending GeoPoint.
+
+     * @return Road object representing the road between the start and end points.
+     **/
     private suspend fun getRoadAsync(roadManager: RoadManager, startPoint: GeoPoint, endPoint: GeoPoint): Road {
         return withContext(Dispatchers.IO) {
             val waypoints = ArrayList<GeoPoint>()
@@ -350,6 +481,17 @@ class MapViewModel @Inject constructor (
         }
     }
 
+    /**
+     * Displays a path between two points on the map.
+
+     * @param startPoint Starting GeoPoint.
+
+     * @param endPoint Ending GeoPoint.
+
+     * @param mapView MapView instance.
+
+     * @param roadManager RoadManager instance for obtaining road data.
+     **/
     fun showPathBetweenPoints(startPoint: GeoPoint, endPoint: GeoPoint, mapView: MapView, roadManager: RoadManager){
         viewModelScope.launch(Dispatchers.Main) {
             try {
@@ -374,16 +516,42 @@ class MapViewModel @Inject constructor (
         }
     }
 
+    /**
+     * Calculates the center GeoPoint of a route defined by its start and end points.
+
+     * @param startLat Latitude of the starting point.
+
+     * @param startLong Longitude of the starting point.
+
+     * @param endLat Latitude of the ending point.
+
+     * @param endLong Longitude of the ending point.
+
+     * @return Center GeoPoint of the route.
+     **/
     fun getCenterRoute(startLat: Double, startLong: Double, endLat: Double, endLong: Double): GeoPoint {
         val centerLat = (startLat + endLat) / 2
         val centerLong = (startLong + endLong) / 2
         return GeoPoint(centerLat, centerLong)
     }
 
+    /**
+     * Updates the map with orders and routes near a specific location.
+
+     * @param mapView MapView instance.
+
+     * @param roadManager RoadManager instance for obtaining road data.
+
+     * @param ctx Context object.
+
+     * @param geoPoint GeoPoint representing the location.
+
+     * @param maxKmDistance Maximum distance in kilometers.
+     **/
     fun ordersAndRoutesFromLocation(mapView: MapView, roadManager: RoadManager, ctx: Context, geoPoint: GeoPoint, maxKmDistance: Int){
 
         mapView.controller.setCenter(geoPoint)
-        mapView.controller.setZoom(15)
+        mapView.controller.setZoom(14)
 
         val orderIconMarker = ContextCompat.getDrawable(ctx, R.drawable.little_map_marker_orders_svg)
         val routeIconMarker = ContextCompat.getDrawable(ctx, R.drawable.little_map_marker_routes_svg)
@@ -406,6 +574,13 @@ class MapViewModel @Inject constructor (
 
     }
 
+    /**
+     * Asynchronously retrieves the GeoPoint of a municipality from the Idescat API using its name.
+
+     * @param cityName Name of the municipality.
+
+     * @return GeoPoint representing the location of the municipality.
+     **/
     suspend fun getMunicipiGeoPointIdescatAPI(cityName: String): GeoPoint? {
          return withContext(Dispatchers.IO) {
               try {
@@ -426,6 +601,13 @@ class MapViewModel @Inject constructor (
          }
     }
 
+    /**
+     * Asynchronously retrieves the GeoPoint of a municipality from the Google Places API using its name.
+
+     * @param cityName Name of the municipality.
+
+     * @return GeoPoint representing the location of the municipality.
+     **/
     suspend fun getMunicipiGeoPointGoogleAPI(cityName: String): GeoPoint? {
         return withContext(Dispatchers.IO) {
             try {
