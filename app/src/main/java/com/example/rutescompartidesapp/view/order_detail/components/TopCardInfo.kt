@@ -33,7 +33,7 @@ import com.example.rutescompartidesapp.utils.round
 fun TopCardInfo(order : Orders) {
     ElevatedCard (
         modifier = Modifier.fillMaxWidth(),colors = CardDefaults.elevatedCardColors(
-        containerColor = MateBlackRC)
+        containerColor = MaterialTheme.colorScheme.onTertiary)
     )
     {
         Column (

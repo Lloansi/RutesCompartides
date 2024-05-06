@@ -96,7 +96,7 @@ fun RoutePoints(route: Routes){
 @Composable
 fun RouteCardHeader(route: Routes){
     ElevatedCard (modifier = Modifier.fillMaxWidth(),colors = CardDefaults.elevatedCardColors(
-        containerColor = MateBlackRC)
+        containerColor = MaterialTheme.colorScheme.onTertiary)
     ) {
         Column(modifier = Modifier.padding(8.dp)) {
             Row(horizontalArrangement = Arrangement.SpaceBetween) {
@@ -137,7 +137,7 @@ fun RouteCard(route: Routes, navController: NavHostController, userID: Int) {
 
             },
             colors = CardDefaults.elevatedCardColors(
-                containerColor = Color.White)) {
+                containerColor = MaterialTheme.colorScheme.onTertiaryContainer)) {
             Row {
                 RouteCardHeader(route = route)
             }
@@ -154,7 +154,7 @@ fun RouteCard(route: Routes, navController: NavHostController, userID: Int) {
                     }
                     append("${route.dataSortida} ${route.horaSortida}")
                 },
-                    color =  Color.Black)
+                    color =  MaterialTheme.colorScheme.onBackground)
             }
             Row {
                 Spacer(modifier = Modifier.padding(4.dp))
@@ -168,7 +168,7 @@ fun RouteCard(route: Routes, navController: NavHostController, userID: Int) {
                     }
                     append("${route.dataArribada} ${route.horaArribada}")
                 },
-                    color =  Color.Black)
+                    color =  MaterialTheme.colorScheme.onBackground)
             }
             Spacer(modifier = Modifier.padding(4.dp))
             Row {
@@ -236,10 +236,10 @@ fun OrderCard(order: Orders, navController: NavHostController) {
                 )
             },
             colors = CardDefaults.elevatedCardColors(
-                containerColor = Color.White)){
+                containerColor = MaterialTheme.colorScheme.onTertiaryContainer)){
             Row {
                 ElevatedCard (modifier = Modifier.fillMaxWidth(),colors = CardDefaults.elevatedCardColors(
-                    containerColor = MateBlackRC)
+                    containerColor = MaterialTheme.colorScheme.onTertiary)
                 ) {
                     Column(modifier = Modifier.padding(8.dp)) {
                         Row(horizontalArrangement = Arrangement.SpaceBetween) {
@@ -300,7 +300,7 @@ fun OrderCard(order: Orders, navController: NavHostController) {
                     }
                     append("${order.dataSortida} ${order.horaSortida}")
                 },
-                    color =  Color.Black)
+                    color =  MaterialTheme.colorScheme.onBackground)
             }
             Row {
                 Spacer(modifier = Modifier.padding(4.dp))
@@ -318,7 +318,7 @@ fun OrderCard(order: Orders, navController: NavHostController) {
                         append("Flexible")
                     }
                 },
-                    color =  Color.Black)
+                    color =  MaterialTheme.colorScheme.onBackground)
             }
             Spacer(modifier = Modifier.padding(4.dp))
             Row {

@@ -8,6 +8,8 @@ val BlueRC = Color(0xFF17A2B8)
 val GrayRC = Color(0xFFF2F2F2)
 val RedRC = Color(0xFFEA4848)
 val YellowRC = Color(0xFFffc107)
+val DarkerGrayRC = Color(0xFF434343)
+val DarkGrayRC = Color(0xFF686868)
 
 
 /*

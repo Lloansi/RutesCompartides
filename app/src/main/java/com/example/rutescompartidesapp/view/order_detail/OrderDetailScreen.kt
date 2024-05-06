@@ -215,7 +215,7 @@ fun CompleteCard(
     ElevatedCard (modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.elevatedCardColors(
             contentColor = MaterialTheme.colorScheme.onBackground,
-            containerColor = MaterialTheme.colorScheme.background)) {
+            containerColor = MaterialTheme.colorScheme.onTertiaryContainer)) {
         TopCardInfo(order = order)
         Column(
             modifier = Modifier

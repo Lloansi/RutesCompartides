@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
@@ -117,7 +118,9 @@ fun RouteDetailDriverScreen(
             content = {
                 if (route != null) {
 
-                    Column(modifier = Modifier.verticalScroll(verticalScroll)) {
+                    Column(modifier = Modifier
+                        //.verticalScroll(verticalScroll)
+                    ) {
                         if (isCompleteScreenShowing) {
                             ConfirmScreen(
                                 routeDetailDriverViewModel = routeDetailDriverViewModel,
@@ -128,7 +131,7 @@ fun RouteDetailDriverScreen(
                             ElevatedCard(
                                 modifier = Modifier.fillMaxWidth(),
                                 colors = CardDefaults.elevatedCardColors(
-                                    containerColor = MaterialTheme.colorScheme.background
+                                    containerColor = MaterialTheme.colorScheme.onTertiaryContainer
                                 )
                             ) {
                                 Row {
@@ -384,7 +387,7 @@ fun RouteDetailDriverScreen(
                             LazyColumn(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .height(LocalConfiguration.current.screenHeightDp.dp * 0.6f),
+                                    .wrapContentHeight(),
                                 verticalArrangement = Arrangement.Center,
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {

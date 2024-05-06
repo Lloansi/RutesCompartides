@@ -129,7 +129,7 @@ fun RouteInteractionCard(interaction: RouteInteraction, index: Int, routeDetailD
         navHost.navigate("OrderDetailScreen/${interaction.orderID}")
     },
         colors = CardDefaults.elevatedCardColors(
-            containerColor = MaterialTheme.colorScheme.background)) {
+            containerColor = MaterialTheme.colorScheme.onTertiaryContainer)) {
         Row(modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)) {

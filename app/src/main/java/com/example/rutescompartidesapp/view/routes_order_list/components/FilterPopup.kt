@@ -184,7 +184,7 @@ fun FilterPopup(routesOrderListViewModel: RoutesOrderListViewModel, filterPopupV
                                     disabledIndicatorColor = Color.Gray,
                                     focusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
                                     unfocusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
-                                    disabledTextColor = Color.Black
+                                    disabledTextColor = MaterialTheme.colorScheme.onBackground
                                 ),
                                 keyboardOptions = KeyboardOptions(
                                     imeAction = ImeAction.Next
@@ -256,7 +256,7 @@ fun FilterPopup(routesOrderListViewModel: RoutesOrderListViewModel, filterPopupV
                                     disabledIndicatorColor = Color.Gray,
                                     focusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
                                     unfocusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
-                                    disabledTextColor = Color.Black
+                                    disabledTextColor = MaterialTheme.colorScheme.onBackground
                                 ),
                                 keyboardOptions = KeyboardOptions(
                                     imeAction = ImeAction.Next

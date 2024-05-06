@@ -283,7 +283,7 @@ fun RouteDetailGeneralScreen(
             ElevatedCard(
                 modifier = Modifier.fillMaxWidth(),
                 colors = CardDefaults.elevatedCardColors(
-                    containerColor = MaterialTheme.colorScheme.background
+                    containerColor = MaterialTheme.colorScheme.onTertiaryContainer
                 )
             ) {
                 Row {

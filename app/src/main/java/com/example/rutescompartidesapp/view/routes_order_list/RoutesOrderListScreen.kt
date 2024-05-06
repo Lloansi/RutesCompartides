@@ -106,7 +106,7 @@ fun RoutesOrderListScreen(navController: NavHostController, routeOrderListViewMo
                 containerColor = if (areFilterActive.contains(true)) {
                     MaterialTheme.colorScheme.primary
                 } else {
-                    MaterialTheme.colorScheme.secondary
+                    MaterialTheme.colorScheme.onTertiaryContainer
                 },
                 contentColor = if (areFilterActive.contains(true)) {
                     MaterialTheme.colorScheme.secondary
