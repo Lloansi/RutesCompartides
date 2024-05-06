@@ -195,7 +195,7 @@ fun CompleteCard(
                                 orderDetailViewModel.createRouteFromOrder()
                                                      },
                                 colors = ButtonDefaults.elevatedButtonColors(
-                                    contentColor = MaterialTheme.colorScheme.secondary,
+                                    contentColor = Color.White,
                                     containerColor = MaterialTheme.colorScheme.primary
                                 )
                             ) {

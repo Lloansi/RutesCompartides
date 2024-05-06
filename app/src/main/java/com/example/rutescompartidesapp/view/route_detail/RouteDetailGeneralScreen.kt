@@ -6,6 +6,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -14,7 +16,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material3.AssistChipDefaults
@@ -30,9 +34,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -64,11 +65,13 @@ import com.example.rutescompartidesapp.view.route_detail.route_detail_driver.Rou
 import com.example.rutescompartidesapp.view.route_detail.route_detail_driver.TransportOptions
 import com.example.rutescompartidesapp.view.route_detail.components.RouteMapViewContainer
 import com.example.rutescompartidesapp.view.generic_components.OrderPoints
+import com.example.rutescompartidesapp.view.login.LoginViewModel
 import com.example.rutescompartidesapp.view.publish_order.ManageOrderViewModel
 import com.example.rutescompartidesapp.view.route_detail.viewModels.RouteDetailViewModel
 import com.example.rutescompartidesapp.view.routes_order_list.components.RouteCardHeader
 import com.example.rutescompartidesapp.view.routes_order_list.viewmodels.RoutesOrderListViewModel
 
+@OptIn(ExperimentalLayoutApi::class)
 @SuppressLint("UnusedBoxWithConstraintsScope")
 @Composable
 fun RouteDetailGeneralScreen(
@@ -76,17 +79,21 @@ fun RouteDetailGeneralScreen(
     routeID: Int, mapViewModel: MapViewModel,
     mapViewModel2: MapViewModel2,
     manageOrderViewModel: ManageOrderViewModel,
-    routesOrderListViewModel: RoutesOrderListViewModel
+    routesOrderListViewModel: RoutesOrderListViewModel,
+    loginViewModel: LoginViewModel
 ) {
 
     val routeDetailViewModel = RouteDetailViewModel()
     routeDetailViewModel.getRoute(routeID)
     val matchingOrders by routeDetailViewModel.userMatchingOrders.collectAsStateWithLifecycle()
-    var requestPopup by remember { mutableStateOf(false) }
+    val requestPopup by routeDetailViewModel.requestPopup.collectAsState()
     val orderFromRoute by routeDetailViewModel.orderFromRoute.collectAsStateWithLifecycle()
     val routeInfo by routeDetailViewModel.route.collectAsStateWithLifecycle()
     val isMapExpanded by mapViewModel2.isBoxMapClicked.collectAsState()
     val isOrderPendent by routeDetailViewModel.isOrderPendent.collectAsState()
+    val verticalScroll = rememberScrollState()
+    val user by loginViewModel.user.collectAsStateWithLifecycle()
+
 
     if (orderFromRoute != null){
         manageOrderViewModel.loadRouteInfo(orderFromRoute!!)
@@ -102,81 +109,6 @@ fun RouteDetailGeneralScreen(
         }
     }
 
-    if (requestPopup){
-        Popup(
-            offset = IntOffset(0, LocalConfiguration.current.screenHeightDp+100),
-            alignment = Alignment.Center,
-            onDismissRequest = { requestPopup = false},
-            properties = PopupProperties(
-                focusable = true,
-                dismissOnBackPress = true,
-                dismissOnClickOutside=  true
-            )
-        ) {
-            ElevatedCard (modifier = Modifier
-                .fillMaxWidth()
-                .padding(12.dp)
-                .fillMaxHeight(0.35f),colors = CardDefaults.elevatedCardColors(
-                containerColor = MaterialTheme.colorScheme.surface)
-            ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-
-                    if (matchingOrders.isNotEmpty()) {
-                        Text(
-                            text = "Comandas que coincideixen amb la ruta",
-                            style = MaterialTheme.typography.titleLarge,
-                            color = MaterialTheme.colorScheme.onBackground
-                        )
-                        Divider(
-                            thickness = 2.dp,
-                            color = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier.padding(8.dp)
-                        )
-                        LazyColumn(content = {
-                            matchingOrders.forEach { order ->
-                                item {
-                                    MatchingOrderCard(order = order,
-                                        routeDetailViewModel = routeDetailViewModel,
-                                        routeID = routeID)
-                                }
-                            }
-                        })
-
-                    } else {
-                        Text(
-                            text = "No tens comandes que coincideixin amb la ruta",
-                            style = MaterialTheme.typography.titleLarge,
-                            color = MaterialTheme.colorScheme.onBackground
-                        )
-                        Divider(
-                            thickness = 2.dp,
-                            color = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier.padding(8.dp)
-                        )
-                        Column(modifier = Modifier.fillMaxHeight(),
-                            verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
-                            ElevatedButton(onClick = {
-                                routeDetailViewModel.createRouteFromOrder()
-                            },
-                                colors = ButtonDefaults.elevatedButtonColors(
-                                    contentColor = MaterialTheme.colorScheme.secondary,
-                                    containerColor = MaterialTheme.colorScheme.primary
-                                )
-                            ) {
-                                Text("Crear una nova comanda",
-                                    style = MaterialTheme.typography.titleMedium)
-                            }
-                        }
-                    }
-                }
-            }
-        } // End Popup
-    } // End if acceptPopup
 
     // Screen
     TopAppBarWithBackNav(
@@ -204,7 +136,11 @@ fun RouteDetailGeneralScreen(
                     13.5
                 )
             }
-            Row(
+                if (requestPopup){
+                    RequestRoutePopup(matchingOrders, routeDetailViewModel, routeID) // End Popup
+                } // End if acceptPopup
+
+                Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 10.dp, bottom = 10.dp),
@@ -256,8 +192,8 @@ fun RouteDetailGeneralScreen(
                             .padding(start = 4.dp, end = 4.dp),
                         shape = RoundedCornerShape(16.dp),
                         onClick = {
-                            routeDetailViewModel.filterMatchingOrders(routeInfo!!.userID)
-                            requestPopup = true
+                            routeDetailViewModel.filterMatchingOrders(userID = user!!.userId )
+                            routeDetailViewModel.onTogglePopup()
                         },
                         colors = ButtonDefaults.elevatedButtonColors(
                             containerColor = OrangeRC
@@ -281,7 +217,9 @@ fun RouteDetailGeneralScreen(
 
             }
             ElevatedCard(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .verticalScroll(verticalScroll),
                 colors = CardDefaults.elevatedCardColors(
                     containerColor = MaterialTheme.colorScheme.onTertiaryContainer
                 )
@@ -310,6 +248,8 @@ fun RouteDetailGeneralScreen(
                             }
                         })
                 }
+                Spacer(modifier = Modifier.padding(2.dp))
+                // Data sortida
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -335,7 +275,7 @@ fun RouteDetailGeneralScreen(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 12.dp)
+                        .padding(start = 12.dp, bottom = 2.dp)
                 ) {
                     Text(
                         text = buildAnnotatedString {
@@ -354,7 +294,7 @@ fun RouteDetailGeneralScreen(
                 Divider(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 8.dp, end = 8.dp, top = 4.dp, bottom = 4.dp),
+                        .padding(8.dp),
                     color = OrangeRC,
                     thickness = 2.dp
                 )
@@ -402,12 +342,23 @@ fun RouteDetailGeneralScreen(
                         data = routeInfo!!.availableSpace.toString()
                     )
                 }
+                // Cost de la ruta
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    RouteData(
+                        icon = R.drawable.money_svg_icon,
+                        dataHeader = "Cost de la ruta",
+                        data = routeInfo!!.costKm.toString()+"€/km"
+                    )
+                }
                 Divider(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 8.dp, end = 8.dp, top = 4.dp, bottom = 4.dp),
-                    color = OrangeRC,
-                    thickness = 2.dp
+                        .padding(8.dp),
+                    color = OrangeRC, thickness = 2.dp
                 )
                 // Vehicle Type
                 Row(
@@ -421,11 +372,137 @@ fun RouteDetailGeneralScreen(
                         data = routeInfo!!.vehicle.toString()
                     )
                 }
+                Divider(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                    color = OrangeRC, thickness = 2.dp
+                )
+                // Comentari (si existeix)
+                if (!routeInfo!!.comment.isNullOrEmpty()){
+                    FlowRow(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(12.dp, 8.dp, 8.dp, 8.dp),
+                    ) {
+                        Text(text = buildAnnotatedString {
+                            withStyle(
+                                style = SpanStyle(
+                                    fontWeight = FontWeight.Bold
+                                )
+                            ) {
+                                append("Comentari: ")
+                            }
+                            append(routeInfo!!.comment ?: "")
+                        }, color = MaterialTheme.colorScheme.onBackground)
+                    }
+                }
+
+                Divider(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                    color = OrangeRC,
+                    thickness = 2.dp
+                )
             }
+
+
         }
         }
     )
 
+}
+
+@Composable
+private fun RequestRoutePopup(
+    matchingOrders: List<Orders>,
+    routeDetailViewModel: RouteDetailViewModel,
+    routeID: Int
+){
+    Popup(
+        offset = IntOffset(0, LocalConfiguration.current.screenHeightDp + 100),
+        alignment = Alignment.Center,
+        onDismissRequest = { routeDetailViewModel.onTogglePopup() },
+        properties = PopupProperties(
+            focusable = true,
+            dismissOnBackPress = true,
+            dismissOnClickOutside = true
+        )
+    ) {
+        ElevatedCard(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(12.dp)
+                .fillMaxHeight(0.35f), colors = CardDefaults.elevatedCardColors(
+                containerColor = MaterialTheme.colorScheme.surface
+            )
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+
+                if (matchingOrders.isNotEmpty()) {
+                    Text(
+                        text = "Comandas que coincideixen amb la ruta",
+                        style = MaterialTheme.typography.titleLarge,
+                        color = MaterialTheme.colorScheme.onBackground
+                    )
+                    Divider(
+                        thickness = 2.dp,
+                        color = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.padding(8.dp)
+                    )
+                    LazyColumn(content = {
+                        matchingOrders.forEach { order ->
+                            item {
+                                MatchingOrderCard(
+                                    order = order,
+                                    routeDetailViewModel = routeDetailViewModel,
+                                    routeID = routeID
+                                )
+                            }
+                        }
+                    })
+
+                } else {
+                    Text(
+                        text = "No tens comandes que coincideixin amb la ruta",
+                        style = MaterialTheme.typography.titleLarge,
+                        color = MaterialTheme.colorScheme.onBackground
+                    )
+                    Divider(
+                        thickness = 2.dp,
+                        color = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.padding(8.dp)
+                    )
+                    Column(
+                        modifier = Modifier.fillMaxHeight(),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        ElevatedButton(
+                            onClick = {
+                                routeDetailViewModel.createRouteFromOrder()
+                            },
+                            colors = ButtonDefaults.elevatedButtonColors(
+                                contentColor = Color.White,
+                                containerColor = MaterialTheme.colorScheme.primary
+                            )
+                        ) {
+                            Text(
+                                "Crear una nova comanda",
+                                style = MaterialTheme.typography.titleMedium
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 @Composable
@@ -438,6 +515,7 @@ fun MatchingOrderCard(order: Orders, routeDetailViewModel: RouteDetailViewModel,
             Toast
                 .makeText(context, "Has fet una petició de transport", Toast.LENGTH_SHORT)
                 .show()
+            routeDetailViewModel.onTogglePopup()
         },
         colors = CardDefaults.elevatedCardColors(containerColor = MateBlackRC)
     ) {

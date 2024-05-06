@@ -35,9 +35,10 @@ class RouteDetailViewModel: ViewModel() {
      */
     fun filterMatchingOrders(userID: Int){
         val userOrders = LocalConstants.orderList.filter { it.userID == userID }
-
-        val routeConditions = listOf(route.value!!.isRefrigerat, route.value!!.isCongelat,
-            route.value!!.isIsoterm, route.value!!.isSenseHumitat)
+        val routeConditions = listOf(route.value!!.isRefrigerat,
+            route.value!!.isCongelat,
+            route.value!!.isIsoterm,
+            route.value!!.isSenseHumitat)
 
         val matchingOrders = userOrders.filter { order ->
 
@@ -55,12 +56,20 @@ class RouteDetailViewModel: ViewModel() {
                     order.dataSortida == route.value?.dataSortida &&
                     order.dataArribada == route.value?.dataArribada &&
                     // Comprovar que les condicions de transport de la ruta coincideixen amb les de la comanda
-                    routeConditions.zip(orderConditions).all { (routeCondition, orderCondition) ->
-                        routeCondition == orderCondition
+                    orderConditions.zip(routeConditions).all { (orderCondition, routeCondition) ->
+                        orderCondition == routeCondition
                     }
 
         }
+        println(matchingOrders)
         _userMatchingOrders.value = matchingOrders
+    }
+
+    private val _requestPopup = MutableStateFlow(false)
+    val requestPopup = _requestPopup.asStateFlow()
+
+    fun onTogglePopup(){
+        _requestPopup.value = !_requestPopup.value
     }
 
     private val _isOrderPendent = MutableStateFlow(false)

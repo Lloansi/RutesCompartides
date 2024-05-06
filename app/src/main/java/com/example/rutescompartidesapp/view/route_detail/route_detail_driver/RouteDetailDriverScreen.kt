@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -63,7 +65,7 @@ import com.example.rutescompartidesapp.view.route_detail.route_detail_driver.com
 import com.example.rutescompartidesapp.view.routes_order_list.components.RouteCardHeader
 import kotlinx.coroutines.flow.collectLatest
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "RestrictedApi")
 @Composable
 fun RouteDetailDriverScreen(
@@ -76,7 +78,7 @@ fun RouteDetailDriverScreen(
 
     routeDetailDriverViewModel.getRoute(routeID)
     val route by routeDetailDriverViewModel.route.collectAsStateWithLifecycle()
-    val order by routeDetailDriverViewModel.order.collectAsStateWithLifecycle()
+    //val order by routeDetailDriverViewModel.order.collectAsStateWithLifecycle()
     val interactions = routeDetailDriverViewModel.interactions
     val isCompleteScreenShowing by routeDetailDriverViewModel.isCompleteScreenShowing.collectAsStateWithLifecycle()
     val routeInteractionToConfirm by routeDetailDriverViewModel.routeInteractionToConfirm.collectAsStateWithLifecycle()
@@ -161,6 +163,7 @@ fun RouteDetailDriverScreen(
                                             }
                                         })
                                 }
+                                // Data Sortida
                                 Row(
                                     modifier = Modifier
                                         .fillMaxWidth()
@@ -186,7 +189,7 @@ fun RouteDetailDriverScreen(
                                 Row(
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .padding(start = 12.dp)
+                                        .padding(start = 12.dp, bottom = 2.dp)
                                 ) {
                                     Text(
                                         text = buildAnnotatedString {
@@ -205,16 +208,11 @@ fun RouteDetailDriverScreen(
                                 Divider(
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .padding(
-                                            start = 8.dp,
-                                            end = 8.dp,
-                                            top = 4.dp,
-                                            bottom = 4.dp
-                                        ),
+                                        .padding(8.dp),
                                     color = OrangeRC,
                                     thickness = 2.dp
                                 )
-                                // Transport Options
+                                // Condicions de transport
                                 Row(
                                     modifier = Modifier
                                         .fillMaxWidth(),
@@ -247,7 +245,7 @@ fun RouteDetailDriverScreen(
                                     )
 
                                 }
-                                // Available Space
+                                // Espai disponible
                                 Row(
                                     modifier = Modifier
                                         .fillMaxWidth(),
@@ -259,19 +257,25 @@ fun RouteDetailDriverScreen(
                                         data = route!!.availableSpace.toString()
                                     )
                                 }
+                                // Cost de la ruta
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth(),
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    RouteData(
+                                        icon = R.drawable.money_svg_icon,
+                                        dataHeader = "Cost de la ruta",
+                                        data = route!!.costKm.toString()+"€/km"
+                                    )
+                                }
                                 Divider(
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .padding(
-                                            start = 8.dp,
-                                            end = 8.dp,
-                                            top = 4.dp,
-                                            bottom = 4.dp
-                                        ),
+                                        .padding(8.dp),
                                     color = OrangeRC,
                                     thickness = 2.dp
                                 )
-
                                 // Vehicle Type
                                 Row(
                                     modifier = Modifier
@@ -287,12 +291,33 @@ fun RouteDetailDriverScreen(
                                 Divider(
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .padding(
-                                            start = 8.dp,
-                                            end = 8.dp,
-                                            top = 4.dp,
-                                            bottom = 4.dp
-                                        ),
+                                        .padding(8.dp),
+                                    color = OrangeRC,
+                                    thickness = 2.dp
+                                )
+                              // Comentari (si existeix)
+                                if (!route!!.comment.isNullOrEmpty()){
+                                    FlowRow(
+                                        modifier = Modifier
+                                            .fillMaxWidth().padding(12.dp, 8.dp, 8.dp, 8.dp),
+                                    ) {
+                                        Text(text = buildAnnotatedString {
+                                            withStyle(
+                                                style = SpanStyle(
+                                                    fontWeight = FontWeight.Bold
+                                                )
+                                            ) {
+                                                append("Comentari: ")
+                                            }
+                                            append(route!!.comment ?: "")
+                                        }, color = MaterialTheme.colorScheme.onBackground)
+                                    }
+                                    }
+
+                                Divider(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(8.dp),
                                     color = OrangeRC,
                                     thickness = 2.dp
                                 )
@@ -317,7 +342,10 @@ fun RouteDetailDriverScreen(
                                             contentDescription = "Interaction route icon",
                                             tint = Color.White
                                         )
-                                        Text(text = "Interaccions", color = Color.White)
+                                        Text(modifier = Modifier.padding(start = 4.dp),
+                                            text = "Interaccions",
+                                            fontWeight = FontWeight.Bold,
+                                            color = Color.White)
 
                                     }
                                 }
@@ -375,7 +403,9 @@ fun RouteDetailDriverScreen(
                                                     containerColor = MaterialTheme.colorScheme.primary
                                                 )
                                             ) {
-                                                Text(text = "Duplicar Ruta", color = Color.White)
+                                                Text(text = "Duplicar Ruta",
+                                                    fontWeight = FontWeight.Bold,
+                                                    color = Color.White)
                                             }
                                         }
                                     }
@@ -432,7 +462,7 @@ fun RouteDetailDriverScreen(
                                                 .padding(12.dp),
                                             verticalAlignment = Alignment.CenterVertically
                                         ) {
-                                            Column(modifier = Modifier.weight(2.5f),
+                                            Column(modifier = Modifier.weight(2f),
                                                 horizontalAlignment = Alignment.Start,
                                                 verticalArrangement = Arrangement.Center
                                                 ) {
@@ -441,7 +471,7 @@ fun RouteDetailDriverScreen(
                                                     style = MaterialTheme.typography.titleLarge,
                                                 )
                                             }
-                                            Column(modifier = Modifier.weight(0.5f),
+                                            Column(modifier = Modifier.weight(1f),
                                                 horizontalAlignment = Alignment.End
                                                 ) {
                                                 IconButton(onClick = { routeDetailDriverViewModel.showInteractionPopup(false) }) {
@@ -488,7 +518,7 @@ fun RouteDetailDriverScreen(
 }
 @Composable
 fun RouteData(icon: Int, dataHeader: String, data: String) {
-    Icon(modifier= Modifier.padding(start = 12.dp, 8.dp, 8.dp, 8.dp), painter = painterResource(id = icon), contentDescription = "$dataHeader Icon" ,
+    Icon(modifier= Modifier.padding(12.dp, 8.dp, 8.dp, 8.dp), painter = painterResource(id = icon), contentDescription = "$dataHeader Icon" ,
         tint = MaterialTheme.colorScheme.onBackground)
     Text(text = buildAnnotatedString {
         withStyle(

@@ -77,11 +77,9 @@ fun ValueExperienceGeneralScreen(routeID: Int, orderID: Int, navHost: NavHostCon
             ElevatedCard(
                 modifier = Modifier.fillMaxWidth(),
                 colors = CardDefaults.elevatedCardColors(
-                    containerColor = MaterialTheme.colorScheme.background
+                    containerColor = MaterialTheme.colorScheme.onTertiaryContainer
                 )
             ) {
-
-                println("ESTADO DE EL TOGGLE2 DEL DROPDOWN : $isDropdownExpanded")
 
                 Row {
                     RouteOrderHeader(route = route, order = order)
@@ -111,19 +109,18 @@ fun ValueExperienceGeneralScreen(routeID: Int, orderID: Int, navHost: NavHostCon
                 Row(
                     modifier = Modifier
                         .fillMaxWidth(0.95f)
-                        .padding(bottom = 10.dp, start = 4.dp),
+                        .padding(bottom = 10.dp, start = 8.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
 
                     Text(text = "Puntuació: ",
                         style = MaterialTheme.typography.bodyLarge,
+                        fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onBackground,)
                     ExposedDropdownMenuBox(
                         expanded = isDropdownExpanded,
                         onExpandedChange = {
                             isDropdownExpanded = !isDropdownExpanded
-                            //valueExperienceViewModel.toggleDropdown()
-                            println("ESTADO DE EL TOGGLE DEL DROPDOWN : $isDropdownExpanded")
                         }
                     ) {
                         OutlinedTextField(
@@ -137,10 +134,10 @@ fun ValueExperienceGeneralScreen(routeID: Int, orderID: Int, navHost: NavHostCon
                             colors = ExposedDropdownMenuDefaults.textFieldColors(
                                 focusedIndicatorColor = MaterialTheme.colorScheme.primary,
                                 unfocusedIndicatorColor = Color.Gray,
-                                disabledContainerColor = MaterialTheme.colorScheme.background,
+                                disabledContainerColor = MaterialTheme.colorScheme.onTertiaryContainer,
                                 disabledIndicatorColor = Color.Gray,
-                                focusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
-                                unfocusedContainerColor = MaterialTheme.colorScheme.primaryContainer
+                                focusedContainerColor = MaterialTheme.colorScheme.onTertiaryContainer,
+                                unfocusedContainerColor = MaterialTheme.colorScheme.onTertiaryContainer
                             ),
                             modifier = Modifier
                                 .menuAnchor()
@@ -151,17 +148,16 @@ fun ValueExperienceGeneralScreen(routeID: Int, orderID: Int, navHost: NavHostCon
                             onDismissRequest = {
                                 isDropdownExpanded = !isDropdownExpanded
                                 //valueExperienceViewModel.toggleDropdown()
-                                println("ESTADO DE EL TOGGLE3 DEL DROPDOWN : $isDropdownExpanded")
                             }
                         ) {
-                            (1..10).forEach { puntuació ->
+                            (1..10).forEach { puntuacio ->
                                 DropdownMenuItem(
                                     text = {
-                                        Text(text = puntuació.toString())
+                                        Text(text = puntuacio.toString())
                                     },
                                     onClick = {
                                         isDropdownExpanded = !isDropdownExpanded
-                                        valueExperienceViewModel.setExperienceScore(puntuació.toString())
+                                        valueExperienceViewModel.setExperienceScore(puntuacio.toString())
                                     }
                                 )
                             }
@@ -170,12 +166,12 @@ fun ValueExperienceGeneralScreen(routeID: Int, orderID: Int, navHost: NavHostCon
                 }
 
 
-                Divider(color= OrangeRC, thickness = 2.dp)
+                Divider(color= OrangeRC, thickness = 2.dp, modifier = Modifier.padding(start = 6.dp, end = 6.dp))
                 // Comment TextField
                 Row(
                     modifier = Modifier
                         .fillMaxWidth(0.95f)
-                        .padding(start = 4.dp, top = 10.dp, bottom = 8.dp),
+                        .padding(start = 8.dp, top = 10.dp, bottom = 8.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(

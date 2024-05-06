@@ -51,6 +51,11 @@ object LocalConstants {
             true, true, false, true,
             "Renault Clio", 0.2f, 3.5f, 1, "Volum similar a 2 palets", "Tinc aire acondicionat",
             GeoPoint(41.7288939,1.8286765), GeoPoint(41.3828939, 2.1774323)),
+        Routes(6,6, "Ruta 6", "Manresa", "Barcelona",
+            null, "2024-03-26", "20:00","2024-03-26", "23:15", listOf("setmanal"),
+            true, true, false, true,
+            "Renault Clio", 0.2f, 3.5f, 1, "Volum similar a 2 palets", "Tinc aire acondicionat",
+            GeoPoint(41.7288939,1.8286765), GeoPoint(41.3828939, 2.1774323))
     )
 
     val orderList = mutableListOf(
@@ -62,7 +67,14 @@ object LocalConstants {
             2.5f, false, 100.0f, 10.0f,
             "Ben grossos i sucosos",
             GeoPoint(41.3828939, 2.1774323), GeoPoint(41.11888,1.2546057)),
-
+        Orders(1,6, "Colinabos2", "Manresa", "Barcelona",
+            "2024-03-26", "20:00",
+            "2024-03-26", "23:15", listOf("hortalizes"),
+            true, true, false, true,
+            3, 1.2f, 0.5f, 0.5f,
+            2.5f, false, 100.0f, 10.0f,
+            "Ben grossos i sucosos",
+            GeoPoint(41.3828939, 2.1774323), GeoPoint(41.11888,1.2546057)),
         Orders(4,2, "Entrega de patates", "Girona", "Lleida",
             "2024-05-08", "14:00",
             "2024-05-09", "18:00",  listOf("hortalizes"),

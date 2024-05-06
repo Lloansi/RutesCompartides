@@ -192,7 +192,7 @@ fun ScreenNavigationConfiguration(
         })) {
             val routeID = it.arguments?.getInt("routeId")
             RouteDetailGeneralScreen(navHostController, routeID!!, mapViewModel,
-                mapViewModel2, manageOrderViewModel, routeOrderListViewModel)
+                mapViewModel2, manageOrderViewModel, routeOrderListViewModel, loginViewModel)
         }
 
         composable(Screens.ValueExperienceGeneralScreen.route,
