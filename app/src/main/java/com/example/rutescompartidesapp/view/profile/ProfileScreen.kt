@@ -154,7 +154,7 @@ fun ProfileScreen(profileViewModel: ProfileViewModel, loginViewModel: LoginViewM
                             iconVisible = editProfileButtonVisible
                         )
 
-                        LogOutPopup(viewModelProfile = profileViewModel, navController)
+                        LogOutPopup(viewModelProfile = profileViewModel, navController, loginViewModel)
 
                         // This will be delete
                         if (onClickPlaceholder) {

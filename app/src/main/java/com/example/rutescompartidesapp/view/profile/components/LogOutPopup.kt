@@ -26,11 +26,12 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.rutescompartidesapp.ui.theme.MateBlackRC
+import com.example.rutescompartidesapp.view.login.LoginViewModel
 import com.example.rutescompartidesapp.view.profile.ProfileViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LogOutPopup(viewModelProfile: ProfileViewModel, navigator: NavController) {
+fun LogOutPopup(viewModelProfile: ProfileViewModel, navigator: NavController, loginViewModel: LoginViewModel) {
 
     val isLogOutPopUpShowing by viewModelProfile.isLogOutPopUpShowing.collectAsStateWithLifecycle()
     val wantsToLogOut by viewModelProfile.wantsToLogOut.collectAsStateWithLifecycle()
@@ -83,6 +84,7 @@ fun LogOutPopup(viewModelProfile: ProfileViewModel, navigator: NavController) {
                     ) {
                         LogOutButton(buttonText = "No") { viewModelProfile.onClickLogOutPopUpShow(false) }
                         LogOutButton(buttonText = "Si") {
+                            loginViewModel.updateCurrentIndex(0)
                             viewModelProfile.onClickLogOutPopUpShow(false)
                             viewModelProfile.onClickLogOut(true)
                         }
