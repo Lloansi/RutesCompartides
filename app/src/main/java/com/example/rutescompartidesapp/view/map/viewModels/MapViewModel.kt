@@ -13,8 +13,12 @@ import com.example.rutescompartidesapp.R
 import com.example.rutescompartidesapp.data.domain.Order
 import com.example.rutescompartidesapp.data.domain.Route
 import com.example.rutescompartidesapp.data.domain.Route2
+import com.example.rutescompartidesapp.data.domain.orders.Orders
+import com.example.rutescompartidesapp.data.domain.routes.Routes
 import com.example.rutescompartidesapp.data.network.GoogleLocation.repository.GoogleLocationsRepository
 import com.example.rutescompartidesapp.data.network.idescat.repository.idescatRepository
+import com.example.rutescompartidesapp.utils.LocalConstants.orderList
+import com.example.rutescompartidesapp.utils.LocalConstants.routeList
 import com.example.rutescompartidesapp.view.map.MapScreen.maxKmFog
 import com.example.rutescompartidesapp.view.map.components.allOrders
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -60,10 +64,10 @@ class MapViewModel @Inject constructor (
     private val _visibleRoutes = MutableStateFlow<MutableList<GeoPoint>>(mutableListOf())
     var visibleRoutes = _visibleRoutes.asStateFlow()
 
-    private val _filteredOrders = MutableStateFlow<List<Order>>(listOf())
+    private val _filteredOrders = MutableStateFlow<List<Orders>?>(listOf())
     var filteredOrders = _filteredOrders.asStateFlow()
 
-    private val _filteredRoutes = MutableStateFlow<List<Route>>(listOf())
+    private val _filteredRoutes = MutableStateFlow<List<Routes>?>(listOf())
     var filteredRoutes = _filteredRoutes.asStateFlow()
 
     private val _mapViewState = MutableStateFlow<MapView?>(null)
@@ -261,19 +265,20 @@ class MapViewModel @Inject constructor (
                         // Handle the click event, we update our mutable live data, with the click coordinates
                         // The clicked point becomes the center point
                         updateMarkerPosition(geoPoint)
+                        controller.animateTo(markerPosition.value)
                         //controller.setCenter(markerPosition.value)
-                        controller.animateTo(markerPosition.value);
 
                         // With the position where user clicked, we check if near there is any marker, if there is, markers appear
                         // If user never clicked, we just show it as mentioned before, if not, we delete the old markers and create the new ones
                         if (_ordersMarkers.value.isNotEmpty()){
                             // We delete orders
                             deleteOrdersMarkers(_ordersMarkers.value, mapView)
+                            deleteRoutesPaths(_routesPaths.value, mapView)
                             // We check if near user's click have any order
-                            isNearClickUser(ordersList = allOrders, routesList = null, mapView, orderIconMarker, roadManager, maxKmDistance = maxKmFog)
+                            isNearClickUser(ordersList = orderList, routesList = null, mapView, orderIconMarker, roadManager, maxKmDistance = maxKmFog)
                         }else{
                             // We check if near user's click have any order
-                            isNearClickUser(ordersList = allOrders, routesList = null, mapView, orderIconMarker, roadManager, maxKmDistance = maxKmFog)
+                            isNearClickUser(ordersList = orderList, routesList = null, mapView, orderIconMarker, roadManager, maxKmDistance = maxKmFog)
                         }
 
                         if (_routesMarkers.value.isNotEmpty()){
@@ -281,10 +286,10 @@ class MapViewModel @Inject constructor (
                             deleteRoutesMarkers(_routesMarkers.value, mapView)
                             deleteRoutesPaths(_routesPaths.value, mapView)
                             // We check if near user's click have any route
-                            isNearClickUser(ordersList = null, routesList = allRoute2, mapView, routeIconMarker, roadManager, maxKmDistance = maxKmFog)
+                            isNearClickUser(ordersList = null, routesList = routeList, mapView, routeIconMarker, roadManager, maxKmDistance = maxKmFog)
                         } else{
                             // We check if near user's click have any route
-                            isNearClickUser(ordersList = null, routesList = allRoute2, mapView, routeIconMarker, roadManager, maxKmDistance = maxKmFog)
+                            isNearClickUser(ordersList = null, routesList = routeList, mapView, routeIconMarker, roadManager, maxKmDistance = maxKmFog)
                         }
                     }
                     //isDragging = false // Reset the drag flag
@@ -311,7 +316,7 @@ class MapViewModel @Inject constructor (
 
      *@param maxKmDistance Maximum distance in kilometers.
      **/
-    private fun isNearClickUser(ordersList : List<Order>? = null, routesList: List<Route2>? = null, mapView: MapView, iconMarkerType: Drawable? = null, roadManager: RoadManager, maxKmDistance: Int){
+    private fun isNearClickUser(ordersList : MutableList<Orders>? = null, routesList: MutableList<Routes>? = null, mapView: MapView, iconMarkerType: Drawable? = null, roadManager: RoadManager, maxKmDistance: Int){
         // We get the pixels from the center screen
         val centerPoint = mapView.projection.fromPixels(mapView.width / 2, mapView.height / 2) as GeoPoint
 
@@ -321,12 +326,25 @@ class MapViewModel @Inject constructor (
             // We clear the list with previous visible orders, to latter inside if (isInArea) reassign new values
             _visibleOrders.value.clear()
             for (orderPos in ordersList){
-                // GeoPoint from an order
-                val orderGeoPoint = GeoPoint(orderPos.lat.toDouble(),orderPos.lon.toDouble())
                 // Check if order is in area to show
-                if(isInArea(centerPoint,orderGeoPoint, maxKmDistance)){
-                    createMarker("order",orderGeoPoint,mapView,iconMarkerType)
-                    _visibleOrders.value.add(orderGeoPoint)
+                if(isInArea(centerPoint,orderPos.startPoint, maxKmDistance)){
+
+                    _visibleOrders.value.add(orderPos.startPoint)
+
+                    createMarker("order",orderPos.startPoint,mapView,iconMarkerType)
+
+                    createMarker("order",orderPos.endPoint,mapView,iconMarkerType)
+
+                    showPathBetweenPoints(orderPos.startPoint, orderPos.endPoint, mapView, roadManager, "order")
+
+                }else if (isInArea(centerPoint,orderPos.endPoint,maxKmDistance)){
+                    _visibleOrders.value.add(orderPos.endPoint)
+
+                    createMarker("order",orderPos.endPoint,mapView,iconMarkerType)
+
+                    createMarker("order",orderPos.startPoint,mapView,iconMarkerType)
+
+                    showPathBetweenPoints(orderPos.endPoint,orderPos.startPoint, mapView, roadManager, "order")
                 }
             }
         }
@@ -345,7 +363,7 @@ class MapViewModel @Inject constructor (
                     // Marker route end point
                     createMarker("route",routePos.endPoint, mapView, iconMarkerType)
                     // We draw path
-                    showPathBetweenPoints(routePos.startPoint, routePos.endPoint, mapView, roadManager)
+                    showPathBetweenPoints(routePos.startPoint, routePos.endPoint, mapView, roadManager, "route")
                 }else if (isInArea(centerPoint,routePos.endPoint, maxKmDistance)){
                     _visibleRoutes.value.add(routePos.endPoint)
                     // Marker route start point
@@ -353,7 +371,7 @@ class MapViewModel @Inject constructor (
                     // Marker route end point
                     createMarker("route",routePos.endPoint, mapView, iconMarkerType)
                     // We draw path
-                    showPathBetweenPoints(routePos.startPoint, routePos.endPoint, mapView, roadManager)
+                    showPathBetweenPoints(routePos.startPoint, routePos.endPoint, mapView, roadManager, "route")
                 }
             }
         }
@@ -433,9 +451,9 @@ class MapViewModel @Inject constructor (
      * @param visibleOrders List of GeoPoints representing visible orders on the map.
      **/
      private fun filterPerVisibilityOrders(visibleOrders: MutableList<GeoPoint>){
-        val ordersFiltered = allOrders.filter { order ->
+        val ordersFiltered = orderList?.filter { order ->
             visibleOrders.any { geoPoint ->
-                geoPoint.latitude.toFloat() == order.lat && geoPoint.longitude.toFloat() == order.lon
+                geoPoint == order.startPoint || geoPoint == order.endPoint
             }
         }
         _filteredOrders.value = ordersFiltered
@@ -447,9 +465,9 @@ class MapViewModel @Inject constructor (
      * @param visibleRoutes List of GeoPoints representing visible routes on the map.
      **/
     private fun filterPerVisibilityRoute(visibleRoutes: MutableList<GeoPoint>){
-        val routesFiltered = allRoute.filter { route ->
+        val routesFiltered = routeList?.filter { route ->
             visibleRoutes.any{ geoPoint ->
-                geoPoint.latitude.toFloat() == route.startLat  && geoPoint.longitude.toFloat() == route.startLon || geoPoint.latitude.toFloat() == route.endLat && geoPoint.longitude.toFloat() == route.endLon
+                geoPoint == route.startPoint || geoPoint == route.endPoint
             }
         }
         _filteredRoutes.value = routesFiltered
@@ -486,13 +504,18 @@ class MapViewModel @Inject constructor (
 
      * @param roadManager RoadManager instance for obtaining road data.
      **/
-    fun showPathBetweenPoints(startPoint: GeoPoint, endPoint: GeoPoint, mapView: MapView, roadManager: RoadManager){
+    fun showPathBetweenPoints(startPoint: GeoPoint, endPoint: GeoPoint, mapView: MapView, roadManager: RoadManager,type: String){
         viewModelScope.launch(Dispatchers.Main) {
             try {
                 val road = getRoadAsync(roadManager, startPoint, endPoint)
                 val roadOverlay = RoadManager.buildRoadOverlay(road)
+                val colorNaranja = Color.rgb(211, 106, 53)
 
-                roadOverlay.setColor(Color.GREEN) // Path color
+                if (type.uppercase() == "ORDER"){
+                    roadOverlay.setColor(colorNaranja)
+                } else{
+                    roadOverlay.setColor(Color.GREEN)// Path color
+                }
                 roadOverlay.setWidth(20f) // Pat width
 
                 /*
@@ -552,18 +575,19 @@ class MapViewModel @Inject constructor (
 
         if (_ordersMarkers.value.isNotEmpty()){
             deleteOrdersMarkers(_ordersMarkers.value, mapView)
-            isNearClickUser(ordersList = allOrders, routesList = null, mapView, orderIconMarker, roadManager, maxKmDistance)
+            deleteRoutesPaths(_routesPaths.value, mapView)
+            isNearClickUser(ordersList = orderList, routesList = null, mapView, orderIconMarker, roadManager, maxKmDistance)
         }else{
-            isNearClickUser(ordersList = allOrders, routesList = null, mapView, orderIconMarker, roadManager, maxKmDistance)
+            isNearClickUser(ordersList = orderList, routesList = null, mapView, orderIconMarker, roadManager, maxKmDistance)
         }
 
         if (_routesMarkers.value.isNotEmpty()){
             deleteRoutesMarkers(_routesMarkers.value, mapView)
             deleteRoutesPaths(_routesPaths.value, mapView)
-            isNearClickUser(ordersList = null, routesList = allRoute2, mapView, routeIconMarker, roadManager, maxKmDistance)
+            isNearClickUser(ordersList = null, routesList = routeList, mapView, routeIconMarker, roadManager, maxKmDistance)
         } else{
             // We check if near user's click have any route
-            isNearClickUser(ordersList = null, routesList = allRoute2, mapView, routeIconMarker, roadManager, maxKmDistance)
+            isNearClickUser(ordersList = null, routesList = routeList, mapView, routeIconMarker, roadManager, maxKmDistance)
         }
 
         // Important condition , if dont handle user click and doesn't exists, app crash

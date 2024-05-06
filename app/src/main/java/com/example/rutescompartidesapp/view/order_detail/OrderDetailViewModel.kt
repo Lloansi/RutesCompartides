@@ -18,7 +18,7 @@ class OrderDetailViewModel: ViewModel() {
     val order = _order.asStateFlow()
 
     fun getOrder(orderID: Int){
-        val order = LocalConstants.orderList.first { it.orderID == orderID }
+        val order = LocalConstants.orderList!!.first { it.orderID == orderID }
         _order.value = order
         checkOrderStatus()
     }
@@ -43,7 +43,7 @@ class OrderDetailViewModel: ViewModel() {
      */
     fun filterMatchingRoutes(userID: Int){
         _acceptPopup.value = true
-        val userRoutes = LocalConstants.routeList.filter { it.userID == userID }
+        val userRoutes = LocalConstants.routeList!!.filter { it.userID == userID }
 
         val orderConditions = listOf(order.value!!.isRefrigerat, order.value!!.isCongelat,
             order.value!!.isIsoterm, order.value!!.isSenseHumitat)
@@ -182,7 +182,7 @@ class OrderDetailViewModel: ViewModel() {
 
     fun deleteOrder(orderID: Int){
         viewModelScope.launch {
-            LocalConstants.orderList.removeIf { order -> order.orderID == orderID }
+            LocalConstants.orderList!!.removeIf { order -> order.orderID == orderID }
         }
 
         // TODO Fer un DELETE a la API per eliminar la comanda

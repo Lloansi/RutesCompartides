@@ -53,8 +53,8 @@ import kotlinx.coroutines.flow.collectLatest
 fun ValueExperienceGeneralScreen(routeID: Int, orderID: Int, navHost: NavHostController, valueExperienceViewModel: ValueExperienceViewModel) {
 
     //val valueExperienceViewModel = ValueExperienceViewModel()
-    val route: Routes = LocalConstants.routeList.first { it.routeID == routeID }
-    val order: Orders = LocalConstants.orderList.first { it.orderID == orderID }
+    val route: Routes = LocalConstants.routeList!!.first { it.routeID == routeID }
+    val order: Orders = LocalConstants.orderList!!.first { it.orderID == orderID }
     val isPackageDelivered by valueExperienceViewModel.isPackageDelivered.collectAsStateWithLifecycle()
     val comment by valueExperienceViewModel.comment.collectAsStateWithLifecycle()
     val experienceScore by valueExperienceViewModel.experienceScore.collectAsStateWithLifecycle()

@@ -39,7 +39,7 @@ class MapViewModel2 () :ViewModel() {
      * @param routeIconMarker Drawable for the route markers.
      **/
     fun createPathAndRoutePoints(viewModel: MapViewModel, startPoint: GeoPoint, endPoint: GeoPoint, mapView: MapView, roadManager: RoadManager, routeIconMarker: Drawable?){
-        viewModel.showPathBetweenPoints(startPoint, endPoint, mapView, roadManager)
+        viewModel.showPathBetweenPoints(startPoint, endPoint, mapView, roadManager, "route")
         viewModel.createMarker("route", startPoint, mapView, routeIconMarker)
         viewModel.createMarker("route", endPoint, mapView, routeIconMarker)
     }

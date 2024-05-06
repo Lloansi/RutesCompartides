@@ -16,7 +16,7 @@ class RouteDetailViewModel: ViewModel() {
     val route = _route.asStateFlow()
 
     fun getRoute(routeID: Int){
-        val route = LocalConstants.routeList.first { it.routeID == routeID }
+        val route = LocalConstants.routeList!!.first { it.routeID == routeID }
         _route.value = route
         checkOrderStatus()
     }
@@ -34,7 +34,7 @@ class RouteDetailViewModel: ViewModel() {
      * @param userID ID de l'usuari
      */
     fun filterMatchingOrders(userID: Int){
-        val userOrders = LocalConstants.orderList.filter { it.userID == userID }
+        val userOrders = LocalConstants.orderList!!.filter { it.userID == userID }
         val routeConditions = listOf(route.value!!.isRefrigerat,
             route.value!!.isCongelat,
             route.value!!.isIsoterm,

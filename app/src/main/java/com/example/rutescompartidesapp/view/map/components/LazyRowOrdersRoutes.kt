@@ -6,22 +6,27 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.example.rutescompartidesapp.data.domain.Order
 import com.example.rutescompartidesapp.data.domain.Route
+import com.example.rutescompartidesapp.data.domain.orders.Orders
+import com.example.rutescompartidesapp.data.domain.routes.Routes
 
 
 @Composable
-fun CardBottomMap(ordersFiltered: List<Order>, routesFiltered: List<Route>){
+fun CardBottomMap(ordersFiltered: List<Orders>?, routesFiltered: List<Routes>?){
     LazyRow(
         modifier = Modifier.fillMaxWidth()
     ){
-        items(ordersFiltered.size){ item ->
-           val orderItem = ordersFiltered[item]
-           ComandaCard(comanda = orderItem)
+        if (!ordersFiltered.isNullOrEmpty()){
+            items(ordersFiltered.size){ item ->
+                val orderItem = ordersFiltered[item]
+                ComandaCard(comanda = orderItem)
+            }
         }
 
-
-        items(routesFiltered.size){item ->
-            val rutaItem = routesFiltered[item]
-            RouteCard(ruta = rutaItem, newVehicle)
+        if (!routesFiltered.isNullOrEmpty()){
+            items(routesFiltered.size){item ->
+                val rutaItem = routesFiltered[item]
+                RouteCard(ruta = rutaItem, newVehicle)
+            }
         }
     }
 }

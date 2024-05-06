@@ -126,7 +126,7 @@ class RouteDetailDriverViewModel (routeID: Int): ViewModel(){
      * @param routeID ID de la ruta
      */
     fun getRoute(routeID: Int){
-        val route = LocalConstants.routeList.first { it.routeID == routeID }
+        val route = LocalConstants.routeList!!.first { it.routeID == routeID }
         _route.value = route
     }
 
@@ -135,7 +135,7 @@ class RouteDetailDriverViewModel (routeID: Int): ViewModel(){
      * @param orderID ID de la comanda
      */
     private fun getOrder(orderID: Int){
-        val order = LocalConstants.orderList.first { it.orderID == orderID }
+        val order = LocalConstants.orderList!!.first { it.orderID == orderID }
         _order.value = order
     }
 
@@ -144,18 +144,18 @@ class RouteDetailDriverViewModel (routeID: Int): ViewModel(){
      * @param route Ruta a duplicar
      */
     fun duplicateRoute(route: Routes){
-        val nextRouteID = LocalConstants.routeList.maxOf { lastRoute ->
+        val nextRouteID = LocalConstants.routeList!!.maxOf { lastRoute ->
             lastRoute.routeID
         } + 1
         val newRoute = route.copy(routeID = nextRouteID)
-        LocalConstants.routeList.add(newRoute)
+        LocalConstants.routeList!!.add(newRoute)
        // TODO Fer un POST a la API per duplicar la ruta
     }
 
 
 
     fun deleteRoute(route: Routes){
-        LocalConstants.routeList.remove(route)
+        LocalConstants.routeList!!.remove(route)
         // TODO Fer un DELETE a la API per eliminar la ruta
     }
 

@@ -94,15 +94,8 @@ fun MapViewContainer(viewModel: MapViewModel, ctx : Context, iconMarkerClickPoin
             // Since geoPoint is read here, the view will recompose whenever it is updated
             mapView.controller.setCenter(viewModel.markerPosition.value)
 
-            // ViewModel Function to handle click's user in map
+            // ViewModel function to handle click's user in map
             viewModel.handleClicksMap(mapView, iconMarkerClickPointer, ctx, roadManager)
-
-            /*
-            SI USAMOS GESTURE DETECTOR EN VEZ DE MOTION EVENTS
-            mapView.setOnTouchListener { _, event ->
-                gestureDetector.onTouchEvent(event)
-            }
-            */
         }
     )
 }

@@ -438,7 +438,7 @@ class ManageRouteViewModel @Inject constructor(
     val routeAdded = _routeAdded.asStateFlow()
     fun addRoute(userID: Int){
         // TODO Cambiar la classe de la ruta i fer servir la oficial
-        val lastRouteID = LocalConstants.routeList.maxByOrNull { route -> route.routeID }!!.routeID
+        val lastRouteID = LocalConstants.routeList!!.maxByOrNull { route -> route.routeID }!!.routeID
         // Elimina els punts intermitjos buits
         val cleanStepNameList = stepNameList.value.filter { step -> step.isNotEmpty() }
         val newRoute = Routes(userID = userID,
@@ -482,7 +482,7 @@ class ManageRouteViewModel @Inject constructor(
     private val _routeToEdit = MutableStateFlow<Routes?>(null)
     val routeToEdit = _routeToEdit.asStateFlow()
     fun getRoute(routeID: Int) {
-        _routeToEdit.value =  LocalConstants.routeList.find { route -> route.routeID == routeID }!!
+        _routeToEdit.value =  LocalConstants.routeList!!.find { route -> route.routeID == routeID }!!
         updateRouteInfo()
     }
 
@@ -557,8 +557,8 @@ class ManageRouteViewModel @Inject constructor(
         )
         println(updatedRoute)
         // TODO Fer un PUT a la API per actualitzar la ruta
-        if (LocalConstants.routeList.removeIf { route -> route.routeID == updatedRoute.routeID }){
-            LocalConstants.routeList.add(updatedRoute)
+        if (LocalConstants.routeList!!.removeIf { route -> route.routeID == updatedRoute.routeID }){
+            LocalConstants.routeList!!.add(updatedRoute)
             onRouteAdded(true)
         }
     }

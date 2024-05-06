@@ -21,7 +21,29 @@ object LocalConstants {
         UserLocal(7, "David", "david@gmail.com", 684395785, "david"),
     )
 
-    val routeList = mutableListOf(
+    val routeList: MutableList<Routes>? = mutableListOf(
+        Routes(2,3, "A Mordor", "Hobitton", "Mordor",
+            listOf("Bree", "Rivendell", "Moria", "Lothlorien", "Cirith Ungol"),"2024-10-10", "14:00",
+            "2024-12-12", "12:12", listOf(),
+            false, false, false, false,
+            "A cama", 0.0f, 598.6f, 0, "4 Hobbits, 1 elf, 1 nan, 2 humans", "Acompanya al portador de l'anell a Mordor",
+            GeoPoint(41.5659823,2.0101492), GeoPoint(41.6528939, 2.1544323)
+        )
+    )
+
+    val orderList: MutableList<Orders>? = mutableListOf(
+        Orders(1,1, "Colinabos", "Barcelona", "Tarragona",
+            "2024-12-12", "12:00",
+            "2024-12-13", "15:00", listOf("hortalizes"),
+            true, false, false, true,
+            3, 1.2f, 0.5f, 0.5f,
+            2.5f, false, 100.0f, 10.0f,
+            "Ben grossos i sucosos",
+            GeoPoint(41.3828939, 2.1774323), GeoPoint(41.11888,1.2546057)
+        )
+    )
+    /*
+    val routeList: MutableList<Routes>? = mutableListOf(
         Routes(1,1, "Ruta 1", "Barcelona", "Tarragona",
             listOf("Viladecans", "Castelldefels", "Vilanova i la Geltrú", "Torredembarra"),"2024-12-12", "12:00",
             "2024-12-13", "14:00", listOf("diaria"),
@@ -33,32 +55,24 @@ object LocalConstants {
             "2024-05-09", "12:00", listOf("setmanal"),
             true, true, false, true,
             "Seat Ibiza", 1.0f, 4.5f, 2, "Volum similar a 2 palets", "No tinc aire acondicionat",
-            GeoPoint(41.9793006,2.8199439),
-            GeoPoint(41.6147605,0.6267842)),
+            GeoPoint(41.9495006,2.8799239),
+            GeoPoint(41.6387605,0.6467242)),
         Routes(2,3, "A Mordor", "Hobitton", "Mordor",
             listOf("Bree", "Rivendell", "Moria", "Lothlorien", "Cirith Ungol"),"2024-10-10", "14:00",
             "2024-12-12", "12:12", listOf(),
             false, false, false, false,
             "A cama", 0.0f, 598.6f, 0, "4 Hobbits, 1 elf, 1 nan, 2 humans", "Acompanya al portador de l'anell a Mordor",
-            GeoPoint(41.5629623,2.0100492), GeoPoint(41.3828939, 2.1774323)),
+            GeoPoint(41.5659823,2.0101492), GeoPoint(41.3828939, 2.1774323)),
         Routes(4,4, "Ruta 4", "Manresa", "Terrasa",
             null, "2024-04-17", "14:00", "2024-04-17", "21:00", listOf("bisetmanal"),
             true, true, false, true,
             "Renault Clio", 0.2f, 3.5f, 1, "Volum similar a 2 palets", "Tinc aire acondicionat",
-            GeoPoint(41.7288939,1.8286765), GeoPoint(41.5629623,2.0100492)),
-        Routes(5,5, "Ruta 5", "Manresa", "Barcelona",
-            null, "2024-03-26", "20:00","2024-03-26", "23:15", listOf("setmanal"),
-            true, true, false, true,
-            "Renault Clio", 0.2f, 3.5f, 1, "Volum similar a 2 palets", "Tinc aire acondicionat",
-            GeoPoint(41.7288939,1.8286765), GeoPoint(41.3828939, 2.1774323)),
-        Routes(6,6, "Ruta 6", "Manresa", "Barcelona",
-            null, "2024-03-26", "20:00","2024-03-26", "23:15", listOf("setmanal"),
-            true, true, false, true,
-            "Renault Clio", 0.2f, 3.5f, 1, "Volum similar a 2 palets", "Tinc aire acondicionat",
-            GeoPoint(41.7288939,1.8286765), GeoPoint(41.3828939, 2.1774323))
-    )
+            GeoPoint(41.7288939,1.8286765), GeoPoint(41.5429623,2.3110492)),
+       )
+     */
 
-    val orderList = mutableListOf(
+    /*
+    val orderList: MutableList<Orders>? = mutableListOf(
         Orders(1,1, "Colinabos", "Barcelona", "Tarragona",
             "2024-12-12", "12:00",
             "2024-12-13", "15:00", listOf("hortalizes"),
@@ -74,15 +88,15 @@ object LocalConstants {
             3, 1.2f, 0.5f, 0.5f,
             2.5f, false, 100.0f, 10.0f,
             "Ben grossos i sucosos",
-            GeoPoint(41.3828939, 2.1774323), GeoPoint(41.11888,1.2546057)),
+            GeoPoint(41.3868939, 2.1794323), GeoPoint(41.12888,1.2846057)),
         Orders(4,2, "Entrega de patates", "Girona", "Lleida",
             "2024-05-08", "14:00",
             "2024-05-09", "18:00",  listOf("hortalizes"),
             true, true, false, true,
             2, 1.0f, 0.5f, 0.5f,
             2.0f, false, 50.0f, 5.0f,
-            "", GeoPoint(41.9793006,2.8199439),
-            GeoPoint(41.6147605,0.6267842)),
+            "", GeoPoint(41.9833006,2.8199739),
+            GeoPoint(41.6187605,0.6327842)),
 
         Orders(5,4, "Pomes", "Manresa", "Terrasa",
             "2024-04-17", "14:00", "2024-04-18", "15:00",
@@ -91,7 +105,7 @@ object LocalConstants {
             1, 0.2f, 0.2f, 0.2f,
             0.2f, false, 50.0f, 5.0f,
             "",
-            GeoPoint(41.7288939,1.8286765), GeoPoint(41.5629623,2.0100492)),
+            GeoPoint(41.7188939,1.8686765), GeoPoint(41.5639623,2.0150492)),
 
         Orders(3,3, "El anillo único", "Hobitton", "Mordor",
             "2024-10-10", "14:00", "2024-11-11", "14:00", listOf("peligrosa"),
@@ -99,15 +113,16 @@ object LocalConstants {
                 1, 0.1f, 0.1f, 0.1f,
                 0.1f, true, 1000.0f, 100.0f,
                 "No dejar que caiga en manos de Sauron",
-                GeoPoint(41.5629623,2.0100492), GeoPoint(41.3828939, 2.1774323)),
+                GeoPoint(41.5669623,2.0102492), GeoPoint(41.3828939, 2.1774323)),
 
         Orders(5,5, "Taronjes", "Manresa", "Barcelona",
             "2024-03-26", "20:00", "2024-03-27", "20:00", listOf("fruita"),
             true, true, false, true,
             1, 0.2f, 0.2f, 0.2f,
             0.2f, false, 50.0f, 5.0f,
-            "Fresques recollides ahir", GeoPoint(41.7288939,1.8286765), GeoPoint(41.3828939, 2.1774323)),
+            "Fresques recollides ahir", GeoPoint(41.7338939,1.8286765), GeoPoint(41.3828939, 2.1774323)),
     )
+     */
 
     val reviewList = mutableListOf<Review>(
         Review(1, 5, 1, 7, "Entrega a temps!"),

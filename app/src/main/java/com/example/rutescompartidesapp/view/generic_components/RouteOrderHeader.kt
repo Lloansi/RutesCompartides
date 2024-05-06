@@ -59,7 +59,7 @@ fun RouteOrderHeader(route: Routes, order: Orders) {
 @Preview(showBackground = true)
 @Composable
 fun RouteOrderHeaderPreview(){
-    RouteOrderHeader(LocalConstants.routeList.first(), LocalConstants.orderList.first())
+    RouteOrderHeader(LocalConstants.routeList!!.first(), LocalConstants.orderList!!.first())
 }
 
 /**

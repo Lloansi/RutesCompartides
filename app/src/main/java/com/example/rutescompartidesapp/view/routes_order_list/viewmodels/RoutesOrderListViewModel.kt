@@ -38,8 +38,8 @@ class RoutesOrderListViewModel: ViewModel() {
             _routes.value = myRoutes
             _orders.value = myOrders
         } else {
-            _routes.value = LocalConstants.routeList
-            _orders.value = LocalConstants.orderList
+            _routes.value = LocalConstants.routeList!!
+            _orders.value = LocalConstants.orderList!!
         }
     }
 
@@ -56,7 +56,7 @@ class RoutesOrderListViewModel: ViewModel() {
 
 
     // List of routes from the backend
-    private val _routesOriginal = MutableStateFlow(LocalConstants.routeList.asReversed())
+    private val _routesOriginal = MutableStateFlow(LocalConstants.routeList!!.asReversed())
 
     // List of routes, it's initial value it's the list of routes from the BackEnd
     private var _routes = _routesOriginal
@@ -78,7 +78,7 @@ class RoutesOrderListViewModel: ViewModel() {
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), _routes.value)
 
     // List of routes from the backend
-    private val _ordersOriginal = MutableStateFlow(LocalConstants.orderList.asReversed())
+    private val _ordersOriginal = MutableStateFlow(LocalConstants.orderList!!.asReversed())
 
     // List of orders, it's initial value it's the list of routes from the BackEnd
     private var _orders = _ordersOriginal
@@ -154,9 +154,9 @@ class RoutesOrderListViewModel: ViewModel() {
 
         _activeFilters.value = List(9) { false }
 
-        _routes.value = LocalConstants.routeList
+        _routes.value = LocalConstants.routeList!!
 
-        _orders.value = LocalConstants.orderList
+        _orders.value = LocalConstants.orderList!!
     }
 
     /**

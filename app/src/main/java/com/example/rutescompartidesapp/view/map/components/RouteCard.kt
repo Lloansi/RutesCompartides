@@ -35,6 +35,7 @@ import com.example.rutescompartidesapp.R
 import com.example.rutescompartidesapp.data.domain.Route
 import com.example.rutescompartidesapp.data.domain.Route2
 import com.example.rutescompartidesapp.data.domain.Vehicle
+import com.example.rutescompartidesapp.data.domain.routes.Routes
 import com.example.rutescompartidesapp.view.map.fredokaOneFamily
 import com.example.rutescompartidesapp.view.map.openSansFamily
 import org.osmdroid.util.GeoPoint
@@ -88,7 +89,7 @@ val allRoute = listOf(
 val newVehicle = Vehicle("Citroën Berlingo", 4, 234f,564f,234f)
 
 @Composable
-fun RouteCard(ruta : Route, vehicle: Vehicle) {
+fun RouteCard(ruta : Routes, vehicle: Vehicle) {
     Card(
         shape = MaterialTheme.shapes.medium,
         elevation = CardDefaults.cardElevation(
@@ -113,7 +114,7 @@ fun RouteCard(ruta : Route, vehicle: Vehicle) {
             ){
                 // Package number
                 Text(
-                    text = "Ruta nº${ruta.routeId}",
+                    text = "Ruta nº${ruta.routeID}",
                     style = MaterialTheme.typography.titleMedium,
                     fontFamily = fredokaOneFamily,
                     fontWeight = FontWeight.Bold,
@@ -157,7 +158,7 @@ fun RouteCard(ruta : Route, vehicle: Vehicle) {
             ) {
                 // Route start & end point
                 Text(
-                    text = "${ruta.startPoint} - ${ruta.endPoint}",
+                    text = "${ruta.puntSortida} - ${ruta.puntArribada}",
                     style = MaterialTheme.typography.titleMedium,
                     fontFamily = fredokaOneFamily,
                     fontWeight = FontWeight.Bold,
@@ -168,7 +169,7 @@ fun RouteCard(ruta : Route, vehicle: Vehicle) {
 
                 // Route information
                 DetailsCard(idImage = R.drawable.seat_svg, value = "${vehicle.seatsAvailable}", imageSize = 28.dp, paddingPercentage = 2)
-                PricePerKM(idImage1 = R.drawable.eur_svg, idImage2 = R.drawable.km_svg, value = "${ruta.routePrice}€")
+                PricePerKM(idImage1 = R.drawable.eur_svg, idImage2 = R.drawable.km_svg, value = "${ruta.costKm}€")
                 DetailsCard(idImage = R.drawable.van_measures, value = vehicle.vehicleMesures, imageSize = 35.dp, fontSize = 13.sp, paddingPercentage = 5)
 
                 val percentagePaddingDesviament = 5
@@ -179,7 +180,7 @@ fun RouteCard(ruta : Route, vehicle: Vehicle) {
                         append("Desviament de ")
                     }
                     withStyle(style = SpanStyle(fontSize = 17.sp, fontWeight = FontWeight.ExtraBold, color = MaterialTheme.colorScheme.primary)) {
-                        append("${ruta.maxDeviation}km")
+                        append("${ruta.maxDetourKm}km")
                     }
                     withStyle(style = SpanStyle(fontSize = 14.sp, fontWeight = FontWeight.SemiBold)) {
                         append(" màx")

@@ -20,8 +20,8 @@ class NotificationsViewModel: ViewModel() {
      * @param userID User ID to filter the orders and routes lists
      */
     fun getUserInteractions (userID: Int) {
-        val userOrders =  LocalConstants.orderList.filter { it.userID == userID }
-        val userRoutes = LocalConstants.routeList.filter { it.userID == userID }
+        val userOrders =  LocalConstants.orderList!!.filter { it.userID == userID }
+        val userRoutes = LocalConstants.routeList!!.filter { it.userID == userID }
         val userInteractions = LocalConstants.interactionList.filter {
             userOrders.any { order -> order.orderID == it.orderID } ||
                     userRoutes.any { route -> route.routeID == it.routeID }

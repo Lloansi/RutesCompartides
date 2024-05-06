@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.rutescompartidesapp.R
 import com.example.rutescompartidesapp.data.domain.Order
+import com.example.rutescompartidesapp.data.domain.orders.Orders
 import com.example.rutescompartidesapp.view.map.fredokaOneFamily
 import com.example.rutescompartidesapp.view.map.openSansFamily
 
@@ -81,7 +82,7 @@ val allOrders = listOf(
 )
 
 @Composable
-fun ComandaCard(comanda: Order) {
+fun ComandaCard(comanda: Orders) {
     Card(
         shape = MaterialTheme.shapes.medium,
         elevation = CardDefaults.cardElevation(
@@ -104,7 +105,7 @@ fun ComandaCard(comanda: Order) {
             ){
                 // Package number
                 Text(
-                    text = "Comanda nº${comanda.packageId}",
+                    text = "Comanda nº${comanda.orderID}",
                     style = MaterialTheme.typography.titleMedium,
                     fontFamily = fredokaOneFamily,
                     fontWeight = FontWeight.Bold,
@@ -131,13 +132,13 @@ fun ComandaCard(comanda: Order) {
                     )
                     Column {
                         Text(
-                            text = comanda.packageStartingDate,
+                            text = comanda.dataArribada,
                             style = MaterialTheme.typography.bodyMedium,
                             fontFamily = fredokaOneFamily,
                             fontWeight = FontWeight.SemiBold
                         )
                         Text(
-                            text = comanda.packageEndDate,
+                            text = comanda.dataSortida,
                             style = MaterialTheme.typography.bodyMedium,
                             fontFamily = fredokaOneFamily,
                             fontWeight = FontWeight.SemiBold
@@ -153,7 +154,7 @@ fun ComandaCard(comanda: Order) {
             ) {
                 // Profile details
                 Text(
-                    text = "${comanda.packageStartPoint} - ${comanda.packageEndPoint}",
+                    text = "${comanda.puntSortida} - ${comanda.puntArribada}",
                     style = MaterialTheme.typography.titleMedium,
                     fontFamily = fredokaOneFamily,
                     fontWeight = FontWeight.Bold,
@@ -165,14 +166,14 @@ fun ComandaCard(comanda: Order) {
                         .fillMaxWidth()
                 ) {
                     //Important package information
-                    DetailsCard(idImage = R.drawable.packages_svg, value = "${comanda.packageQuantity}", imageSize = 35.dp, paddingPercentage = 4)
-                    DetailsCard(idImage = R.drawable.weight_svg, value = "${comanda.packageWeight}kg", imageSize = 27.dp, paddingPercentage = 1)
+                    DetailsCard(idImage = R.drawable.packages_svg, value = "${comanda.packagesNum}", imageSize = 35.dp, paddingPercentage = 4)
+                    DetailsCard(idImage = R.drawable.weight_svg, value = "${comanda.packagesHeight}kg", imageSize = 27.dp, paddingPercentage = 1)
                 }
                 Column (horizontalAlignment = Alignment.Start){
                     // Measures information
-                    MeasuresText(icon = Icons.AutoMirrored.Filled.KeyboardArrowRight, typeOfMeasure = "Amplada", value = "${comanda.packageWidth}")
-                    MeasuresText(icon = Icons.AutoMirrored.Filled.KeyboardArrowRight, typeOfMeasure = "Longitud", value = "${comanda.packageLongitude}")
-                    MeasuresText(icon = Icons.AutoMirrored.Filled.KeyboardArrowRight, typeOfMeasure = "Altura", value = "${comanda.packageHeight}")
+                    MeasuresText(icon = Icons.AutoMirrored.Filled.KeyboardArrowRight, typeOfMeasure = "Amplada", value = "${comanda.packagesWidth}")
+                    MeasuresText(icon = Icons.AutoMirrored.Filled.KeyboardArrowRight, typeOfMeasure = "Longitud", value = "${comanda.packagesLength}")
+                    MeasuresText(icon = Icons.AutoMirrored.Filled.KeyboardArrowRight, typeOfMeasure = "Altura", value = "${comanda.packagesHeight}")
                 }
             }
         }

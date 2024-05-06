@@ -48,8 +48,7 @@ fun SearchView(searchViewModel : SearchViewModel, ctx: Context, mapViewModel: Ma
             .padding(end = 12.dp),
         query = searchText ,
         placeholder = {
-            Text(
-                text = "Cercar", color = Color.Black)
+            Text(text = "Cercar", color = Color.Black)
         },
         leadingIcon = {
             Icon(

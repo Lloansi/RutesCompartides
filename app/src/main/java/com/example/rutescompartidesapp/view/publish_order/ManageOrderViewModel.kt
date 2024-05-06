@@ -417,7 +417,7 @@ import javax.inject.Inject
     val orderAdded = _orderAdded.asStateFlow()
     fun addOrder(userID: Int){
         // TODO Cambiar la classe de la order i fer servir la oficial
-        val lastOrderID = LocalConstants.orderList.maxByOrNull { order -> order.orderID }!!.orderID
+        val lastOrderID = LocalConstants.orderList!!.maxByOrNull { order -> order.orderID }!!.orderID
 
         val newOrder = Orders(userID = userID,
             orderID = lastOrderID+1,
@@ -461,7 +461,7 @@ import javax.inject.Inject
     private val _orderToEdit = MutableStateFlow<Orders?>(null)
     val orderToEdit = _orderToEdit.asStateFlow()
     fun getOrder(orderID: Int) {
-        _orderToEdit.value =  LocalConstants.orderList.find { order -> order.orderID == orderID }!!
+        _orderToEdit.value =  LocalConstants.orderList!!.find { order -> order.orderID == orderID }!!
         updateOrderInfo()
     }
 
@@ -521,8 +521,8 @@ import javax.inject.Inject
             endPoint = _destinationLocation.value
         )
         // TODO Fer un PUT a la API per actualitzar la ruta
-        if (LocalConstants.orderList.removeIf { order -> order.orderID == updatedOrder.orderID }){
-            LocalConstants.orderList.add(updatedOrder)
+        if (LocalConstants.orderList!!.removeIf { order -> order.orderID == updatedOrder.orderID }){
+            LocalConstants.orderList!!.add(updatedOrder)
             onOrderAdded(true)
         }
     }
