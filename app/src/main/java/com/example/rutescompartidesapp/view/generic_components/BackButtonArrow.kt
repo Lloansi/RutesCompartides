@@ -15,6 +15,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 
+/**
+ * Composable function to display a back button arrow.
+ *
+ * @param navController The NavController to handle navigation.
+ * @param alignment The alignment of the button.
+ * @param screenRoute The route to navigate to when the button is clicked.
+ */
 @Composable
 fun BackButtonArrow(navController: NavController, alignment: Alignment, screenRoute: String) {
     Box(

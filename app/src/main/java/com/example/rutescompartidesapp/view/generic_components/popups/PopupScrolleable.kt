@@ -22,6 +22,14 @@ import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
 import com.example.rutescompartidesapp.ui.theme.MateBlackRC
 
+/**
+ * Composable function to display a scrollable popup with a title and dismissible on outside click.
+ *
+ * @param offset The offset position of the popup.
+ * @param title The title text of the popup.
+ * @param onDismisRequest The callback for the dismiss request.
+ * @param content The content of the popup.
+ */
 @Composable
 fun PopupScrolleable(offset: IntOffset, title: String, onDismisRequest: () -> Unit,
                      content: @Composable () -> Unit){
@@ -77,6 +85,13 @@ fun PopupScrolleable(offset: IntOffset, title: String, onDismisRequest: () -> Un
     }
 }
 
+/**
+ * Composable function to display a basic popup without a title and dismissible on outside click.
+ *
+ * @param offset The offset position of the popup.
+ * @param onDismisRequest The callback for the dismiss request.
+ * @param content The content of the popup.
+ */
 @Composable
 fun BasicPopup(offset: IntOffset, onDismisRequest: () -> Unit,
                content: @Composable () -> Unit){

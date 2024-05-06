@@ -24,6 +24,16 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 
+/**
+ * Composable function to display a text field for measurements.
+ *
+ * @param value The current value of the text field.
+ * @param onValueChange Callback to be invoked when the value changes.
+ * @param placeholder The placeholder text to be displayed when the field is empty.
+ * @param suffix The text to be displayed as a suffix.
+ * @param isError Indicates if the field has an error.
+ * @param keyboardType The keyboard type for the text field.
+ */
 @Composable
 fun MeasurementsTextField(value: String, onValueChange: (String) -> Unit, placeholder: String, suffix: String,
                           isError: Boolean, keyboardType: KeyboardType){
@@ -67,6 +77,14 @@ fun MeasurementsTextField(value: String, onValueChange: (String) -> Unit, placeh
     Spacer(modifier = Modifier.padding(4.dp))
 }
 
+/**
+ * Composable function to display a multiline text field.
+ *
+ * @param value The current value of the text field.
+ * @param onValueChange Callback to be invoked when the value changes.
+ * @param placeholder The placeholder text to be displayed when the field is empty.
+ * @param isError Indicates if the field has an error.
+ */
 @Composable
 fun MultilineTextField(value: String, onValueChange: (String) -> Unit, placeholder: String, isError: Boolean){
     OutlinedTextField(
@@ -109,6 +127,15 @@ fun MultilineTextField(value: String, onValueChange: (String) -> Unit, placehold
     Spacer(modifier = Modifier.padding(4.dp))
 }
 
+/**
+ * Composable function to display a basic text field.
+ *
+ * @param value The current value of the text field.
+ * @param onValueChange Callback to be invoked when the value changes.
+ * @param placeholder The placeholder text to be displayed when the field is empty.
+ * @param isError Indicates if the field has an error.
+ * @param keyboardType The keyboard type for the text field.
+ */
 @Composable
 fun BasicTextField(value: String, onValueChange: (String) -> Unit, placeholder: String, isError: Boolean,
                    keyboardType: KeyboardType = KeyboardType.Text){
@@ -148,6 +175,17 @@ fun BasicTextField(value: String, onValueChange: (String) -> Unit, placeholder: 
         )
     Spacer(modifier = Modifier.padding(4.dp))
 }
+
+
+/**
+ * Composable function to display a text field with an icon.
+ *
+ * @param value The current value of the text field.
+ * @param onValueChange Callback to be invoked when the value changes.
+ * @param placeholder The placeholder text to be displayed when the field is empty.
+ * @param leadingIcon The leading icon to be displayed in the text field.
+ * @param isError Indicates if the field has an error.
+ */
 
 @Composable
 fun IconTextField(value: String, onValueChange: (String) -> Unit, placeholder: String, leadingIcon: @Composable () -> Unit,
@@ -191,6 +229,13 @@ fun IconTextField(value: String, onValueChange: (String) -> Unit, placeholder: S
     Spacer(modifier = Modifier.padding(4.dp))
 }
 
+/**
+ * Composable function to display a text field for steps.
+ *
+ * @param modifier The modifier for the text field.
+ * @param value The current value of the text field.
+ * @param onValueChange Callback to be invoked when the value changes.
+ */
 @Composable
 fun StepTextField(modifier: Modifier, value: String, onValueChange: (String) -> Unit){
     OutlinedTextField(
@@ -219,6 +264,16 @@ fun StepTextField(modifier: Modifier, value: String, onValueChange: (String) -> 
     Spacer(modifier = Modifier.padding(4.dp))
 }
 
+/**
+ * Composable function to display a text field for date and time picker.
+ *
+ * @param invocation Callback to be invoked when the field is clicked.
+ * @param time The current time value of the text field.
+ * @param onValueChange Callback to be invoked when the value changes.
+ * @param placeholder The placeholder text to be displayed when the field is empty.
+ * @param icon The icon for the text field.
+ * @param isError Indicates if the field has an error.
+ */
 @Composable
 fun DateTimePickerTextField(
     invocation: () -> Unit, time: String, onValueChange: (String) -> Unit,

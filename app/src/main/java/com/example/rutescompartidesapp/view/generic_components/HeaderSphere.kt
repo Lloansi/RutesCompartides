@@ -13,7 +13,11 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import com.example.rutescompartidesapp.R
-
+/**
+ * Composable function to display a header sphere.
+ *
+ * @param height The height of the header sphere.
+ */
 @Composable
 fun HeaderSphere(height: Dp) {
     Image(

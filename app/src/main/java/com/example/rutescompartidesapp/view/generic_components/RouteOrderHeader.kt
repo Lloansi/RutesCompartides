@@ -32,6 +32,12 @@ import com.example.rutescompartidesapp.ui.theme.MateBlackRC
 import com.example.rutescompartidesapp.ui.theme.OrangeRC
 import com.example.rutescompartidesapp.utils.LocalConstants
 
+/**
+ * Composable function to display the header for a route and an order.
+ *
+ * @param route The route information.
+ * @param order The order information.
+ */
 @Composable
 fun RouteOrderHeader(route: Routes, order: Orders) {
         ElevatedCard (modifier = Modifier.fillMaxWidth(),colors = CardDefaults.elevatedCardColors(
@@ -47,12 +53,21 @@ fun RouteOrderHeader(route: Routes, order: Orders) {
             }
         }
 }
+
+/**
+ * Preview function for displaying a preview of the [RouteOrderHeader] composable.
+ */
 @Preview(showBackground = true)
 @Composable
 fun RouteOrderHeaderPreview(){
     RouteOrderHeader(LocalConstants.routeList.first(), LocalConstants.orderList.first())
 }
 
+/**
+ * Composable function to display route points.
+ *
+ * @param route The route information.
+ */
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun RoutePoints2(route: Routes){
@@ -118,6 +133,12 @@ fun RoutePoints2(route: Routes){
 
 
 }
+
+/**
+ * Composable function to display order points.
+ *
+ * @param order The order information.
+ */
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun OrderPoints(order: Orders){

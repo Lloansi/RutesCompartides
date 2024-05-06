@@ -19,6 +19,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.rutescompartidesapp.ui.theme.MateBlackRC
 
+/**
+ * Composable function for displaying a top app bar with a back navigation icon.
+ *
+ * @param title The title to be displayed in the app bar.
+ * @param onBack Callback to be invoked when the back navigation icon is clicked.
+ * @param content The composable function to be displayed below the app bar.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopAppBarWithBackNav(title: String, onBack: () -> Unit, content: @Composable () -> Unit) {

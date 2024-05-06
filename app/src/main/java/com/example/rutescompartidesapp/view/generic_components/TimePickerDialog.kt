@@ -43,7 +43,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import java.util.Calendar
 
-
+/**
+ * Composable function for displaying a custom picker dialog.
+ *
+ * @param onDismissRequest Callback to be invoked when the dialog is dismissed.
+ * @param title The composable function to display the title of the dialog.
+ * @param buttons The composable function to display the buttons in the dialog.
+ * @param modifier The modifier for the dialog.
+ * @param content The composable function to display the content of the dialog.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PickerDialog(
@@ -101,6 +109,13 @@ fun PickerDialog(
     }
 }
 
+/**
+ * Composable function for displaying a time picker dialog.
+ *
+ * @param onCancel Callback to be invoked when the dialog is cancelled.
+ * @param onConfirm Callback to be invoked when the time is confirmed.
+ * @param modifier The modifier for the dialog.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TimePickerDialog(
@@ -153,6 +168,13 @@ fun TimePickerDialog(
     }
 }
 
+/**
+ * Composable function for toggling between picker and input mode in the time picker dialog.
+ *
+ * @param displayMode The current display mode.
+ * @param onDisplayModeChange Callback to be invoked when the display mode changes.
+ * @param modifier The modifier for the button.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun DisplayModeToggleButton(

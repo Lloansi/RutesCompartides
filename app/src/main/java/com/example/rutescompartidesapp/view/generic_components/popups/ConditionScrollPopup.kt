@@ -14,6 +14,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 
+/**
+ * List of transport conditions information.
+ */
 val condicionsTransportInfo = listOf(
     "En seleccionar el tipus de transport, se't mostraran només els vehicles i les comandes (necessitats de transport) que compleixin aquestes característiques:",
     "ISOTERM:Vehicle amb parets aïllants, manté la temperatura.",
@@ -21,6 +24,9 @@ val condicionsTransportInfo = listOf(
     "CONGELAT:Vehicle amb font de fred, temperatures inferiors a 0º (cal confirmar temperatura amb qui ofereixi el transport).",
     "SENSE HUMITAT:No es transporten verdures o altres productes que produeixin humitat (vehicle compatible per al transport de pa, llavors, pasta, etc.)."
 )
+/**
+ * Composable function to display a scrollable popup with transport conditions.
+ */
 @Composable
 fun ConditionScrollPopup(){
     LazyColumn(modifier = Modifier.fillMaxHeight(0.4f)){

@@ -10,7 +10,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.rutescompartidesapp.ui.theme.OrangeRC
 
-
+/**
+ * Composable function to display a publish button.
+ *
+ * @param onClick Callback to be invoked when the button is clicked.
+ * @param text The text to be displayed on the button.
+ */
 @Composable
 fun PublishButton(onClick: () -> Unit, text: String){
     ElevatedButton(
@@ -29,7 +34,11 @@ fun PublishButton(onClick: () -> Unit, text: String){
         )
     }
 }
-
+/**
+ * Composable function to display a publish next button.
+ *
+ * @param onClickCheck Callback to be invoked when the button is clicked.
+ */
 @Composable
 fun PublishNextButton(onClickCheck: (() -> Unit)){
     ElevatedButton(
@@ -48,6 +57,12 @@ fun PublishNextButton(onClickCheck: (() -> Unit)){
     }
 
 }
+
+/**
+ * Composable function to display a publish back button.
+ *
+ * @param onClickBack Callback to be invoked when the button is clicked.
+ */
 @Composable
 fun PublishBackButton(onClickBack: () -> Unit){
     ElevatedButton(
