@@ -58,6 +58,12 @@ class RouteDetailDriverViewModel (routeID: Int): ViewModel(){
         _isCompleteScreenShowing.value = isShowing
     }
 
+    private val _isInteractionPopupShowing = MutableStateFlow(false)
+    val isInteractionPopupShowing = _isInteractionPopupShowing.asStateFlow()
+    fun showInteractionPopup(isShowing: Boolean){
+        _isInteractionPopupShowing.value = isShowing
+    }
+
     // Interacció a confirmar, guarda la interacció que es vol confirmar la entrega
     private val _routeInteractionToConfirm = MutableStateFlow<RouteInteraction?>(null)
     val routeInteractionToConfirm = _routeInteractionToConfirm.asStateFlow()

@@ -2,7 +2,8 @@ package com.example.rutescompartidesapp.view.route_detail.route_detail_driver.co
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -39,6 +40,7 @@ import com.example.rutescompartidesapp.ui.theme.RedRC
 import com.example.rutescompartidesapp.ui.theme.YellowRC
 import com.example.rutescompartidesapp.view.route_detail.route_detail_driver.RouteDetailDriverViewModel
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun RouteInteractionCard(interaction: RouteInteraction, index: Int, routeDetailDriverViewModel: RouteDetailDriverViewModel, navHost: NavController){
     var firstText = ""
@@ -64,7 +66,7 @@ fun RouteInteractionCard(interaction: RouteInteraction, index: Int, routeDetailD
             secondText = "dur la comanda"
             chipColor = BlueRC
             chipText = "Acceptada"
-            button1Text = "Confirmar entrega"
+            button1Text = "Confirmar"
             button1Color = MateBlackRC
             button1Icon = Icons.Filled.Check
             button1IconTint = Color.White
@@ -86,6 +88,7 @@ fun RouteInteractionCard(interaction: RouteInteraction, index: Int, routeDetailD
             button1Icon = Icons.Filled.ThumbUp
             button1IconTint = Color.White
             button1OnClick = {
+                routeDetailDriverViewModel.showInteractionPopup(false)
                 navHost.navigate("ValueExperienceGeneralScreen/{routeId}/{orderId}"
                 .replace("{routeId}", interaction.routeID.toString())
                     .replace("{orderId}", interaction.orderID.toString())
@@ -125,33 +128,35 @@ fun RouteInteractionCard(interaction: RouteInteraction, index: Int, routeDetailD
         }
     }
 
-    ElevatedCard(modifier = Modifier.fillMaxWidth().clickable {
-        navHost.navigate("OrderDetailScreen/${interaction.orderID}")
-    },
+    ElevatedCard(modifier = Modifier
+        .fillMaxWidth()
+        .clickable {
+            routeDetailDriverViewModel.showInteractionPopup(false)
+            navHost.navigate("OrderDetailScreen/${interaction.orderID}")
+        },
         colors = CardDefaults.elevatedCardColors(
             containerColor = MaterialTheme.colorScheme.onTertiaryContainer)) {
         Row(modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp)) {
-            Column(modifier = Modifier
-                .fillMaxWidth()
-                .padding(end = 4.dp)
-                .weight(2f),
-                verticalArrangement = Arrangement.Center) {
-                Text(text = "${interaction.date.split("-")[0]} a les ${interaction.date.split("-")[1]} ",
-                    color = MaterialTheme.colorScheme.onBackground)
-                InteractionText(firstText, secondText, interaction.orderID, navHost)
-            }
-            Column {
-                InteractionChip(text = chipText, containerColor = chipColor, chipColorText = chipTextColor)
-            }
+            .padding(end = 8.dp),
+            horizontalArrangement = Arrangement.End
+        ) {
+            InteractionChip(text = chipText, containerColor = chipColor, chipColorText = chipTextColor)
+        }
+        FlowRow(modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 8.dp, end = 8.dp, bottom = 8.dp)
+            ) {
 
+            Text(text = "${interaction.date.split("-")[0]} a les ${interaction.date.split("-")[1]} ",
+                color = MaterialTheme.colorScheme.onBackground)
+            InteractionText(firstText, secondText, interaction.orderID, navHost)
         }
         // Buttons
         if (interaction.status == "Acceptada" || interaction.status == "Pendent" || interaction.status == "Entregada"){
             Row(modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 8.dp, bottom = 8.dp, end = 8.dp),
+                .padding(start = 4.dp, bottom = 8.dp, end = 4.dp),
             horizontalArrangement = Arrangement.SpaceAround) {
                 InteractionButton(onClick = button1OnClick, text = button1Text , color = button1Color, icon = button1Icon, iconTint = button1IconTint )
                 if (button2Text != ""){
@@ -174,7 +179,7 @@ fun InteractionButton(onClick: () -> Unit, text: String, color: Color, icon: Ima
     ) {
         if (icon != null) {
             Icon(
-                modifier = Modifier.size(28.dp),
+                modifier = Modifier.size(28.dp).padding(end = 4.dp),
                 imageVector = icon,
                 contentDescription = "$text icon",
                 tint = iconTint

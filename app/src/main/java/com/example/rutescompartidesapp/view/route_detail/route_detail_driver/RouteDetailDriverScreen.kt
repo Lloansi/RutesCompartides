@@ -10,14 +10,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CardDefaults
@@ -26,6 +24,7 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.ElevatedAssistChip
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -43,6 +42,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.example.rutescompartidesapp.R
@@ -61,6 +61,7 @@ import com.example.rutescompartidesapp.view.route_detail.route_detail_driver.com
 import com.example.rutescompartidesapp.view.routes_order_list.components.RouteCardHeader
 import kotlinx.coroutines.flow.collectLatest
 
+@OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "RestrictedApi")
 @Composable
 fun RouteDetailDriverScreen(
@@ -78,12 +79,11 @@ fun RouteDetailDriverScreen(
     val isCompleteScreenShowing by routeDetailDriverViewModel.isCompleteScreenShowing.collectAsStateWithLifecycle()
     val routeInteractionToConfirm by routeDetailDriverViewModel.routeInteractionToConfirm.collectAsStateWithLifecycle()
 
-    val verticalScroll = rememberScrollState()
     val isCameraActive by cameraViewModel.isCameraActive.collectAsStateWithLifecycle()
     val isSignatureActive by drawViewModel.isSignatureActive.collectAsStateWithLifecycle()
 
     val interactionToastText by routeDetailDriverViewModel.interactionToastText.collectAsStateWithLifecycle()
-
+    val isInteractionPopupShowing by routeDetailDriverViewModel.isInteractionPopupShowing.collectAsStateWithLifecycle()
     val context = LocalContext.current
 
     // Toast per notificar a l'usuari l'event de la interacció
@@ -203,7 +203,12 @@ fun RouteDetailDriverScreen(
                                 Divider(
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .padding(start = 8.dp, end = 8.dp, top = 4.dp, bottom = 4.dp),
+                                        .padding(
+                                            start = 8.dp,
+                                            end = 8.dp,
+                                            top = 4.dp,
+                                            bottom = 4.dp
+                                        ),
                                     color = OrangeRC,
                                     thickness = 2.dp
                                 )
@@ -255,7 +260,12 @@ fun RouteDetailDriverScreen(
                                 Divider(
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .padding(start = 8.dp, end = 8.dp, top = 4.dp, bottom = 4.dp),
+                                        .padding(
+                                            start = 8.dp,
+                                            end = 8.dp,
+                                            top = 4.dp,
+                                            bottom = 4.dp
+                                        ),
                                     color = OrangeRC,
                                     thickness = 2.dp
                                 )
@@ -275,10 +285,40 @@ fun RouteDetailDriverScreen(
                                 Divider(
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .padding(start = 8.dp, end = 8.dp, top = 4.dp, bottom = 4.dp),
+                                        .padding(
+                                            start = 8.dp,
+                                            end = 8.dp,
+                                            top = 4.dp,
+                                            bottom = 4.dp
+                                        ),
                                     color = OrangeRC,
                                     thickness = 2.dp
                                 )
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(8.dp),
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    ElevatedButton(
+                                        shape = RoundedCornerShape(16.dp),
+                                        onClick = {
+                                            routeDetailDriverViewModel.showInteractionPopup(true)
+                                        },
+                                        colors = ButtonDefaults.elevatedButtonColors(
+                                            containerColor = OrangeRC
+                                        )
+                                    ) {
+                                        Icon(
+                                            modifier = Modifier.size(28.dp),
+                                            painter = painterResource(id = R.drawable.handshake_icon),
+                                            contentDescription = "Interaction route icon",
+                                            tint = Color.White
+                                        )
+                                        Text(text = "Interaccions", color = Color.White)
+
+                                    }
+                                }
 
                                 Row(
                                     modifier = Modifier
@@ -366,39 +406,61 @@ fun RouteDetailDriverScreen(
                                 }
                             }
                             // Interaccions
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(top = 8.dp),
-                                horizontalArrangement = Arrangement.Start
-                            ) {
-                                Text(
-                                    text = "Interaccions", color = MaterialTheme.colorScheme.primary,
-                                    style = MaterialTheme.typography.titleLarge,
-                                )
-                            }
-                            Divider(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(top = 4.dp, bottom = 4.dp),
-                                color = OrangeRC,
-                                thickness = 2.dp
-                            )
-                            LazyColumn(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .wrapContentHeight(),
-                                verticalArrangement = Arrangement.Center,
-                                horizontalAlignment = Alignment.CenterHorizontally
-                            ) {
-                                items(interactions.size) { index ->
-                                    Spacer(modifier = Modifier.padding(8.dp))
-                                    RouteInteractionCard(
-                                        interaction = interactions[index],
-                                        index = index,
-                                        routeDetailDriverViewModel = routeDetailDriverViewModel,
-                                        navHost = navHost
+                            if (isInteractionPopupShowing) {
+                                AlertDialog(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(LocalConfiguration.current.screenHeightDp.dp*0.8f),
+                                    onDismissRequest = { routeDetailDriverViewModel.showInteractionPopup(false) },
+                                    properties = DialogProperties(
+                                        dismissOnBackPress = true,
+                                        dismissOnClickOutside=  true
                                     )
+                                ) {
+                                    ElevatedCard (modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(8.dp, bottom = 12.dp),
+                                        colors = CardDefaults.elevatedCardColors(
+                                        containerColor = MaterialTheme.colorScheme.surface)
+                                    ){
+                                        Row(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .padding(12.dp),
+                                            horizontalArrangement = Arrangement.Center
+                                        ) {
+                                            Text(
+                                                text = "Interaccions", color = MaterialTheme.colorScheme.primary,
+                                                style = MaterialTheme.typography.titleLarge,
+                                            )
+                                        }
+                                        Divider(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .padding(start = 8.dp, end = 8.dp),
+                                            color = OrangeRC,
+                                            thickness = 2.dp
+                                        )
+                                        LazyColumn(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .padding(8.dp),
+                                            verticalArrangement = Arrangement.Center,
+                                            horizontalAlignment = Alignment.CenterHorizontally
+                                        ) {
+                                            items(interactions.size) { index ->
+                                                Spacer(modifier = Modifier.padding(8.dp))
+                                                RouteInteractionCard(
+                                                    interaction = interactions[index],
+                                                    index = index,
+                                                    routeDetailDriverViewModel = routeDetailDriverViewModel,
+                                                    navHost = navHost
+                                                )
+                                            }
+                                        }
+                                        Spacer(modifier = Modifier.padding(8.dp))
+                                    }
+
                                 }
                             }
                         }
