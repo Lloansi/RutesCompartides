@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -81,10 +80,10 @@ fun ConfirmScreen(
 
     ElevatedCard (
         modifier = Modifier
-            .fillMaxHeight()
+            .fillMaxWidth()
             .padding(start = 8.dp, end = 8.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer,
+            containerColor = MaterialTheme.colorScheme.onTertiaryContainer,
             contentColor = MaterialTheme.colorScheme.onSurface
         ),
         elevation = CardDefaults.cardElevation(
@@ -121,7 +120,7 @@ fun ConfirmScreen(
     ){
         ElevatedButton(
             colors = ButtonDefaults.elevatedButtonColors(
-                contentColor = MaterialTheme.colorScheme.secondary,
+                contentColor = Color.White,
                 containerColor = MaterialTheme.colorScheme.primary
             ),
             contentPadding = PaddingValues(16.dp),
@@ -163,34 +162,14 @@ fun UploadImageOrSignature(
                 }
                       },
             containerColor = MaterialTheme.colorScheme.primary,
-            /*
-            modifier = Modifier
-                .width(LocalConfiguration.current.screenWidthDp.dp / 8)
-                .height(LocalConfiguration.current.screenHeightDp.dp / 18)
 
-             */
         ) {
-            Icon(imageVector = icon, contentDescription = "Upload")
+            Icon(imageVector = icon, contentDescription = "Upload", tint = Color.White)
         }
         Spacer(modifier = Modifier.padding(6.dp))
 
         if (bitmap != null){
             Text(text = "Foto seleccionada correctament")
-
-            /*
-            Image(
-                bitmap = bitmap.asImageBitmap(),
-                contentDescription = "Bitmap from previous screen")
-
-             */
-
-            /*
-            In summary, use asImageBitmap() when you have a local resource or asset
-            that you want to display as a bitmap directly in your Compose UI.
-            Use Coil's AsyncImage when you need to load images asynchronously from URLs,
-            especially for remote images, and when you need features such as caching,
-            error handling, and transformations.
-             */
 
         } else{
             Text(text = "No s'ha seleccionat cap arxiu")
@@ -221,8 +200,8 @@ fun UserCommentContainer(routeDetailDriverViewModel: RouteDetailDriverViewModel)
             unfocusedIndicatorColor = Color.Gray,
             disabledContainerColor = MaterialTheme.colorScheme.background,
             disabledIndicatorColor = Color.Gray,
-            focusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
-            unfocusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
+            focusedContainerColor = MaterialTheme.colorScheme.onTertiaryContainer,
+            unfocusedContainerColor = MaterialTheme.colorScheme.onTertiaryContainer,
             errorTextColor = MaterialTheme.colorScheme.primary,
             errorContainerColor = GrayRC
         )

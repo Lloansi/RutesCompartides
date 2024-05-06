@@ -49,13 +49,13 @@ fun SearchView(searchViewModel : SearchViewModel, ctx: Context, mapViewModel: Ma
         query = searchText ,
         placeholder = {
             Text(
-                text = "Cercar", color = MaterialTheme.colorScheme.onSurface)
+                text = "Cercar", color = Color.Black)
         },
         leadingIcon = {
             Icon(
                 imageVector = Icons.Default.Search,
-                tint = MaterialTheme.colorScheme.onSurface,
-                contentDescription = null
+                tint = Color.Black,
+                contentDescription = "Search Icon"
             )
         },
         onQueryChange = searchViewModel::onSearchTextChange,

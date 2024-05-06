@@ -2,6 +2,7 @@ package com.example.rutescompartidesapp.view.route_detail.route_detail_driver.co
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
@@ -40,6 +41,13 @@ import com.example.rutescompartidesapp.ui.theme.RedRC
 import com.example.rutescompartidesapp.ui.theme.YellowRC
 import com.example.rutescompartidesapp.view.route_detail.route_detail_driver.RouteDetailDriverViewModel
 
+/**
+ * Composable function for the Route Interaction Card, which displays the interaction details.
+ * @param interaction RouteInteraction with the order and route ID, date and status .
+ * @param index Index of the interaction from the lazy column used to match with the list of interactions on the [routeDetailDriverViewModel].
+ * @param routeDetailDriverViewModel ViewModel for route details for the driver.
+ * @param navHost Navigation controller.
+ */
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun RouteInteractionCard(interaction: RouteInteraction, index: Int, routeDetailDriverViewModel: RouteDetailDriverViewModel, navHost: NavController){
@@ -137,20 +145,23 @@ fun RouteInteractionCard(interaction: RouteInteraction, index: Int, routeDetailD
         colors = CardDefaults.elevatedCardColors(
             containerColor = MaterialTheme.colorScheme.onTertiaryContainer)) {
         Row(modifier = Modifier
-            .fillMaxWidth()
-            .padding(end = 8.dp),
+            .fillMaxWidth(),
             horizontalArrangement = Arrangement.End
         ) {
-            InteractionChip(text = chipText, containerColor = chipColor, chipColorText = chipTextColor)
+            Column(modifier = Modifier.weight(2f).padding(top = 16.dp, start = 8.dp, end = 8.dp),
+                verticalArrangement = Arrangement.Center) {
+                Text(text = "${interaction.date.split("-")[0]} a les ${interaction.date.split("-")[1]} ",
+                    color = MaterialTheme.colorScheme.onBackground)
+            }
+            Column(modifier = Modifier.weight(0.8f)) {
+                InteractionChip(text = chipText, containerColor = chipColor, chipColorText = chipTextColor)
+            }
         }
         FlowRow(modifier = Modifier
             .fillMaxWidth()
             .padding(start = 8.dp, end = 8.dp, bottom = 8.dp)
             ) {
-
-            Text(text = "${interaction.date.split("-")[0]} a les ${interaction.date.split("-")[1]} ",
-                color = MaterialTheme.colorScheme.onBackground)
-            InteractionText(firstText, secondText, interaction.orderID, navHost)
+            InteractionText(firstText, secondText, interaction.orderID)
         }
         // Buttons
         if (interaction.status == "Acceptada" || interaction.status == "Pendent" || interaction.status == "Entregada"){
@@ -202,7 +213,7 @@ fun InteractionChip(text: String, containerColor: Color, chipColorText: Color){
 }
 
 @Composable
-fun InteractionText(firstText: String, secondText: String, comandaID: Int, navHost: NavController){
+fun InteractionText(firstText: String, secondText: String, comandaID: Int){
    Text(text = buildAnnotatedString {
         append("$firstText ")
         withStyle(

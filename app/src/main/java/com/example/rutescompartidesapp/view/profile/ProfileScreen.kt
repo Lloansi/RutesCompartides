@@ -15,14 +15,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ElevatedCard
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -33,13 +27,14 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.DialogProperties
 import androidx.compose.ui.zIndex
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.rutescompartidesapp.ui.theme.openSans
 import com.example.rutescompartidesapp.view.generic_components.HeaderSphere
+import com.example.rutescompartidesapp.view.generic_components.popups.NotificationPopup
 import com.example.rutescompartidesapp.view.login.LoginViewModel
+import com.example.rutescompartidesapp.view.map.viewModels.NotificationsViewModel
 import com.example.rutescompartidesapp.view.profile.components.CreateCardsWithItems
 import com.example.rutescompartidesapp.view.profile.components.LogOutPopup
 import com.example.rutescompartidesapp.view.profile.components.ProfileEditButton
@@ -49,19 +44,22 @@ import com.example.rutescompartidesapp.view.profile.components.userProfileItemsL
 import com.example.rutescompartidesapp.view.routes_order_list.viewmodels.RoutesOrderListViewModel
 import com.example.rutescompartidesapp.view.routes_order_list.viewmodels.TabRowViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(profileViewModel: ProfileViewModel, loginViewModel: LoginViewModel,
                   navController: NavController, routesOrderListViewModel: RoutesOrderListViewModel,
                   tabRowViewModel: TabRowViewModel
 ) {
 
-    val onClickPlaceholder by profileViewModel.onClickPlaceholder.collectAsStateWithLifecycle()
     val editProfileButtonSize by profileViewModel.editProfileButtonSize.collectAsStateWithLifecycle()
     val editProfileButtonVisible by profileViewModel.editProfileButtonVisible.collectAsStateWithLifecycle()
     val userID = loginViewModel.user.collectAsStateWithLifecycle().value?.userId
     loginViewModel.getUser(userID!!)
     val user by loginViewModel.user.collectAsStateWithLifecycle()
+    val notificationsViewModel = NotificationsViewModel()
+    val notificationPopup by notificationsViewModel.notificationPopup.collectAsStateWithLifecycle()
+
+    notificationsViewModel.getUserInteractions(user!!.userId)
+    val userInteractions = notificationsViewModel.userIteractions
 
     val animateSize by animateFloatAsState(
         targetValue = editProfileButtonSize,
@@ -156,37 +154,13 @@ fun ProfileScreen(profileViewModel: ProfileViewModel, loginViewModel: LoginViewM
 
                         LogOutPopup(viewModelProfile = profileViewModel, navController, loginViewModel)
 
-                        // This will be delete
-                        if (onClickPlaceholder) {
-                            AlertDialog(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .wrapContentHeight(),
-                                onDismissRequest = { profileViewModel.onClickItemPlaceholder(false) },
-                                properties = DialogProperties(
-                                    dismissOnBackPress = true,
-                                    dismissOnClickOutside = true
-                                )
-                            ) {
-                                ElevatedCard(
-                                    modifier = Modifier
-                                        .fillMaxWidth(0.9f)
-                                        .fillMaxHeight(0.2f),
-                                    shape = RoundedCornerShape(15.dp),
-                                    colors = CardDefaults.cardColors(containerColor = Color.White),
-                                    elevation = CardDefaults.cardElevation(defaultElevation = 5.dp)
-                                ) {
-                                    Column(
-                                        verticalArrangement = Arrangement.Center,
-                                        horizontalAlignment = Alignment.CenterHorizontally
-                                    ) {
-                                        Text(
-                                            text = "Not implemented yet",
-                                            color = Color.Black
-                                        )
-                                    }
-                                }
-                            }
+                        // Notifications popup
+                        if (notificationPopup) {
+                            NotificationPopup(
+                                notificationsViewModel = notificationsViewModel,
+                                userInteractions = userInteractions ,
+                                navHost = navController
+                            )
                         }
                     }
                 }
@@ -202,11 +176,11 @@ fun ProfileScreen(profileViewModel: ProfileViewModel, loginViewModel: LoginViewM
         ) {
             // First card creation (Route Settings)
             CreateCardsWithItems(routeProfileItemsList, 0.dp, 0.dp, profileViewModel, navController, 1,
-                routesOrderListViewModel, tabRowViewModel, user!!.userId, loginViewModel)
+                routesOrderListViewModel, tabRowViewModel, user!!.userId, loginViewModel, notificationsViewModel)
 
             // Second card creation (User Settings)
             CreateCardsWithItems(userProfileItemsList, 20.dp, 0.dp, profileViewModel, navController, 2,
-                routesOrderListViewModel, tabRowViewModel, user!!.userId, loginViewModel)
+                routesOrderListViewModel, tabRowViewModel, user!!.userId, loginViewModel, notificationsViewModel)
         }
     }
 }

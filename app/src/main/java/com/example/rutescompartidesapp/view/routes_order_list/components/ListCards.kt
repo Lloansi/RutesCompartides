@@ -40,10 +40,13 @@ import androidx.navigation.NavHostController
 import com.example.rutescompartidesapp.data.domain.orders.Orders
 import com.example.rutescompartidesapp.data.domain.routes.Routes
 import com.example.rutescompartidesapp.ui.theme.BlueRC
-import com.example.rutescompartidesapp.ui.theme.MateBlackRC
 import com.example.rutescompartidesapp.ui.theme.OrangeRC
 import com.example.rutescompartidesapp.utils.LocalConstants
 
+/**
+ * Composable function for the Route Points, which displays the start, intermediate and end points of the route.
+ * @param route Route
+ */
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun RoutePoints(route: Routes){
@@ -93,6 +96,12 @@ fun RoutePoints(route: Routes){
 
 }
 
+/**
+ * Composable function for the Route Card Header, which displays the route name and the user name
+ * along with the route points.
+ * @param route Route
+ */
+
 @Composable
 fun RouteCardHeader(route: Routes){
     ElevatedCard (modifier = Modifier.fillMaxWidth(),colors = CardDefaults.elevatedCardColors(
@@ -113,6 +122,12 @@ fun RouteCardHeader(route: Routes){
     }
 }
 
+/**
+ * Composable function for the Route Card, which displays the route information.
+ * @param route Route with the information to display
+ * @param navController NavController to navigate to the detail of the route
+ * @param userID Int used to check if the user is the driver of the route and navigate accordingly
+ */
 @Composable
 fun RouteCard(route: Routes, navController: NavHostController, userID: Int) {
     Column{
@@ -221,6 +236,11 @@ fun RouteCard(route: Routes, navController: NavHostController, userID: Int) {
     }
 }
 
+/**
+ * Composable function for the Order Card, which displays the order information.
+ * @param order Order to obtain the information
+ * @param navController NavController to navigate to the detail of the order
+ */
 
 @Composable
 fun OrderCard(order: Orders, navController: NavHostController) {
@@ -360,6 +380,10 @@ fun OrderCard(order: Orders, navController: NavHostController) {
     }
 }
 
+/**
+ * Composable function to display a message when there are no results.
+ * @param type String to display if it is a route or an order
+ */
 @Composable
 fun EmptyResults(type: String) {
     Spacer(modifier = Modifier.padding(0.dp, LocalConfiguration.current.screenHeightDp.dp / 10))

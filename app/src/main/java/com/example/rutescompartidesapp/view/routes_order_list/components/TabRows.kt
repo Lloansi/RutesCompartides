@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
@@ -30,7 +31,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
@@ -41,8 +42,8 @@ import com.example.rutescompartidesapp.view.routes_order_list.viewmodels.TabRowV
 
 data class TabItems(
     val title: String,
-    val unselectedIcon: ImageVector,
-    val selectedIcon: ImageVector
+    val unselectedIcon: Int,
+    val selectedIcon: Int
 )
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
@@ -57,6 +58,7 @@ fun TabRows(routesOrderListViewModel: RoutesOrderListViewModel, navController: N
     val isMyFilterActive by routesOrderListViewModel.isMyFilterActive.collectAsStateWithLifecycle()
 
 
+
     val pagerState = rememberPagerState {
         tabItems.size
     }
@@ -65,9 +67,7 @@ fun TabRows(routesOrderListViewModel: RoutesOrderListViewModel, navController: N
         pagerState.animateScrollToPage(selectedTabIndex)
     }
     LaunchedEffect(pagerState.currentPage) {
-        if (!pagerState.isScrollInProgress) {
-            tabRowViewModel.onSelectTab(pagerState.currentPage)
-        }
+        tabRowViewModel.onSelectTab(pagerState.currentPage)
     }
 
     Column {
@@ -81,11 +81,12 @@ fun TabRows(routesOrderListViewModel: RoutesOrderListViewModel, navController: N
                         style = MaterialTheme.typography.titleSmall) },
                     icon = {
                         Icon(
-                            imageVector = if (index == selectedTabIndex) {
+                            modifier = Modifier.size(28.dp),
+                            painter = painterResource(if (index == selectedTabIndex) {
                                 item.selectedIcon
                             } else {
                                 item.unselectedIcon
-                            },
+                            }),
                             contentDescription = item.title
                         )
                     },

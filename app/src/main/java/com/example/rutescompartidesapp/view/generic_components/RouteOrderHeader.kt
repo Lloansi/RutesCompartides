@@ -28,7 +28,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rutescompartidesapp.data.domain.orders.Orders
 import com.example.rutescompartidesapp.data.domain.routes.Routes
-import com.example.rutescompartidesapp.ui.theme.MateBlackRC
 import com.example.rutescompartidesapp.ui.theme.OrangeRC
 import com.example.rutescompartidesapp.utils.LocalConstants
 
@@ -41,7 +40,7 @@ import com.example.rutescompartidesapp.utils.LocalConstants
 @Composable
 fun RouteOrderHeader(route: Routes, order: Orders) {
         ElevatedCard (modifier = Modifier.fillMaxWidth(),colors = CardDefaults.elevatedCardColors(
-            containerColor = MateBlackRC
+            containerColor = MaterialTheme.colorScheme.onTertiary
         )
         ) {
             Column(modifier = Modifier.padding(8.dp)) {

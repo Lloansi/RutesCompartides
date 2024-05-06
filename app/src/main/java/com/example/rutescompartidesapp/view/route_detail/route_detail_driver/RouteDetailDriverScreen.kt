@@ -14,6 +14,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.AssistChipDefaults
@@ -26,6 +27,7 @@ import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -410,16 +412,17 @@ fun RouteDetailDriverScreen(
                                 AlertDialog(
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .height(LocalConfiguration.current.screenHeightDp.dp*0.8f),
+                                        .height(LocalConfiguration.current.screenHeightDp.dp * 0.75f),
                                     onDismissRequest = { routeDetailDriverViewModel.showInteractionPopup(false) },
                                     properties = DialogProperties(
                                         dismissOnBackPress = true,
-                                        dismissOnClickOutside=  true
+                                        dismissOnClickOutside=  true,
+                                        usePlatformDefaultWidth = false
                                     )
                                 ) {
                                     ElevatedCard (modifier = Modifier
                                         .fillMaxWidth()
-                                        .padding(8.dp, bottom = 12.dp),
+                                        .padding(8.dp),
                                         colors = CardDefaults.elevatedCardColors(
                                         containerColor = MaterialTheme.colorScheme.surface)
                                     ){
@@ -427,12 +430,24 @@ fun RouteDetailDriverScreen(
                                             modifier = Modifier
                                                 .fillMaxWidth()
                                                 .padding(12.dp),
-                                            horizontalArrangement = Arrangement.Center
+                                            verticalAlignment = Alignment.CenterVertically
                                         ) {
-                                            Text(
-                                                text = "Interaccions", color = MaterialTheme.colorScheme.primary,
-                                                style = MaterialTheme.typography.titleLarge,
-                                            )
+                                            Column(modifier = Modifier.weight(2.5f),
+                                                horizontalAlignment = Alignment.Start,
+                                                verticalArrangement = Arrangement.Center
+                                                ) {
+                                                Text(
+                                                    text = "Interaccions", color = MaterialTheme.colorScheme.primary,
+                                                    style = MaterialTheme.typography.titleLarge,
+                                                )
+                                            }
+                                            Column(modifier = Modifier.weight(0.5f),
+                                                horizontalAlignment = Alignment.End
+                                                ) {
+                                                IconButton(onClick = { routeDetailDriverViewModel.showInteractionPopup(false) }) {
+                                                    Icon(imageVector = Icons.Filled.Close, contentDescription = "Close Popup Icon")
+                                                }
+                                            }
                                         }
                                         Divider(
                                             modifier = Modifier

@@ -532,7 +532,8 @@ fun FilterPopup(routesOrderListViewModel: RoutesOrderListViewModel, filterPopupV
 
                             ) {
                             Text(text = "Cerca",
-                                style = MaterialTheme.typography.titleMedium
+                                style = MaterialTheme.typography.titleMedium,
+                                color = Color.White
                                )
                         }
                         Spacer(modifier = Modifier.padding(8.dp))

@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -31,6 +33,7 @@ import androidx.navigation.NavController
 import com.example.rutescompartidesapp.data.domain.ProfileItems
 import com.example.rutescompartidesapp.ui.theme.openSans
 import com.example.rutescompartidesapp.view.login.LoginViewModel
+import com.example.rutescompartidesapp.view.map.viewModels.NotificationsViewModel
 import com.example.rutescompartidesapp.view.profile.ProfileViewModel
 import com.example.rutescompartidesapp.view.routes_order_list.viewmodels.RoutesOrderListViewModel
 import com.example.rutescompartidesapp.view.routes_order_list.viewmodels.TabRowViewModel
@@ -39,7 +42,7 @@ import com.example.rutescompartidesapp.view.routes_order_list.viewmodels.TabRowV
 fun CreateCardsWithItems(list: List<ProfileItems>, paddingBottom: Dp, paddingTop: Dp, viewModel: ProfileViewModel, navController: NavController, listNumber: Int,
                          routesOrderListViewModel: RoutesOrderListViewModel, tabRowViewModel: TabRowViewModel,
                          userID: Int,
-                         loginViewModel: LoginViewModel) {
+                         loginViewModel: LoginViewModel, notificationsViewModel: NotificationsViewModel) {
     Card(
         modifier = Modifier
             .width(LocalConfiguration.current.screenWidthDp.dp - 50.dp)
@@ -74,7 +77,7 @@ fun CreateCardsWithItems(list: List<ProfileItems>, paddingBottom: Dp, paddingTop
                             loginViewModel.updateCurrentIndex(1)
                         }
                         "Notificacions" -> {
-                            viewModel.onClickItemPlaceholder(true)
+                            notificationsViewModel.onPopupToggle()
                         }
                         "Com funciona?" -> {
                             navController.navigate("ComFuncionaScreen") {
@@ -134,7 +137,7 @@ fun CreateCardsWithItems(list: List<ProfileItems>, paddingBottom: Dp, paddingTop
                         }
                     }
                     Image(
-                        imageVector = Icons.Default.KeyboardArrowRight,
+                        imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
                         contentDescription = null,
                         colorFilter = ColorFilter.tint(color = if (isSystemInDarkTheme()) Color.White else Color.Black)
                     )
