@@ -545,7 +545,7 @@ class MapViewModel @Inject constructor (
     fun ordersAndRoutesFromLocation(mapView: MapView, roadManager: RoadManager, ctx: Context, geoPoint: GeoPoint, maxKmDistance: Int){
 
         mapView.controller.setCenter(geoPoint)
-        mapView.controller.setZoom(14)
+        mapView.controller.setZoom(16)
 
         val orderIconMarker = ContextCompat.getDrawable(ctx, R.drawable.little_map_marker_orders_svg)
         val routeIconMarker = ContextCompat.getDrawable(ctx, R.drawable.little_map_marker_routes_svg)
@@ -566,6 +566,11 @@ class MapViewModel @Inject constructor (
             isNearClickUser(ordersList = null, routesList = allRoute2, mapView, routeIconMarker, roadManager, maxKmDistance)
         }
 
+        // Important condition , if dont handle user click and doesn't exists, app crash
+        if (_userClickedPointer.value.isNotEmpty()){
+            deleteUserClickPointer(_userClickedPointer.value[0], mapView)
+        }
+
     }
 
     /**
@@ -578,14 +583,11 @@ class MapViewModel @Inject constructor (
     suspend fun getMunicipiGeoPointIdescatAPI(cityName: String): GeoPoint? {
          return withContext(Dispatchers.IO) {
               try {
-                  //val cityInfo = googleLocationsRepository.getCityInfo(cityName) GOOGLE GET
-                  // val location = cityInfo?.geometry?.location
                   val cityInfo = idescatRepository.getLatLngMunicipi(cityName)
                   val lat = cityInfo?.lat
                   val lng = cityInfo?.lng
-                  println("Latitud: $lat, Longitud: $lng")
+                  println("Latitud de $cityName: $lat, Longitud de $cityName: $lng")
 
-                  //GeoPoint(location?.lng ?: 0.0, location?.lat ?: 0.0)
                   println(GeoPoint(cityInfo?.lat ?: 0.0, cityInfo?.lng ?: 0.0))
                   GeoPoint(cityInfo?.lat ?: 0.0, cityInfo?.lng ?: 0.0)
               } catch (e: Exception) {
@@ -609,7 +611,7 @@ class MapViewModel @Inject constructor (
                 val location = cityInfo?.geometry?.location
                 val lat = location?.lat
                 val lng = location?.lng
-                println("Latitud: $lat, Longitud: $lng")
+                println("Latitud de $cityName: $lat, Longitud de $cityName: $lng")
 
                 GeoPoint(lat ?: 0.0, lng ?: 0.0)
             } catch (e: Exception) {

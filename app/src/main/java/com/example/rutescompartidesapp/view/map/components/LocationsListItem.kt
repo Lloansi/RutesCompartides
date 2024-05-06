@@ -40,6 +40,8 @@ fun LocationListItem(municipi: Municipi, ctx: Context, mapViewModel: MapViewMode
 
                     val fetchedGeoPoint = mapViewModel.getMunicipiGeoPointIdescatAPI(municipi.id) // Si fuera la llamada a google, seria municipi.content
 
+                    println("GEOPOINT CLICKED: ${fetchedGeoPoint?.latitude}, ${fetchedGeoPoint?.longitude}")
+
                     // Navigate to a point of map, when user click on item's list
                     mapView?.let { mapview ->
                         roadManager?.let { roadmanager ->
@@ -52,7 +54,10 @@ fun LocationListItem(municipi: Municipi, ctx: Context, mapViewModel: MapViewMode
                                     mapView = mapview,
                                     roadManager = roadmanager,
                                     ctx = ctx,
-                                    geoPoint = GeoPoint(fetchedGeoPoint?.latitude ?: 0.0,fetchedGeoPoint?.longitude ?: 0.0),
+                                    geoPoint = GeoPoint(
+                                        fetchedGeoPoint?.latitude ?: 0.0,
+                                        fetchedGeoPoint?.longitude ?: 0.0
+                                    ),
                                     maxKmDistance = 30 // 30km is cuz its a city, so, aprox 30km will show every place in city that can have a order or route
                                 )
                                 onCloseSearchBar() // We update the state of searching, so will close the list below the search bar
