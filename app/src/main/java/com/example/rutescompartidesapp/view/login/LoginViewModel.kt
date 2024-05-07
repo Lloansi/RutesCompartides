@@ -20,6 +20,12 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+/**
+ * ViewModel for the login screen.
+ *
+ * @param rutesCompartidesRepository The repository for Rutes Compartides API interactions.
+ * @param sessionRepository The repository for managing user session data.
+ */
 @HiltViewModel
 class LoginViewModel @Inject constructor (
     private val rutesCompartidesRepository: RutesCompartidesRepository,
@@ -29,6 +35,11 @@ class LoginViewModel @Inject constructor (
     private val _currentIndex = mutableIntStateOf(0)
     val currentIndex = _currentIndex
 
+    /**
+     * Updates the current index for tab navigation.
+     *
+     * @param index The index to set.
+     */
     fun updateCurrentIndex(index: Int){
         _currentIndex.intValue = index
     }
@@ -88,6 +99,11 @@ class LoginViewModel @Inject constructor (
     private val _isLoading = MutableStateFlow(false)
     val isLoading = _isLoading.asStateFlow()
 
+    /**
+     * Updates the loading state.
+     *
+     * @param isLoading Whether the app is in a loading state or not.
+     */
     fun onLoading(isLoading: Boolean){
         _isLoading.value = isLoading
     }
@@ -96,6 +112,11 @@ class LoginViewModel @Inject constructor (
     private val _userEmail = MutableStateFlow("")
     val userEmail = _userEmail.asStateFlow()
 
+    /**
+     * Updates the user email text.
+     *
+     * @param text The new email text.
+     */
     fun onUserEmailTextChange(text: String) {
         _userEmail.value = text
 
@@ -110,6 +131,12 @@ class LoginViewModel @Inject constructor (
     private val _userEmailError = MutableStateFlow(false)
     val userEmailError = _userEmailError.asStateFlow()
 
+    /**
+     * Updates the user email error status.
+     *
+     * @param isError Whether there is an error with the user email or not.
+     * @return The error status.
+     */
     fun onUserEmailError(isError: Boolean): Boolean {
         _userEmailError.value = isError
 
@@ -120,6 +147,11 @@ class LoginViewModel @Inject constructor (
     private val _userPassword = MutableStateFlow("")
     val userPassword = _userPassword.asStateFlow()
 
+    /**
+     * Updates the user password text.
+     *
+     * @param text The new password text.
+     */
     fun onUserPasswordTextChange(text: String) {
         _userPassword.value = text
     }
@@ -129,6 +161,9 @@ class LoginViewModel @Inject constructor (
     val isPasswordVisible = _isPasswordVisible.asStateFlow()
     
     //User password hide and show
+    /**
+     * Toggles the password visibility.
+     */
     fun togglePasswordVisibility() {
         _isPasswordVisible.value = !_isPasswordVisible.value
     }
@@ -137,6 +172,12 @@ class LoginViewModel @Inject constructor (
     private val _userPasswordError = MutableStateFlow(false)
     val userPasswordError = _userPasswordError.asStateFlow()
 
+    /**
+     * Updates the user password error status.
+     *
+     * @param isError Whether there is an error with the user password or not.
+     * @return The error status.
+     */
     fun onUserPasswordError(isError: Boolean): Boolean {
         _userPasswordError.value = isError
         return isError
@@ -172,6 +213,11 @@ class LoginViewModel @Inject constructor (
     private val _user = MutableStateFlow<UserLocal?>(null)
     val user = _user.asStateFlow()
 
+    /**
+     * Sets the user flow value.
+     *
+     * @param user The user to set.
+     */
     private fun setUser(user: UserLocal){
         _user.value = user
     }
@@ -219,7 +265,9 @@ class LoginViewModel @Inject constructor (
          }
      }
 
-
+    /**
+     * Performs login.
+     */
    suspend fun login() {
        getToken(AuthRequest(_userEmail.value, _userPassword.value))
    }

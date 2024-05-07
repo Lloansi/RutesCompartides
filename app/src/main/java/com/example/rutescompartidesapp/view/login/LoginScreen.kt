@@ -60,6 +60,12 @@ import com.example.rutescompartidesapp.R
 import com.example.rutescompartidesapp.ui.theme.OrangeRC
 import kotlinx.coroutines.flow.collectLatest
 
+/**
+ * Composable function for the login screen.
+ *
+ * @param loginViewModel The ViewModel associated with the login screen.
+ * @param navController The navigation controller used to navigate between screens.
+ */
 @Composable
 fun LoginScreen(loginViewModel: LoginViewModel, navController: NavController){
     //Email

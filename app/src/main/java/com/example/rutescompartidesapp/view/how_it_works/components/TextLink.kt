@@ -16,6 +16,12 @@ import androidx.compose.ui.unit.sp
 import com.example.rutescompartidesapp.ui.theme.MateBlackRC
 import com.example.rutescompartidesapp.ui.theme.openSans
 
+/**
+ * Composable function for displaying clickable text with links.
+ *
+ * @param annotatedString The annotated string containing the text with links.
+ * @param tag The tag identifying the type of link (e.g., "telegram" or "email").
+ */
 @Composable
 fun TextLink(annotatedString: AnnotatedString, tag: String){
 
@@ -45,6 +51,9 @@ fun TextLink(annotatedString: AnnotatedString, tag: String){
         })
 }
 
+/**
+ * Sends an email using the default email client.
+ */
 private fun Context.sendMail() {
     try {
         val intent = Intent(Intent.ACTION_SEND)

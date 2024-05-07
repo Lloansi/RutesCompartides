@@ -44,6 +44,11 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 
+/**
+ * Composable function for displaying the "How it works" screen.
+ *
+ * @param navController The navigation controller used for navigating between composables.
+ */
 @Composable
 fun ComFuncionaScreen(navController: NavHostController) {
 
@@ -92,6 +97,12 @@ fun ComFuncionaScreen(navController: NavHostController) {
 
 }
 
+/**
+ * Composable function for displaying the YouTube player.
+ *
+ * @param youtubeVideoId The ID of the YouTube video.
+ * @param lifecycleOwner The lifecycle owner used to observe the YouTube player's lifecycle.
+ */
 @Composable
 fun YouTubePlayer(
     youtubeVideoId: String,
@@ -119,6 +130,9 @@ fun YouTubePlayer(
     )
 }
 
+/**
+ * Composable function for displaying the description text.
+ */
 @Composable
 fun Description() {
 
@@ -142,6 +156,9 @@ fun Description() {
     )
 }
 
+/**
+ * Composable function for displaying the social media buttons.
+ */
 @Composable
 fun RRSSButtons() {
 
