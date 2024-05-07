@@ -18,8 +18,8 @@ import com.example.rutescompartidesapp.view.login.LoginViewModel
 import com.example.rutescompartidesapp.view.map.viewModels.SearchViewModel
 
 @Composable
-fun SearchViewContainer(searchViewModel: SearchViewModel, loginViewModel: LoginViewModel, navHost: NavController, ctx: Context, mapViewModel: MapViewModel) {
-    val isSearching by searchViewModel.isSearching.collectAsState()
+fun SearchViewContainer(loginViewModel: LoginViewModel, navHost: NavController, ctx: Context, mapViewModel: MapViewModel) {
+    val isSearching by mapViewModel.isSearching.collectAsState()
     Row (modifier = Modifier
         .offset(y = -(4).dp)
         .fillMaxWidth()
@@ -27,7 +27,7 @@ fun SearchViewContainer(searchViewModel: SearchViewModel, loginViewModel: LoginV
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        SearchView(searchViewModel, ctx, mapViewModel)
+        SearchView(ctx, mapViewModel)
         if (!isSearching) {
             NotificationButtonCard(loginViewModel = loginViewModel, navHost = navHost)
         }

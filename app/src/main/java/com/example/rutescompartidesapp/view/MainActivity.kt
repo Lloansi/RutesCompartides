@@ -79,7 +79,6 @@ class MainActivity : ComponentActivity() {
                 val filterPopupViewModel = FilterPopupViewModel()
                 val routeOrderListViewModel = RoutesOrderListViewModel()
                 val tabRowViewModel = TabRowViewModel()
-                val searchViewModel: SearchViewModel = hiltViewModel()
                 val navController = rememberNavController()
                 val manageRouteViewModel : ManageRouteViewModel  = hiltViewModel()
                 val manageOrderViewModel : ManageOrderViewModel = hiltViewModel()
@@ -145,7 +144,6 @@ class MainActivity : ComponentActivity() {
                         routeOrderListViewModel,
                         tabRowViewModel,
                         filterPopupViewModel,
-                        searchViewModel,
                         manageRouteViewModel,
                         manageOrderViewModel,
                         navController,
@@ -160,14 +158,19 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun ScreenNavigationConfiguration(
-    mapViewModel: MapViewModel, mapViewModel2: MapViewModel2, loginViewModel: LoginViewModel,
-    profileViewModel: ProfileViewModel, routeOrderListViewModel: RoutesOrderListViewModel,
-    tabRowViewModel: TabRowViewModel, filterPopupViewModel: FilterPopupViewModel,
-    searchViewModel: SearchViewModel, manageRouteViewModel: ManageRouteViewModel,
+    mapViewModel: MapViewModel,
+    mapViewModel2: MapViewModel2,
+    loginViewModel: LoginViewModel,
+    profileViewModel: ProfileViewModel,
+    routeOrderListViewModel: RoutesOrderListViewModel,
+    tabRowViewModel: TabRowViewModel,
+    filterPopupViewModel: FilterPopupViewModel,
+    manageRouteViewModel: ManageRouteViewModel,
     manageOrderViewModel: ManageOrderViewModel,
     navHostController: NavHostController,
     userIsLogged: Boolean,
-    modifier: Modifier) {
+    modifier: Modifier
+) {
 
     println("USER IS LOGGED AFTER NAV: $userIsLogged")
     NavHost(navController = navHostController,
@@ -175,7 +178,7 @@ fun ScreenNavigationConfiguration(
         modifier = modifier) {
 
         composable(Screens.MapScreen.route) {
-            MapScreen(navHostController, mapViewModel, searchViewModel, loginViewModel)
+            MapScreen(navHostController, mapViewModel, loginViewModel)
         }
         composable(Screens.OrderDetailScreen.route,
             arguments = listOf(navArgument("orderID"){
