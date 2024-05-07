@@ -98,7 +98,6 @@ fun MapScreen(navController: NavHostController, mapViewModel: MapViewModel, sear
         requestPermissionLauncher.launch(Manifest.permission.ACCESS_NETWORK_STATE)
     }
 
-
     val ordersFiltered by mapViewModel.filteredOrders.collectAsState()
     val routesFiltered by mapViewModel.filteredRoutes.collectAsState()
 
@@ -142,7 +141,7 @@ fun MapScreen(navController: NavHostController, mapViewModel: MapViewModel, sear
                 ) {
                     ExpandableFloatingButton(navController)
                     Spacer(modifier = Modifier.height(5.dp))
-                    CardBottomMap(ordersFiltered, routesFiltered)
+                    CardBottomMap(ordersFiltered, routesFiltered, navController)
                 }
             }
         }

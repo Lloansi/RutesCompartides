@@ -11,8 +11,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.rutescompartidesapp.R
 import com.example.rutescompartidesapp.data.domain.Order
-import com.example.rutescompartidesapp.data.domain.Route
-import com.example.rutescompartidesapp.data.domain.Route2
 import com.example.rutescompartidesapp.data.domain.orders.Orders
 import com.example.rutescompartidesapp.data.domain.routes.Routes
 import com.example.rutescompartidesapp.data.network.GoogleLocation.repository.GoogleLocationsRepository
@@ -20,10 +18,7 @@ import com.example.rutescompartidesapp.data.network.idescat.repository.idescatRe
 import com.example.rutescompartidesapp.utils.LocalConstants.orderList
 import com.example.rutescompartidesapp.utils.LocalConstants.routeList
 import com.example.rutescompartidesapp.view.map.MapScreen.maxKmFog
-import com.example.rutescompartidesapp.view.map.components.allOrders
 import dagger.hilt.android.lifecycle.HiltViewModel
-import com.example.rutescompartidesapp.view.map.components.allRoute
-import com.example.rutescompartidesapp.view.map.components.allRoute2
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

@@ -30,6 +30,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.example.rutescompartidesapp.R
 import com.example.rutescompartidesapp.data.domain.Order
 import com.example.rutescompartidesapp.data.domain.orders.Orders
@@ -82,7 +83,7 @@ val allOrders = listOf(
 )
 
 @Composable
-fun ComandaCard(comanda: Orders) {
+fun ComandaCard(comanda: Orders, navController: NavHostController) {
     Card(
         shape = MaterialTheme.shapes.medium,
         elevation = CardDefaults.cardElevation(
@@ -90,7 +91,8 @@ fun ComandaCard(comanda: Orders) {
         ),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(10.dp),
+            .padding(10.dp)
+            .clickable { navController.navigate("OrderDetailScreen/${comanda.orderID}") },
     ) {
         Row (
             modifier = Modifier

@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.example.rutescompartidesapp.R
 import com.example.rutescompartidesapp.data.domain.Route
 import com.example.rutescompartidesapp.data.domain.Route2
@@ -89,7 +90,7 @@ val allRoute = listOf(
 val newVehicle = Vehicle("Citroën Berlingo", 4, 234f,564f,234f)
 
 @Composable
-fun RouteCard(ruta : Routes, vehicle: Vehicle) {
+fun RouteCard(ruta : Routes, vehicle: Vehicle, navController: NavHostController) {
     Card(
         shape = MaterialTheme.shapes.medium,
         elevation = CardDefaults.cardElevation(
@@ -99,7 +100,7 @@ fun RouteCard(ruta : Routes, vehicle: Vehicle) {
             .fillMaxWidth()
             .padding(10.dp)
             //.background(color = Color.White)
-            .clickable { },
+            .clickable { navController.navigate("RouteDetailGeneralScreen/${ruta.routeID}") },
     ) {
         Row (
             modifier = Modifier

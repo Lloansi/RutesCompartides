@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavHostController
 import com.example.rutescompartidesapp.data.domain.Order
 import com.example.rutescompartidesapp.data.domain.Route
 import com.example.rutescompartidesapp.data.domain.orders.Orders
@@ -11,21 +12,21 @@ import com.example.rutescompartidesapp.data.domain.routes.Routes
 
 
 @Composable
-fun CardBottomMap(ordersFiltered: List<Orders>?, routesFiltered: List<Routes>?){
+fun CardBottomMap(ordersFiltered: List<Orders>?, routesFiltered: List<Routes>?, navController: NavHostController){
     LazyRow(
         modifier = Modifier.fillMaxWidth()
     ){
         if (!ordersFiltered.isNullOrEmpty()){
             items(ordersFiltered.size){ item ->
                 val orderItem = ordersFiltered[item]
-                ComandaCard(comanda = orderItem)
+                ComandaCard(comanda = orderItem, navController)
             }
         }
 
         if (!routesFiltered.isNullOrEmpty()){
             items(routesFiltered.size){item ->
                 val rutaItem = routesFiltered[item]
-                RouteCard(ruta = rutaItem, newVehicle)
+                RouteCard(ruta = rutaItem, newVehicle, navController)
             }
         }
     }
