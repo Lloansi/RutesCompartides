@@ -5,6 +5,7 @@ import android.content.Context
 import android.graphics.drawable.Drawable
 import android.view.MotionEvent
 import android.graphics.Color
+import android.os.Handler
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -89,13 +90,13 @@ class MapViewModel @Inject constructor (
     private val _isSearching = MutableStateFlow(false)
     val isSearching = _isSearching.asStateFlow()
 
-    private val _routes = MutableStateFlow(listOf<Route>())
+    private val _routes = MutableStateFlow(listOf<Routes>())
     val routes = _routes.asStateFlow()
 
     private val _orders = MutableStateFlow(mutableListOf<Orders>())
     val orders = _orders.asStateFlow()
 
-    private val _ordersAndRoutes = MutableStateFlow(listOf<Pair<List<Route>, List<Order>>>())
+    private val _ordersAndRoutes = MutableStateFlow(listOf<Pair<List<Routes>, List<Order>>>())
     val ordersAndRoutes = _ordersAndRoutes.asStateFlow()
 
     private val _locations = MutableStateFlow(listOf<Municipi>())
@@ -260,74 +261,74 @@ class MapViewModel @Inject constructor (
         _roadManagerState.value = roadManager
 
         var isDragging = false
+        val handler = Handler()
+
         mapView.setOnTouchListener { _, event ->
             when (event.action) {
-                MotionEvent.ACTION_DOWN -> {
+                MotionEvent.ACTION_UP -> {
                     isDragging= false
                     //true  // if MotionEvent don't have anything inside, use it to consume the touch event
                 }
                 MotionEvent.ACTION_MOVE -> {
                     // User dragging
                     isDragging = true
-                    //true  // if MotionEvent don't have anything inside, use it to consume the touch event
                 }
-                MotionEvent.ACTION_UP -> {
+                MotionEvent.ACTION_DOWN -> {
                     // User tap screen
-                    if (!isDragging) {
+                    // We add handler because if not , dragging state will take effect before the touch event MotionEvent.ACTION_DOWN
+                    handler.postDelayed({
+                        if (!isDragging) {
+                            // Convert click screen coordinates to GeoPoint
+                            val x = event.x.toInt()
+                            val y = event.y.toInt()
+                            val projection = mapView.projection
+                            val geoPoint = projection.fromPixels(x, y)
+                            // We transform this click coordinates to Class GeoPoint
+                            geoPoint as GeoPoint
 
-                        if (isSearching.value){
-                            onToogleSearch()
+                            // Controller of the mapView for set center, animations ...
+                            val controller = mapView.controller
+
+                            // With the position where user clicked, we create a point marker
+                            // If user never clicked, we just create a Click Pointer Marker if not, we delete the old Click Pointer Marker and create the new one
+                            if (_userClickedPointer.value.isNotEmpty()){
+                                deleteUserClickPointer(_userClickedPointer.value[0], mapView)
+                                createClickPointerMarker(geoPoint, mapView, iconMarkerClickPointer)
+                            }else{
+                                createClickPointerMarker(geoPoint, mapView, iconMarkerClickPointer)
+                            }
+
+                            // Handle the click event, we update our mutable live data, with the click coordinates
+                            // The clicked point becomes the center point
+                            updateMarkerPosition(geoPoint)
+                            controller.animateTo(markerPosition.value)
+                            //controller.setCenter(markerPosition.value)
+
+                            // With the position where user clicked, we check if near there is any marker, if there is, markers appear
+                            // If user never clicked, we just show it as mentioned before, if not, we delete the old markers and create the new ones
+                            if (_ordersMarkers.value.isNotEmpty()){
+                                // We delete orders
+                                deleteOrdersMarkers(_ordersMarkers.value, mapView)
+                                deleteRoutesPaths(_routesPaths.value, mapView)
+                                // We check if near user's click have any order
+                                isNearClickUser(ordersList = orderList, routesList = null, mapView, orderIconMarker, roadManager, maxKmDistance = maxKmFog)
+                            }else{
+                                // We check if near user's click have any order
+                                isNearClickUser(ordersList = orderList, routesList = null, mapView, orderIconMarker, roadManager, maxKmDistance = maxKmFog)
+                            }
+
+                            if (_routesMarkers.value.isNotEmpty()){
+                                // We delete routes and paths of the map
+                                deleteRoutesMarkers(_routesMarkers.value, mapView)
+                                deleteRoutesPaths(_routesPaths.value, mapView)
+                                // We check if near user's click have any route
+                                isNearClickUser(ordersList = null, routesList = routeList, mapView, routeIconMarker, roadManager, maxKmDistance = maxKmFog)
+                            } else{
+                                // We check if near user's click have any route
+                                isNearClickUser(ordersList = null, routesList = routeList, mapView, routeIconMarker, roadManager, maxKmDistance = maxKmFog)
+                            }
                         }
-                        // Convert click screen coordinates to GeoPoint
-                        val x = event.x.toInt()
-                        val y = event.y.toInt()
-                        val projection = mapView.projection
-                        val geoPoint = projection.fromPixels(x, y)
-                        // We transform this click coordinates to Class GeoPoint
-                        geoPoint as GeoPoint
-
-                        // Controller of the mapView for set center, animations ...
-                        val controller = mapView.controller
-
-                        // With the position where user clicked, we create a point marker
-                        // If user never clicked, we just create a Click Pointer Marker if not, we delete the old Click Pointer Marker and create the new one
-                        if (_userClickedPointer.value.isNotEmpty()){
-                            deleteUserClickPointer(_userClickedPointer.value[0], mapView)
-                            createClickPointerMarker(geoPoint, mapView, iconMarkerClickPointer)
-                        }else{
-                            createClickPointerMarker(geoPoint, mapView, iconMarkerClickPointer)
-                        }
-
-                        // Handle the click event, we update our mutable live data, with the click coordinates
-                        // The clicked point becomes the center point
-                        updateMarkerPosition(geoPoint)
-                        controller.animateTo(markerPosition.value)
-                        //controller.setCenter(markerPosition.value)
-
-                        // With the position where user clicked, we check if near there is any marker, if there is, markers appear
-                        // If user never clicked, we just show it as mentioned before, if not, we delete the old markers and create the new ones
-                        if (_ordersMarkers.value.isNotEmpty()){
-                            // We delete orders
-                            deleteOrdersMarkers(_ordersMarkers.value, mapView)
-                            deleteRoutesPaths(_routesPaths.value, mapView)
-                            // We check if near user's click have any order
-                            isNearClickUser(ordersList = orderList, routesList = null, mapView, orderIconMarker, roadManager, maxKmDistance = maxKmFog)
-                        }else{
-                            // We check if near user's click have any order
-                            isNearClickUser(ordersList = orderList, routesList = null, mapView, orderIconMarker, roadManager, maxKmDistance = maxKmFog)
-                        }
-
-                        if (_routesMarkers.value.isNotEmpty()){
-                            // We delete routes and paths of the map
-                            deleteRoutesMarkers(_routesMarkers.value, mapView)
-                            deleteRoutesPaths(_routesPaths.value, mapView)
-                            // We check if near user's click have any route
-                            isNearClickUser(ordersList = null, routesList = routeList, mapView, routeIconMarker, roadManager, maxKmDistance = maxKmFog)
-                        } else{
-                            // We check if near user's click have any route
-                            isNearClickUser(ordersList = null, routesList = routeList, mapView, routeIconMarker, roadManager, maxKmDistance = maxKmFog)
-                        }
-                    }
+                    }, 100)
                     //isDragging = false // Reset the drag flag
                     //true
                 }
@@ -335,6 +336,7 @@ class MapViewModel @Inject constructor (
             // Let the map handle the touch event for dragging
             false
         }
+
     }
 
     /**
