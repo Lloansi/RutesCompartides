@@ -61,7 +61,7 @@ object MapScreen: Screen {
 }
 
 @Composable
-fun MapScreen(navController: NavHostController, mapViewModel: MapViewModel, searchViewModel: SearchViewModel, loginViewModel: LoginViewModel) {
+fun MapScreen(navController: NavHostController, mapViewModel: MapViewModel,loginViewModel: LoginViewModel) {
 
     val ctx = LocalContext.current
 
@@ -128,7 +128,7 @@ fun MapScreen(navController: NavHostController, mapViewModel: MapViewModel, sear
                     .align(Alignment.TopStart)
             ) {
                 Column {
-                    SearchViewContainer(searchViewModel, loginViewModel = loginViewModel, navHost = navController, ctx, mapViewModel)
+                    SearchViewContainer(loginViewModel = loginViewModel, navHost = navController, ctx, mapViewModel)
                 }
             }
 

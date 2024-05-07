@@ -31,12 +31,12 @@ import com.example.rutescompartidesapp.view.map.viewModels.SearchViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchView(searchViewModel : SearchViewModel, ctx: Context, mapViewModel: MapViewModel) {
+fun SearchView(ctx: Context, mapViewModel: MapViewModel) {
 
-    val searchText by searchViewModel.searchText.collectAsState()
-    val isSearching by searchViewModel.isSearching.collectAsState()
+    val searchText by mapViewModel.searchText.collectAsState()
+    val isSearching by mapViewModel.isSearching.collectAsState()
 
-    val locationsFilteredSearchBar by searchViewModel.locationsFilteredPerSearchedText.collectAsStateWithLifecycle()
+    val locationsFilteredSearchBar by mapViewModel.locationsFilteredPerSearchedText.collectAsStateWithLifecycle()
 
     val isLocationsNotNull = !locationsFilteredSearchBar.isNullOrEmpty()
 
@@ -57,8 +57,8 @@ fun SearchView(searchViewModel : SearchViewModel, ctx: Context, mapViewModel: Ma
                 contentDescription = "Search Icon"
             )
         },
-        onQueryChange = searchViewModel::onSearchTextChange,
-        onSearch = searchViewModel::onSearchTextChange,
+        onQueryChange = mapViewModel::onSearchTextChange,
+        onSearch = mapViewModel::onSearchTextChange,
         active = isSearching,
         colors = SearchBarDefaults.colors(
             containerColor = Color.White,
@@ -70,7 +70,7 @@ fun SearchView(searchViewModel : SearchViewModel, ctx: Context, mapViewModel: Ma
             Modifier.size(4.dp)
         },*/
         onActiveChange = { _ ->
-            searchViewModel.onToogleSearch()
+            mapViewModel.onToogleSearch()
         }) {
 
         LazyColumn(
@@ -86,7 +86,7 @@ fun SearchView(searchViewModel : SearchViewModel, ctx: Context, mapViewModel: Ma
                         ctx = ctx,
                         mapViewModel = mapViewModel,
                         onCloseSearchBar = {
-                                searchViewModel.onToogleSearch()
+                            mapViewModel.onToogleSearch()
                         })
                     Spacer(modifier = Modifier.height(12.dp))
                 }

@@ -29,6 +29,8 @@ class SearchViewModel @Inject constructor(
     private val idescatRepository: idescatRepository
 ) : ViewModel() {
 
+    // NO SE USA ESTE VIEWMODEL, ESTA FUSIONADO CON EL MAPVIEWMODEL
+
     private val _searchText = MutableStateFlow("")
     val searchText = _searchText.asStateFlow()
 
