@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable
 import android.view.MotionEvent
 import android.graphics.Color
 import android.os.Handler
+import android.os.Looper
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -261,7 +262,7 @@ class MapViewModel @Inject constructor (
         _roadManagerState.value = roadManager
 
         var isDragging = false
-        val handler = Handler()
+        val handler = Handler(Looper.getMainLooper())
 
         mapView.setOnTouchListener { _, event ->
             when (event.action) {
@@ -275,6 +276,9 @@ class MapViewModel @Inject constructor (
                 }
                 MotionEvent.ACTION_DOWN -> {
                     // User tap screen
+                    if (isSearching.value){
+                        onToogleSearch()
+                    }
                     // We add handler because if not , dragging state will take effect before the touch event MotionEvent.ACTION_DOWN
                     handler.postDelayed({
                         if (!isDragging) {

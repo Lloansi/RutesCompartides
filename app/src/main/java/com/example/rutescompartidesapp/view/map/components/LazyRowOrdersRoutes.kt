@@ -9,10 +9,11 @@ import com.example.rutescompartidesapp.data.domain.Order
 import com.example.rutescompartidesapp.data.domain.Route
 import com.example.rutescompartidesapp.data.domain.orders.Orders
 import com.example.rutescompartidesapp.data.domain.routes.Routes
+import com.example.rutescompartidesapp.view.login.LoginViewModel
 
 
 @Composable
-fun CardBottomMap(ordersFiltered: List<Orders>?, routesFiltered: List<Routes>?, navController: NavHostController){
+fun CardBottomMap(ordersFiltered: List<Orders>?, routesFiltered: List<Routes>?, navController: NavHostController,loginViewModel: LoginViewModel){
     LazyRow(
         modifier = Modifier.fillMaxWidth()
     ){
@@ -26,7 +27,7 @@ fun CardBottomMap(ordersFiltered: List<Orders>?, routesFiltered: List<Routes>?, 
         if (!routesFiltered.isNullOrEmpty()){
             items(routesFiltered.size){item ->
                 val rutaItem = routesFiltered[item]
-                RouteCard(ruta = rutaItem, newVehicle, navController)
+                RouteCard(ruta = rutaItem, navController, loginViewModel)
             }
         }
     }

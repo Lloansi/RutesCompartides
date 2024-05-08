@@ -26,7 +26,7 @@ object LocalConstants {
             listOf("Bree", "Rivendell", "Moria", "Lothlorien", "Cirith Ungol"),"2024-10-10", "14:00",
             "2024-12-12", "12:12", listOf(),
             false, false, false, false,
-            "A cama", 0.0f, 598.6f, 0, "4 Hobbits, 1 elf, 1 nan, 2 humans", "Acompanya al portador de l'anell a Mordor",
+            "A cama", 0.0f, 598.6f, 0, "340.5 x 123.5 x 45.3", "Acompanya al portador de l'anell a Mordor",
             GeoPoint(41.5659823,2.0101492), GeoPoint(41.6528939, 2.1544323)
         )
     )

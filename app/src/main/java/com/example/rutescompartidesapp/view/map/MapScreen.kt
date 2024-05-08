@@ -141,7 +141,7 @@ fun MapScreen(navController: NavHostController, mapViewModel: MapViewModel,login
                 ) {
                     ExpandableFloatingButton(navController)
                     Spacer(modifier = Modifier.height(5.dp))
-                    CardBottomMap(ordersFiltered, routesFiltered, navController)
+                    CardBottomMap(ordersFiltered, routesFiltered, navController, loginViewModel)
                 }
             }
         }

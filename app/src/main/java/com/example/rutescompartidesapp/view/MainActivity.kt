@@ -42,7 +42,6 @@ import com.example.rutescompartidesapp.view.login.LoginViewModel
 import com.example.rutescompartidesapp.view.map.MapScreen
 import com.example.rutescompartidesapp.view.map.viewModels.MapViewModel
 import com.example.rutescompartidesapp.view.map.viewModels.MapViewModel2
-import com.example.rutescompartidesapp.view.map.viewModels.SearchViewModel
 import com.example.rutescompartidesapp.view.profile.ProfileScreen
 import com.example.rutescompartidesapp.view.profile.ProfileViewModel
 import com.example.rutescompartidesapp.view.publish_order.ManageOrderViewModel

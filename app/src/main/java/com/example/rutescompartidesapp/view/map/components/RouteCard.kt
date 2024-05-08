@@ -18,6 +18,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -37,60 +39,15 @@ import com.example.rutescompartidesapp.data.domain.Route
 import com.example.rutescompartidesapp.data.domain.Route2
 import com.example.rutescompartidesapp.data.domain.Vehicle
 import com.example.rutescompartidesapp.data.domain.routes.Routes
+import com.example.rutescompartidesapp.view.login.LoginViewModel
 import com.example.rutescompartidesapp.view.map.fredokaOneFamily
 import com.example.rutescompartidesapp.view.map.openSansFamily
 import org.osmdroid.util.GeoPoint
 
-val allRoute2 = listOf(
-    Route2(
-        GeoPoint(41.563484f.toDouble(), 2.181916f.toDouble()),
-        GeoPoint(41.67175f.toDouble(), 2.193416f.toDouble())
-    )
-)
-
-val allRoute = listOf(
-    Route(
-        1,
-        "Mataró",
-        listOf("Premia de Mar"),
-        "Masnou",
-        5,
-        4.56f,
-        41.563484f,
-        2.181916f,
-        41.67175f,
-        2.193416f
-    ),
-    Route(
-        2,
-        "Mataró",
-        listOf("Premia de Mar", "Masnou","Badalona"),
-        "Barcelona",
-        4,
-        4.56f,
-        41.513485f,
-        2.181916f,
-        41.33565f,
-        2.172416f
-    ),
-    Route(
-        3,
-        "Terrasa",
-        null,
-        "Sabadell",
-        2,
-        4.56f,
-        41.453426f,
-        2.187916f,
-        41.753227f,
-        2.187916f
-    )
-)
-
-val newVehicle = Vehicle("Citroën Berlingo", 4, 234f,564f,234f)
-
 @Composable
-fun RouteCard(ruta : Routes, vehicle: Vehicle, navController: NavHostController) {
+fun RouteCard(ruta : Routes, navController: NavHostController, loginViewModel: LoginViewModel) {
+    val user by loginViewModel.user.collectAsState()
+
     Card(
         shape = MaterialTheme.shapes.medium,
         elevation = CardDefaults.cardElevation(
@@ -100,7 +57,15 @@ fun RouteCard(ruta : Routes, vehicle: Vehicle, navController: NavHostController)
             .fillMaxWidth()
             .padding(10.dp)
             //.background(color = Color.White)
-            .clickable { navController.navigate("RouteDetailGeneralScreen/${ruta.routeID}") },
+            .clickable {
+                navController.navigate(
+                    if (user?.userId == ruta.routeID){
+                        "RouteDetailDriverScreen/${ruta.routeID}"
+                    }else {
+                        "RouteDetailGeneralScreen/${ruta.routeID}"
+                    }
+                )
+            },
     ) {
         Row (
             modifier = Modifier
@@ -142,7 +107,7 @@ fun RouteCard(ruta : Routes, vehicle: Vehicle, navController: NavHostController)
                             .offset(x = (-2).dp)
                     )
                     Text(
-                        text = newVehicle.name,
+                        text = ruta.vehicle ?: "No Assignat",
                         style = MaterialTheme.typography.bodyMedium,
                         fontFamily = fredokaOneFamily,
                         fontWeight = FontWeight.SemiBold,
@@ -169,9 +134,9 @@ fun RouteCard(ruta : Routes, vehicle: Vehicle, navController: NavHostController)
 
 
                 // Route information
-                DetailsCard(idImage = R.drawable.seat_svg, value = "${vehicle.seatsAvailable}", imageSize = 28.dp, paddingPercentage = 2)
+                DetailsCard(idImage = R.drawable.seat_svg, value = "${ruta.availableSeats}", imageSize = 28.dp, paddingPercentage = 2)
                 PricePerKM(idImage1 = R.drawable.eur_svg, idImage2 = R.drawable.km_svg, value = "${ruta.costKm}€")
-                DetailsCard(idImage = R.drawable.van_measures, value = vehicle.vehicleMesures, imageSize = 35.dp, fontSize = 13.sp, paddingPercentage = 5)
+                DetailsCard(idImage = R.drawable.van_measures, value = ruta.availableSpace ?: "No assignat", imageSize = 35.dp, fontSize = 13.sp, paddingPercentage = 5)
 
                 val percentagePaddingDesviament = 5
                 val paddingDesviament = (LocalDensity.current.density * percentagePaddingDesviament).dp
@@ -193,7 +158,9 @@ fun RouteCard(ruta : Routes, vehicle: Vehicle, navController: NavHostController)
                     fontSize = 14.sp,
                     fontWeight = FontWeight.SemiBold,
                     fontFamily = openSansFamily,
-                    modifier = Modifier.padding().padding(start = paddingDesviament)
+                    modifier = Modifier
+                        .padding()
+                        .padding(start = paddingDesviament)
                 )
 
             }
