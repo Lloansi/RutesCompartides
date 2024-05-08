@@ -12,10 +12,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.rutescompartidesapp.view.map.viewModels.MapViewModel
 import androidx.navigation.NavController
 import com.example.rutescompartidesapp.view.login.LoginViewModel
-import com.example.rutescompartidesapp.view.map.viewModels.SearchViewModel
+import com.example.rutescompartidesapp.view.map.viewModels.MapViewModel
 
 @Composable
 fun SearchViewContainer(loginViewModel: LoginViewModel, navHost: NavController, ctx: Context, mapViewModel: MapViewModel) {

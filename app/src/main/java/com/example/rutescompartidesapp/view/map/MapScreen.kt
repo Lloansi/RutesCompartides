@@ -40,7 +40,6 @@ import com.example.rutescompartidesapp.view.map.components.ExpandableFloatingBut
 import com.example.rutescompartidesapp.view.map.components.MapViewContainer
 import com.example.rutescompartidesapp.view.map.components.SearchViewContainer
 import com.example.rutescompartidesapp.view.map.viewModels.MapViewModel
-import com.example.rutescompartidesapp.view.map.viewModels.SearchViewModel
 
 val openSansFamily = FontFamily(
     Font(R.font.opensans, FontWeight.Normal),

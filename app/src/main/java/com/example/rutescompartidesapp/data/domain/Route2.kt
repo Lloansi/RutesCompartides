@@ -1,6 +1,5 @@
 package com.example.rutescompartidesapp.data.domain
 
-import kotlinx.serialization.Serializable
 import org.osmdroid.util.GeoPoint
 
 

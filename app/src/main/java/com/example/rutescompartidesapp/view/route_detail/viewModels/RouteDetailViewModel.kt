@@ -3,8 +3,8 @@ package com.example.rutescompartidesapp.view.route_detail.viewModels
 import androidx.lifecycle.ViewModel
 import com.example.rutescompartidesapp.data.domain.interactions.RouteInteraction
 import com.example.rutescompartidesapp.data.domain.orders.Orders
-import com.example.rutescompartidesapp.data.domain.routes.SharedDataRouteOrder
 import com.example.rutescompartidesapp.data.domain.routes.Routes
+import com.example.rutescompartidesapp.data.domain.routes.SharedDataRouteOrder
 import com.example.rutescompartidesapp.utils.LocalConstants
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -61,7 +61,6 @@ class RouteDetailViewModel: ViewModel() {
                     }
 
         }
-        println(matchingOrders)
         _userMatchingOrders.value = matchingOrders
     }
 

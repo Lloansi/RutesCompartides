@@ -1,7 +1,6 @@
 package com.example.rutescompartidesapp.data.network.idescat.repository
 
 import com.example.rutescompartidesapp.data.domain.Location.idescat.Coordinates.MunicipiCoordinates
-import com.example.rutescompartidesapp.data.domain.Location.idescat.Coordinates.MunicipiCoordinatesResponse
 import com.example.rutescompartidesapp.data.domain.Location.idescat.Municipi
 import com.example.rutescompartidesapp.data.network.idescat.idescatApi
 import com.example.rutescompartidesapp.data.network.idescat.idescatService

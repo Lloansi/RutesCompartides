@@ -30,26 +30,26 @@ import com.example.rutescompartidesapp.R
 import com.example.rutescompartidesapp.navigation.Screens
 import com.example.rutescompartidesapp.ui.theme.MateBlackRC
 import com.example.rutescompartidesapp.ui.theme.RutesCompartidesAppTheme
-import com.example.rutescompartidesapp.view.how_it_works.ComFuncionaScreen
+import com.example.rutescompartidesapp.view.confirm_delivery.viewmodel.CameraViewModel
+import com.example.rutescompartidesapp.view.confirm_delivery.viewmodel.DrawViewModel
 import com.example.rutescompartidesapp.view.edit_profile.EditProfileScreen
 import com.example.rutescompartidesapp.view.faq.FaqScreen
 import com.example.rutescompartidesapp.view.faq.FaqViewModel
-import com.example.rutescompartidesapp.view.confirm_delivery.viewmodel.CameraViewModel
-import com.example.rutescompartidesapp.view.confirm_delivery.viewmodel.DrawViewModel
-import com.example.rutescompartidesapp.view.order_detail.OrderDetailScreen
+import com.example.rutescompartidesapp.view.how_it_works.ComFuncionaScreen
 import com.example.rutescompartidesapp.view.login.LoginScreen
 import com.example.rutescompartidesapp.view.login.LoginViewModel
 import com.example.rutescompartidesapp.view.map.MapScreen
 import com.example.rutescompartidesapp.view.map.viewModels.MapViewModel
 import com.example.rutescompartidesapp.view.map.viewModels.MapViewModel2
+import com.example.rutescompartidesapp.view.order_detail.OrderDetailScreen
 import com.example.rutescompartidesapp.view.profile.ProfileScreen
 import com.example.rutescompartidesapp.view.profile.ProfileViewModel
 import com.example.rutescompartidesapp.view.publish_order.ManageOrderViewModel
 import com.example.rutescompartidesapp.view.publish_order.PublishOrderScreen
 import com.example.rutescompartidesapp.view.publish_route.ManageRouteViewModel
 import com.example.rutescompartidesapp.view.publish_route.PublishRouteScreen
-import com.example.rutescompartidesapp.view.route_detail.route_detail_driver.RouteDetailDriverScreen
 import com.example.rutescompartidesapp.view.route_detail.RouteDetailGeneralScreen
+import com.example.rutescompartidesapp.view.route_detail.route_detail_driver.RouteDetailDriverScreen
 import com.example.rutescompartidesapp.view.route_detail.route_detail_driver.RouteDetailDriverViewModel
 import com.example.rutescompartidesapp.view.routes_order_list.RoutesOrderListScreen
 import com.example.rutescompartidesapp.view.routes_order_list.viewmodels.FilterPopupViewModel
@@ -128,7 +128,6 @@ class MainActivity : ComponentActivity() {
                                 ),
                                 onSelectItem = {
                                     println("SELECTED_ITEM " + " onCreate: Selected Item ${it.name}")
-                                    println(it.route)
                                 }
                             )
                        }
@@ -171,7 +170,6 @@ fun ScreenNavigationConfiguration(
     modifier: Modifier
 ) {
 
-    println("USER IS LOGGED AFTER NAV: $userIsLogged")
     NavHost(navController = navHostController,
         startDestination = if (userIsLogged) Screens.MapScreen.route else Screens.LoginScreen.route,
         modifier = modifier) {

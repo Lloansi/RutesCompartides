@@ -111,11 +111,9 @@ fun RouteDetailDriverScreen(
             "Confirmar entrega de la comanda ${routeInteractionToConfirm!!.orderID}"
         },
             onBack = {
-                println(isCompleteScreenShowing)
                 if (isCompleteScreenShowing) {
                     routeDetailDriverViewModel.showCompleteScreen(false)
                 } else {
-                    println("Current back stack:\n${navHost.currentBackStack.value}")
                     navHost.popBackStack()
                 }
             },

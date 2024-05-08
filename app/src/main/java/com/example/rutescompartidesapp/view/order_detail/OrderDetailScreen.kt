@@ -85,7 +85,6 @@ fun OrderDetailScreen(orderID: Int, navHost: NavHostController, loginViewModel: 
     TopAppBarWithBackNav(
         title = "Comanda #${order!!.orderID}",
         onBack = {
-            println("Current back stack:\n${navHost.currentBackStack.value}")
             navHost.popBackStack() },
         content = {
             if (order != null){
