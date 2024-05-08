@@ -2,6 +2,7 @@ package com.example.rutescompartidesapp.view.order_detail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavHostController
 import com.example.rutescompartidesapp.data.domain.interactions.RouteInteraction
 import com.example.rutescompartidesapp.data.domain.orders.Orders
 import com.example.rutescompartidesapp.data.domain.routes.SharedDataRouteOrder
@@ -17,10 +18,17 @@ class OrderDetailViewModel: ViewModel() {
     private val _order = MutableStateFlow<Orders?>(null)
     val order = _order.asStateFlow()
 
+    /**
+     * Obté la comanda amb l'ID i actualitza [_order] amb la comanda,
+     * també crida a [checkOrderStatus] per comprovar l'estat de la comanda
+     * @param orderID Int -> ID de la comanda
+     */
     fun getOrder(orderID: Int){
-        val order = LocalConstants.orderList!!.first { it.orderID == orderID }
-        _order.value = order
-        checkOrderStatus()
+        val order = LocalConstants.orderList?.find { it.orderID == orderID }
+        order?.let {
+            _order.value = order
+            checkOrderStatus()
+        }
     }
 
     private val _acceptPopup = MutableStateFlow(false)
@@ -73,7 +81,7 @@ class OrderDetailViewModel: ViewModel() {
     }
 
     /**
-     * Checks if the order status by accessing
+     * Checks the order status by accessing
      * [LocalConstants.interactionList]
      * and updates [_isOrderAccepted], [_isOrderDelivered] and [_isOrderPendent] with the result [_isOrderDeclined]
      * and [_isDeliveryValuated] with the result.
@@ -150,12 +158,12 @@ class OrderDetailViewModel: ViewModel() {
         _isOrderPendent.value = false
     }
 
-    private val _SharedData_routeOrder = MutableStateFlow<SharedDataRouteOrder?>(null)
-    val routeFromOrder = _SharedData_routeOrder.asStateFlow()
+    private val _sharedDataRouteOrder = MutableStateFlow<SharedDataRouteOrder?>(null)
+    val routeFromOrder = _sharedDataRouteOrder.asStateFlow()
 
     /**
      * Obtains the info of the order to create a route with this info and
-     * updates [_SharedData_routeOrder] with the info.
+     * updates [_sharedDataRouteOrder] with the info.
      *
      * Obtains the following info from the order:
      * - Origin point (Punt de sortida)
@@ -176,15 +184,22 @@ class OrderDetailViewModel: ViewModel() {
             isIsoterm = order.isIsoterm,
             isSenseHumitat = order.isSenseHumitat
         )
-        _SharedData_routeOrder.value = newRoute
+        _sharedDataRouteOrder.value = newRoute
     }
 
-
-    fun deleteOrder(orderID: Int){
+    /**
+     * Deletes the order with the [orderID] and navigates back to the previous screen
+     * @param orderID Int -> ID of the order
+     * @param navHost NavHostController
+     */
+    fun deleteOrder(orderID: Int, navHost: NavHostController){
+        navHost.popBackStack()
         viewModelScope.launch {
-            LocalConstants.orderList!!.removeIf { order -> order.orderID == orderID }
+            val orderToRemove = LocalConstants.orderList?.find { it.orderID == orderID }
+            orderToRemove?.let {
+                LocalConstants.orderList.remove(it)
+            }
         }
-
         // TODO Fer un DELETE a la API per eliminar la comanda
     }
 }

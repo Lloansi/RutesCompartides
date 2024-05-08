@@ -160,6 +160,7 @@ fun PublishOrderScreen(command: String, orderID: Int, navHost: NavHostController
                 }
             }
         }
+        manageOrderViewModel.resetStep()
     }
 
     Scaffold( modifier = Modifier
@@ -367,7 +368,8 @@ private fun PublishOrderContent3(
         PublishButton(
             onClick = {  if(command == "create" || command == "createFrom"){
                 manageOrderViewModel.addOrder(userID)
-            } else manageOrderViewModel.updateOrder(userID) },
+            } else manageOrderViewModel.updateOrder(userID)
+                      },
 
             text = if(command == "create" || command == "createFrom") "Publicar comanda" else "Editar comanda"
         )

@@ -22,11 +22,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.rutescompartidesapp.view.map.viewModels.MapViewModel
-import com.example.rutescompartidesapp.view.map.viewModels.SearchViewModel
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -48,12 +46,12 @@ fun SearchView(ctx: Context, mapViewModel: MapViewModel) {
             .padding(end = 12.dp),
         query = searchText ,
         placeholder = {
-            Text(text = "Cercar", color = Color.Black)
+            Text(text = "Cercar", color = MaterialTheme.colorScheme.onBackground)
         },
         leadingIcon = {
             Icon(
                 imageVector = Icons.Default.Search,
-                tint = Color.Black,
+                tint = MaterialTheme.colorScheme.onBackground,
                 contentDescription = "Search Icon"
             )
         },
@@ -61,7 +59,8 @@ fun SearchView(ctx: Context, mapViewModel: MapViewModel) {
         onSearch = mapViewModel::onSearchTextChange,
         active = isSearching,
         colors = SearchBarDefaults.colors(
-            containerColor = Color.White,
+            containerColor = MaterialTheme.colorScheme.onTertiary,
+            dividerColor = MaterialTheme.colorScheme.onBackground,
             inputFieldColors = TextFieldDefaults.colors(MaterialTheme.colorScheme.primary)
         ),
         shape = RoundedCornerShape(16.dp),

@@ -75,7 +75,7 @@ fun MiniFloatingButton(
     onClick: () -> Unit
 ) {
     FloatingActionButton(
-        containerColor = Color.White,
+        containerColor = MaterialTheme.colorScheme.background,
         contentColor = MaterialTheme.colorScheme.primary,
         onClick = {
             onClick()

@@ -35,14 +35,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.rutescompartidesapp.R
-import com.example.rutescompartidesapp.data.domain.Route
-import com.example.rutescompartidesapp.data.domain.Route2
-import com.example.rutescompartidesapp.data.domain.Vehicle
 import com.example.rutescompartidesapp.data.domain.routes.Routes
 import com.example.rutescompartidesapp.view.login.LoginViewModel
 import com.example.rutescompartidesapp.view.map.fredokaOneFamily
 import com.example.rutescompartidesapp.view.map.openSansFamily
-import org.osmdroid.util.GeoPoint
 
 @Composable
 fun RouteCard(ruta : Routes, navController: NavHostController, loginViewModel: LoginViewModel) {

@@ -5,8 +5,6 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
-import com.example.rutescompartidesapp.data.domain.Order
-import com.example.rutescompartidesapp.data.domain.Route
 import com.example.rutescompartidesapp.data.domain.orders.Orders
 import com.example.rutescompartidesapp.data.domain.routes.Routes
 import com.example.rutescompartidesapp.view.login.LoginViewModel

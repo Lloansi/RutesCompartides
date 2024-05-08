@@ -59,7 +59,9 @@ import javax.inject.Inject
     private fun nextStep(){
         _step.value = _step.value + 1
     }
-
+    fun resetStep(){
+        _step.value = 1
+    }
     fun previousStep(){
         _step.value = _step.value - 1
     }
@@ -273,9 +275,7 @@ import javax.inject.Inject
 
     // Next button
     private val _isFirstFormCompleted = MutableStateFlow(false)
-    val isFirstFormCompleted = _isFirstFormCompleted
     private val _isSecondFormCompleted = MutableStateFlow(false)
-    val isSecondFormCompleted = _isSecondFormCompleted
     fun checkAllValues(){
         when (step.value) {
             1 -> {
@@ -369,10 +369,10 @@ import javax.inject.Inject
     // Screen 3
 
     // Delivery contact
-    val deliveryContact = MutableStateFlow(LocalConstants.userList.first{ user -> user.userId == userID.value }.name)
-    val deliveryTelephoneNumber = MutableStateFlow(LocalConstants.userList.first{ user -> user.userId == userID.value }.phone.toString())
+    private val deliveryContact = MutableStateFlow(LocalConstants.userList.first{ user -> user.userId == userID.value }.name)
+    private val deliveryTelephoneNumber = MutableStateFlow(LocalConstants.userList.first{ user -> user.userId == userID.value }.phone.toString())
     // TODO Aquí hauria de ser les dades reals del contacte del punt habitual
-    val puntHabitualData = MutableStateFlow("\nCarrer de la Llibertat, 1, 08001 Barcelona\nTelèfon: 61234567")
+    private val puntHabitualData = MutableStateFlow("\nCarrer de la Llibertat, 1, 08001 Barcelona\nTelèfon: 61234567")
 
     // Delivery note
     private val _deliveryNote = MutableStateFlow("")
@@ -425,6 +425,11 @@ import javax.inject.Inject
 
     private val _orderAdded = MutableStateFlow(false)
     val orderAdded = _orderAdded.asStateFlow()
+
+    /**
+     * Adds a new order to the list of orders with the values of the form fields.
+     * @param userID: The ID of the user who is creating the order.
+     */
     fun addOrder(userID: Int){
         // TODO Cambiar la classe de la order i fer servir la oficial
         val lastOrderID = LocalConstants.orderList!!.maxByOrNull { order -> order.orderID }!!.orderID
@@ -471,11 +476,20 @@ import javax.inject.Inject
     // Get the order
     private val _orderToEdit = MutableStateFlow<Orders?>(null)
     val orderToEdit = _orderToEdit.asStateFlow()
+
+    /**
+     * Retrieves the order with the specified ID from the list of orders and updates the form fields
+     * with the order's values.
+     * @param orderID: The ID of the order to retrieve.
+     */
     fun getOrder(orderID: Int) {
         _orderToEdit.value =  LocalConstants.orderList!!.find { order -> order.orderID == orderID }!!
         updateOrderInfo()
     }
 
+    /**
+     * Updates the form fields with the values of the order to edit.
+     */
     private fun updateOrderInfo(){
         _internalOrderName.value = _orderToEdit.value!!.orderName
         _originName.value = _orderToEdit.value!!.puntSortida
@@ -504,6 +518,10 @@ import javax.inject.Inject
         }
     }
 
+    /**
+     * Updates the order with the values of the form fields.
+     * @param userID: The ID of the user who is editing the order.
+     */
     fun updateOrder(userID: Int){
         val distance = distanceBetweenPoints(_originLocation.value.latitude, _originLocation.value.longitude, _destinationLocation.value.latitude, _destinationLocation.value.longitude)
         val updatedOrder = Orders(userID = userID,
@@ -534,7 +552,7 @@ import javax.inject.Inject
         )
         // TODO Fer un PUT a la API per actualitzar la ruta
         if (LocalConstants.orderList!!.removeIf { order -> order.orderID == updatedOrder.orderID }){
-            LocalConstants.orderList!!.add(updatedOrder)
+            LocalConstants.orderList.add(updatedOrder)
             onOrderAdded(true)
         }
     }
@@ -546,6 +564,10 @@ import javax.inject.Inject
     private val _screen2Errors = MutableStateFlow(List(5) { false })
     val screen2Errors = _screen2Errors.asStateFlow()
 
+    /**
+     * Checks if any of the form fields are empty and updates the corresponding error list.
+     * @param step: The step of the form to check.
+     */
     private fun checkIfEmpty(step: Int){
 
         when(step){
@@ -578,6 +600,10 @@ import javax.inject.Inject
 
     }
 
+    /**
+     * Loads the information of a route into the order form fields.
+     * @param sharedDataRouteOrder: The route to load.
+     */
     fun loadRouteInfo(sharedDataRouteOrder: SharedDataRouteOrder){
         _originName.value = sharedDataRouteOrder.puntSortida
         _destinationName.value = sharedDataRouteOrder.puntArribada
@@ -590,7 +616,9 @@ import javax.inject.Inject
     }
 
 
-
+    /**
+     * Clears the values of the form fields.
+     */
     private fun clearValues(){
         _internalOrderName.value = ""
         _originName.value = ""
@@ -617,7 +645,6 @@ import javax.inject.Inject
         _screen2Errors.value = List(5) { false }
         _destinationLocation.value = GeoPoint(0.0, 0.0)
         _originLocation.value = GeoPoint(0.0, 0.0)
-        _step.value = 1
         _isDeliveryContactDataChecked.value = false
         _isPuntHabitualDataChecked.value = false
         _deliveryNote.value = ""

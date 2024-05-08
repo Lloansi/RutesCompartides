@@ -3,6 +3,7 @@ package com.example.rutescompartidesapp.view.route_detail.route_detail_driver
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavHostController
 import com.example.rutescompartidesapp.data.domain.interactions.RouteInteraction
 import com.example.rutescompartidesapp.data.domain.orders.Orders
 import com.example.rutescompartidesapp.data.domain.routes.Routes
@@ -13,6 +14,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import java.util.Locale
 
 class RouteDetailDriverViewModel (routeID: Int): ViewModel(){
 
@@ -89,7 +91,7 @@ class RouteDetailDriverViewModel (routeID: Int): ViewModel(){
     val userComment = _userComment.asStateFlow()
 
     fun setUserComment(comment: String){
-        _userComment.value = comment
+        _userComment.value = comment.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
     }
 
 
@@ -126,8 +128,10 @@ class RouteDetailDriverViewModel (routeID: Int): ViewModel(){
      * @param routeID ID de la ruta
      */
     fun getRoute(routeID: Int){
-        val route = LocalConstants.routeList!!.first { it.routeID == routeID }
-        _route.value = route
+        val route = LocalConstants.routeList!!.find { it.routeID == routeID }
+        route?.let {
+            _route.value = route
+        }
     }
 
     /**
@@ -148,15 +152,26 @@ class RouteDetailDriverViewModel (routeID: Int): ViewModel(){
             lastRoute.routeID
         } + 1
         val newRoute = route.copy(routeID = nextRouteID)
-        LocalConstants.routeList!!.add(newRoute)
+        LocalConstants.routeList.add(newRoute)
        // TODO Fer un POST a la API per duplicar la ruta
     }
 
 
+    /**
+     * Elimina la ruta de la llista de rutes i fa un popBackStack per tornar a la llista de rutes i comandes
+     * @param routeID ID de la ruta a eliminar
+     * @param navHost NavHostController per fer el popBackStack
+     */
 
-    fun deleteRoute(route: Routes){
-        LocalConstants.routeList!!.remove(route)
-        // TODO Fer un DELETE a la API per eliminar la ruta
+    fun deleteRoute(routeID: Int, navHost: NavHostController){
+        navHost.popBackStack()
+        viewModelScope.launch {
+            val routeToRemove = LocalConstants.routeList?.find { it.routeID == routeID }
+            routeToRemove?.let {
+                LocalConstants.routeList.remove(it)
+            }
+        }
+    // TODO Fer un DELETE a la API per eliminar la ruta
     }
 
     // Toast d'interacció

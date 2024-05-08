@@ -8,7 +8,6 @@ import com.example.rutescompartidesapp.data.domain.routes.Routes
 import com.example.rutescompartidesapp.data.network.GoogleLocation.repository.GoogleLocationsRepository
 import com.example.rutescompartidesapp.data.network.idescat.repository.idescatRepository
 import com.example.rutescompartidesapp.utils.LocalConstants
-import com.example.rutescompartidesapp.utils.distanceBetweenPoints
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -60,6 +59,10 @@ class ManageRouteViewModel @Inject constructor(
 
     private fun nextStep(){
         _step.value = _step.value + 1
+    }
+
+    fun resetStep(){
+        _step.value = 1
     }
 
     fun previousStep(){
@@ -493,8 +496,8 @@ class ManageRouteViewModel @Inject constructor(
         val lastRouteID = LocalConstants.routeList!!.maxByOrNull { route -> route.routeID }!!.routeID
         // Elimina els punts intermitjos buits
         val cleanStepNameList = stepNameList.value.filter { step -> step.isNotEmpty() }
-        val distance = distanceBetweenPoints(_originLocation.value.latitude, _originLocation.value.longitude,
-            _destinationLocation.value.latitude, _destinationLocation.value.longitude)
+        //val distance = distanceBetweenPoints(_originLocation.value.latitude, _originLocation.value.longitude,
+        //   _destinationLocation.value.latitude, _destinationLocation.value.longitude)
         val newRoute = Routes(userID = userID,
             routeID = lastRouteID+1,
             routeName = _internalRouteName.value,
@@ -526,6 +529,7 @@ class ManageRouteViewModel @Inject constructor(
         }
     }
 
+
     fun onRouteAdded(isRouteAdded: Boolean){
         _routeAdded.value = isRouteAdded
         clearValues()
@@ -535,6 +539,12 @@ class ManageRouteViewModel @Inject constructor(
     // Get the route
     private val _routeToEdit = MutableStateFlow<Routes?>(null)
     val routeToEdit = _routeToEdit.asStateFlow()
+
+    /**
+     * Gets the route to be edited based on the route ID.
+     * and then updates the form fields with the route information.
+     * @param routeID The ID of the route to be edited.
+     */
     fun getRoute(routeID: Int) {
         _routeToEdit.value =  LocalConstants.routeList!!.find { route -> route.routeID == routeID }!!
         updateRouteInfo()
@@ -591,8 +601,8 @@ class ManageRouteViewModel @Inject constructor(
      */
     fun updateRoute(userID: Int){
         val cleanStepNameList = stepNameList.value.filter { step -> step.isNotEmpty() }
-        val distance = distanceBetweenPoints(_originLocation.value.latitude, _originLocation.value.longitude,
-            _destinationLocation.value.latitude, _destinationLocation.value.longitude)
+        //val distance = distanceBetweenPoints(_originLocation.value.latitude, _originLocation.value.longitude,
+         //   _destinationLocation.value.latitude, _destinationLocation.value.longitude)
         val updatedRoute = Routes(userID = userID,
             routeID = _routeToEdit.value!!.routeID,
             routeName = _internalRouteName.value,
@@ -619,7 +629,7 @@ class ManageRouteViewModel @Inject constructor(
         )
         // TODO Fer un PUT a la API per actualitzar la ruta
         if (LocalConstants.routeList!!.removeIf { route -> route.routeID == updatedRoute.routeID }){
-            LocalConstants.routeList!!.add(updatedRoute)
+            LocalConstants.routeList.add(updatedRoute)
             onRouteAdded(true)
         }
     }
@@ -715,7 +725,6 @@ class ManageRouteViewModel @Inject constructor(
         _screen2Errors.value = List(5) { false }
         _originLocation.value = GeoPoint(0.0, 0.0)
         _destinationLocation.value = GeoPoint(0.0, 0.0)
-        _step.value = 1
     }
 
 

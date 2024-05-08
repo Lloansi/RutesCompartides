@@ -421,8 +421,7 @@ fun RouteDetailDriverScreen(
                                         ElevatedButton(
                                             shape = RoundedCornerShape(16.dp),
                                             onClick = {
-                                                routeDetailDriverViewModel.deleteRoute(route!!)
-                                                navHost.popBackStack()
+                                                routeDetailDriverViewModel.deleteRoute(route!!.routeID, navHost)
                                             },
                                             colors = ButtonDefaults.elevatedButtonColors(
                                                 containerColor = RedRC

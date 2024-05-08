@@ -13,6 +13,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import java.util.Locale
+
 /**
  * ViewModel for managing the value experience screen.
  */
@@ -35,7 +37,7 @@ class ValueExperienceViewModel:ViewModel() {
      * @param text The comment text.
      */
     fun setComment(text: String){
-        _comment.value = text
+        _comment.value = text.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
     }
 
     // Score
@@ -53,9 +55,7 @@ class ValueExperienceViewModel:ViewModel() {
     }
 
     fun toggleDropdown(){
-        println("HA ENTRADOOOOOOOOOOO")
         _isDropdownExpanded.value = !_isDropdownExpanded.value
-        println(_isDropdownExpanded.value)
     }
     /**
      * Sends a review for a route and order.

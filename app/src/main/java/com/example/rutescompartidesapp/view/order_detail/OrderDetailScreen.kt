@@ -387,9 +387,8 @@ fun CompleteCard(
                     // Delete order button
                     ElevatedButton(
                         shape = RoundedCornerShape(16.dp),
-                        onClick = { navHost.popBackStack()
-                            orderDetailViewModel.deleteOrder(order.orderID)
-                            navHost.popBackStack()
+                        onClick = {
+                            orderDetailViewModel.deleteOrder(order.orderID, navHost)
                         },
                         colors = ButtonDefaults.elevatedButtonColors(
                             containerColor = RedRC

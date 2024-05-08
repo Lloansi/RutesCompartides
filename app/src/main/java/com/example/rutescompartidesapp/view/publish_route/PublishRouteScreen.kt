@@ -171,6 +171,7 @@ fun PublishRouteScreen(command: String, routeID: Int, navHost: NavHostController
                 }
             }
         }
+        manageRouteViewModel.resetStep()
     }
 
     Scaffold( modifier = Modifier
