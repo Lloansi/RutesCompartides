@@ -288,15 +288,15 @@ fun RouteDetailDriverScreen(
                                         data = route!!.vehicle.toString()
                                     )
                                 }
-                                Divider(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(8.dp),
-                                    color = OrangeRC,
-                                    thickness = 2.dp
-                                )
                               // Comentari (si existeix)
                                 if (!route!!.comment.isNullOrEmpty()){
+                                    Divider(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(8.dp),
+                                        color = OrangeRC,
+                                        thickness = 2.dp
+                                    )
                                     FlowRow(
                                         modifier = Modifier
                                             .fillMaxWidth().padding(12.dp, 8.dp, 8.dp, 8.dp),
@@ -312,6 +312,7 @@ fun RouteDetailDriverScreen(
                                             append(route!!.comment ?: "")
                                         }, color = MaterialTheme.colorScheme.onBackground)
                                     }
+
                                     }
 
                                 Divider(

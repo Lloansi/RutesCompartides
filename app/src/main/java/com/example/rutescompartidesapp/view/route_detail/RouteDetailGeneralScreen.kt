@@ -372,14 +372,14 @@ fun RouteDetailGeneralScreen(
                         data = routeInfo!!.vehicle.toString()
                     )
                 }
-                Divider(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp),
-                    color = OrangeRC, thickness = 2.dp
-                )
                 // Comentari (si existeix)
                 if (!routeInfo!!.comment.isNullOrEmpty()){
+                    Divider(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp),
+                        color = OrangeRC, thickness = 2.dp
+                    )
                     FlowRow(
                         modifier = Modifier
                             .fillMaxWidth()

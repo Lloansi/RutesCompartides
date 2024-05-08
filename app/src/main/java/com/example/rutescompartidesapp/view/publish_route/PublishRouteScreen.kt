@@ -61,11 +61,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
@@ -145,6 +143,7 @@ fun PublishRouteScreen(command: String, routeID: Int, navHost: NavHostController
     val routeAdded by manageRouteViewModel.routeAdded.collectAsStateWithLifecycle()
 
     // When the route is added, navigates to the destination based on from where the route was added
+
     if (routeAdded) {
         manageRouteViewModel.onRouteAdded(false)
         when (command){
@@ -295,7 +294,7 @@ private fun PublishRouteContent3(
             // Conditions Button
             FloatingActionButton(
                 onClick = { manageRouteViewModel.onCondicionsPopupShow(true) },
-                containerColor = MateBlackRC
+                containerColor = MaterialTheme.colorScheme.primary
             ) {
                 Icon(
                     imageVector = Icons.Filled.QuestionMark,
@@ -305,8 +304,8 @@ private fun PublishRouteContent3(
             }
             // Conditions Popup
             if (isCondicionsPopupShowing) {
-                PopupScrolleable(offset = IntOffset((LocalConfiguration.current.screenWidthDp / 2), -100),
-                    title = "Condicions de transport" , onDismisRequest = { manageRouteViewModel.onCondicionsPopupShow(
+                PopupScrolleable(title = "Condicions de transport" ,
+                    onDismisRequest = { manageRouteViewModel.onCondicionsPopupShow(
                         false ) },
                     content = { ConditionScrollPopup() })
             }
@@ -333,7 +332,8 @@ private fun PublishRouteContent3(
                             )
                         } else {
                             Text("Isoterm",
-                                style = MaterialTheme.typography.bodyLarge,)
+                                style = MaterialTheme.typography.bodyLarge,
+                                color = Color.DarkGray)
                         }
                     },
                     leadingIcon = {
@@ -363,7 +363,8 @@ private fun PublishRouteContent3(
                             )
                         } else {
                             Text("Refrigerat",
-                                style = MaterialTheme.typography.bodyLarge,)
+                                style = MaterialTheme.typography.bodyLarge,
+                                color = Color.DarkGray)
                         }
                     },
                     leadingIcon = {
@@ -398,7 +399,8 @@ private fun PublishRouteContent3(
                             )
                         } else {
                             Text("Congelat",
-                                style = MaterialTheme.typography.bodyLarge,)
+                                style = MaterialTheme.typography.bodyLarge,
+                                color = Color.DarkGray)
                         }
                     },
                     leadingIcon = {
@@ -429,6 +431,7 @@ private fun PublishRouteContent3(
                         } else {
                             Text("Sense Humitat",
                                 style = MaterialTheme.typography.bodyLarge,
+                                color = Color.DarkGray
                             )
                         }
                     },
@@ -565,10 +568,11 @@ private fun PublishRouteContent2(
         IconButton(
             onClick = { manageRouteViewModel.onFreqPopupShow(true) },
             colors = IconButtonDefaults.iconButtonColors(
-                containerColor = MateBlackRC
+                containerColor = MaterialTheme.colorScheme.secondaryContainer
             )
         ) {
-            Icon(imageVector = Icons.Filled.QuestionMark, contentDescription = "Frequency Icon")
+            Icon(imageVector = Icons.Filled.QuestionMark, contentDescription = "Frequency Icon",
+                tint = MaterialTheme.colorScheme.onSecondaryContainer)
         }
         Text(
             modifier = Modifier.weight(2f),
@@ -576,11 +580,11 @@ private fun PublishRouteContent2(
         )
     }
     if (isFreqPopupShowing){
-        PopupScrolleable(offset = IntOffset((LocalConfiguration.current.screenWidthDp / 2), (LocalConfiguration.current.screenHeightDp / 2)),
-            title = "Freqüència de la ruta" , onDismisRequest = { manageRouteViewModel.onFreqPopupShow(
+        PopupScrolleable(title = "Freqüència de la ruta" ,
+            onDismisRequest = { manageRouteViewModel.onFreqPopupShow(
                 false ) },
             content = { Text(text = "Crearà totes  les rutes que pertoqui fins a la data final indicada, amb un màxim de 3  mesos. Recorda editar o eliminar les rutes si canvien a posteriori o  n'hi ha alguna que finalment no faràs. La freqüència mensual implica  aquell dia de la setmana i la mateixa setmana de cada mes (és a dir, el  1er dimecres de mes, o el 2on dijous de mes, etc).",
-                color = MaterialTheme.colorScheme.onBackground) })
+                color = MaterialTheme.colorScheme.onBackground)})
     }
     // Frequency dropdown
     Row(
@@ -690,8 +694,8 @@ private fun PublishRouteContent2(
                 tint = MaterialTheme.colorScheme.onSecondaryContainer)
         }
         if (isCostPopupShowing){
-            PopupScrolleable(offset = IntOffset((LocalConfiguration.current.screenWidthDp / 2), (LocalConfiguration.current.screenHeightDp)),
-                title = "Cost per KM" , onDismisRequest = { manageRouteViewModel.onCostPopupShow(
+            PopupScrolleable(title = "Cost per KM" ,
+                onDismisRequest = { manageRouteViewModel.onCostPopupShow(
                     false ) },
                 content = { Text(text = "Per ajudar amb  una estimació del preu del transport compartit. En cas que prefereixis  oferir una alternativa (productes a canvi del transport, altres monedes,  etc.) pots utilitzar el camp \"Comentaris\" (a sota) per especificar la  teva proposta i l'etiqueta \"intercanvi\" o \"monedasocial\" al camp  \"Etiquetes\"",
                     color = MaterialTheme.colorScheme.onBackground) })

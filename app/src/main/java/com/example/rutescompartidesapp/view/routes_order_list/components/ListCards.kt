@@ -200,6 +200,7 @@ fun RouteCard(route: Routes, navController: NavHostController, userID: Int) {
                                     containerColor = BlueRC
                                 )
                             )
+                            Spacer(modifier = Modifier.padding(1.dp))
                         }
                     }
                 })
@@ -356,9 +357,11 @@ fun OrderCard(order: Orders, navController: NavHostController) {
                                         containerColor = BlueRC
                                     )
                                 )
+                                Spacer(modifier = Modifier.padding(1.dp))
                             }
                         }
                     })
+                Spacer(modifier = Modifier.padding(4.dp))
                 ElevatedButton( shape = RoundedCornerShape(16.dp),
                     onClick = { navController.navigate("OrderDetailScreen/{packageId}".replace(
                         oldValue = "{packageId}",

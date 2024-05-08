@@ -19,6 +19,7 @@ import org.osmdroid.util.GeoPoint
 import java.time.Instant
 import java.time.ZoneId
 import java.util.Calendar
+import java.util.Locale
 import javax.inject.Inject
 
 /**
@@ -69,7 +70,7 @@ class ManageRouteViewModel @Inject constructor(
     private val _internalRouteName = MutableStateFlow("")
     val internalRouteName = _internalRouteName
     fun setInternalRouteName(name: String){
-        _internalRouteName.value = name
+        _internalRouteName.value = name.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
     }
 
     // Start location name
@@ -77,7 +78,7 @@ class ManageRouteViewModel @Inject constructor(
     val originName = _originName
 
     fun setOriginName(name: String){
-        _originName.value = name
+        _originName.value = name.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
     }
 
 
@@ -136,13 +137,14 @@ class ManageRouteViewModel @Inject constructor(
      * @param name The name of the step location.
      */
     fun setStepLocationName(number: Int, name: String){
+        val newName = name.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
         when(number){
-            0 -> _stepName1.value = name
-            1 -> _stepName2.value = name
-            2 -> _stepName3.value = name
-            3 -> _stepName4.value = name
-            4 -> _stepName5.value = name
-            5 -> _stepName6.value = name
+            0 -> _stepName1.value = newName
+            1 -> _stepName2.value = newName
+            2 -> _stepName3.value = newName
+            3 -> _stepName4.value = newName
+            4 -> _stepName5.value = newName
+            5 -> _stepName6.value = newName
         }
         val newList =  listOf(_stepName1.value, _stepName2.value,
             _stepName3.value, _stepName4.value, _stepName5.value, _stepName6.value)
@@ -150,7 +152,6 @@ class ManageRouteViewModel @Inject constructor(
     }
 
     private fun updateStepNameList(newList: List<String>){
-        println(newList)
         _stepNameList.value = newList
     }
 
@@ -159,7 +160,7 @@ class ManageRouteViewModel @Inject constructor(
     val destinationName = _destinationName
 
     fun setDestinationName(name: String){
-        _destinationName.value = name
+        _destinationName.value = name.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
     }
 
     // Step location 1 coordinates
@@ -378,7 +379,7 @@ class ManageRouteViewModel @Inject constructor(
     val availableSpace = _availableSpace.asStateFlow()
 
     fun setAvailableSpace(text: String){
-        _availableSpace.value = text
+        _availableSpace.value = text.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
     }
     // Cost KM
     private val _costKM = MutableStateFlow("")
@@ -393,7 +394,7 @@ class ManageRouteViewModel @Inject constructor(
     val vehicle = _vehicle.asStateFlow()
 
     fun setVehicle(vehicle: String){
-        _vehicle.value = vehicle
+        _vehicle.value = vehicle.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
     }
 
     // Screen 3
@@ -476,7 +477,7 @@ class ManageRouteViewModel @Inject constructor(
     val comment = _comment
 
     fun setComment(comment: String){
-        _comment.value = comment
+        _comment.value = comment.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
     }
 
     private val _routeAdded = MutableStateFlow(false)
@@ -616,7 +617,6 @@ class ManageRouteViewModel @Inject constructor(
             startPoint = _originLocation.value,
             endPoint = _destinationLocation.value
         )
-        println(updatedRoute)
         // TODO Fer un PUT a la API per actualitzar la ruta
         if (LocalConstants.routeList!!.removeIf { route -> route.routeID == updatedRoute.routeID }){
             LocalConstants.routeList!!.add(updatedRoute)

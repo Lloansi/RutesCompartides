@@ -19,6 +19,7 @@ import org.osmdroid.util.GeoPoint
 import java.time.Instant
 import java.time.ZoneId
 import java.util.Calendar
+import java.util.Locale
 import javax.inject.Inject
 
 /**
@@ -67,7 +68,7 @@ import javax.inject.Inject
     private val _internalOrderName = MutableStateFlow("")
     val internalOrderName = _internalOrderName
     fun setInternalOrderName(name: String){
-        _internalOrderName.value = name
+        _internalOrderName.value = name.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
     }
 
     // Start location name
@@ -75,7 +76,7 @@ import javax.inject.Inject
     val originName = _originName
 
     fun setOriginName(name: String){
-        _originName.value = name
+        _originName.value = name.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
     }
 
     // Start location coordinates
@@ -86,7 +87,7 @@ import javax.inject.Inject
     val destinationName = _destinationName
 
     fun setDestinationName(name: String){
-        _destinationName.value = name
+        _destinationName.value = name.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
     }
 
     // Destination location coordinates
@@ -419,7 +420,7 @@ import javax.inject.Inject
     val comment = _comment
 
     fun setComment(text: String){
-        _comment.value = text
+        _comment.value = text.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
     }
 
     private val _orderAdded = MutableStateFlow(false)

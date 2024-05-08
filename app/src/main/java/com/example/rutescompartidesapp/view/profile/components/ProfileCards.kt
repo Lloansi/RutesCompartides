@@ -14,11 +14,10 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
-import androidx.compose.material.icons.filled.ArrowBackIosNew
-import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,6 +28,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.rutescompartidesapp.data.domain.ProfileItems
 import com.example.rutescompartidesapp.ui.theme.openSans
@@ -43,6 +43,7 @@ fun CreateCardsWithItems(list: List<ProfileItems>, paddingBottom: Dp, paddingTop
                          routesOrderListViewModel: RoutesOrderListViewModel, tabRowViewModel: TabRowViewModel,
                          userID: Int,
                          loginViewModel: LoginViewModel, notificationsViewModel: NotificationsViewModel) {
+    val isMyFilterActive by routesOrderListViewModel.isMyFilterActive.collectAsStateWithLifecycle()
     Card(
         modifier = Modifier
             .width(LocalConfiguration.current.screenWidthDp.dp - 50.dp)
@@ -61,7 +62,9 @@ fun CreateCardsWithItems(list: List<ProfileItems>, paddingBottom: Dp, paddingTop
                 onClick = {
                     when (list[i].title) {
                         "Les meves rutes" -> {
-                            routesOrderListViewModel.onMyFilterActive(userID)
+                            if (!isMyFilterActive){
+                                routesOrderListViewModel.onMyFilterActive(userID)
+                            }
                             tabRowViewModel.onSelectTab(0)
                             navController.navigate("RoutesOrderListScreen"){
                                 popUpTo("ProfileScreen") { inclusive = true }
@@ -69,7 +72,9 @@ fun CreateCardsWithItems(list: List<ProfileItems>, paddingBottom: Dp, paddingTop
                             loginViewModel.updateCurrentIndex(1)
                         }
                         "Les meves comandes" -> {
-                            routesOrderListViewModel.onMyFilterActive(userID)
+                            if (!isMyFilterActive){
+                                routesOrderListViewModel.onMyFilterActive(userID)
+                            }
                             tabRowViewModel.onSelectTab(1)
                             navController.navigate("RoutesOrderListScreen"){
                                 popUpTo("ProfileScreen") { inclusive = true }

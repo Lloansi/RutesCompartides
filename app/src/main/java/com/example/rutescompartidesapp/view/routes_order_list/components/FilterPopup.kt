@@ -25,6 +25,7 @@ import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Map
 import androidx.compose.material.icons.filled.QuestionMark
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DatePicker
@@ -51,10 +52,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Popup
-import androidx.compose.ui.window.PopupProperties
+import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.rutescompartidesapp.data.domain.ListQuery
 import com.example.rutescompartidesapp.ui.theme.BlueRC
@@ -86,13 +85,13 @@ fun FilterPopup(routesOrderListViewModel: RoutesOrderListViewModel, filterPopupV
     val showTimePicker by filterPopupViewModel.timePickerDialogIsShowing.collectAsStateWithLifecycle()
 
     if (isPopupShowing){
-        Popup(alignment = Alignment.Center,
-            offset = IntOffset(0, 1200),
+        AlertDialog(
             onDismissRequest = { filterPopupViewModel.onPopupShow(false) },
-            properties = PopupProperties(
-                focusable = true,
+            properties = DialogProperties(
                 dismissOnBackPress = true,
-                dismissOnClickOutside=  true)
+                dismissOnClickOutside=  true,
+                usePlatformDefaultWidth = false
+                )
         ){
             ElevatedCard(
                 modifier = Modifier
@@ -281,12 +280,12 @@ fun FilterPopup(routesOrderListViewModel: RoutesOrderListViewModel, filterPopupV
                                     }
                                     // Conditions Popup
                                     if (isCondicionsPopupShowing){
-                                        Popup(onDismissRequest = { filterPopupViewModel.onCondicionsPopupShow(false) },
-                                            offset = IntOffset(150, -700),
-                                            properties = PopupProperties(
-                                                focusable = true,
+                                        AlertDialog(onDismissRequest = { filterPopupViewModel.onCondicionsPopupShow(false) },
+                                            properties = DialogProperties(
                                                 dismissOnBackPress = true,
-                                                dismissOnClickOutside=  true)){
+                                                dismissOnClickOutside=  true,
+                                                usePlatformDefaultWidth = false
+                                                )){
                                                 ElevatedCard(modifier = Modifier
                                                     .fillMaxWidth(0.65f),
                                                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background)) {
@@ -336,7 +335,7 @@ fun FilterPopup(routesOrderListViewModel: RoutesOrderListViewModel, filterPopupV
                                                     style = MaterialTheme.typography.bodyLarge,)
                                             } else {
                                                 Text("Isoterm",
-                                                    color = Color.Gray,
+                                                    color = Color.DarkGray,
                                                     style = MaterialTheme.typography.bodyLarge,)
                                             }
                                             },
@@ -362,7 +361,7 @@ fun FilterPopup(routesOrderListViewModel: RoutesOrderListViewModel, filterPopupV
                                                         style = MaterialTheme.typography.bodyLarge,)
                                                 } else {
                                                     Text("Refrigerat",
-                                                        color = Color.Gray,
+                                                        color = Color.DarkGray,
                                                         style = MaterialTheme.typography.bodyLarge,)
                                                 }
                                             },
@@ -390,7 +389,7 @@ fun FilterPopup(routesOrderListViewModel: RoutesOrderListViewModel, filterPopupV
                                                     style = MaterialTheme.typography.bodyLarge,)
                                             } else {
                                                 Text("Congelat",
-                                                    color = Color.Gray,
+                                                    color = Color.DarkGray,
                                                     style = MaterialTheme.typography.bodyLarge,)
                                             }
                                             },
@@ -415,7 +414,7 @@ fun FilterPopup(routesOrderListViewModel: RoutesOrderListViewModel, filterPopupV
                                                     style = MaterialTheme.typography.bodyLarge,)
                                             } else {
                                                 Text("Sense Humitat",
-                                                    color = Color.Gray,
+                                                    color = Color.DarkGray,
                                                     style = MaterialTheme.typography.bodyLarge,)
                                             } },
                                             leadingIcon = {

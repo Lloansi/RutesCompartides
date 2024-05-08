@@ -1,7 +1,6 @@
 package com.example.rutescompartidesapp.view.publish_order
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -11,7 +10,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
@@ -29,16 +27,13 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.House
 import androidx.compose.material.icons.filled.QuestionMark
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDefaults
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.DatePickerState
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ElevatedButton
-import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ElevatedFilterChip
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChipDefaults
@@ -60,14 +55,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Popup
-import androidx.compose.ui.window.PopupProperties
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.example.rutescompartidesapp.R
@@ -85,6 +76,7 @@ import com.example.rutescompartidesapp.view.generic_components.PublishNextButton
 import com.example.rutescompartidesapp.view.generic_components.TimePickerDialog
 import com.example.rutescompartidesapp.view.generic_components.popups.BasicPopup
 import com.example.rutescompartidesapp.view.generic_components.popups.ConditionScrollPopup
+import com.example.rutescompartidesapp.view.generic_components.popups.PopupScrolleable
 import com.example.rutescompartidesapp.view.login.LoginViewModel
 
 @SuppressLint("RestrictedApi", "StateFlowValueCalledInComposition")
@@ -414,7 +406,7 @@ private fun PublishOrderContent2(
             // Conditions Button
             FloatingActionButton(
                 onClick = { manageOrderViewModel.onCondicionsPopupShow(true) },
-                containerColor = MateBlackRC
+                containerColor = MaterialTheme.colorScheme.primary
             ) {
                 Icon(
                     imageVector = Icons.Filled.QuestionMark,
@@ -424,58 +416,10 @@ private fun PublishOrderContent2(
             }
             // Conditions Popup
             if (isCondicionsPopupShowing) {
-                Popup(
-                    onDismissRequest = {
-                        manageOrderViewModel.onCondicionsPopupShow(
-                            false
-                        )
-                    },
-                    offset = IntOffset((LocalConfiguration.current.screenWidthDp / 2), -100),
-                    properties = PopupProperties(
-                        focusable = true,
-                        dismissOnBackPress = true,
-                        dismissOnClickOutside = true
-                    )
-                ) {
-                    ElevatedCard(
-                        modifier = Modifier
-                            .fillMaxWidth(0.65f),
-                        colors = CardDefaults.cardColors(containerColor = Color.White)
-                    ) {
-                        Row(Modifier.fillMaxWidth()) {
-                            Column(
-                                Modifier.fillMaxWidth(),
-                                verticalArrangement = Arrangement.Center,
-                                horizontalAlignment = Alignment.CenterHorizontally
-                            ) {
-                                Row(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .height(40.dp)
-                                        .background(Color.LightGray),
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    horizontalArrangement = Arrangement.Center
-                                ) {
-                                    Text(
-                                        "Condicions de transport",
-                                        style = MaterialTheme.typography.titleLarge,
-                                    )
-                                }
-                                Row(
-                                    Modifier
-                                        .height(10.dp)
-                                        .background(Color.LightGray)
-                                ) {
-                                    Divider(color = MateBlackRC, thickness = 4.dp)
-                                }
-                                Row(Modifier.padding(12.dp)) {
-                                    ConditionScrollPopup()
-                                }
-
-                            }
-                        }
-                    }
-                }
+                PopupScrolleable(title = "Condicions de transport" ,
+                    onDismisRequest = { manageOrderViewModel.onCondicionsPopupShow(
+                        false ) },
+                    content = { ConditionScrollPopup() })
             }
         }
         // Chips & Info Button
@@ -502,6 +446,7 @@ private fun PublishOrderContent2(
                             Text(
                                 "Isoterm",
                                 style = MaterialTheme.typography.bodyLarge,
+                                color = Color.DarkGray
                             )
                         }
                     },
@@ -534,6 +479,7 @@ private fun PublishOrderContent2(
                             Text(
                                 "Refrigerat",
                                 style = MaterialTheme.typography.bodyLarge,
+                                color = Color.DarkGray
                             )
                         }
                     },
@@ -570,7 +516,8 @@ private fun PublishOrderContent2(
                         } else {
                             Text(
                                 "Congelat",
-                                style = MaterialTheme.typography.bodyLarge
+                                style = MaterialTheme.typography.bodyLarge,
+                                color = Color.DarkGray
                             )
                         }
                     },
@@ -603,6 +550,7 @@ private fun PublishOrderContent2(
                             Text(
                                 "Sense Humitat",
                                 style = MaterialTheme.typography.bodyLarge,
+                                color = Color.DarkGray
                             )
                         }
                     },
@@ -830,11 +778,10 @@ private fun PublishOrderContent1(
         )
     }
     if (isDataMinPopupShowing){
-        BasicPopup(offset = IntOffset((LocalConfiguration.current.screenWidthDp / 2), (LocalConfiguration.current.screenHeightDp)),
-            onDismisRequest = { manageOrderViewModel.onDataMinPopupShow(
-                false ) },
-            content = { Text(text = "Indicar a partir de quin moment podries tenir llesta la teva comanda per iniciar el transport.",
-                color = Color.Black) })
+        BasicPopup(onDismisRequest = { manageOrderViewModel.onDataMinPopupShow(false ) } ) {
+            Text(text = "Indicar a partir de quin moment podries tenir llesta la teva comanda per iniciar el transport.",
+                color = Color.Black)
+        }
     }
     DateTimePickerTextField(
         invocation = {
@@ -871,11 +818,10 @@ private fun PublishOrderContent1(
             )
         }
         if (isDataMaxPopupShowing){
-            BasicPopup(offset = IntOffset((LocalConfiguration.current.screenWidthDp / 2), (LocalConfiguration.current.screenHeightDp / 5)),
-                onDismisRequest = { manageOrderViewModel.onDataMaxPopupShow(
-                    false ) },
-                content = { Text(text = "Indicar la data màxima en què ha d'arribar la teva comanda.",
-                    color = Color.Black) })
+            BasicPopup(onDismisRequest = { manageOrderViewModel.onDataMaxPopupShow(false )}) {
+                Text(text = "Indicar la data màxima en què ha d'arribar la teva comanda.",
+                    color = Color.Black)
+            }
         }
         // Data Arribada Text field
         DateTimePickerTextField(
