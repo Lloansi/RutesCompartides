@@ -20,6 +20,12 @@ import java.time.ZoneId
 import java.util.Calendar
 import javax.inject.Inject
 
+/**
+ * ViewModel for managing the order creation process.
+ *
+ * @property googleLocationsRepository Repository for fetching Google locations.
+ * @property idescatRepository Repository for fetching Idescat data.
+ */
 @HiltViewModel
     class ManageOrderViewModel @Inject constructor(
     private val googleLocationsRepository: GoogleLocationsRepository,

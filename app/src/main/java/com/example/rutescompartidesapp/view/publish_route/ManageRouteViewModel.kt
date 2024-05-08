@@ -20,6 +20,13 @@ import java.time.ZoneId
 import java.util.Calendar
 import javax.inject.Inject
 
+/**
+ * ViewModel for managing the creation and editing of routes.
+ * Responsible for handling user input, data validation, and interaction with repositories.
+ *
+ * @param googleLocationsRepository Repository for fetching location data from Google APIs.
+ * @param idescatRepository Repository for fetching location data from Idescat API.
+ */
 @HiltViewModel
 class ManageRouteViewModel @Inject constructor(
     private val googleLocationsRepository: GoogleLocationsRepository,
@@ -38,6 +45,10 @@ class ManageRouteViewModel @Inject constructor(
     private val _userID = MutableStateFlow(0)
     val userID = _userID.asStateFlow()
 
+    /**
+     * Sets the user ID.
+     * @param id The user ID.
+     */
     fun setUserID(id: Int){
         _userID.value = id
     }
@@ -93,6 +104,12 @@ class ManageRouteViewModel @Inject constructor(
             _stepLocationsNumber.value = _stepLocationsNumber.value + 1
         }
     }
+
+    /**
+     * Removes a step location from the route creation/editing process.
+     *
+     * @param index The index of the step location to be removed.
+     */
     fun removeStepLocation(index: Int){
         if (_stepLocationsNumber.value != 1) {
             _stepLocationsNumber.value = _stepLocationsNumber.value - 1
@@ -110,6 +127,13 @@ class ManageRouteViewModel @Inject constructor(
             updateStepNameList(updatedStepNameList)
         }
     }
+
+    /**
+     * Sets the name of a step location in the route creation/editing process.
+     *
+     * @param number The number/index of the step location.
+     * @param name The name of the step location.
+     */
     fun setStepLocationName(number: Int, name: String){
         when(number){
             0 -> _stepName1.value = name
@@ -150,6 +174,11 @@ class ManageRouteViewModel @Inject constructor(
     private val _routeFrequency = MutableStateFlow("")
     val routeFrequency = _routeFrequency
 
+    /**
+     * Sets the frequency of the route and updates the corresponding tags list accordingly.
+     *
+     * @param frequency The frequency of the route.
+     */
     fun setRouteFrequency(frequency: String){
         if (_routeFrequency.value != frequency){
             val updatedTagsList = _tagsList.value.toMutableList()
@@ -207,6 +236,11 @@ class ManageRouteViewModel @Inject constructor(
         _datePickerDialogIsShowing.value = isShowing
     }
 
+    /**
+     * Confirms the date picked from the date picker dialog, updates the corresponding date value, and hides the dialog.
+     *
+     * @param datePicked The timestamp representing the picked date.
+     */
     fun onDatePickerDialogConfirm(datePicked: Long ){
         datePicked.let {
             val date = Instant.ofEpochMilli(it).atZone(ZoneId.systemDefault()).toLocalDate()
@@ -267,6 +301,10 @@ class ManageRouteViewModel @Inject constructor(
 
     private val _isFormCompletedPopup = MutableStateFlow(false)
 
+    /**
+     * Checks if all the required values are filled based on the current step of the form.
+     * If all values are filled, proceeds to the next step; otherwise, shows a popup indicating missing values.
+     */
     fun checkAllValues(){
         when (step.value) {
             1 -> {
@@ -371,6 +409,12 @@ class ManageRouteViewModel @Inject constructor(
     private val _isSenseHumitat = MutableStateFlow(false)
     val isSenseHumitat = _isSenseHumitat.asStateFlow()
 
+    /**
+     * Handles the chip check events based on the condition.
+     * Toggles the corresponding boolean value depending on the condition.
+     *
+     * @param condition The condition string representing the type of chip.
+     */
     fun onCheckChip(condition: String){
         when(condition) {
             "Isoterm" -> _isIsoterm.value = !_isIsoterm.value
@@ -436,6 +480,12 @@ class ManageRouteViewModel @Inject constructor(
 
     private val _routeAdded = MutableStateFlow(false)
     val routeAdded = _routeAdded.asStateFlow()
+
+    /**
+     * Adds a new route for the specified user.
+     *
+     * @param userID The ID of the user for whom the route is being added.
+     */
     fun addRoute(userID: Int){
         // TODO Cambiar la classe de la ruta i fer servir la oficial
         val lastRouteID = LocalConstants.routeList!!.maxByOrNull { route -> route.routeID }!!.routeID
@@ -486,6 +536,9 @@ class ManageRouteViewModel @Inject constructor(
         updateRouteInfo()
     }
 
+    /**
+     * Updates the route information based on the route to be edited.
+     */
     private fun updateRouteInfo(){
         _internalRouteName.value = _routeToEdit.value!!.routeName
         _originName.value = _routeToEdit.value!!.puntSortida
@@ -528,6 +581,10 @@ class ManageRouteViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Updates the route information in the local storage and potentially in the backend.
+     * @param userID The ID of the user.
+     */
     fun updateRoute(userID: Int){
         val cleanStepNameList = stepNameList.value.filter { step -> step.isNotEmpty() }
 
@@ -569,6 +626,10 @@ class ManageRouteViewModel @Inject constructor(
     private val _screen2Errors = MutableStateFlow(List(5) { false })
     val screen2Errors = _screen2Errors.asStateFlow()
 
+    /**
+     * Checks if any required fields are empty for the specified step and updates the error flags accordingly.
+     * @param step The step number.
+     */
     private fun checkIfEmpty(step: Int){
 
         when(step){
@@ -599,7 +660,10 @@ class ManageRouteViewModel @Inject constructor(
 
     }
 
-
+    /**
+     * Loads order information from the provided SharedDataRouteOrder object.
+     * @param sharedDataRouteOrder The SharedDataRouteOrder object containing the order information.
+     */
     fun loadOrderInfo(sharedDataRouteOrder: SharedDataRouteOrder){
         _originName.value = sharedDataRouteOrder.puntSortida
         _destinationName.value = sharedDataRouteOrder.puntArribada

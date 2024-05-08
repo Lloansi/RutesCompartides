@@ -30,7 +30,9 @@ import com.example.rutescompartidesapp.view.login.LoginViewModel
 import com.example.rutescompartidesapp.view.splash.components.LogoAnimation
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
-
+/**
+ * Activity for displaying the splash screen while initializing the application.
+ */
 @SuppressLint("CustomSplashScreen")
 @AndroidEntryPoint
 class SplashActivity: ComponentActivity() {
