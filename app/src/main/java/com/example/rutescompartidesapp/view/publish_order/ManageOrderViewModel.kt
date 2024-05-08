@@ -8,6 +8,7 @@ import com.example.rutescompartidesapp.data.domain.routes.SharedDataRouteOrder
 import com.example.rutescompartidesapp.data.network.GoogleLocation.repository.GoogleLocationsRepository
 import com.example.rutescompartidesapp.data.network.idescat.repository.idescatRepository
 import com.example.rutescompartidesapp.utils.LocalConstants
+import com.example.rutescompartidesapp.utils.distanceBetweenPoints
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -47,6 +48,8 @@ import javax.inject.Inject
 
     fun setUserID(id: Int){
         _userID.value = id
+        deliveryContact.value = LocalConstants.userList.first{ user -> user.userId == id }.name
+        deliveryTelephoneNumber.value = LocalConstants.userList.first{ user -> user.userId == id }.phone.toString()
     }
 
     private val _step = MutableStateFlow(1)
@@ -424,6 +427,7 @@ import javax.inject.Inject
     fun addOrder(userID: Int){
         // TODO Cambiar la classe de la order i fer servir la oficial
         val lastOrderID = LocalConstants.orderList!!.maxByOrNull { order -> order.orderID }!!.orderID
+        val distance = distanceBetweenPoints(_originLocation.value.latitude, _originLocation.value.longitude, _destinationLocation.value.latitude, _destinationLocation.value.longitude)
 
         val newOrder = Orders(userID = userID,
             orderID = lastOrderID+1,
@@ -446,7 +450,7 @@ import javax.inject.Inject
             packagesWeight = _packagesWeight.value.toFloat(),
             packagesFragile = _arePackagesFragile.value,
             co2Saved = 0.0f,
-            distance = 0.0f,
+            distance = distance.toFloat(),
             comment = _comment.value,
             startPoint = _originLocation.value,
             endPoint = _destinationLocation.value
@@ -500,6 +504,7 @@ import javax.inject.Inject
     }
 
     fun updateOrder(userID: Int){
+        val distance = distanceBetweenPoints(_originLocation.value.latitude, _originLocation.value.longitude, _destinationLocation.value.latitude, _destinationLocation.value.longitude)
         val updatedOrder = Orders(userID = userID,
             orderID = _orderToEdit.value!!.orderID,
             orderName = _internalOrderName.value,
@@ -521,7 +526,7 @@ import javax.inject.Inject
             packagesWeight = _packagesWeight.value.toFloat(),
             packagesFragile = _arePackagesFragile.value,
             co2Saved = 0.0f,
-            distance = 0.0f,
+            distance = distance.toFloat(),
             comment = _comment.value,
             startPoint = _originLocation.value,
             endPoint = _destinationLocation.value
@@ -617,6 +622,7 @@ import javax.inject.Inject
         _deliveryNote.value = ""
         _wantsDeliveryNotification.value = false
         _wantsCarpool.value = false
+        _isFlexDate.value = false
     }
 
 
@@ -638,4 +644,6 @@ import javax.inject.Inject
             }
         }
     }
+
+
 }

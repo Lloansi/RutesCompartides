@@ -131,8 +131,8 @@ fun PublishOrderScreen(command: String, orderID: Int, navHost: NavHostController
     val deliveryNote by manageOrderViewModel.deliveryNote.collectAsStateWithLifecycle()
     val isDeliveryContactDataChecked by manageOrderViewModel.isDeliveryContactDataChecked.collectAsStateWithLifecycle()
     val isPuntHabitualDataChecked by manageOrderViewModel.isPuntHabitualDataChecked.collectAsStateWithLifecycle()
-    val clientName by manageOrderViewModel.deliveryContact.collectAsStateWithLifecycle()
-    val clientPhone by manageOrderViewModel.deliveryTelephoneNumber.collectAsStateWithLifecycle()
+    val clientName = user!!.name
+    val clientPhone = user!!.phone
     val comment by manageOrderViewModel.comment.collectAsStateWithLifecycle()
 
     // Errors
@@ -251,7 +251,7 @@ fun PublishOrderScreen(command: String, orderID: Int, navHost: NavHostController
                         manageOrderViewModel,
                         isDeliveryContactDataChecked,
                         clientName,
-                        clientPhone,
+                        clientPhone.toString(),
                         isPuntHabitualDataChecked,
                         comment,
                         command,
@@ -312,12 +312,14 @@ private fun PublishOrderContent3(
             }
         )
         Text(
-            text = "Recollida: $clientName\n" +
+            text = "Recollida: ${clientName}\n" +
                     "Telèfon: $clientPhone",
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onBackground
         )
     }
+    /*
+    // Punt habitual checkbox
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -337,6 +339,8 @@ private fun PublishOrderContent3(
             color = MaterialTheme.colorScheme.onBackground
         )
     }
+     */
+
     // Comment TextField
     Row(
         modifier = Modifier

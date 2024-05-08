@@ -8,6 +8,7 @@ import com.example.rutescompartidesapp.data.domain.routes.Routes
 import com.example.rutescompartidesapp.data.network.GoogleLocation.repository.GoogleLocationsRepository
 import com.example.rutescompartidesapp.data.network.idescat.repository.idescatRepository
 import com.example.rutescompartidesapp.utils.LocalConstants
+import com.example.rutescompartidesapp.utils.distanceBetweenPoints
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -491,6 +492,8 @@ class ManageRouteViewModel @Inject constructor(
         val lastRouteID = LocalConstants.routeList!!.maxByOrNull { route -> route.routeID }!!.routeID
         // Elimina els punts intermitjos buits
         val cleanStepNameList = stepNameList.value.filter { step -> step.isNotEmpty() }
+        val distance = distanceBetweenPoints(_originLocation.value.latitude, _originLocation.value.longitude,
+            _destinationLocation.value.latitude, _destinationLocation.value.longitude)
         val newRoute = Routes(userID = userID,
             routeID = lastRouteID+1,
             routeName = _internalRouteName.value,
@@ -587,7 +590,8 @@ class ManageRouteViewModel @Inject constructor(
      */
     fun updateRoute(userID: Int){
         val cleanStepNameList = stepNameList.value.filter { step -> step.isNotEmpty() }
-
+        val distance = distanceBetweenPoints(_originLocation.value.latitude, _originLocation.value.longitude,
+            _destinationLocation.value.latitude, _destinationLocation.value.longitude)
         val updatedRoute = Routes(userID = userID,
             routeID = _routeToEdit.value!!.routeID,
             routeName = _internalRouteName.value,
