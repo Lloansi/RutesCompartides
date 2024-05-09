@@ -19,6 +19,7 @@ import com.example.rutescompartidesapp.view.map.viewModels.MapViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.osmdroid.util.GeoPoint
 
 @Composable
@@ -41,6 +42,10 @@ fun LocationListItem(municipi: Municipi, ctx: Context, mapViewModel: MapViewMode
 
                     println("GEOPOINT CLICKED: ${fetchedGeoPoint?.latitude}, ${fetchedGeoPoint?.longitude}")
 
+                    // Update markerPosition LiveData from the main thread
+                    withContext(Dispatchers.Main) {
+                        mapViewModel.markerPosition.value = fetchedGeoPoint
+                    }
                     // Navigate to a point of map, when user click on item's list
                     mapView?.let { mapview ->
                         roadManager?.let { roadmanager ->
