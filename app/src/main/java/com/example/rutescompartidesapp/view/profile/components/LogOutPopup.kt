@@ -38,7 +38,7 @@ fun LogOutPopup(viewModelProfile: ProfileViewModel, navigator: NavController, lo
     val isLoggedOut by viewModelProfile.isLoggedOut.collectAsStateWithLifecycle()
 
     if (wantsToLogOut){
-    LaunchedEffect(wantsToLogOut){
+    LaunchedEffect(true){
         viewModelProfile.updateSession()
         viewModelProfile.onClickLogOut(false)
         }
