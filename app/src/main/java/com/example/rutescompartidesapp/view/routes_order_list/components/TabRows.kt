@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
@@ -117,43 +116,36 @@ fun TabRows(routesOrderListViewModel: RoutesOrderListViewModel, navController: N
                     containerColor = GrayRC
                 ))
         }
-        // Content
-        HorizontalPager(
-            state = pagerState,
-            modifier = Modifier.fillMaxWidth(),
-
-        ) { index ->
-            Box(modifier = Modifier.fillMaxSize()) {
-                if (isSearching) {
-                    Box(modifier = Modifier.fillMaxSize()) {
-                        CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
-                    }
-                } else {
-                    LazyColumn(modifier = Modifier.fillMaxWidth(),
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                        if (index == 0) {
-                            if (routes.isEmpty()){
-                                item {
-                                    EmptyResults(type = "ruta")
-                                }
-                            }else {
-                                items(routes.size) { index ->
-                                    Spacer(modifier = Modifier.padding(6.dp))
-                                    RouteCard(route = routes[index], navController, user.userId)
-                                }
+        Box(modifier = Modifier.fillMaxSize()) {
+            if (isSearching) {
+                Box(modifier = Modifier.fillMaxSize()) {
+                    CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+                }
+            } else {
+                LazyColumn(modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    if (selectedTabIndex == 0) {
+                        if (routes.isEmpty()){
+                            item {
+                                EmptyResults(type = "ruta")
+                            }
+                        }else {
+                            items(routes.size) { index ->
+                                Spacer(modifier = Modifier.padding(6.dp))
+                                RouteCard(route = routes[index], navController, user.userId)
+                            }
+                        }
+                    } else {
+                        if (orders.isEmpty()){
+                            item {
+                                EmptyResults(type = "comanda")
                             }
                         } else {
-                            if (orders.isEmpty()){
-                                item {
-                                    EmptyResults(type = "comanda")
-                                }
-                            } else {
-                                    items(orders.size) { index ->
-                                        Spacer(modifier = Modifier.padding(8.dp))
-                                        OrderCard(order = orders[index], navController)
-                                    }
+                            items(orders.size) { index ->
+                                Spacer(modifier = Modifier.padding(8.dp))
+                                OrderCard(order = orders[index], navController)
                             }
                         }
                     }
