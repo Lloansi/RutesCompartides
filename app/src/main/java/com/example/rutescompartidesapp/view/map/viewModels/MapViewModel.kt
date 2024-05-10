@@ -103,6 +103,11 @@ class MapViewModel @Inject constructor (
     private val _locations = MutableStateFlow(listOf<Municipi>())
     val locations = _locations.asStateFlow()
 
+    // BACK BUTTON HANDLER
+
+    private val _isBackButtonPopUpShowing = MutableStateFlow(false)
+    val isBackButtonPopUpShowing = _isBackButtonPopUpShowing.asStateFlow()
+
     init {
 
         //Barcelona GeoPoint
@@ -119,6 +124,16 @@ class MapViewModel @Inject constructor (
             //_locations.value = googleLocationsRepository.getAllCities(autonomousCommunityLat = CATALONIA_LAT, autonomousCommunityLng = CATALONIA_LNG, radius = 3200)
         }
 
+    }
+
+    /**
+     * Change status of back button handler.
+
+     * @param isPopUpShowing new status ("True" or "False")
+
+     **/
+    fun onClickBackButton(isPopUpShowing: Boolean){
+        _isBackButtonPopUpShowing.value = isPopUpShowing
     }
 
     /**
