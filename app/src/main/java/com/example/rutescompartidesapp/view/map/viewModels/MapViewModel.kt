@@ -610,7 +610,7 @@ class MapViewModel @Inject constructor (
     fun ordersAndRoutesFromLocation(mapView: MapView, roadManager: RoadManager, ctx: Context, geoPoint: GeoPoint, maxKmDistance: Int){
 
         mapView.controller.setCenter(geoPoint)
-        mapView.controller.setZoom(16)
+        mapView.controller.setZoom(15)
 
         val orderIconMarker = ContextCompat.getDrawable(ctx, R.drawable.little_map_marker_orders_svg)
         val routeIconMarker = ContextCompat.getDrawable(ctx, R.drawable.little_map_marker_routes_svg)
