@@ -75,7 +75,10 @@ class FilterPopupViewModel: ViewModel() {
         }
 
     }
-    // Resets the values of the popup
+    /**
+     * Invokes or dismisses the popup and resets the values of the popup
+     * @param isShowing Boolean: The state of the popup
+     */
     fun onPopupShow(isShowing: Boolean){
         _popupIsShowing.value = isShowing
         if (!isShowing){

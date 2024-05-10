@@ -29,6 +29,10 @@ class RoutesOrderListViewModel: ViewModel() {
     private val _isMyFilterActive = MutableStateFlow(false)
     val isMyFilterActive = _isMyFilterActive.asStateFlow()
 
+    /**
+     * Filters the routes and orders based on the user ID.
+     * @param userID: Int
+     */
     fun onMyFilterActive(userID: Int) {
         _isMyFilterActive.value = !_isMyFilterActive.value
         val myRoutes = _routes.value.filter { it.userID == userID}.toMutableList()

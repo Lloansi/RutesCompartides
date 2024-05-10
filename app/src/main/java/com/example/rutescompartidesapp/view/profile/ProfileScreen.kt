@@ -1,6 +1,7 @@
 package com.example.rutescompartidesapp.view.profile
 
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
@@ -49,6 +50,11 @@ fun ProfileScreen(profileViewModel: ProfileViewModel, loginViewModel: LoginViewM
                   navController: NavController, routesOrderListViewModel: RoutesOrderListViewModel,
                   tabRowViewModel: TabRowViewModel
 ) {
+
+    BackHandler {
+        navController.popBackStack()
+        loginViewModel.updateCurrentIndex(0)
+    }
 
     val editProfileButtonSize by profileViewModel.editProfileButtonSize.collectAsStateWithLifecycle()
     val editProfileButtonVisible by profileViewModel.editProfileButtonVisible.collectAsStateWithLifecycle()

@@ -80,31 +80,6 @@ class ProfileViewModel @Inject constructor(
         _editProfileButtonVisible.value = newVisibility
     }
 
-    // Profile options
-
-    fun onClickMyRoutes(){
-        TODO("Not implemented yet")
-    }
-
-    fun onClickMyOrders(){
-        TODO("Not implemented yet")
-    }
-
-    fun onClickCommonPoints(){
-        TODO("Not implemented yet")
-    }
-
-    fun onClickNotifications(){
-        TODO("Not implemented yet")
-    }
-
-    fun onClickWorkInfo(){
-        TODO("Not implemented yet")
-    }
-
-    fun onClickFAQs(){
-        TODO("Not implemented yet")
-    }
 
     fun onClickItemPlaceholder(isShowingAlert: Boolean) {
         _onClickPlaceholder.value = isShowingAlert

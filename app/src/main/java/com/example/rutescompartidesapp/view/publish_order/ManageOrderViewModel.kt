@@ -276,6 +276,10 @@ import javax.inject.Inject
     // Next button
     private val _isFirstFormCompleted = MutableStateFlow(false)
     private val _isSecondFormCompleted = MutableStateFlow(false)
+    /**
+     * Checks if all the required values are filled based on the current step of the form.
+     * If all values are filled, proceeds to the next step; otherwise, shows a popup indicating missing values.
+     */
     fun checkAllValues(){
         when (step.value) {
             1 -> {
@@ -387,6 +391,11 @@ import javax.inject.Inject
         _isDeliveryContactDataChecked.value = !_isDeliveryContactDataChecked.value
 
     }
+
+    /**
+     * Appends the information of the delivery contact to the delivery note.
+     * @param type: The type of information to append.
+     */
     fun appendInfoToDeliveryNote(type: String){
         if (type == "puntHabitual"){
             if (_isPuntHabitualDataChecked.value){
@@ -597,7 +606,6 @@ import javax.inject.Inject
                 _screen2Errors.value = screen2Errors
             }
         }
-
     }
 
     /**
@@ -614,7 +622,6 @@ import javax.inject.Inject
         _isIsoterm.value = sharedDataRouteOrder.isIsoterm
         _isSenseHumitat.value = sharedDataRouteOrder.isSenseHumitat
     }
-
 
     /**
      * Clears the values of the form fields.
@@ -672,6 +679,4 @@ import javax.inject.Inject
             }
         }
     }
-
-
 }

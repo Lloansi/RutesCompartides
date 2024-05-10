@@ -1,5 +1,6 @@
 package com.example.rutescompartidesapp.view.routes_order_list
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -46,6 +47,10 @@ fun RoutesOrderListScreen(navController: NavHostController, routeOrderListViewMo
                           filterPopupViewModel: FilterPopupViewModel, loginViewModel: LoginViewModel,
                           tabRowViewModel: TabRowViewModel
 ) {
+    BackHandler {
+        navController.popBackStack()
+        loginViewModel.updateCurrentIndex(0)
+    }
     val searchText by routeOrderListViewModel.searchText.collectAsStateWithLifecycle()
     val areFilterActive by routeOrderListViewModel.activeFilters.collectAsStateWithLifecycle()
     val focusManager = LocalFocusManager.current
@@ -55,7 +60,8 @@ fun RoutesOrderListScreen(navController: NavHostController, routeOrderListViewMo
             horizontalArrangement = Arrangement.SpaceAround,
             verticalAlignment = Alignment.CenterVertically) {
             // Search Bar
-            OutlinedTextField(modifier = Modifier.weight(3f)
+            OutlinedTextField(modifier = Modifier
+                .weight(3f)
                 .padding(start = 6.dp, end = 6.dp),
                 value = searchText,
                 onValueChange = routeOrderListViewModel::onSearchTextChange ,
