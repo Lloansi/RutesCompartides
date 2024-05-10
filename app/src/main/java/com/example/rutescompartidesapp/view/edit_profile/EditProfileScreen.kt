@@ -208,7 +208,7 @@ fun SaveButton(viewModel: EditProfileViewModel, navController: NavController) {
     ) {
         Text(
             text = "Desa",
-            style = MaterialTheme.typography.headlineMedium,
+            style = MaterialTheme.typography.titleMedium,
             color = Color.White
         )
     }

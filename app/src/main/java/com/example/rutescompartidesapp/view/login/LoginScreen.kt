@@ -294,7 +294,8 @@ fun LoginScreen(loginViewModel: LoginViewModel, navController: NavController){
                             shape = RoundedCornerShape(16.dp)
                         ) {
                             Text(text = "Envia",
-                                style = MaterialTheme.typography.headlineLarge)
+                                style = MaterialTheme.typography.titleMedium,
+                                color = Color.White)
                         }
                     }
 

@@ -86,42 +86,51 @@ fun SignUpScreen(navController: NavController) {
 
 
     //Column
-    Column(modifier= Modifier
-        .fillMaxSize()
-        .background(color = MaterialTheme.colorScheme.background),
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = MaterialTheme.colorScheme.background),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
-    ){
+    ) {
         Box(modifier = Modifier.fillMaxSize()) {
-            Box(modifier = Modifier
-                .fillMaxWidth()
-                .height(270.dp)
-                .align(Alignment.TopCenter)
-            ){
-                Image(modifier = Modifier
+            Box(
+                modifier = Modifier
                     .fillMaxWidth()
-                    .height(270.dp),
+                    .height(270.dp)
+                    .align(Alignment.TopCenter)
+            ) {
+                Image(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(270.dp),
                     painter = painterResource(id = R.drawable.authheader),
-                    colorFilter = ColorFilter.tint( color =
-                    if (isSystemInDarkTheme()) {
-                        Color.Gray
-                    } else {
-                        MaterialTheme.colorScheme.primary
-                    }
+                    colorFilter = ColorFilter.tint(
+                        color =
+                        if (isSystemInDarkTheme()) {
+                            Color.Gray
+                        } else {
+                            MaterialTheme.colorScheme.primary
+                        }
                     ),
                     contentScale = ContentScale.FillBounds,
-                    contentDescription = "Header image")
-                Image(modifier = Modifier
-                    .fillMaxWidth(0.58f)
-                    .align(Alignment.TopCenter)
-                    .padding(top = 25.dp),
-                    painter = painterResource(id = if (isSystemInDarkTheme()) {
-                        R.drawable.logowhite
-                    } else {
-                        R.drawable.logoblack
-                    }),
+                    contentDescription = "Header image"
+                )
+                Image(
+                    modifier = Modifier
+                        .fillMaxWidth(0.58f)
+                        .align(Alignment.TopCenter)
+                        .padding(top = 25.dp),
+                    painter = painterResource(
+                        id = if (isSystemInDarkTheme()) {
+                            R.drawable.logowhite
+                        } else {
+                            R.drawable.logoblack
+                        }
+                    ),
                     contentScale = ContentScale.Fit,
-                    contentDescription = "Logo image")
+                    contentDescription = "Logo image"
+                )
             }
             /*
             Box(modifier = Modifier
@@ -132,192 +141,236 @@ fun SignUpScreen(navController: NavController) {
 
 
               */
-                Column(modifier= Modifier
+            Column(
+                modifier = Modifier
                     .verticalScroll(rememberScrollState())
-                    .fillMaxWidth().align(Alignment.Center)
-                    .padding(top = LocalConfiguration.current.screenHeightDp.dp / 5)
-                    ,
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Bottom) {
+                    .fillMaxWidth()
+                    .align(Alignment.Center)
+                    .padding(top = LocalConfiguration.current.screenHeightDp.dp / 5),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Bottom
+            ) {
 
-                    //Tittle
-                    Row(modifier= Modifier
+                //Tittle
+                Row(
+                    modifier = Modifier
                         .fillMaxWidth(0.85f),
-                        horizontalArrangement= Arrangement.Absolute.Left) {
-                        Text(text = "Crear un compte",
-                            color = MaterialTheme.colorScheme.primary,
-                            style = MaterialTheme.typography.headlineLarge,
-                            fontWeight = FontWeight.ExtraBold,
-                            fontSize = 26.sp)
-                    }
-                    Spacer(modifier = Modifier.padding(8.dp))
+                    horizontalArrangement = Arrangement.Absolute.Left
+                ) {
+                    Text(
+                        text = "Crear un compte",
+                        color = MaterialTheme.colorScheme.primary,
+                        style = MaterialTheme.typography.headlineLarge,
+                        fontWeight = FontWeight.ExtraBold,
+                        fontSize = 26.sp
+                    )
+                }
+                Spacer(modifier = Modifier.padding(8.dp))
 
-                    //User Name
-                    Row{
-                        OutlinedTextField(modifier= Modifier
+                //User Name
+                Row {
+                    OutlinedTextField(
+                        modifier = Modifier
                             .fillMaxWidth(0.85f),
-                            value = userNameText, onValueChange = signUpViewModel::onUserNameTextChange,
-                            leadingIcon = {
-                                Icon(imageVector = Icons.Outlined.AccountCircle, contentDescription = "user name icon", tint= Color.LightGray)
-                            },
-                            placeholder = {
-                                Text(text = "Nom d'Usuari", color = Color.Gray)
-                            },
-                            shape = RoundedCornerShape(16.dp),
-                            //User Name Error
-                            isError = userNameError,
-                            trailingIcon = {
-                                if (userNameError){
-                                    Icon(imageVector = Icons.Filled.Cancel,
-                                        contentDescription = "Error Icon",
-                                        tint = MaterialTheme.colorScheme.primary)
-                                }
-                            },
-                            //User Name Text
-                            supportingText = {
-                                if (userNameError){
-                                    Text(text = "Escriu un nom vàlid, fins a 12 caràcters",
-                                        color = MaterialTheme.colorScheme.primary)
-                                }
-                            },
-                            keyboardOptions = KeyboardOptions(
-                                keyboardType = KeyboardType.Text,
-                                imeAction = ImeAction.Next
-                            ),
-                            singleLine = true,
-
-                            colors = OutlinedTextFieldDefaults.colors(
-                                unfocusedContainerColor = Color.White,
-                                focusedContainerColor = Color.White,
-                                errorContainerColor = Color.White,
+                        value = userNameText, onValueChange = signUpViewModel::onUserNameTextChange,
+                        leadingIcon = {
+                            Icon(
+                                imageVector = Icons.Outlined.AccountCircle,
+                                contentDescription = "user name icon",
+                                tint = Color.LightGray
                             )
-                        )
-                    }
-                    Spacer(modifier = Modifier.padding(4.dp))
-
-                    //User Email
-                    Row {
-                        OutlinedTextField(modifier= Modifier
-                            .fillMaxWidth(0.85f),
-                            value = userEmailText, onValueChange = signUpViewModel::onUserEmailTextChange,
-                            leadingIcon = {
-                                Icon(imageVector = Icons.Outlined.Mail, contentDescription = "user email icon", tint= Color.LightGray)
-                            },
-                            placeholder = {
-                                Text(text = "Correu Electrònic", color = Color.Gray)
-                            },
-                            shape = RoundedCornerShape(16.dp),
-                            //User Email Error
-                            isError = userEmailError,
-                            trailingIcon = {
-                                if (userEmailError){
-                                    Icon(imageVector = Icons.Filled.Cancel,
-                                        contentDescription = "Error Icon",
-                                        tint = MaterialTheme.colorScheme.primary)
-                                }
-                            },
-                            //User Email Text
-                            supportingText = {
-                                if (userEmailError){
-                                    Text(text = "Escriu un email vàlid",
-                                        color = MaterialTheme.colorScheme.primary)
-                                }
-                            },
-                            //User Email Keyboard
-                            keyboardOptions = KeyboardOptions(
-                                keyboardType = KeyboardType.Email,
-                                imeAction = ImeAction.Next
-                            ),
-                            singleLine = true,
-
-                            colors = OutlinedTextFieldDefaults.colors(
-                                unfocusedContainerColor = Color.White,
-                                focusedContainerColor = Color.White,
-                                errorContainerColor = Color.White
-                                )
-                        )
-
-                    }
-                    Spacer(modifier = Modifier.padding(4.dp))
-
-                    //User Phone
-                    Row {
-                        OutlinedTextField(modifier= Modifier
-                            .fillMaxWidth(0.85f),
-                            value = userPhoneText, onValueChange = signUpViewModel::onUserPhoneTextChange,
-                            leadingIcon = {
-                                Icon(imageVector = Icons.Outlined.Phone, contentDescription = "user phone icon", tint= Color.LightGray)
-                            },
-                            placeholder = {
-                                Text(text = "Telèfon Mòbil", color = Color.Gray)
-                            },
-                            shape = RoundedCornerShape(16.dp),
-                            //User Phone Error
-                            isError = userPhoneError,
-                            trailingIcon = {
-                                if (userPhoneError){
-                                    Icon(imageVector = Icons.Filled.Cancel,
-                                        contentDescription = "Error Icon",
-                                        tint = MaterialTheme.colorScheme.primary)
-                                }
-                            },
-                            //User Phone Text
-                            supportingText = {
-                                if (userPhoneError){
-                                    Text(text = "Escriu un telèfon vàlid",
-                                        color = MaterialTheme.colorScheme.primary)
-                                }
-                            },
-                            //User Phone Keyboard
-                            keyboardOptions = KeyboardOptions(
-                                keyboardType = KeyboardType.Phone,
-                                imeAction = ImeAction.Next
-                            ),
-                            singleLine = true,
-
-                            colors = OutlinedTextFieldDefaults.colors(
-                                unfocusedContainerColor = Color.White,
-                                focusedContainerColor = Color.White,
-                                errorContainerColor = Color.White
-                                )
-                        )
-
-                    }
-                    Spacer(modifier = Modifier.padding(4.dp))
-
-                    //User Password
-                    Row {
-                        OutlinedTextField(
-                            modifier= Modifier
-                                .fillMaxWidth(0.85f),
-                            value = userPasswordText, onValueChange = signUpViewModel::onUserPasswordTextChange,
-                            leadingIcon = {
+                        },
+                        placeholder = {
+                            Text(text = "Nom d'Usuari", color = Color.Gray)
+                        },
+                        shape = RoundedCornerShape(16.dp),
+                        //User Name Error
+                        isError = userNameError,
+                        trailingIcon = {
+                            if (userNameError) {
                                 Icon(
-                                    imageVector = Icons.Outlined.LockOpen,
-                                    contentDescription = "user password icon",
-                                    tint = Color.LightGray
+                                    imageVector = Icons.Filled.Cancel,
+                                    contentDescription = "Error Icon",
+                                    tint = MaterialTheme.colorScheme.primary
                                 )
-                            },
-                            placeholder = {
-                                Text(text = "Contrassenya", color = Color.Gray)
-                            },
-                            shape = RoundedCornerShape(16.dp),
+                            }
+                        },
+                        //User Name Text
+                        supportingText = {
+                            if (userNameError) {
+                                Text(
+                                    text = "Escriu un nom vàlid, fins a 12 caràcters",
+                                    color = MaterialTheme.colorScheme.primary
+                                )
+                            }
+                        },
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Text,
+                            imeAction = ImeAction.Next
+                        ),
+                        singleLine = true,
 
-                            //User Password Visibility
-                            visualTransformation =
-                            if (isPasswordVisible) {
-                                VisualTransformation.None
-                            } else {
-                                PasswordVisualTransformation()
-                            },
+                        colors = OutlinedTextFieldDefaults.colors(
+                            unfocusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
+                            focusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
+                            errorContainerColor = MaterialTheme.colorScheme.primaryContainer,
+                        )
+                    )
+                }
+                Spacer(modifier = Modifier.padding(4.dp))
 
-                            //User Password Error
-                            isError = userPasswordError,
-                            trailingIcon = {
+                //User Email
+                Row {
+                    OutlinedTextField(
+                        modifier = Modifier
+                            .fillMaxWidth(0.85f),
+                        value = userEmailText,
+                        onValueChange = signUpViewModel::onUserEmailTextChange,
+                        leadingIcon = {
+                            Icon(
+                                imageVector = Icons.Outlined.Mail,
+                                contentDescription = "user email icon",
+                                tint = Color.LightGray
+                            )
+                        },
+                        placeholder = {
+                            Text(text = "Correu Electrònic", color = Color.Gray)
+                        },
+                        shape = RoundedCornerShape(16.dp),
+                        //User Email Error
+                        isError = userEmailError,
+                        trailingIcon = {
+                            if (userEmailError) {
+                                Icon(
+                                    imageVector = Icons.Filled.Cancel,
+                                    contentDescription = "Error Icon",
+                                    tint = MaterialTheme.colorScheme.primary
+                                )
+                            }
+                        },
+                        //User Email Text
+                        supportingText = {
+                            if (userEmailError) {
+                                Text(
+                                    text = "Escriu un email vàlid",
+                                    color = MaterialTheme.colorScheme.primary
+                                )
+                            }
+                        },
+                        //User Email Keyboard
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Email,
+                            imeAction = ImeAction.Next
+                        ),
+                        singleLine = true,
+
+                        colors = OutlinedTextFieldDefaults.colors(
+                            unfocusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
+                            focusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
+                            errorContainerColor = MaterialTheme.colorScheme.primaryContainer,
+                        )
+                    )
+
+                }
+                Spacer(modifier = Modifier.padding(4.dp))
+
+                //User Phone
+                Row {
+                    OutlinedTextField(
+                        modifier = Modifier
+                            .fillMaxWidth(0.85f),
+                        value = userPhoneText,
+                        onValueChange = signUpViewModel::onUserPhoneTextChange,
+                        leadingIcon = {
+                            Icon(
+                                imageVector = Icons.Outlined.Phone,
+                                contentDescription = "user phone icon",
+                                tint = Color.LightGray
+                            )
+                        },
+                        placeholder = {
+                            Text(text = "Telèfon Mòbil", color = Color.Gray)
+                        },
+                        shape = RoundedCornerShape(16.dp),
+                        //User Phone Error
+                        isError = userPhoneError,
+                        trailingIcon = {
+                            if (userPhoneError) {
+                                Icon(
+                                    imageVector = Icons.Filled.Cancel,
+                                    contentDescription = "Error Icon",
+                                    tint = MaterialTheme.colorScheme.primary
+                                )
+                            }
+                        },
+                        //User Phone Text
+                        supportingText = {
+                            if (userPhoneError) {
+                                Text(
+                                    text = "Escriu un telèfon vàlid",
+                                    color = MaterialTheme.colorScheme.primary
+                                )
+                            }
+                        },
+                        //User Phone Keyboard
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Phone,
+                            imeAction = ImeAction.Next
+                        ),
+                        singleLine = true,
+
+                        colors = OutlinedTextFieldDefaults.colors(
+                            unfocusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
+                            focusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
+                            errorContainerColor = MaterialTheme.colorScheme.primaryContainer,
+                        )
+                    )
+
+                }
+                Spacer(modifier = Modifier.padding(4.dp))
+
+                //User Password
+                Row {
+                    OutlinedTextField(
+                        modifier = Modifier
+                            .fillMaxWidth(0.85f),
+                        value = userPasswordText,
+                        onValueChange = signUpViewModel::onUserPasswordTextChange,
+                        leadingIcon = {
+                            Icon(
+                                imageVector = Icons.Outlined.LockOpen,
+                                contentDescription = "user password icon",
+                                tint = Color.LightGray
+                            )
+                        },
+                        placeholder = {
+                            Text(text = "Contrassenya", color = Color.Gray)
+                        },
+                        shape = RoundedCornerShape(16.dp),
+
+                        //User Password Visibility
+                        visualTransformation =
+                        if (isPasswordVisible) {
+                            VisualTransformation.None
+                        } else {
+                            PasswordVisualTransformation()
+                        },
+
+                        //User Password Error
+                        isError = userPasswordError,
+                        trailingIcon = {
+                            Row(
+                                horizontalArrangement = Arrangement.Center,
+                                verticalAlignment = Alignment.CenterVertically,
+                                modifier = Modifier.padding(0.dp, 0.dp, 8.dp, 0.dp)
+                            ) {
                                 val image =
                                     if (isPasswordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
-                                IconButton(onClick = {signUpViewModel.togglePasswordVisibility()}) {
-                                    Icon(imageVector = image, contentDescription = "toggle password icon" )
+                                IconButton(onClick = { signUpViewModel.togglePasswordVisibility() }) {
+                                    Icon(
+                                        imageVector = image,
+                                        contentDescription = "toggle password icon"
+                                    )
                                 }
                                 if (userPasswordError) {
                                     Icon(
@@ -326,147 +379,169 @@ fun SignUpScreen(navController: NavController) {
                                         tint = MaterialTheme.colorScheme.primary
                                     )
                                 }
-                            },
+                            }
+                        },
 
-                            //User Password Text
-                            supportingText = {
+                        //User Password Text
+                        supportingText = {
 
-                                if (userPasswordError) {
-                                    Text(
-                                        text = "Escriu una contrassenya vàlida",
-                                        color = MaterialTheme.colorScheme.primary
+                            if (userPasswordError) {
+                                Text(
+                                    text = "Escriu una contrassenya vàlida",
+                                    color = MaterialTheme.colorScheme.primary
+                                )
+                            }
+                        },
+
+                        //User Password Keyboard
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Password,
+                            imeAction = ImeAction.Next
+                        ),
+                        singleLine = true,
+
+                        colors = OutlinedTextFieldDefaults.colors(
+                            unfocusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
+                            focusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
+                            errorContainerColor = MaterialTheme.colorScheme.primaryContainer,
+                        )
+
+                    )
+
+                }
+                Spacer(modifier = Modifier.padding(4.dp))
+
+                //User Repeat Password
+                Row {
+                    OutlinedTextField(
+                        modifier = Modifier.fillMaxWidth(0.85f),
+                        value = userRepeatPasswordText,
+                        onValueChange = signUpViewModel::onUserRepeatPasswordTextChange,
+                        leadingIcon = {
+                            Icon(
+                                imageVector = Icons.Outlined.LockOpen,
+                                contentDescription = "user password icon",
+                                tint = Color.LightGray
+                            )
+                        },
+                        placeholder = {
+                            Text(text = "Repeteix Contrassenya", color = Color.Gray)
+                        },
+                        shape = RoundedCornerShape(16.dp),
+
+                        //User Repeat Password Visibility
+                        visualTransformation =
+                        if (isRepeatPasswordVisible) {
+                            VisualTransformation.None
+                        } else {
+                            PasswordVisualTransformation()
+                        },
+
+                        //User Repeat Password Error
+                        isError = userRepeatPasswordError,
+                        trailingIcon = {
+                            Row(
+                                horizontalArrangement = Arrangement.Center,
+                                verticalAlignment = Alignment.CenterVertically,
+                                modifier = Modifier.padding(0.dp, 0.dp, 8.dp, 0.dp)
+                            ) {
+                                val image =
+                                    if (isRepeatPasswordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
+                                IconButton(onClick = { signUpViewModel.toggleRepeatPasswordVisibility() }) {
+                                    Icon(
+                                        imageVector = image,
+                                        contentDescription = "toggle password icon"
                                     )
                                 }
-                            },
+                                if (userRepeatPasswordError) {
+                                    Icon(
+                                        imageVector = Icons.Filled.Cancel,
+                                        contentDescription = "Error Icon",
+                                        tint = MaterialTheme.colorScheme.primary
+                                    )
+                                }
+                            }
 
-                            //User Password Keyboard
-                            keyboardOptions = KeyboardOptions(
-                                keyboardType = KeyboardType.Password,
-                                imeAction = ImeAction.Next
-                            ),
-                            singleLine = true,
+                        },
 
-                            colors = OutlinedTextFieldDefaults.colors(
-                               unfocusedContainerColor = Color.White,
-                                focusedContainerColor = Color.White,
-                                errorContainerColor = Color.White
+
+                        //User Repeat Password Text
+                        supportingText = {
+                            if (userRepeatPasswordError) {
+                                Text(
+                                    text = "Les contrassenyes no coincideixen",
+                                    color = MaterialTheme.colorScheme.primary
                                 )
+                            }
+                        },
+                        //User Repeat Password Keyboard
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Password,
+                            imeAction = ImeAction.Next
+                        ),
+                        singleLine = true,
+                        colors = OutlinedTextFieldDefaults.colors(
+                            unfocusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
+                            focusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
+                            errorContainerColor = MaterialTheme.colorScheme.primaryContainer,
+                        )
+                    )
 
+                }
+                Spacer(modifier = Modifier.padding(4.dp))
+
+                //Sing Up Button
+                Row {
+                    ElevatedButton(
+                        onClick = { signUpViewModel.onSignUpButtonClick(navController) },
+                        modifier = Modifier
+                            .fillMaxWidth(0.85f)
+                            .height(LocalConfiguration.current.screenHeightDp.dp / 16),
+                        colors = ButtonDefaults.elevatedButtonColors(
+                            containerColor = MaterialTheme.colorScheme.primary,
+                            contentColor = MaterialTheme.colorScheme.secondary
+                        ),
+                        //enabled = false,
+                        shape = RoundedCornerShape(16.dp)
+                    ) {
+                        Text(
+                            text = "Registra't",
+                            style = MaterialTheme.typography.titleMedium,
+                            color = Color.White
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.padding(12.dp))
+
+                //Bottom Text
+                Row(horizontalArrangement = Arrangement.Absolute.Left) {
+                    Text(text = buildAnnotatedString {
+                        append("Tens un usuari registrat?  ")
+                        withStyle(
+                            style = SpanStyle(
+                                fontWeight = FontWeight.Bold,
+                                color = OrangeRC
                             )
-
-                    }
-                    Spacer(modifier = Modifier.padding(4.dp))
-
-                    //User Repeat Password
-                    Row {
-                        OutlinedTextField(
-                            modifier = Modifier.fillMaxWidth(0.85f),
-                            value = userRepeatPasswordText, onValueChange = signUpViewModel::onUserRepeatPasswordTextChange,
-                            leadingIcon = {
-                                Icon(imageVector = Icons.Outlined.LockOpen, contentDescription = "user password icon", tint= Color.LightGray)
-                            },
-                            placeholder = {
-                                Text(text = "Repeteix Contrassenya", color = Color.Gray)
-                            },
-                            shape = RoundedCornerShape(16.dp),
-
-                            //User Repeat Password Visibility
-                            visualTransformation =
-                            if (isRepeatPasswordVisible) {
-                                VisualTransformation.None
-                            } else {
-                                PasswordVisualTransformation()
-                            },
-
-                            //User Repeat Password Error
-                            isError = userRepeatPasswordError,
-                            trailingIcon = {
-                                Row (horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(0.dp,0.dp,8.dp,0.dp)) {
-                                    val image =
-                                        if (isRepeatPasswordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
-                                    IconButton(onClick = {signUpViewModel.toggleRepeatPasswordVisibility()}) {
-                                        Icon(imageVector = image, contentDescription = "toggle password icon" )
-                                    }
-                                    if (userRepeatPasswordError){
-                                        Icon(imageVector = Icons.Filled.Cancel,
-                                            contentDescription = "Error Icon",
-                                            tint = MaterialTheme.colorScheme.primary)
-                                    }
-                                }
-
-                            },
-
-
-                            //User Repeat Password Text
-                            supportingText = {
-                                if (userRepeatPasswordError){
-                                    Text(text = "Les contrassenyes no coincideixen",
-                                        color = MaterialTheme.colorScheme.primary)
-                                }
-                            },
-                            //User Repeat Password Keyboard
-                            keyboardOptions = KeyboardOptions(
-                                keyboardType = KeyboardType.Password,
-                                imeAction = ImeAction.Next
-                            ),
-                            singleLine = true,
-                            colors = OutlinedTextFieldDefaults.colors(
-                                unfocusedContainerColor = Color.White,
-                                focusedContainerColor = Color.White,
-                                errorContainerColor = Color.White,
-                                )
-                        )
-
-                    }
-                    Spacer(modifier = Modifier.padding(4.dp))
-
-                    //Sing Up Button
-                    Row {
-                        ElevatedButton(
-                            onClick = { signUpViewModel.onSignUpButtonClick(navController) },
-                            modifier = Modifier
-                                .fillMaxWidth(0.85f).height(LocalConfiguration.current.screenHeightDp.dp / 16),
-                            colors = ButtonDefaults.elevatedButtonColors(
-                                containerColor = MaterialTheme.colorScheme.primary,
-                                contentColor = MaterialTheme.colorScheme.secondary
-                            ),
-                            //enabled = false,
-                            shape = RoundedCornerShape(16.dp)
                         ) {
-                            Text(text = "Registra't",
-                                style = MaterialTheme.typography.headlineMedium)
+                            append("Inicia sessió")
                         }
-                    }
-
-                    Spacer(modifier = Modifier.padding(12.dp))
-
-                    //Bottom Text
-                    Row(horizontalArrangement=Arrangement.Absolute.Left) {
-                        Text(text = buildAnnotatedString {
-                            append("Tens un usuari registrat?  ")
-                                    withStyle(
-                                style = SpanStyle(
-                                    fontWeight = FontWeight.Bold,
-                                    color = OrangeRC
-                                )
-                            ) {
-                                append("Inicia sessió")
+                    },
+                        color = MaterialTheme.colorScheme.onBackground,
+                        //FALTA EL TEXT ENLLAÇ AL LOGIN
+                        modifier = Modifier.clickable {
+                            navController.navigate("LoginScreen") {
+                                popUpTo("LoginScreen") { inclusive = true }
                             }
-                                                         },
-                            color = Color.Black,
-                            //FALTA EL TEXT ENLLAÇ AL LOGIN
-                            modifier = Modifier.clickable {
-                                navController.navigate("LoginScreen") {
-                                    popUpTo("LoginScreen") { inclusive = true }
-                                }
 
-                            }
-                        )
-                    }
+                        }
+                    )
+                }
 
-                    if(userExists){
-                        Toast.makeText(LocalContext.current, "Usuari ja registrat", Toast.LENGTH_SHORT).show()
-                    }
+                if (userExists) {
+                    Toast.makeText(LocalContext.current, "Usuari ja registrat", Toast.LENGTH_SHORT)
+                        .show()
+                }
 
             }
         }

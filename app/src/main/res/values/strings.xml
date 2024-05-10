@@ -2,7 +2,7 @@
     <string name="app_name">RutesCompartidesApp</string>
 
     <!--Bottom Navigation Names-->
-    <string name="map">Map</string>
-    <string name="list">List</string>
-    <string name="profile">Profile</string>
+    <string name="map">Mapa</string>
+    <string name="list">Llista</string>
+    <string name="profile">Perfil</string>
 </resources>

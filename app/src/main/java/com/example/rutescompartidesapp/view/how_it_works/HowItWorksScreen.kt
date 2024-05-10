@@ -84,7 +84,7 @@ fun ComFuncionaScreen(navController: NavHostController) {
                 .verticalScroll(rememberScrollState())
         ) {
             YouTubePlayer(
-                youtubeVideoId = "85IINPA_igE",
+                youtubeVideoId = "eyZLwNzF1bM",
                 lifecycleOwner = LocalLifecycleOwner.current
             )
             Description()
