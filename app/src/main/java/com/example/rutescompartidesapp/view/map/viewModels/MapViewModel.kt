@@ -468,7 +468,7 @@ class MapViewModel @Inject constructor (
 
      * @return The distance between the points in kilometers.
      **/
-    private fun distanceBetweenPoints(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Double{
+     fun distanceBetweenPoints(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Double{
         val earthRadius = 6371 // 6371 is Earth radius in km.
 
         // We transform the data parameters to get the distance between points

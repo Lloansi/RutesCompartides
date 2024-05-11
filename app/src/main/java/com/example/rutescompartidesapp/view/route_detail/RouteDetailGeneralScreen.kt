@@ -67,6 +67,7 @@ import com.example.rutescompartidesapp.view.route_detail.components.RouteMapView
 import com.example.rutescompartidesapp.view.generic_components.OrderPoints
 import com.example.rutescompartidesapp.view.login.LoginViewModel
 import com.example.rutescompartidesapp.view.publish_order.ManageOrderViewModel
+import com.example.rutescompartidesapp.view.route_detail.components.CircularCloseButton
 import com.example.rutescompartidesapp.view.route_detail.viewModels.RouteDetailViewModel
 import com.example.rutescompartidesapp.view.routes_order_list.components.RouteCardHeader
 import com.example.rutescompartidesapp.view.routes_order_list.viewmodels.RoutesOrderListViewModel
@@ -113,34 +114,40 @@ fun RouteDetailGeneralScreen(
     // Screen
     TopAppBarWithBackNav(
         title = "Ruta #$routeID",
-        onBack = { navHost.popBackStack() },
-        content = {
+        onBack = { navHost.popBackStack() }
+    ) {
 
-            if (routeInfo != null) {
+        if (routeInfo != null) {
             val ctx = LocalContext.current
             BoxWithConstraints(
                 modifier = Modifier
                     .fillMaxWidth()
                     .fillMaxHeight(if (isMapExpanded) 1f else 0.25f)
                     .clip(RoundedCornerShape(16.dp))
-                    .clickable {
-                        mapViewModel2.updateClickState(!isMapExpanded)
-                    }
+                //.clickable { mapViewModel2.updateClickState(!isMapExpanded) }
             ) {
                 RouteMapViewContainer(
                     viewModel = mapViewModel,
                     viewModel2 = mapViewModel2,
                     ctx,
                     routeInfo!!.startPoint,
-                    routeInfo!!.endPoint,
-                    13.5
+                    routeInfo!!.endPoint
                 )
-            }
-                if (requestPopup){
-                    RequestRoutePopup(matchingOrders, routeDetailViewModel, routeID) // End Popup
-                } // End if acceptPopup
 
-                Row(
+                if (isMapExpanded) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.End
+                    ){
+                        CircularCloseButton { mapViewModel2.updateClickState() }
+                    }
+                }
+            }
+            if (requestPopup) {
+                RequestRoutePopup(matchingOrders, routeDetailViewModel, routeID) // End Popup
+            } // End if acceptPopup
+
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 10.dp, bottom = 10.dp),
@@ -185,14 +192,14 @@ fun RouteDetailGeneralScreen(
                     )
                 }
                 // Demanar Ruta
-                if (!isOrderPendent){
+                if (!isOrderPendent) {
                     ElevatedButton(
                         modifier = Modifier
                             .weight(1f)
                             .padding(start = 4.dp, end = 4.dp),
                         shape = RoundedCornerShape(16.dp),
                         onClick = {
-                            routeDetailViewModel.filterMatchingOrders(userID = user!!.userId )
+                            routeDetailViewModel.filterMatchingOrders(userID = user!!.userId)
                             routeDetailViewModel.onTogglePopup()
                         },
                         colors = ButtonDefaults.elevatedButtonColors(
@@ -351,7 +358,7 @@ fun RouteDetailGeneralScreen(
                     RouteData(
                         icon = R.drawable.money_svg_icon,
                         dataHeader = "Cost de la ruta",
-                        data = routeInfo!!.costKm.toString()+"€/km"
+                        data = routeInfo!!.costKm.toString() + "€/km"
                     )
                 }
                 Divider(
@@ -373,7 +380,7 @@ fun RouteDetailGeneralScreen(
                     )
                 }
                 // Comentari (si existeix)
-                if (!routeInfo!!.comment.isNullOrEmpty()){
+                if (!routeInfo!!.comment.isNullOrEmpty()) {
                     Divider(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -409,8 +416,7 @@ fun RouteDetailGeneralScreen(
 
 
         }
-        }
-    )
+    }
 
 }
 
