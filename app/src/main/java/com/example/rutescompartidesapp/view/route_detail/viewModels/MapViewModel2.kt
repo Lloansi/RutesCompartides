@@ -6,8 +6,6 @@ import android.os.Handler
 import android.os.Looper
 import android.view.MotionEvent
 import androidx.lifecycle.ViewModel
-import com.example.rutescompartidesapp.utils.LocalConstants
-import com.example.rutescompartidesapp.view.map.MapScreen
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import org.osmdroid.bonuspack.routing.RoadManager
@@ -22,7 +20,7 @@ class MapViewModel2 () :ViewModel() {
 
     /**
      * Updates the click state LiveData with the provided boolean value.
-     * @param clicked Boolean value representing the click state.
+
      **/
     fun updateClickState() {
         _isBoxMapClicked.value = !_isBoxMapClicked.value
@@ -84,8 +82,10 @@ class MapViewModel2 () :ViewModel() {
                                 updateClickState()
                             }else{
 
+                                /*
                                 // Controller of the mapView for set center, animations ...
                                 val controller = mapView.controller
+                                 */
                             }
 
                         }
@@ -110,7 +110,6 @@ class MapViewModel2 () :ViewModel() {
      *@return The calculated zoom level.
      */
     fun calculateZoomLevel(distanceKm: Double, screenCoverage: Double): Double {
-        // Calculate the zoom level using the formula: Zoom Level = log2(Screen Coverage / Distance)
         return log2(screenCoverage / distanceKm)
     }
 }

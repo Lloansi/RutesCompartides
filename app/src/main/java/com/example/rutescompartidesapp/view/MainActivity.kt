@@ -185,14 +185,8 @@ fun ScreenNavigationConfiguration(
 
             DisposableEffect(true) {
                 isInMapScreen = true
-                // Realiza acciones específicas cuando entras en MapScreen
-                // Por ejemplo, podrías llamar a una función de viewModel
-                // mapViewModel.onMapScreenEnter()
 
                 onDispose {
-                    // Realiza acciones de limpieza cuando sales de la MapScreen
-                    // Por ejemplo, libera recursos
-                    // mapViewModel.cleanupOnMapScreenExit()
                     isInMapScreen = false
                     mapView?.let { it1 -> mapViewModel.onMapScreenLeft(it1) }
                 }

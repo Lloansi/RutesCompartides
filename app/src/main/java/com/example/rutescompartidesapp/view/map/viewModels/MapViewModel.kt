@@ -109,7 +109,6 @@ class MapViewModel @Inject constructor (
     val isBackButtonPopUpShowing = _isBackButtonPopUpShowing.asStateFlow()
 
     init {
-
         //Barcelona GeoPoint
         markerPosition.value = GeoPoint(41.4534265,2.1837151)
 
@@ -123,7 +122,6 @@ class MapViewModel @Inject constructor (
             _locations.value = idescatRepository.getAllMunicipis()
             //_locations.value = googleLocationsRepository.getAllCities(autonomousCommunityLat = CATALONIA_LAT, autonomousCommunityLng = CATALONIA_LNG, radius = 3200)
         }
-
     }
 
     /**
@@ -387,20 +385,20 @@ class MapViewModel @Inject constructor (
                 if(isInArea(centerPoint,orderPos.startPoint, maxKmDistance)){
 
                     _visibleOrders.value.add(orderPos.startPoint)
-
+                    // Marker order start point
                     createMarker("order",orderPos.startPoint,mapView,iconMarkerType)
-
+                    // Marker order end point
                     createMarker("order",orderPos.endPoint,mapView,iconMarkerType)
-
+                    // We draw path
                     showPathBetweenPoints(orderPos.startPoint, orderPos.endPoint, mapView, roadManager, "order")
 
                 }else if (isInArea(centerPoint,orderPos.endPoint,maxKmDistance)){
                     _visibleOrders.value.add(orderPos.endPoint)
-
+                    // Marker order start point
                     createMarker("order",orderPos.endPoint,mapView,iconMarkerType)
-
+                    // Marker order end point
                     createMarker("order",orderPos.startPoint,mapView,iconMarkerType)
-
+                    // We draw path
                     showPathBetweenPoints(orderPos.endPoint,orderPos.startPoint, mapView, roadManager, "order")
                 }
             }
@@ -643,7 +641,6 @@ class MapViewModel @Inject constructor (
             deleteRoutesPaths(_routesPaths.value, mapView)
             isNearClickUser(ordersList = null, routesList = routeList, mapView, routeIconMarker, roadManager, maxKmDistance)
         } else{
-            // We check if near user's click have any route
             isNearClickUser(ordersList = null, routesList = routeList, mapView, routeIconMarker, roadManager, maxKmDistance)
         }
 
@@ -702,6 +699,11 @@ class MapViewModel @Inject constructor (
         }
     }
 
+    /**
+     * Clears the filtered orders and routes lists when navigating away from the map screen.
+
+     * @param mapView MapView instance.
+     */
     fun onMapScreenLeft(mapView: MapView){
 
         if (_filteredOrders.value?.isNotEmpty() == true){
@@ -713,6 +715,7 @@ class MapViewModel @Inject constructor (
 
     }
 
+    // FUNCIÓN ACTUALMENTE SIN USO
     // Function to print square (geometric form) in map
     fun path(mapView: MapView){
 
@@ -772,16 +775,19 @@ class MapViewModel @Inject constructor (
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-    private fun getCataloniaRadius(): Double {
-        val areaOfCatalonia = 32000 // in square kilometers
-        return sqrt(areaOfCatalonia / PI)
-    }
-
     private val CATALONIA_LAT = 41.5912
     private val CATALONIA_LNG = 1.5209
     private val RADIUS_CATALONIA =  getCataloniaRadius()
 
+    /**
+     * Calculates the approximate radius of Catalonia based on its area.
+
+     * @return The radius of Catalonia in kilometers.
+     */
+    private fun getCataloniaRadius(): Double {
+        val areaOfCatalonia = 32000 // in square kilometers
+        return sqrt(areaOfCatalonia / PI)
+    }
 
     /**
      * Updates the search text LiveData with the provided text.
