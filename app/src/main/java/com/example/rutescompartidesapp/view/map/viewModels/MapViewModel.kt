@@ -702,6 +702,17 @@ class MapViewModel @Inject constructor (
         }
     }
 
+    fun onMapScreenLeft(mapView: MapView){
+
+        if (_filteredOrders.value?.isNotEmpty() == true){
+            _filteredOrders.value = emptyList()
+        }
+        if (_filteredRoutes.value?.isNotEmpty() == true){
+            _filteredRoutes.value = emptyList()
+        }
+
+    }
+
     // Function to print square (geometric form) in map
     fun path(mapView: MapView){
 

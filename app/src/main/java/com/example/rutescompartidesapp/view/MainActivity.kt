@@ -7,7 +7,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -169,12 +174,30 @@ fun ScreenNavigationConfiguration(
     userIsLogged: Boolean,
     modifier: Modifier
 ) {
+    var isInMapScreen by remember { mutableStateOf(false) }
+    val mapView by mapViewModel.mapViewState.collectAsState()
 
     NavHost(navController = navHostController,
         startDestination = if (userIsLogged) Screens.MapScreen.route else Screens.LoginScreen.route,
         modifier = modifier) {
 
         composable(Screens.MapScreen.route) {
+
+            DisposableEffect(true) {
+                isInMapScreen = true
+                // Realiza acciones específicas cuando entras en MapScreen
+                // Por ejemplo, podrías llamar a una función de viewModel
+                // mapViewModel.onMapScreenEnter()
+
+                onDispose {
+                    // Realiza acciones de limpieza cuando sales de la MapScreen
+                    // Por ejemplo, libera recursos
+                    // mapViewModel.cleanupOnMapScreenExit()
+                    isInMapScreen = false
+                    mapView?.let { it1 -> mapViewModel.onMapScreenLeft(it1) }
+                }
+            }
+
             MapScreen(navHostController, mapViewModel, loginViewModel)
         }
         composable(Screens.OrderDetailScreen.route,
