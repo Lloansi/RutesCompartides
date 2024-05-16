@@ -535,11 +535,14 @@ fun TransportOptions(route: Routes) {
     var conditions = ""
     if (route.isIsoterm) {
         conditions+=" Isoterm | "
-    } else if (route.isRefrigerat){
+    }
+    if (route.isRefrigerat){
         conditions+=" Refrigerat |"
-    } else if (route.isCongelat){
+    }
+    if (route.isCongelat){
         conditions+=" Congelat |"
-    } else if (route.isSenseHumitat){
+    }
+    if (route.isSenseHumitat){
         conditions+=" Sense Humitat"
     }
     RouteData(icon = R.drawable.humidity_icon_svg, dataHeader = "Condicions", data = conditions)

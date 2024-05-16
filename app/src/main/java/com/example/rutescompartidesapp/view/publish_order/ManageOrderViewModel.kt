@@ -608,6 +608,9 @@ import javax.inject.Inject
         }
     }
 
+    private val _routeID = MutableStateFlow<Int?>(null)
+    val routeID = _routeID.asStateFlow()
+
     /**
      * Loads the information of a route into the order form fields.
      * @param sharedDataRouteOrder: The route to load.
@@ -621,6 +624,7 @@ import javax.inject.Inject
         _isCongelat.value = sharedDataRouteOrder.isCongelat
         _isIsoterm.value = sharedDataRouteOrder.isIsoterm
         _isSenseHumitat.value = sharedDataRouteOrder.isSenseHumitat
+        _routeID.value = sharedDataRouteOrder.routeID
     }
 
     /**

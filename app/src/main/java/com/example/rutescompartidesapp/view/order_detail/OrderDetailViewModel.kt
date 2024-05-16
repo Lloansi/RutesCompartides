@@ -5,8 +5,8 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import com.example.rutescompartidesapp.data.domain.interactions.RouteInteraction
 import com.example.rutescompartidesapp.data.domain.orders.Orders
-import com.example.rutescompartidesapp.data.domain.routes.SharedDataRouteOrder
 import com.example.rutescompartidesapp.data.domain.routes.Routes
+import com.example.rutescompartidesapp.data.domain.routes.SharedDataRouteOrder
 import com.example.rutescompartidesapp.utils.LocalConstants
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -175,6 +175,7 @@ class OrderDetailViewModel: ViewModel() {
     fun createRouteFromOrder(){
         val order = order.value!!
         val newRoute = SharedDataRouteOrder(
+            orderID = order.orderID,
             puntSortida = order.puntSortida,
             puntArribada = order.puntArribada,
             dataSortida = order.dataSortida,

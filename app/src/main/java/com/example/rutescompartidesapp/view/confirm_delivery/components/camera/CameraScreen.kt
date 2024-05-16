@@ -34,6 +34,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -75,20 +76,13 @@ fun CameraScreen(cameraViewModel: CameraViewModel){
         ) == PackageManager.PERMISSION_GRANTED
     }
 
-    val hasAudioPermission = remember(ctx) {
-        ContextCompat.checkSelfPermission(
-            ctx,
-            Manifest.permission.RECORD_AUDIO
-        ) == PackageManager.PERMISSION_GRANTED
-    }
 
-    if (!hasCameraPermission) {
-        requestPermissionLauncher.launch(Manifest.permission.ACCESS_NETWORK_STATE)
+    LaunchedEffect(hasCameraPermission) {
+        if (!hasCameraPermission) {
+            requestPermissionLauncher.launch(Manifest.permission.CAMERA)
+        }
     }
-
-    if (!hasAudioPermission) {
-        requestPermissionLauncher.launch(Manifest.permission.ACCESS_NETWORK_STATE)
-    }
+    
 
     val bitmaps by cameraViewModel.bitmaps.collectAsState()
 

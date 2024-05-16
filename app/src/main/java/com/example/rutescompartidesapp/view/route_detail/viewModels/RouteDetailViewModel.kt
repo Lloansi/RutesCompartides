@@ -126,6 +126,7 @@ class RouteDetailViewModel: ViewModel() {
     fun createRouteFromOrder(){
         val route = route.value!!
         val newOrder = SharedDataRouteOrder(
+            routeID = route.routeID,
             puntSortida = route.puntSortida,
             puntArribada = route.puntArribada,
             dataSortida = route.dataSortida,

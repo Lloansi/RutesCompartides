@@ -19,7 +19,9 @@ object LocalConstants {
         UserLocal(5, "sOniasOnia12", "sonia@gmail.com", 666666666, "SoniaRutes"),
         UserLocal(6, "Alejandro", "alejandroarcasleon@gmail.com", 666666666, "hola123"),
         UserLocal(7, "David", "david@gmail.com", 684395785, "david"),
-    )
+        UserLocal(8, "IvanITB", "ivan.itb@gmail.com", 645323145, "IvanITB1"),
+
+        )
 
 
     val routeList: MutableList<Routes>? = mutableListOf(
@@ -58,11 +60,18 @@ object LocalConstants {
             GeoPoint(41.366577,2.151493),
             GeoPoint(41.385577, 2.069545)),
 
-        Routes(7,7, "Ruta 7", "Barcelona", "Sant Cugat",
+        Routes(7,7, "Ruta 7", "Barcelona", "Sant Cugat del Vallès",
             null, "2024-03-16", "13:15","2024-03-17", "16:15", listOf("setmanal"),true, true, false, true,
             "Renault Clio", 0.5f, 4.0f, 1, "Volum similar a 4 palets", "Tinc aire acondicionat",
             GeoPoint(41.413504,2.156450),
-            GeoPoint(41.469895, 2.089806))
+            GeoPoint(41.469895, 2.089806),
+
+            ),
+        Routes(4,8, "Ruta 8", "Alella", "Arenys de Mar",
+            listOf("Premià de Mar", "Mataró"), "2024-03-25", "12:30","2024-03-25", "15:15", listOf("setmanal"),false, false, false, false,
+            "Renault Clio", 0.8f, 1.5f, 1, "Volum similar a 1 palet", "Tinc un seient disponible",
+            GeoPoint(41.4952867,2.2942758),
+            GeoPoint(41.5797031,2.5491562))
     )
 
     val orderList: MutableList<Orders>? = mutableListOf(

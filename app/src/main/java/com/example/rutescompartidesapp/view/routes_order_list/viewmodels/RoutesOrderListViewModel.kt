@@ -145,7 +145,6 @@ class RoutesOrderListViewModel: ViewModel() {
         // Reassign the value of the routes and orders to the filtered ones
         _routes.value = filteredRoutes.toMutableList()
         _orders.value = filteredOrders.toMutableList()
-
         _isSearching.update { false }
 
     }

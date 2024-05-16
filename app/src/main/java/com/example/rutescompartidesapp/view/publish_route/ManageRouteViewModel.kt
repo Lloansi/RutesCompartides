@@ -3,8 +3,8 @@ package com.example.rutescompartidesapp.view.publish_route
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.rutescompartidesapp.data.domain.Location.idescat.Municipi
-import com.example.rutescompartidesapp.data.domain.routes.SharedDataRouteOrder
 import com.example.rutescompartidesapp.data.domain.routes.Routes
+import com.example.rutescompartidesapp.data.domain.routes.SharedDataRouteOrder
 import com.example.rutescompartidesapp.data.network.GoogleLocation.repository.GoogleLocationsRepository
 import com.example.rutescompartidesapp.data.network.idescat.repository.idescatRepository
 import com.example.rutescompartidesapp.utils.LocalConstants
@@ -674,6 +674,9 @@ class ManageRouteViewModel @Inject constructor(
 
     }
 
+    private val _orderID = MutableStateFlow<Int?>(null)
+    val orderID = _orderID.asStateFlow()
+
     /**
      * Loads order information from the provided SharedDataRouteOrder object.
      * @param sharedDataRouteOrder The SharedDataRouteOrder object containing the order information.
@@ -687,6 +690,7 @@ class ManageRouteViewModel @Inject constructor(
         _isCongelat.value = sharedDataRouteOrder.isCongelat
         _isIsoterm.value = sharedDataRouteOrder.isIsoterm
         _isSenseHumitat.value = sharedDataRouteOrder.isSenseHumitat
+        _orderID.value = sharedDataRouteOrder.orderID
     }
 
     /**

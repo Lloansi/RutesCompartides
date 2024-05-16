@@ -145,11 +145,14 @@ fun PublishOrderScreen(command: String, orderID: Int, navHost: NavHostController
                 }
             }
             "createFrom" -> {
+                val routeID by manageOrderViewModel.routeID.collectAsStateWithLifecycle()
                 navHost.navigate(
-                    "RoutesOrderListScreen")
-                {
+                    "RouteDetailGeneralScreen/{routeId}".replace(
+                        oldValue = "{routeId}",
+                        newValue = "$routeID")
+                ) {
                     popUpTo(
-                        "RoutesOrderListScreen"){ inclusive = true }
+                        "RouteDetailGeneralScreen/{routeId}"){ inclusive = true }
                 }
             }
             "edit" -> {

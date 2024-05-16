@@ -1,6 +1,8 @@
 package com.example.rutescompartidesapp.data.domain.routes
 
 data class SharedDataRouteOrder(
+    val orderID: Int? = null,
+    val routeID: Int? = null,
     val puntSortida: String,
     val puntArribada: String,
     val dataSortida: String,
