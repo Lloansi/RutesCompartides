@@ -47,7 +47,7 @@
 ## ❓ Preguntas Frecuentes
 
 #### Registro y Cuenta:
-*¿Cómo puedo registrarme en Mapa Agrícola?*
+*¿Cómo puedo registrarme en RutesCompartides?*
 - Puedes registrarte en RutesCompartides creando una cuenta desde la pantalla de inicio y siguiendo las instrucciones proporcionadas o en la web www.RutesCompartides.cat.
 
 *¿Qué información se requiere durante el registro?*
