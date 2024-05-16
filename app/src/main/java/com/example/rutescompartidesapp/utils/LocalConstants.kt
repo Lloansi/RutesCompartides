@@ -30,7 +30,7 @@ object LocalConstants {
             "2024-12-13", "14:00", listOf("diaria"),
             false, false, false, true,
             "Wolkswagen", 1.2f, 5.0f, 2, "Volum similar a 2 palets", "Tinc aire acondicionat",
-            GeoPoint(41.3632939, 2.2464323),
+            GeoPoint(41.402710, 2.209802),
             GeoPoint(41.11888,1.2546057)),
 
         Routes(1, 2, "Ruta 2", "Girona", "Lleida",
@@ -64,9 +64,8 @@ object LocalConstants {
             null, "2024-03-16", "13:15","2024-03-17", "16:15", listOf("setmanal"),true, true, false, true,
             "Renault Clio", 0.5f, 4.0f, 1, "Volum similar a 4 palets", "Tinc aire acondicionat",
             GeoPoint(41.413504,2.156450),
-            GeoPoint(41.469895, 2.089806),
+            GeoPoint(41.469895, 2.089806)),
 
-            ),
         Routes(4,8, "Ruta 8", "Alella", "Arenys de Mar",
             listOf("Premià de Mar", "Mataró"), "2024-03-25", "12:30","2024-03-25", "15:15", listOf("setmanal"),false, false, false, false,
             "Renault Clio", 0.8f, 1.5f, 1, "Volum similar a 1 palet", "Tinc un seient disponible",
@@ -121,8 +120,8 @@ object LocalConstants {
             1, 0.2f, 0.2f, 0.2f,
             0.2f, false, 50.0f, 5.0f,
             "Fresques recollides ahir",
-            GeoPoint(41.7338939,1.8286765),
-            GeoPoint(41.3828939, 2.1774323))
+            GeoPoint(41.680487, 2.289529),
+            GeoPoint(41.402750, 2.182010))
     )
 
 
