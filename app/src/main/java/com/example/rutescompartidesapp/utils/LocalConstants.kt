@@ -28,25 +28,41 @@ object LocalConstants {
             "2024-12-13", "14:00", listOf("diaria"),
             false, false, false, true,
             "Wolkswagen", 1.2f, 5.0f, 2, "Volum similar a 2 palets", "Tinc aire acondicionat",
-            GeoPoint(41.3828939, 2.1774323), GeoPoint(41.11888,1.2546057)),
-            Routes(1, 2, "Ruta 2", "Girona", "Lleida",
-                null, "2024-05-08", "14:00",
-                "2024-05-09", "12:00", listOf("setmanal"),
-                true, true, false, true,
-                "Seat Ibiza", 1.0f, 4.5f, 2, "Volum similar a 2 palets", "No tinc aire acondicionat",
-                GeoPoint(41.9495006,2.8799239),
-                GeoPoint(41.6387605,0.6467242)),
+            GeoPoint(41.3632939, 2.2464323),
+            GeoPoint(41.11888,1.2546057)),
+
+        Routes(1, 2, "Ruta 2", "Girona", "Lleida",
+            null, "2024-05-08", "14:00",
+            "2024-05-09", "12:00", listOf("setmanal"),
+            true, true, false, true,
+            "Seat Ibiza", 1.0f, 4.5f, 2, "Volum similar a 2 palets", "No tinc aire acondicionat",
+            GeoPoint(41.9495006,2.8799239),
+            GeoPoint(41.6387605,0.6467242)),
 
         Routes(4,4, "Ruta 4", "Manresa", "Terrasa",
-                null, "2024-04-17", "14:00", "2024-04-17", "21:00", listOf("bisetmanal"),
-                true, true, false, true,
-                "Renault Clio", 0.2f, 3.5f, 1, "Volum similar a 2 palets", "Tinc aire acondicionat",
-                GeoPoint(41.7288939,1.8286765), GeoPoint(41.5429623,2.3110492)),
+            null, "2024-04-17", "14:00", "2024-04-17", "21:00", listOf("bisetmanal"),
+            true, true, false, true,
+            "Renault Clio", 0.2f, 3.5f, 1, "Volum similar a 2 palets", "Tinc aire acondicionat",
+            GeoPoint(41.7288939,1.8286765),
+            GeoPoint(41.5429623,2.3110492)),
+
         Routes(5,5, "Ruta 5", "Manresa", "Barcelona",
             null, "2024-03-26", "20:00","2024-03-26", "23:15", listOf("setmanal"),true, true, false, true,
             "Renault Clio", 0.2f, 3.5f, 1, "Volum similar a 2 palets", "Tinc aire acondicionat",
-            GeoPoint(41.7288939,1.8286765), GeoPoint(41.3828939, 2.1774323)),
+            GeoPoint(41.7288939,1.8286765),
+            GeoPoint(41.3828939, 2.4216323)),
 
+        Routes(6,6, "Ruta 6", "Barcelona", "Barcelona",
+            null, "2024-03-23", "12:30","2024-03-23", "15:15", listOf("setmanal"),true, false, false, true,
+            "Renault Clio", 0.8f, 1.5f, 1, "Volum similar a 1 palet", "Tinc un seient disponible",
+            GeoPoint(41.366577,2.151493),
+            GeoPoint(41.385577, 2.069545)),
+
+        Routes(7,7, "Ruta 7", "Barcelona", "Sant Cugat",
+            null, "2024-03-16", "13:15","2024-03-17", "16:15", listOf("setmanal"),true, true, false, true,
+            "Renault Clio", 0.5f, 4.0f, 1, "Volum similar a 4 palets", "Tinc aire acondicionat",
+            GeoPoint(41.413504,2.156450),
+            GeoPoint(41.469895, 2.089806))
     )
 
     val orderList: MutableList<Orders>? = mutableListOf(
@@ -57,7 +73,9 @@ object LocalConstants {
             3, 1.2f, 0.5f, 0.5f,
             2.5f, false, 100.0f, 10.0f,
             "Ben grossos i sucosos",
-            GeoPoint(41.3828939, 2.1774323), GeoPoint(41.11888,1.2546057)),
+            GeoPoint(41.5618439, 2.3424323),
+            GeoPoint(41.11888,1.2546057)),
+
         Orders(1,6, "Enciams", "Manresa", "Barcelona",
             "2024-03-26", "20:00",
             "2024-03-26", "23:15", listOf(),
@@ -65,14 +83,17 @@ object LocalConstants {
             3, 1.2f, 0.5f, 0.5f,
             2.5f, false, 100.0f, 10.0f,
             "Verds i frescos",
-            GeoPoint(41.3868939, 2.1794323), GeoPoint(41.12888,1.2846057)),
+            GeoPoint(41.1473939, 2.3592323),
+            GeoPoint(41.12888,1.2846057)),
+
         Orders(4,2, "Entrega de patates", "Girona", "Lleida",
             "2024-05-08", "14:00",
             "2024-05-09", "18:00",  listOf("hortalizes"),
             true, true, false, true,
             2, 1.0f, 0.5f, 0.5f,
             2.0f, false, 50.0f, 5.0f,
-            "", GeoPoint(41.9833006,2.8199739),
+            "",
+            GeoPoint(41.9833006,2.8199739),
             GeoPoint(41.6187605,0.6327842)),
 
         Orders(5,4, "Pomes", "Manresa", "Terrasa",
@@ -82,14 +103,17 @@ object LocalConstants {
             1, 0.2f, 0.2f, 0.2f,
             0.2f, false, 50.0f, 5.0f,
             "",
-            GeoPoint(41.7188939,1.8686765), GeoPoint(41.5639623,2.0150492)),
+            GeoPoint(41.7188939,1.8686765),
+            GeoPoint(41.5639623,2.0150492)),
 
         Orders(5,5, "Taronjes", "Manresa", "Barcelona",
             "2024-03-26", "20:00", "2024-03-27", "20:00", listOf("fruita"),
             true, true, false, true,
             1, 0.2f, 0.2f, 0.2f,
             0.2f, false, 50.0f, 5.0f,
-            "Fresques recollides ahir", GeoPoint(41.7338939,1.8286765), GeoPoint(41.3828939, 2.1774323)),
+            "Fresques recollides ahir",
+            GeoPoint(41.7338939,1.8286765),
+            GeoPoint(41.3828939, 2.1774323))
     )
 
 
@@ -107,11 +131,8 @@ object LocalConstants {
         //RouteInteraction(2, 1, "4/3/2024-20:45", "Valorada"),
         RouteInteraction(4, 2, "4/3/2024-20:45", "Entregada"),
         RouteInteraction(5, 2, "4/3/2024-20:45", "Pendent"),
-        RouteInteraction(1, 1, "4/3/2024-20:45", "Entregada"),
-        )
-
-
-
+        RouteInteraction(1, 1, "4/3/2024-20:45", "Entregada")
+    )
 
 
     /*
