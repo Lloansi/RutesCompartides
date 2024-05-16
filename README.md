@@ -28,7 +28,7 @@
 ## 🎥 Demo
 [Video Demo App](#)
 
-## 🎥 APK
+## 🔗 APK
 [Link 1](https://www.mediafire.com/file/cz6vjc3nruxxgo9/app-debug.apk/file)
 [Link 2](https://mega.nz/file/UPdn1byK#sPFIy9Bq3T4SkmIBS-o5Ft_wESsx5jm7ahanECrXlYQ)
 
