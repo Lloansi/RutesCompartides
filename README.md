@@ -40,8 +40,8 @@
 
 
 ## 🔗 APK
-- [Link 1](https://www.mediafire.com/file/cz6vjc3nruxxgo9/app-debug.apk/file)
-- [Link 2](https://mega.nz/file/UPdn1byK#sPFIy9Bq3T4SkmIBS-o5Ft_wESsx5jm7ahanECrXlYQ)
+- [Link 1](https://mega.nz/file/JPUHnRxZ#gaUhXpsVhZSlect9NqA0ZUeUNra5cZc1_5LmavaNZ50)
+- [Link 2](https://www.mediafire.com/file/7bu4axeuoxst1ux/app-debug.apk/file)
 
 
 ## ❓ Preguntas Frecuentes
